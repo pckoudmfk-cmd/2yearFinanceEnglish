@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banking & Finance Vocabulary — Learning Hub</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0A1628;--navy2:#0d1e38;--navy3:#112244;
+    --gold:#C9A84C;--gold2:#e8c96a;--gold3:#f5e6b0;
+    --text:#e8eaf0;--text2:#b0b8cc;--text3:#7a8299;
+    --card:#13233d;--card2:#1a2e50;--border:#1e3560;
+    --radius:14px;--shadow:0 4px 24px rgba(0,0,0,0.45);
+  }
+  body.light{
+    --navy:#f0f4ff;--navy2:#e4ecff;--navy3:#d8e4ff;
+    --text:#111827;--text2:#374151;--text3:#6b7280;
+    --card:#ffffff;--card2:#f8faff;--border:#c8d4f0;
+    --shadow:0 4px 24px rgba(0,0,0,0.12);
+  }
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(160deg,#0c1f40 0%,#0A1628 60%,#091525 100%);
+    border-bottom:1px solid var(--border);
+    padding:52px 24px 44px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,.12),transparent);
+    pointer-events:none;
+  }
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);
+    border-radius:20px;padding:5px 14px;
+    font-size:.75rem;font-weight:700;color:var(--gold);
+    letter-spacing:.5px;text-transform:uppercase;margin-bottom:18px;
+  }
+  .hero h1{font-size:clamp(1.6rem,5vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:12px}
+  .hero h1 span{color:var(--gold)}
+  .hero p{font-size:.95rem;color:var(--text2);max-width:520px;margin:0 auto 24px;line-height:1.65}
+  .hero-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+  .stat{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:10px 18px;text-align:center}
+  .stat .n{font-size:1.4rem;font-weight:800;color:var(--gold)}
+  .stat .l{font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+
+  /* CONTROLS */
+  .controls{max-width:960px;margin:28px auto 0;padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .search-wrap{position:relative;flex:1;min-width:200px;max-width:360px}
+  .search-wrap input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px 10px 38px;color:var(--text);font-size:.875rem;font-family:inherit;outline:none;transition:.2s}
+  .search-wrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+  .search-wrap .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.9rem;pointer-events:none}
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap}
+  .filter-btn{background:none;border:1px solid var(--border);border-radius:20px;padding:7px 14px;color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent}
+  .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
+  .theme-toggle{background:none;border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text2);cursor:pointer;font-size:.8rem;transition:.2s;white-space:nowrap}
+  .theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* GRID */
+  .grid{max-width:960px;margin:24px auto 60px;padding:0 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+  /* CARD */
+  .lesson-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:22px 20px;
+    cursor:pointer;text-decoration:none;color:inherit;
+    display:flex;flex-direction:column;gap:12px;
+    box-shadow:var(--shadow);
+    transition:transform .18s,border-color .18s,box-shadow .18s;
+    position:relative;overflow:hidden;
+  }
+  .lesson-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--gold),var(--gold2));
+    opacity:0;transition:opacity .2s;
+  }
+  .lesson-card:hover{transform:translateY(-3px);border-color:rgba(201,168,76,.4);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+  .lesson-card:hover::before{opacity:1}
+  .card-icon{font-size:1.8rem;line-height:1}
+  .card-topic{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:12px;width:fit-content}
+  .topic-finance{background:rgba(52,152,219,.15);color:#5bb8ff}
+  .topic-economy{background:rgba(155,89,182,.15);color:#c39bff}
+  .topic-society{background:rgba(46,204,113,.15);color:#5ee89e}
+  .topic-strategy{background:rgba(231,76,60,.15);color:#ff8f85}
+  .topic-science{background:rgba(243,156,18,.15);color:#ffd066}
+  .card-title{font-size:1rem;font-weight:700;color:var(--text);line-height:1.35}
+  .card-desc{font-size:.8rem;color:var(--text3);line-height:1.55}
+  .card-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:10px;border-top:1px solid var(--border)}
+  .meta-pill{font-size:.72rem;font-weight:600;color:var(--text3);display:flex;align-items:center;gap:4px}
+  .card-arrow{margin-left:auto;color:var(--gold);opacity:0;transition:opacity .2s,transform .2s;font-size:1rem}
+  .lesson-card:hover .card-arrow{opacity:1;transform:translateX(3px)}
+
+  /* EMPTY STATE */
+  .empty{text-align:center;padding:60px 20px;color:var(--text3);display:none}
+  .empty.show{display:block}
+  .empty p{font-size:.9rem;margin-top:8px}
+
+  /* FOOTER */
+  footer{text-align:center;padding:24px;font-size:.75rem;color:var(--text3);border-top:1px solid var(--border)}
+
+  @media(max-width:600px){
+    .hero{padding:36px 16px 32px}
+    .controls{flex-direction:column;align-items:stretch}
+    .search-wrap{max-width:100%}
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-badge">📚 Finance English</div>
+  <h1>Banking &amp; Finance<br><span>Vocabulary Hub</span></h1>
+  <p>Professional English for finance specialists. Each lesson is an interactive dashboard with glossary flashcards, writing tasks, and speaking practice.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="n" id="stat-lessons">8</div><div class="l">Lessons</div></div>
+    <div class="stat"><div class="n">93</div><div class="l">Points per lesson</div></div>
+    <div class="stat"><div class="n">200+</div><div class="l">Glossary terms</div></div>
+  </div>
+</section>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="icon">🔍</span>
+    <input type="text" id="search" placeholder="Search lessons…" oninput="filterCards()">
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('finance',this)">Finance</button>
+    <button class="filter-btn" onclick="setFilter('economy',this)">Economy</button>
+    <button class="filter-btn" onclick="setFilter('society',this)">Society</button>
+    <button class="filter-btn" onclick="setFilter('strategy',this)">Strategy</button>
+    <button class="filter-btn" onclick="setFilter('science',this)">Science</button>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+</div>
+
+<main class="grid" id="grid"></main>
+<div class="empty" id="empty">
+  <div style="font-size:2rem">🔍</div>
+  <p>No lessons match your search.</p>
+</div>
+
+<footer>Banking &amp; Finance Vocabulary Hub · Interactive Learning Dashboards</footer>
+
+<script>
+const lessons = [
+  {
+    file: 'lessons/lesson1_financial_reporting.html',
+    icon: '📊',
+    title: 'Financial Reporting',
+    desc: 'Balance sheets, income statements, and the language of corporate financial disclosure.',
+    topic: 'finance',
+    terms: 30,
+    tasks: 7,
+    tags: ['financial statements','balance sheet','IFRS','audit']
+  },
+  {
+    file: 'lessons/exhibitions_finance.html',
+    icon: '🏛',
+    title: 'Industry Exhibitions in Finance',
+    desc: 'How trade fairs and professional exhibitions serve as tools for financial networking and deal-making.',
+    topic: 'finance',
+    terms: 28,
+    tasks: 7,
+    tags: ['exhibitions','networking','trade fairs','deals']
+  },
+  {
+    file: 'lessons/business_entities.html',
+    icon: '🏢',
+    title: 'Business Entities & Corporate Structure',
+    desc: 'Sole proprietorships, LLCs, corporations — legal forms and their financial implications.',
+    topic: 'finance',
+    terms: 30,
+    tasks: 7,
+    tags: ['LLC','corporation','liability','shares']
+  },
+  {
+    file: 'lessons/russian_education.html',
+    icon: '🎓',
+    title: 'Russian Education System',
+    desc: 'Structure, challenges, and reforms of education in Russia — from compulsory schooling to the Unified State Exam.',
+    topic: 'society',
+    terms: 32,
+    tasks: 7,
+    tags: ['USE','compulsory','reform','digital literacy']
+  },
+  {
+    file: 'lessons/economist_profession.html',
+    icon: '💼',
+    title: 'Profession of an Economist',
+    desc: 'The role of English in finance, key competencies of a modern economist, and the risks of poor analysis.',
+    topic: 'economy',
+    terms: 26,
+    tasks: 7,
+    tags: ['financial analysis','forecasting','risk assessment','English in finance']
+  },
+  {
+    file: 'lessons/production_safety.html',
+    icon: '⚙️',
+    title: 'Production Standards & Workplace Safety',
+    desc: 'How compliance, safety violations, and preventive investment affect a company\'s financial performance.',
+    topic: 'economy',
+    terms: 17,
+    tasks: 7,
+    tags: ['compliance','operational risk','cost-benefit','sanctions']
+  },
+  {
+    file: 'lessons/marketing_strategy.html',
+    icon: '📈',
+    title: 'Marketing & Strategy in Finance',
+    desc: 'Market segmentation, competitive positioning, and strategic decision-making in financial organizations.',
+    topic: 'strategy',
+    terms: 15,
+    tasks: 7,
+    tags: ['segmentation','positioning','competitive advantage','demand']
+  },
+  {
+    file: 'lessons/scientific_inventions.html',
+    icon: '🔬',
+    title: 'Scientific & Technological Progress',
+    desc: 'World-shaking discoveries, innovators, industry exhibitions, and how technology drives financial markets.',
+    topic: 'science',
+    terms: 43,
+    tasks: 7,
+    tags: ['AI','SpaceX','CRISPR','venture capital','IPO']
+  },
+];
+
+let activeFilter = 'all';
+
+function topicClass(t){
+  return {finance:'topic-finance',economy:'topic-economy',society:'topic-society',strategy:'topic-strategy',science:'topic-science'}[t]||'topic-finance';
+}
+function topicLabel(t){
+  return {finance:'Finance',economy:'Economy',society:'Society',strategy:'Strategy',science:'Science'}[t]||t;
+}
+
+function renderCards(list){
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  if(!list.length){ grid.innerHTML=''; empty.classList.add('show'); return; }
+  empty.classList.remove('show');
+  grid.innerHTML = list.map(l => `
+    <a class="lesson-card" href="${l.file}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div class="card-icon">${l.icon}</div>
+        <span class="card-topic ${topicClass(l.topic)}">${topicLabel(l.topic)}</span>
+      </div>
+      <div class="card-title">${l.title}</div>
+      <div class="card-desc">${l.desc}</div>
+      <div class="card-meta">
+        <span class="meta-pill">📚 ${l.terms} terms</span>
+        <span class="meta-pill">✏️ ${l.tasks} sections</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>`).join('');
+}
+
+function filterCards(){
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = lessons.filter(l => {
+    const matchTopic = activeFilter === 'all' || l.topic === activeFilter;
+    const matchQ = !q || l.title.toLowerCase().includes(q) || l.desc.toLowerCase().includes(q) || l.tags.some(t => t.includes(q));
+    return matchTopic && matchQ;
+  });
+  renderCards(filtered);
+}
+
+function setFilter(f, btn){
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+
+function toggleTheme(){
+  document.body.classList.toggle('light');
+  document.querySelector('.theme-toggle').textContent = document.body.classList.contains('light') ? '🌙 Dark' : '☀ Light';
+  localStorage.setItem('hub_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+(function init(){
+  if(localStorage.getItem('hub_theme') === 'light') document.body.classList.add('light');
+  renderCards(lessons);
+})();
+</script>
+</body>
+</html>
