@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industry Exhibitions — Educational Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0A1628; --gold: #C9A84C; --gold-light: #e8c96a; --white: #FFFFFF;
+    --light-gray: #F5F5F5; --mid-gray: #8892A4; --bg: #F5F5F5; --card-bg: #FFFFFF;
+    --text: #0A1628; --text-secondary: #8892A4; --border: #e0e4ec;
+    --sidebar-bg: #0A1628; --sidebar-text: #FFFFFF; --input-bg: #FFFFFF;
+    --shadow: 0 2px 16px rgba(10,22,40,0.10); --shadow-lg: 0 8px 32px rgba(10,22,40,0.16);
+    --radius: 12px; --transition: 0.22s cubic-bezier(.4,0,.2,1);
+  }
+  .dark-mode { --bg: #0A1628; --card-bg: #1a2a42; --text: #FFFFFF; --text-secondary: #8892A4; --border: #2a3a52; --sidebar-bg: #06101e; --input-bg: #1a2a42; --shadow: 0 2px 16px rgba(0,0,0,0.3); --shadow-lg: 0 8px 32px rgba(0,0,0,0.4); }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 100vh; display: -webkit-flex; display: flex; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); }
+  #progress-bar-wrap { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--border); z-index: 9999; }
+  #progress-bar-fill { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); -webkit-transition: width 0.5s ease; transition: width 0.5s ease; border-radius: 0 2px 2px 0; }
+  #progress-label { position: fixed; top: 8px; right: 70px; font-size: 11px; font-weight: 600; color: var(--gold); z-index: 9999; letter-spacing: 0.5px; }
+  #sidebar { width: 250px; min-height: 100vh; background: var(--sidebar-bg); position: fixed; left: 0; top: 0; bottom: 0; z-index: 1000; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-transition: -webkit-transform var(--transition); transition: transform var(--transition); overflow-y: auto; padding-bottom: 24px; }
+  #sidebar-logo { padding: 28px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px; }
+  #sidebar-logo .logo-title { color: var(--gold); font-size: 15px; font-weight: 700; letter-spacing: 0.3px; line-height: 1.3; }
+  #sidebar-logo .logo-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+  #sidebar nav a { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 10px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 500; padding: 10px 24px; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); cursor: pointer; }
+  #sidebar nav a:hover, #sidebar nav a.active { background: rgba(201,168,76,0.13); color: var(--gold); }
+  #sidebar nav a .nav-num { width: 20px; height: 20px; border-radius: 50%; background: rgba(201,168,76,0.18); color: var(--gold); font-size: 10px; font-weight: 700; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  #sidebar nav a.done .nav-num { background: var(--gold); color: var(--navy); }
+  #hamburger { display: none; position: fixed; top: 12px; left: 12px; z-index: 1100; background: var(--navy); border: none; border-radius: 8px; padding: 8px; cursor: pointer; -webkit-flex-direction: column; flex-direction: column; gap: 4px; }
+  #hamburger span { display: block; width: 20px; height: 2px; background: var(--gold); border-radius: 2px; -webkit-transition: var(--transition); transition: var(--transition); }
+  #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  #dark-toggle { position: fixed; top: 10px; right: 16px; z-index: 9999; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; -webkit-transition: var(--transition); transition: var(--transition); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 5px; box-shadow: var(--shadow); }
+  #main-content { margin-left: 250px; -webkit-flex: 1; flex: 1; padding: 40px 48px 60px; max-width: 1100px; }
+  .section { margin-bottom: 64px; scroll-margin-top: 32px; }
+  .section-header { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .section-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 14px; font-weight: 800; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .section-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .card { background: var(--card-bg); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); -webkit-transition: background var(--transition), border-color var(--transition); transition: background var(--transition), border-color var(--transition); }
+  .btn { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; -webkit-transition: var(--transition); transition: var(--transition); font-family: inherit; }
+  .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); box-shadow: 0 2px 8px rgba(201,168,76,0.3); }
+  .btn-primary:hover { -webkit-transform: translateY(-1px); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .btn-outline { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+  .case-box { background: linear-gradient(135deg, rgba(10,22,40,0.04) 0%, rgba(201,168,76,0.06) 100%); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 28px 32px; font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 24px; display: none; }
+  .dark-mode .case-box { background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(26,42,66,0.8) 100%); }
+  .case-box.visible { display: block; -webkit-animation: slideDown 0.4s ease; animation: slideDown 0.4s ease; }
+  .discussion-questions { display: none; }
+  .discussion-questions.visible { display: block; }
+  .dq-item { background: var(--card-bg); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; border: 1px solid var(--border); -webkit-animation: slideIn 0.4s ease backwards; animation: slideIn 0.4s ease backwards; box-shadow: var(--shadow); }
+  .dq-num { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .dq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+  .dq-textarea { width: 100%; min-height: 80px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .dq-textarea:focus { border-color: var(--gold); }
+  .vocab-text { font-size: 15px; line-height: 1.85; color: var(--text); }
+  .vocab-text p { margin-bottom: 18px; }
+  .vocab-word { color: var(--gold); font-weight: 600; cursor: pointer; border-bottom: 1.5px dashed var(--gold); position: relative; display: inline-block; }
+  .vocab-word .tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); background: var(--navy); color: #fff; font-size: 12px; font-weight: 400; padding: 8px 14px; border-radius: 8px; white-space: normal; z-index: 500; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.25); max-width: 260px; text-align: center; line-height: 1.5; min-width: 160px; }
+  .vocab-word .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--navy); }
+  .vocab-word:hover .tooltip { display: block; }
+  .search-bar { width: 100%; padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; margin-bottom: 24px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .search-bar:focus { border-color: var(--gold); }
+  .flashcard-grid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 16px; }
+  .flashcard-wrap { width: calc(25% - 12px); min-width: 150px; height: 150px; -webkit-perspective: 800px; perspective: 800px; cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .flashcard-inner { width: 100%; height: 100%; position: relative; -webkit-transform-style: preserve-3d; transform-style: preserve-3d; -webkit-transition: -webkit-transform 0.5s cubic-bezier(.4,0,.2,1); transition: transform 0.5s cubic-bezier(.4,0,.2,1); }
+  .flashcard-wrap.flipped .flashcard-inner { -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
+  .flashcard-face { position: absolute; inset: 0; border-radius: var(--radius); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; padding: 14px; text-align: center; -webkit-backface-visibility: hidden; backface-visibility: hidden; border: 1.5px solid var(--border); }
+  .flashcard-front { background: var(--card-bg); font-size: 13px; font-weight: 600; color: var(--text); box-shadow: var(--shadow); }
+  .flashcard-back { background: linear-gradient(135deg, var(--navy), #1a2a42); -webkit-transform: rotateY(180deg); transform: rotateY(180deg); font-size: 12px; color: rgba(255,255,255,0.9); line-height: 1.5; border-color: var(--gold); }
+  .fc-hint { font-size: 10px; color: var(--mid-gray); margin-top: 6px; }
+  .fib-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; font-size: 14px; line-height: 2.2; box-shadow: var(--shadow); }
+  .fib-input-wrap { display: inline-flex; align-items: center; gap: 4px; }
+  .fib-input { display: inline-block; width: 180px; padding: 4px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); vertical-align: middle; }
+  .fib-input.correct { border-color: #38a169; background: rgba(56,161,105,0.08); }
+  .fib-input.incorrect { border-color: #e53e3e; background: rgba(229,62,62,0.08); }
+  .fib-status { font-size: 14px; vertical-align: middle; }
+  .hint-btn { font-size: 11px; padding: 2px 8px; background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold); border-radius: 4px; cursor: pointer; font-family: inherit; font-weight: 600; vertical-align: middle; -webkit-transition: var(--transition); transition: var(--transition); }
+  .hint-btn:hover { background: rgba(201,168,76,0.22); }
+  .writing-scenario { background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04)); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 20px 24px; font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+  .writing-task { margin-bottom: 24px; }
+  .writing-task label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  .writing-ta { width: 100%; min-height: 120px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .writing-ta:focus { border-color: var(--gold); }
+  .writing-meta { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 12px; margin-top: 6px; }
+  .word-count { font-size: 12px; color: var(--mid-gray); }
+  .vocab-badge { display: none; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; -webkit-animation: pop 0.3s ease; animation: pop 0.3s ease; }
+  .vocab-badge.show { display: inline-block; }
+  .timer-wrap { display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; gap: 16px; padding: 28px; background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .timer-ring { position: relative; width: 100px; height: 100px; }
+  .timer-ring svg { -webkit-transform: rotate(-90deg); transform: rotate(-90deg); }
+  .timer-ring circle { fill: none; stroke-width: 6; }
+  .timer-ring .ring-bg { stroke: var(--border); }
+  .timer-ring .ring-fill { stroke: var(--gold); stroke-linecap: round; -webkit-transition: stroke-dashoffset 1s linear, stroke 0.3s; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-dasharray: 283; stroke-dashoffset: 283; }
+  .timer-ring.red .ring-fill { stroke: #e53e3e; }
+  .timer-num { position: absolute; inset: 0; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; font-size: 26px; font-weight: 700; color: var(--text); }
+  .final-grid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+  .final-check-item { width: calc(50% - 6px); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 18px; display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; -webkit-transition: border-color var(--transition), background var(--transition); transition: border-color var(--transition), background var(--transition); box-shadow: var(--shadow); cursor: pointer; }
+  .final-check-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--gold); cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; margin-top: 1px; }
+  .final-check-item.checked { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  #confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 9998; overflow: hidden; }
+  .confetti-piece { position: absolute; -webkit-animation: confettiFall linear forwards; animation: confettiFall linear forwards; }
+  #excellent-banner { display: none; position: fixed; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 28px; font-weight: 800; padding: 24px 48px; border-radius: 16px; box-shadow: 0 16px 64px rgba(201,168,76,0.5); z-index: 10000; text-align: center; }
+  #excellent-banner.show { display: block; -webkit-animation: pop 0.4s cubic-bezier(.18,.89,.32,1.28); animation: pop 0.4s cubic-bezier(.18,.89,.32,1.28); }
+  .kchip { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-block; margin: 4px; -webkit-transition: var(--transition); transition: var(--transition); }
+  .kchip:hover, .kchip.used { background: var(--gold); color: var(--navy); }
+  .cat-term { display: inline-block; background: rgba(201,168,76,0.1); border: 1.5px solid var(--gold); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: var(--gold); cursor: pointer; margin: 4px; -webkit-transition: var(--transition); transition: var(--transition); }
+  .cat-term.selected { background: var(--gold); color: var(--navy); box-shadow: 0 0 0 3px rgba(201,168,76,0.3); }
+  .cat-term.assigned-S { background: rgba(102,126,234,0.15); border-color: #667eea; color: #667eea; }
+  .cat-term.assigned-M { background: rgba(56,161,105,0.15); border-color: #38a169; color: #38a169; }
+  .cat-term.assigned-A { background: rgba(229,62,62,0.15); border-color: #e53e3e; color: #e53e3e; }
+  .cat-btn { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; border: 2px solid; -webkit-transition: var(--transition); transition: var(--transition); font-family: inherit; margin: 6px; }
+  .cat-btn-S { background: rgba(102,126,234,0.08); border-color: #667eea; color: #667eea; }
+  .cat-btn-S:hover, .cat-btn-S.active-cat { background: rgba(102,126,234,0.2); }
+  .cat-btn-M { background: rgba(56,161,105,0.08); border-color: #38a169; color: #38a169; }
+  .cat-btn-M:hover, .cat-btn-M.active-cat { background: rgba(56,161,105,0.2); }
+  .cat-btn-A { background: rgba(229,62,62,0.08); border-color: #e53e3e; color: #e53e3e; }
+  .cat-btn-A:hover, .cat-btn-A.active-cat { background: rgba(229,62,62,0.2); }
+  .speaking-plan-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; margin-bottom: 4px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .speaking-plan-input:focus { border-color: var(--gold); }
+  .speaking-plan-label { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; margin-top: 16px; display: block; }
+  @-webkit-keyframes slideDown { from { opacity: 0; -webkit-transform: translateY(-12px); transform: translateY(-12px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+  @-webkit-keyframes slideIn { from { opacity: 0; -webkit-transform: translateX(-16px); transform: translateX(-16px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+  @-webkit-keyframes pop { from { -webkit-transform: scale(0.7); transform: scale(0.7); opacity: 0; } to { -webkit-transform: scale(1); transform: scale(1); opacity: 1; } }
+  @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @-webkit-keyframes confettiFall { 0% { -webkit-transform: translateY(-20px) rotate(0deg); transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { -webkit-transform: translateY(105vh) rotate(720deg); transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+  @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+  @-webkit-keyframes flash { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @keyframes flash { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .mt-16 { margin-top: 16px; } .mt-8 { margin-top: 8px; } .mb-16 { margin-bottom: 16px; }
+  .flex { display: -webkit-flex; display: flex; } .flex-center { -webkit-align-items: center; align-items: center; }
+  .gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
+  .text-gold { color: var(--gold); } .text-sm { font-size: 13px; } .text-xs { font-size: 11px; color: var(--mid-gray); } .fw-600 { font-weight: 600; }
+  @media print { #sidebar, #hamburger, #dark-toggle, #progress-bar-wrap, #progress-label, #confetti-container, #excellent-banner, .btn, .timer-wrap { display: none !important; } #main-content { margin-left: 0 !important; padding: 20px !important; } body { background: white !important; color: black !important; } .card { box-shadow: none !important; border: 1px solid #ddd !important; } }
+  @media (max-width: 900px) { #main-content { margin-left: 0; padding: 20px 20px 48px; } #hamburger { display: -webkit-flex; display: flex; } #sidebar { -webkit-transform: translateX(-100%); transform: translateX(-100%); } #sidebar.open { -webkit-transform: none; transform: none; } #sidebar-overlay.show { display: block; } .flashcard-wrap { width: calc(50% - 8px); } .final-check-item { width: 100%; } #progress-label { right: 60px; } }
+  @media (max-width: 600px) { .flashcard-wrap { width: 100%; } #main-content { padding: 16px 16px 48px; } .section-title { font-size: 18px; } .final-check-item { width: 100%; } .fib-input { width: 130px; } }
+</style>
+</head>
+<body>
+
+<div id="progress-bar-wrap"><div id="progress-bar-fill" style="width:0%"></div></div>
+<div id="progress-label">0% Complete</div>
+<button id="dark-toggle" onclick="toggleDark()"><span id="dark-icon">🌙</span><span id="dark-label">Dark</span></button>
+<button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<aside id="sidebar">
+  <div id="sidebar-logo">
+    <div class="logo-title">Industry Exhibitions</div>
+    <div class="logo-sub">Educational Dashboard</div>
+  </div>
+  <nav>
+    <a href="#part1" onclick="smoothNav(event,'part1')" id="nav1"><span class="nav-num">1</span> Professional Situation</a>
+    <a href="#part2" onclick="smoothNav(event,'part2')" id="nav2"><span class="nav-num">2</span> Main Text</a>
+    <a href="#part3" onclick="smoothNav(event,'part3')" id="nav3"><span class="nav-num">3</span> Glossary Categories</a>
+    <a href="#part4" onclick="smoothNav(event,'part4')" id="nav4"><span class="nav-num">4</span> Glossary Cards</a>
+    <a href="#part5" onclick="smoothNav(event,'part5')" id="nav5"><span class="nav-num">5</span> Fill in Blanks</a>
+    <a href="#part6" onclick="smoothNav(event,'part6')" id="nav6"><span class="nav-num">6</span> Writing Tasks</a>
+    <a href="#part7" onclick="smoothNav(event,'part7')" id="nav7"><span class="nav-num">7</span> Speaking Plan</a>
+    <a href="#part8" onclick="smoothNav(event,'part8')" id="nav8"><span class="nav-num">8</span> Speaking Task</a>
+    <a href="#final" onclick="smoothNav(event,'final')" id="navF"><span class="nav-num">✓</span> Self-Reflection</a>
+    <a href="#score" onclick="smoothNav(event,'score')" id="navS"><span class="nav-num">★</span> My Score</a>
+  </nav>
+</aside>
+
+<main id="main-content">
+
+<!-- PART 1 -->
+<section class="section" id="part1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Professional Situation</div>
+      <div class="section-subtitle">Read the situation, then answer the discussion questions</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">A professional scenario is hidden below. Reveal it, then respond to the questions.</p>
+    <button class="btn btn-primary" id="reveal-btn" onclick="revealCase()">▶ Reveal Situation</button>
+    <div class="case-box" id="case-box">
+      <strong style="color:var(--gold);display:block;margin-bottom:12px;">📋 Professional Situation</strong>
+      You are a <strong>finance specialist at a regional bank</strong>. Your management team is deciding which industry exhibitions to attend next year to guide the bank's innovation strategy. You have been asked to research the options and present a recommendation.
+    </div>
+    <div class="discussion-questions" id="discussion-qs">
+      <div style="margin:20px 0 14px;font-size:14px;font-weight:700;color:var(--text);">💬 Discussion Questions</div>
+      <div class="dq-item">
+        <div class="dq-num">Question 1</div>
+        <div class="dq-q">What specific professional goals can a finance specialist have when attending a FinTech exhibition?</div>
+        <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts... (min. 20 words)" oninput="saveItem('exhib_dq1',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question 2</div>
+        <div class="dq-q">What types of information collected at an exhibition are crucial for a financial analysis or market report?</div>
+        <textarea class="dq-textarea" id="dq2" placeholder="List at least 3 types of information..." oninput="saveItem('exhib_dq2',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question 3</div>
+        <div class="dq-q">Besides booking a ticket, what preparation is necessary to make exhibition participation effective?</div>
+        <textarea class="dq-textarea" id="dq3" placeholder="Give 2-3 specific preparation steps..." oninput="saveItem('exhib_dq3',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="section" id="part2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Main Text</div>
+      <div class="section-subtitle">Hover over gold-highlighted terms to see their definitions. Answer the comprehension questions below.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="vocab-text">
+      <p>For finance professionals, industry exhibitions are critical platforms for <span class="vocab-word">strategic intelligence<span class="tooltip">the process of gathering and analysing information to support long-term business decisions</span></span> and <span class="vocab-word">professional development<span class="tooltip">the process of improving skills and knowledge for career growth</span></span>. They provide a <span class="vocab-word">condensed<span class="tooltip">compressed into a shorter or denser form</span></span> view of market innovations, <span class="vocab-word">competitive landscapes<span class="tooltip">the overall market environment including all key players and their positions</span></span>, and <span class="vocab-word">emerging economic trends<span class="tooltip">new patterns in the economy that are beginning to develop</span></span>, translating <span class="vocab-word">observation<span class="tooltip">the act of carefully watching and noting facts or behaviour</span></span> into <span class="vocab-word">actionable insight<span class="tooltip">practical information that can be directly used to make decisions</span></span>.</p>
+      <p>Exhibitions can be categorized by their <span class="vocab-word">scope<span class="tooltip">the range or extent of something</span></span> and <span class="vocab-word">focus<span class="tooltip">the main area of attention or activity</span></span>. Global exhibitions like Money20/20 set the worldwide agenda for FinTech, covering trends like <span class="vocab-word">digital assets<span class="tooltip">financial or data assets stored and transferred digitally</span></span> and <span class="vocab-word">AI-driven finance<span class="tooltip">financial services powered by artificial intelligence</span></span>. Their <span class="vocab-word">primary value<span class="tooltip">the main or most important benefit of something</span></span> lies in <span class="vocab-word">showcasing<span class="tooltip">to display or present something to highlight its strengths</span></span> <span class="vocab-word">disruptive technologies<span class="tooltip">innovations that significantly change how an industry operates</span></span> and <span class="vocab-word">facilitating<span class="tooltip">making a process easier or helping it happen</span></span> partnerships across continents. Attending allows finance specialists to <span class="vocab-word">benchmark<span class="tooltip">to compare performance against industry standards or leading examples</span></span> their organisation against global leaders and identify transformative investment opportunities.</p>
+      <p>In contrast, regional and national exhibitions address specific market dynamics. An event like FinCore in Moscow focuses on the <span class="vocab-word">practical implementation<span class="tooltip">the process of putting a plan or technology into actual use</span></span> of technology within the local banking and regulatory context. Here, discussions <span class="vocab-word">revolve around<span class="tooltip">to have something as the central focus or theme</span></span> adapting global trends, solving regional challenges, and forming partnerships within the CIS financial ecosystem. The focus shifts from global disruption to local execution and <span class="vocab-word">market adaptation<span class="tooltip">adjusting products or strategies to fit a specific local market</span></span>.</p>
+      <p>Furthermore, <span class="vocab-word">specialized forums<span class="tooltip">professional events focused on specific niche topics</span></span> offer deep dives into niche areas. For instance, a forum on <span class="vocab-word">RegTech<span class="tooltip">technology designed to help companies meet regulatory requirements</span></span> explores solutions for <span class="vocab-word">compliance automation<span class="tooltip">using technology to automatically ensure adherence to rules</span></span>, while an <span class="vocab-word">ESG<span class="tooltip">Environmental, Social, Governance — a framework for evaluating sustainable business practices</span></span> finance summit concentrates on <span class="vocab-word">sustainable investment models<span class="tooltip">investment approaches that consider long-term environmental and social factors</span></span>. These events provide finance analysts with <span class="vocab-word">expert-level knowledge<span class="tooltip">deep, specialised understanding of a specific field</span></span> in specific domains increasingly important for risk assessment and <span class="vocab-word">long-term valuation<span class="tooltip">assessing the financial worth of an asset over an extended period</span></span>.</p>
+      <p>Therefore, a strategic approach to exhibitions is <span class="vocab-word">vital<span class="tooltip">extremely important; essential</span></span>. A finance professional might visit a global event to <span class="vocab-word">scout for<span class="tooltip">to search actively for something valuable or promising</span></span> innovation, a regional one to analyse <span class="vocab-word">market entry feasibility<span class="tooltip">the assessment of whether entering a new market is practical and profitable</span></span>, and a specialized forum to solve a specific technical challenge. This triangulation of intelligence directly informs <span class="vocab-word">investment strategies<span class="tooltip">plans that guide decisions about allocating capital for financial return</span></span>, <span class="vocab-word">risk management<span class="tooltip">the process of identifying and controlling potential financial threats</span></span> frameworks, and the company's overall <span class="vocab-word">strategic direction<span class="tooltip">the long-term course or plan a company chooses to follow</span></span>.</p>
+    </div>
+    <div style="border-top:1px solid var(--border);margin-top:28px;padding-top:24px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">📝 Comprehension Questions</div>
+      <div class="dq-item">
+        <div class="dq-num">Question A</div>
+        <div class="dq-q">What are the two main strategic purposes of attending exhibitions, according to the text?</div>
+        <textarea class="dq-textarea" id="cq1" placeholder="Identify two purposes from the text..." oninput="saveItem('exhib_cq1',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(1)">📋 Model</button>
+        </div>
+        <div id="cq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question B</div>
+        <div class="dq-q">How do global and regional exhibitions differ in their primary focus?</div>
+        <textarea class="dq-textarea" id="cq2" placeholder="Compare global vs. regional exhibitions..." oninput="saveItem('exhib_cq2',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(2)">📋 Model</button>
+        </div>
+        <div id="cq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question C</div>
+        <div class="dq-q">How can exhibitions directly influence a company's strategic planning?</div>
+        <textarea class="dq-textarea" id="cq3" placeholder="Explain the connection between exhibitions and strategy..." oninput="saveItem('exhib_cq3',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(3)">📋 Model</button>
+        </div>
+        <div id="cq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="section" id="part3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Glossary Awareness</div>
+      <div class="section-subtitle">Click a term to select it, then click a category to assign it. One term can belong to multiple groups.</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Select a term, then click its best category. Correct assignments highlight in that category's colour. Score counts unique correct assignments.</p>
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="cat-btn cat-btn-S" id="catbtn-S" onclick="assignCategory('S')">🔵 Strategy &amp; Planning</button>
+      <button class="cat-btn cat-btn-M" id="catbtn-M" onclick="assignCategory('M')">🟢 Market &amp; Innovation</button>
+      <button class="cat-btn cat-btn-A" id="catbtn-A" onclick="assignCategory('A')">🔴 Analysis &amp; Risk</button>
+    </div>
+    <div id="cat-terms-grid" style="margin-bottom:20px;"></div>
+    <div class="flex flex-center gap-8" style="flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="resetCategories()">↺ Reset</button>
+      <span id="cat-score" class="text-sm text-gold fw-600"></span>
+    </div>
+  </div>
+</section>
+
+<!-- PART 4 -->
+<section class="section" id="part4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Glossary — Flip Cards</div>
+      <div class="section-subtitle">Click any card to reveal its definition. Search to filter terms.</div>
+    </div>
+  </div>
+  <div class="card">
+    <input type="search" class="search-bar" id="card-search" placeholder="🔍 Search terms..." oninput="filterCards(this.value)">
+    <div class="flashcard-grid" id="flashcard-grid"></div>
+  </div>
+</section>
+
+<!-- PART 5 -->
+<section class="section" id="part5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Fill in the Blanks</div>
+      <div class="section-subtitle">Complete each sentence with the correct glossary term. Click outside to check.</div>
+    </div>
+  </div>
+  <div class="card" id="fib-container"></div>
+</section>
+
+<!-- PART 6 -->
+<section class="section" id="part6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Writing Tasks</div>
+      <div class="section-subtitle">Write at least 40 words. Use 5+ glossary terms for a vocabulary bonus!</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="writing-scenario">
+      <strong style="color:var(--gold);">📊 Scenario — Task 5: Strategic Recommendation</strong><br>
+      Your company (a mid-sized asset management firm) can attend only <strong>ONE</strong> major exhibition this year:<br>
+      <strong>A)</strong> Money20/20 Europe — global FinTech trends &amp; networking<br>
+      <strong>B)</strong> Regional ESG Finance Summit — sustainable investing focus<br>
+      <strong>C)</strong> FinCore Moscow — FinTech adoption in your home region<br>
+      Write a short memo (4–5 sentences) recommending one option. Use at least <strong>5 glossary terms</strong>.
+    </div>
+    <div class="writing-task">
+      <label for="wt1">Your memo to management:</label>
+      <textarea class="writing-ta" id="wt1" placeholder="To: Management Team. Re: Exhibition Recommendation..." oninput="updateWriting(1,this.value)"></textarea>
+      <div class="writing-meta">
+        <span class="word-count" id="wc1">0 words</span>
+        <span class="vocab-badge" id="vb1">⭐ Good vocabulary!</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✓ Check</button>
+        <button class="btn btn-outline btn-sm" onclick="showWritingModel(1)">📋 Model</button>
+      </div>
+      <div id="wfb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid var(--border);"></div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);padding-top:24px;margin-top:8px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">📝 Task 5a — Evaluate &amp; Justify</div>
+      <div class="writing-task">
+        <label for="wt2"><strong>Statement 1:</strong> "Specialized forums are more valuable for a finance specialist's professional development than large global exhibitions." — Do you agree or disagree? Justify with 2–3 sentences and 5+ glossary terms.</label>
+        <textarea class="writing-ta" id="wt2" placeholder="I agree/disagree because..." oninput="updateWriting(2,this.value)"></textarea>
+        <div class="writing-meta">
+          <span class="word-count" id="wc2">0 words</span>
+          <span class="vocab-badge" id="vb2">⭐ Good vocabulary!</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showWritingModel(2)">📋 Model</button>
+        </div>
+        <div id="wfb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid var(--border);"></div>
+      </div>
+      <div class="writing-task">
+        <label for="wt3"><strong>Statement 2:</strong> "In the digital age, the primary value of an exhibition is no longer seeing products, but facilitating high-level networking." — Do you agree or disagree? Justify with 2–3 sentences and 5+ glossary terms.</label>
+        <textarea class="writing-ta" id="wt3" placeholder="I agree/disagree because..." oninput="updateWriting(3,this.value)"></textarea>
+        <div class="writing-meta">
+          <span class="word-count" id="wc3">0 words</span>
+          <span class="vocab-badge" id="vb3">⭐ Good vocabulary!</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-primary btn-sm" onclick="checkWriting(3)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showWritingModel(3)">📋 Model</button>
+        </div>
+        <div id="wfb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid var(--border);"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 7 -->
+<section class="section" id="part7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">Speaking Plan — Team Briefing</div>
+      <div class="section-subtitle">Complete the briefing template, then use your notes for the final speaking task</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Imagine you attended a major exhibition. Complete this briefing plan for your colleagues. Your notes will be used in Part 8.</p>
+    <span class="speaking-plan-label">Event &amp; Purpose</span>
+    <input type="text" class="speaking-plan-input" id="sp1" placeholder="I attended [Exhibition Name] to gather intelligence on..." oninput="updateSpeakingPlan()">
+    <span class="speaking-plan-label">Key Trend Identified</span>
+    <input type="text" class="speaking-plan-input" id="sp2" placeholder="The most significant trend observed was... This matters for our business because..." oninput="updateSpeakingPlan()">
+    <span class="speaking-plan-label">Competitive Insight</span>
+    <input type="text" class="speaking-plan-input" id="sp3" placeholder="In terms of the competitive landscape, I noticed that key players are..." oninput="updateSpeakingPlan()">
+    <span class="speaking-plan-label">Strategic Recommendation</span>
+    <input type="text" class="speaking-plan-input" id="sp4" placeholder="Therefore, I recommend we focus on... to manage risk / seize an opportunity." oninput="updateSpeakingPlan()">
+    <div style="margin-top:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <span class="text-sm" id="sp-wordcount" style="color:var(--mid-gray);">0 words in your plan</span>
+      <button class="btn btn-primary btn-sm" onclick="smoothNav(event,'part8')">✓ Ready for Speaking Task →</button>
+    </div>
+  </div>
+</section>
+
+<!-- PART 8 -->
+<section class="section" id="part8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <div class="section-title">Final Speaking Task</div>
+      <div class="section-subtitle">Deliver your briefing. Use your notes — do NOT read a prepared script.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="writing-scenario" style="margin-bottom:20px;">
+      <strong style="color:var(--gold);">🎤 Instructions</strong><br>
+      Speak for <strong>1.5–2 minutes</strong> (90–120 seconds) · Use your notes from Part 7 · Structure: <em>Observation → Analysis → Recommendation</em> · Use at least <strong>8 glossary terms</strong>
+    </div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:24px;">
+      <div class="timer-wrap" style="flex:1;min-width:160px;">
+        <div style="font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;">Minimum (90s)</div>
+        <div class="timer-ring" id="timer-ring-90">
+          <svg width="100" height="100" viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fill" id="ring-fill-90" cx="50" cy="50" r="45"/></svg>
+          <div class="timer-num" id="timer-num-90">90</div>
+        </div>
+        <div class="flex gap-8">
+          <button class="btn btn-primary btn-sm" onclick="startTimer(90)">▶ Start</button>
+          <button class="btn btn-outline btn-sm" onclick="resetTimer(90)">↺</button>
+        </div>
+      </div>
+      <div class="timer-wrap" style="flex:1;min-width:160px;">
+        <div style="font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;">Maximum (120s)</div>
+        <div class="timer-ring" id="timer-ring-120">
+          <svg width="100" height="100" viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fill" id="ring-fill-120" cx="50" cy="50" r="45"/></svg>
+          <div class="timer-num" id="timer-num-120">120</div>
+        </div>
+        <div class="flex gap-8">
+          <button class="btn btn-primary btn-sm" onclick="startTimer(120)">▶ Start</button>
+          <button class="btn btn-outline btn-sm" onclick="resetTimer(120)">↺</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">🎯 Tick off each term as you use it:</div>
+      <div id="speaking-chips" style="margin-bottom:12px;"></div>
+      <div id="speaking-chip-count" class="text-sm" style="color:var(--mid-gray);">0 / 8 terms used</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="section" id="final">
+  <div class="section-header">
+    <div class="section-num">✓</div>
+    <div>
+      <div class="section-title">Self-Reflection</div>
+      <div class="section-subtitle">Tick each item when you feel genuinely confident. Complete all 12 to unlock your reward!</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Reflect honestly. Check an item only when you are truly confident.</p>
+    <div class="final-grid" id="final-grid"></div>
+    <div style="text-align:center;">
+      <span id="final-score" class="text-sm fw-600" style="color:var(--mid-gray);">0 / 12 completed</span>
+    </div>
+  </div>
+</section>
+
+<!-- SCORE -->
+<section class="section" id="score">
+  <div class="section-header">
+    <div class="section-num">★</div>
+    <div>
+      <div class="section-title">My Overall Score</div>
+      <div class="section-subtitle">Aggregated results from all checked tasks</div>
+    </div>
+  </div>
+  <div class="card" id="score-card">
+    <div id="score-overview" style="text-align:center;padding:24px 0 16px;">
+      <div id="score-ring-wrap" style="display:inline-block;position:relative;width:140px;height:140px;">
+        <svg width="140" height="140" viewBox="0 0 140 140" style="-webkit-transform:rotate(-90deg);transform:rotate(-90deg);">
+          <circle cx="70" cy="70" r="60" fill="none" stroke="var(--border)" stroke-width="10"/>
+          <circle id="score-ring-fill" cx="70" cy="70" r="60" fill="none" stroke="var(--gold)" stroke-width="10" stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377" style="-webkit-transition:stroke-dashoffset 1s ease;transition:stroke-dashoffset 1s ease;"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div id="score-pct" style="font-size:30px;font-weight:800;color:var(--gold);">0%</div>
+          <div style="font-size:11px;color:var(--text-secondary);">Overall</div>
+        </div>
+      </div>
+      <div id="score-grade" style="margin-top:12px;font-size:18px;font-weight:700;color:var(--text);">Complete tasks to see your grade</div>
+    </div>
+    <div id="score-breakdown" style="margin-top:4px;"></div>
+    <div style="margin-top:20px;text-align:center;">
+      <button class="btn btn-primary" onclick="updateOverallScore()">🔄 Refresh Score</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="confetti-container"></div>
+<div id="excellent-banner">🏆 Excellent Work! You've mastered this lesson!</div>
+
+<script>
+// DATA
+var glossaryTerms = [
+  {term:"strategic intelligence",def:"the process of gathering and analysing information to support long-term business decisions",ru:"стратегическая разведка"},
+  {term:"professional development",def:"the process of improving skills and knowledge for career growth",ru:"профессиональное развитие"},
+  {term:"condensed",def:"compressed into a shorter or denser form",ru:"сжатый, концентрированный"},
+  {term:"competitive landscape",def:"the overall market environment including all key players and their positions",ru:"конкурентная среда"},
+  {term:"emerging economic trends",def:"new patterns in the economy that are beginning to develop",ru:"возникающие экономические тренды"},
+  {term:"observation",def:"the act of carefully watching and noting facts or behaviour",ru:"наблюдение"},
+  {term:"actionable insight",def:"practical information that can be directly used to make decisions",ru:"практически применимая информация"},
+  {term:"scope",def:"the range or extent of something",ru:"масштаб, охват"},
+  {term:"digital assets",def:"financial or data assets stored and transferred digitally",ru:"цифровые активы"},
+  {term:"AI-driven finance",def:"financial services powered by artificial intelligence",ru:"финансы на базе ИИ"},
+  {term:"primary value",def:"the main or most important benefit of something",ru:"основная ценность"},
+  {term:"to showcase",def:"to display or present something to highlight its strengths",ru:"демонстрировать"},
+  {term:"disruptive technology",def:"an innovation that significantly changes how an industry operates",ru:"разрушительная технология"},
+  {term:"to facilitate",def:"to make a process easier or help it happen",ru:"способствовать, облегчать"},
+  {term:"to benchmark",def:"to compare performance against industry standards or leading examples",ru:"сравнивать с эталоном"},
+  {term:"practical implementation",def:"the process of putting a plan or technology into actual use",ru:"практическая реализация"},
+  {term:"market adaptation",def:"adjusting products or strategies to fit a specific local market",ru:"адаптация к рынку"},
+  {term:"specialized forum",def:"a professional event focused on a specific niche topic",ru:"специализированный форум"},
+  {term:"RegTech",def:"technology designed to help companies meet regulatory requirements",ru:"регуляторные технологии"},
+  {term:"compliance automation",def:"using technology to automatically ensure adherence to rules",ru:"автоматизация комплаенса"},
+  {term:"ESG",def:"Environmental, Social, Governance — a framework for evaluating sustainable business practices",ru:"ESG-критерии"},
+  {term:"sustainable investment models",def:"investment approaches that consider long-term environmental and social factors",ru:"модели устойчивых инвестиций"},
+  {term:"expert-level knowledge",def:"deep, specialised understanding of a specific field",ru:"экспертные знания"},
+  {term:"long-term valuation",def:"assessing the financial worth of an asset over an extended period",ru:"долгосрочная оценка стоимости"},
+  {term:"vital",def:"extremely important; essential",ru:"жизненно важный"},
+  {term:"to scout for",def:"to search actively for something valuable or promising",ru:"искать, выискивать"},
+  {term:"market entry feasibility",def:"the assessment of whether entering a new market is practical and profitable",ru:"целесообразность выхода на рынок"},
+  {term:"strategic direction",def:"the long-term course or plan a company chooses to follow",ru:"стратегическое направление"},
+  {term:"investment strategy",def:"a plan that guides decisions about allocating capital for financial return",ru:"инвестиционная стратегия"},
+  {term:"risk management",def:"the process of identifying and controlling potential financial threats",ru:"управление рисками"},
+  {term:"to revolve around",def:"to have something as the central focus or theme",ru:"вращаться вокруг, сосредоточиваться на"},
+  {term:"focus",def:"the main area of attention or activity",ru:"фокус, направленность"}
+];
+
+var dqCriteria = {
+  1: {keywords:['network','partner','benchmark','trend','innovat','strateg','competi','intelligen','insight','technolog','scout','develop'],minWords:20,
+    model:"A finance specialist can attend a FinTech exhibition to gather strategic intelligence on emerging technologies, benchmark their organisation against global leaders, scout for potential partners and vendors, and identify disruptive innovations that could affect their investment strategy or business model.",
+    tip:"Mention: benchmark, strategic intelligence, scout for, disruptive technology, innovation, networking."},
+  2: {keywords:['trend','competi','data','product','partner','market','pricing','regulat','technolog','innovat','insight','landscape'],minWords:20,
+    model:"Key information includes data on emerging economic trends and the competitive landscape, details of new disruptive technologies, regulatory updates, pricing benchmarks, and partnership opportunities. This raw observation must be converted into actionable insight to be useful in a market report.",
+    tip:"Mention: trends, competitive landscape, actionable insight, regulatory data, technology."},
+  3: {keywords:['goal','research','agenda','contact','compan','session','priorit','strateg','briefing','budget','plan','object'],minWords:25,
+    model:"Effective preparation requires setting clear strategic goals, researching exhibitors and keynote speakers in advance, prioritising sessions and networking events, preparing targeted questions for potential partners, and defining what specific actionable insights the team needs to bring back. A pre-event briefing aligned with the company's strategic direction is essential.",
+    tip:"Mention: goals, research, prioritise, agenda, strategic direction, actionable insights."}
+};
+
+var cqCriteria = {
+  1: {keywords:['intelligen','develop','network','innovat','partner','benchmark','trend','insight','strateg'],minWords:15,
+    model:"According to the text, the two main strategic purposes are gathering strategic intelligence (understanding market innovations, competitive landscapes, and emerging trends) and professional development (building expertise and partnerships that support career and organisational growth).",
+    tip:"Look for: strategic intelligence, professional development."},
+  2: {keywords:['global','regional','local','disrupt','innovat','implement','adapt','market','partner','worldwide','national'],minWords:20,
+    model:"Global exhibitions like Money20/20 focus on worldwide disruptive technologies and cross-continental partnerships. Regional events like FinCore address local market adaptation and practical implementation within a specific regulatory and economic context.",
+    tip:"Contrast: global = disruptive technology / regional = practical implementation, market adaptation."},
+  3: {keywords:['strateg','invest','risk','direction','insight','benchmark','decision','innovat','framework','planning','inform'],minWords:20,
+    model:"Exhibitions provide actionable insights that directly inform investment strategies and risk management frameworks. By benchmarking against competitors and assessing market entry feasibility, professionals gather the strategic intelligence needed to update their company's strategic direction.",
+    tip:"Mention: actionable insight, investment strategy, risk management, strategic direction."}
+};
+
+var catTerms = [
+  {label:"strategic intelligence",   cats:['S','A']},
+  {label:"professional development",  cats:['S']},
+  {label:"competitive landscape",     cats:['M','A']},
+  {label:"emerging economic trends",  cats:['M','A']},
+  {label:"actionable insight",        cats:['A','S']},
+  {label:"disruptive technology",     cats:['M']},
+  {label:"to benchmark",              cats:['A','S']},
+  {label:"market adaptation",         cats:['M','S']},
+  {label:"specialized forum",         cats:['M']},
+  {label:"RegTech",                   cats:['M','A']},
+  {label:"ESG",                       cats:['A']},
+  {label:"long-term valuation",       cats:['A']},
+  {label:"strategic direction",       cats:['S']},
+  {label:"investment strategy",       cats:['S','A']},
+  {label:"risk management",           cats:['A','S']}
+];
+
+var fibData = [
+  {label:"Task 4 — Complete the professional analysis", sentences:[
+    {s:"Before entering a new market, a company must understand the local ___ and consider strategies for successful ___.", blanks:["competitive landscape","market adaptation"]},
+    {s:"Attending a global exhibition like Money20/20 is excellent for ___ our capabilities against the most advanced global players.", blanks:["benchmarking"]},
+    {s:"The finance team's report provided several ___ that management used to update the company's ___.", blanks:["actionable insights","strategic direction"]},
+    {s:"Investing in a ___ carries high risk but can redefine our core business.", blanks:["disruptive technology"]},
+    {s:"To manage new regulatory demands efficiently, the bank is exploring solutions in ___.", blanks:["RegTech"]}
+  ]},
+  {label:"Task 4a — Complete the strategic analysis", sentences:[
+    {s:"A key outcome for any finance professional should be to translate observations into ___ that can guide our decisions.", blanks:["actionable insights"]},
+    {s:"Before investing in a new technology, it is crucial to ___ our current capabilities against industry leaders.", blanks:["benchmark"]},
+    {s:"Attending a ___ provides expert-level knowledge on a very specific business challenge.", blanks:["specialized forum"]},
+    {s:"The ultimate goal of market research is gaining a deep understanding of the ___ and ___.", blanks:["competitive landscape","emerging economic trends"]},
+    {s:"For a product to succeed internationally, a strategy for ___ is as important as the innovation itself.", blanks:["market adaptation"]}
+  ]}
+];
+
+var writingCriteria = {
+  1: {
+    keywords:['money20','esg','fincore','strateg','intelligen','benchmark','invest','adapt','scope','competi','insight','develop','risk','disrupt','regional','global','forum'],
+    model:"To: Management Team. Re: Exhibition Recommendation. I recommend we attend the Regional ESG Finance Summit. Our strategic direction for the next three years prioritises sustainable investment models and long-term valuation. This specialized forum will provide expert-level knowledge in ESG compliance that a global event like Money20/20 cannot offer with the same depth. I will scout for compliance automation tools and benchmark our ESG framework against industry leaders. This actionable insight will directly inform our investment strategy.",
+    tip:"State your choice. Explain strategic goal. Mention specific information to gather. Use 5+ terms."
+  },
+  2: {
+    keywords:['special','forum','global','develop','expert','knowledge','scope','innovat','competi','network','value','intelligen','professional','benchmark'],
+    model:"I partially agree. Specialized forums provide expert-level knowledge and deep actionable insight in a specific domain, which is invaluable for professional development in that area. However, large global exhibitions offer unmatched strategic intelligence on competitive landscapes and emerging economic trends that is equally vital. The ideal approach is to triangulate both types of events based on the company's current strategic direction.",
+    tip:"State position clearly. Compare forums vs. global events. Use: expert-level knowledge, strategic intelligence, competitive landscape, professional development."
+  },
+  3: {
+    keywords:['network','partner','digital','value','product','showcase','facilitat','relationship','trust','intelligen','contact','meeting','primary'],
+    model:"I agree. While the primary value of exhibitions once lay in showcasing physical products, digital channels now provide access to product information more efficiently. Today, the irreplaceable benefit is the ability to facilitate high-level partnerships, build trust through face-to-face interaction, and gain strategic intelligence through conversations that cannot happen online. The real asset is the network built, not the brochures collected.",
+    tip:"State position. Contrast old vs. new primary value. Use: facilitate, strategic intelligence, primary value, showcase, partnerships."
+  }
+};
+
+var writingScores = [0,0,0];
+var speakingChipsUsed = 0;
+var timerIntervals = {};
+var timerTimes = {90:90, 120:120};
+var timerRunning = {90:false, 120:false};
+var catSelected = null;
+var catResults = {};
+var progressEvents = {};
+var totalProgressEvents = 10;
+
+var vocabKeywords = glossaryTerms.map(function(t){ return t.term.toLowerCase(); });
+
+var finalChecks = [
+  "I can explain what strategic intelligence means and why it matters at exhibitions",
+  "I understand the difference between global, regional, and specialized exhibitions",
+  "I can describe the primary value of attending events like Money20/20 or FinCore",
+  "I can use 'benchmark' and 'competitive landscape' correctly in a professional sentence",
+  "I understand what actionable insight means and how it differs from raw data",
+  "I can explain the concept of market adaptation with a real example",
+  "I know what RegTech and compliance automation refer to",
+  "I can explain ESG and sustainable investment models in a professional context",
+  "I can write a professional memo using at least 5 glossary terms",
+  "I can structure a briefing with clear observation, analysis, and recommendation",
+  "I am confident using the language of strategic analysis in a professional discussion",
+  "I feel prepared to speak for 1.5–2 minutes on exhibition strategy in English"
+];
+
+// INIT
+document.addEventListener('DOMContentLoaded', function() {
+  loadDarkMode();
+  buildFlashcards();
+  buildFIB();
+  buildCatTerms();
+  buildSpeakingChips();
+  buildFinalCheck();
+  loadFromStorage();
+  updateProgress();
+  updateOverallScore();
+});
+window.addEventListener('scroll', updateNavHighlight);
+
+// DARK MODE
+function toggleDark() {
+  document.body.classList.toggle('dark-mode');
+  var isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('exhib_darkMode', isDark ? '1' : '0');
+  document.getElementById('dark-icon').textContent = isDark ? '☀️' : '🌙';
+  document.getElementById('dark-label').textContent = isDark ? 'Light' : 'Dark';
+}
+function loadDarkMode() {
+  if (localStorage.getItem('exhib_darkMode') === '1') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('dark-icon').textContent = '☀️';
+    document.getElementById('dark-label').textContent = 'Light';
+  }
+}
+
+// SIDEBAR
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); }
+function smoothNav(e, id) { e.preventDefault(); closeSidebar(); var el = document.getElementById(id); if (el) el.scrollIntoView({behavior:'smooth', block:'start'}); }
+function updateNavHighlight() {
+  var sections = ['part1','part2','part3','part4','part5','part6','part7','part8','final','score'];
+  var navIds   = ['nav1','nav2','nav3','nav4','nav5','nav6','nav7','nav8','navF','navS'];
+  var scrollY  = window.scrollY + 120; var active = 0;
+  sections.forEach(function(id, i) { var el = document.getElementById(id); if (el && el.offsetTop <= scrollY) active = i; });
+  navIds.forEach(function(nid, i) { var el = document.getElementById(nid); if (el) el.classList.toggle('active', i === active); });
+}
+
+// PROGRESS
+function markProgress(key) {
+  if (!progressEvents[key]) {
+    progressEvents[key] = true;
+    var stored = JSON.parse(localStorage.getItem('exhib_progress') || '{}');
+    stored[key] = true; localStorage.setItem('exhib_progress', JSON.stringify(stored));
+    updateProgress();
+  }
+}
+function updateProgress() {
+  var count = Object.keys(progressEvents).length;
+  var pct = Math.round((count / totalProgressEvents) * 100);
+  document.getElementById('progress-bar-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = pct + '% Complete';
+}
+function saveItem(key, val) { localStorage.setItem(key, val); }
+
+// PART 1 — Situation
+function revealCase() {
+  document.getElementById('case-box').classList.add('visible');
+  document.getElementById('discussion-qs').classList.add('visible');
+  document.getElementById('reveal-btn').style.display = 'none';
+  localStorage.setItem('exhib_caseRevealed','1');
+  markProgress('case_reveal');
+}
+
+// DQ checking (Part 1)
+function checkDQ(n) {
+  var ta = document.getElementById('dq'+n);
+  var val = ta ? ta.value.trim() : '';
+  var fb = document.getElementById('dq-fb'+n);
+  if (!fb) return;
+  if (val.length < 10) { fb.style.display='block'; fb.style.background='rgba(229,62,62,0.08)'; fb.style.border='1px solid rgba(229,62,62,0.3)'; fb.innerHTML='⚠️ Please write a more complete answer first.'; return; }
+  var crit = dqCriteria[n]; var lower = val.toLowerCase(); var words = val.split(/\s+/).length;
+  var found = crit.keywords.filter(function(k){ return lower.includes(k); });
+  var score = 0; var feedback = [];
+  if (words >= crit.minWords) { score += 2; } else { feedback.push('📏 Try to write at least '+crit.minWords+' words (you have '+words+').'); }
+  if (found.length >= 3) { score += 3; } else if (found.length >= 1) { score += 1; feedback.push('📚 Use more key terms — '+crit.tip); } else { feedback.push('📚 No key vocabulary detected. '+crit.tip); }
+  var hasCause = lower.includes(' because') || lower.includes(' therefore') || lower.includes(' as a result') || lower.includes(' which means') || lower.includes(' leads to') || lower.includes(' so ');
+  if (hasCause) { score += 1; } else { feedback.push('🔗 Try adding a cause-effect link (because, therefore, as a result…).'); }
+  var hasMulti = val.includes('.') && val.split('.').filter(function(s){ return s.trim().length > 5; }).length >= 2;
+  if (hasMulti) score += 1;
+  var totalScore = Math.min(score, 5); var pct = Math.round(totalScore/5*100);
+  var color = pct>=80?'#38a169':pct>=50?'#C9A84C':'#e53e3e'; var emoji = pct>=80?'🌟':pct>=50?'👍':'💪';
+  fb.style.display='block'; fb.style.background='rgba(201,168,76,0.05)'; fb.style.border='1px solid var(--border)';
+  fb.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="font-size:18px;">'+emoji+'</span><strong style="color:'+color+';">Score: '+totalScore+' / 5</strong><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="width:'+pct+'%;height:100%;background:'+color+';border-radius:3px;transition:width 0.5s;"></div></div></div>'+(found.length>0?'<div style="color:#38a169;font-size:12px;margin-bottom:6px;">✅ Key terms used: <em>'+found.slice(0,5).join(', ')+'</em></div>':'')+(feedback.length>0?'<div style="color:var(--text-secondary);">'+feedback.map(function(f){ return '<div style="margin-bottom:4px;">'+f+'</div>'; }).join('')+'</div>':'<div style="color:#38a169;">Great answer! You covered the key ideas well.</div>');
+  if (totalScore >= 4) markProgress('dq'+n+'_done');
+  updateOverallScore();
+}
+function showModelDQ(n) {
+  var fb = document.getElementById('dq-fb'+n); if (!fb) return;
+  fb.style.display='block'; fb.style.background='rgba(102,126,234,0.06)'; fb.style.border='1px solid rgba(102,126,234,0.3)';
+  fb.innerHTML='<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>'+escHtml(dqCriteria[n].model);
+}
+
+// CQ checking (Part 2)
+function checkCQ(n) {
+  var ta = document.getElementById('cq'+n); var val = ta ? ta.value.trim() : '';
+  var fb = document.getElementById('cq-fb'+n); if (!fb) return;
+  if (val.length < 10) { fb.style.display='block'; fb.innerHTML='⚠️ Please write a more complete answer.'; return; }
+  var crit = cqCriteria[n]; var lower = val.toLowerCase(); var words = val.split(/\s+/).length;
+  var found = crit.keywords.filter(function(k){ return lower.includes(k); });
+  var score = 0; var feedback = [];
+  if (words >= crit.minWords) { score += 2; } else { feedback.push('📏 Aim for at least '+crit.minWords+' words (you have '+words+').'); }
+  if (found.length >= 3) { score += 2; } else if (found.length >= 1) { score += 1; feedback.push('📚 '+crit.tip); } else { feedback.push('📚 '+crit.tip); }
+  if (val.includes('.') && val.split('.').filter(function(s){ return s.trim().length>5; }).length>=2) score+=1;
+  var totalScore = Math.min(score,5); var pct = Math.round(totalScore/5*100);
+  var color = pct>=80?'#38a169':pct>=50?'#C9A84C':'#e53e3e';
+  fb.style.display='block'; fb.style.background='rgba(201,168,76,0.05)'; fb.style.border='1px solid var(--border)';
+  fb.innerHTML='<strong style="color:'+color+';">Score: '+totalScore+' / 5</strong>'+(found.length>0?' — ✅ terms: <em>'+found.slice(0,4).join(', ')+'</em>':'')+(feedback.length>0?'<div style="margin-top:6px;color:var(--text-secondary);">'+feedback.join(' ')+'</div>':'<div style="color:#38a169;margin-top:4px;">Good answer!</div>');
+  if (totalScore>=4) markProgress('cq'+n+'_done');
+  updateOverallScore();
+}
+function showModelCQ(n) {
+  var fb = document.getElementById('cq-fb'+n); if (!fb) return;
+  fb.style.display='block'; fb.style.background='rgba(102,126,234,0.06)'; fb.style.border='1px solid rgba(102,126,234,0.3)';
+  fb.innerHTML='<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>'+escHtml(cqCriteria[n].model);
+}
+
+// PART 3 — Categorization
+function buildCatTerms() {
+  var grid = document.getElementById('cat-terms-grid'); if (!grid) return;
+  var html = '';
+  catTerms.forEach(function(t, i) {
+    html += '<span class="cat-term" id="cat-term-'+i+'" onclick="selectCatTerm('+i+')" tabindex="0">'+escHtml(t.label)+'</span>';
+  });
+  grid.innerHTML = html;
+}
+function selectCatTerm(i) {
+  document.querySelectorAll('.cat-term').forEach(function(el){ el.classList.remove('selected'); });
+  catSelected = i;
+  var el = document.getElementById('cat-term-'+i);
+  if (el) el.classList.add('selected');
+  ['S','M','A'].forEach(function(c){ var b = document.getElementById('catbtn-'+c); if(b) b.classList.remove('active-cat'); });
+}
+function assignCategory(cat) {
+  if (catSelected === null) { alert('First click a term, then click a category.'); return; }
+  var term = catTerms[catSelected];
+  var el = document.getElementById('cat-term-'+catSelected);
+  var key = catSelected+'-'+cat;
+  var correct = term.cats.indexOf(cat) !== -1;
+  if (correct) {
+    catResults[key] = true;
+    if (el) { el.classList.remove('selected'); el.classList.add('assigned-'+cat); }
+  } else {
+    if (el) {
+      el.style.background='rgba(229,62,62,0.15)'; el.style.borderColor='#e53e3e'; el.style.color='#e53e3e';
+      setTimeout(function(){ if(el){ el.style.background=''; el.style.borderColor=''; el.style.color=''; el.classList.remove('selected'); } },800);
+    }
+  }
+  catSelected = null;
+  var correctCount = Object.keys(catResults).filter(function(k){ return catResults[k]; }).length;
+  document.getElementById('cat-score').textContent = correctCount + ' correct assignment'+(correctCount!==1?'s':'');
+  if (correctCount >= 10) markProgress('cat_done');
+  updateOverallScore();
+}
+function resetCategories() {
+  catResults = {}; catSelected = null;
+  document.querySelectorAll('.cat-term').forEach(function(el){ el.className='cat-term'; });
+  document.getElementById('cat-score').textContent = '';
+}
+
+// PART 4 — Flashcards
+function buildFlashcards() {
+  var grid = document.getElementById('flashcard-grid'); if (!grid) return;
+  grid.innerHTML = '';
+  glossaryTerms.forEach(function(t, i) {
+    var wrap = document.createElement('div');
+    wrap.className = 'flashcard-wrap'; wrap.setAttribute('tabindex','0'); wrap.dataset.idx = i;
+    wrap.innerHTML = '<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div style="width:100%"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">'+escHtml(t.term)+'</div><div style="font-size:11px;color:var(--gold);font-style:italic;margin-bottom:6px;">'+escHtml(t.ru)+'</div><div style="display:flex;justify-content:space-between;align-items:center;"><span class="fc-hint">Click to flip</span><button class="fc-audio-btn" onclick="speakTerm(event,\''+escAttr(t.term)+'\')" title="Listen" style="background:rgba(201,168,76,0.15);border:1px solid var(--gold);color:var(--gold);border-radius:6px;padding:2px 7px;font-size:13px;cursor:pointer;line-height:1;">🔊</button></div></div></div><div class="flashcard-face flashcard-back"><div style="width:100%;text-align:left;"><div style="font-size:11px;color:rgba(255,255,255,0.9);line-height:1.5;margin-bottom:6px;">'+escHtml(t.def)+'</div><div style="font-size:11px;color:var(--gold);font-style:italic;border-top:1px solid rgba(201,168,76,0.3);padding-top:5px;">'+escHtml(t.ru)+'</div></div></div></div>';
+    wrap.addEventListener('click', function(e){ if(!e.target.classList.contains('fc-audio-btn')) this.classList.toggle('flipped'); });
+    wrap.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); this.classList.toggle('flipped'); } });
+    grid.appendChild(wrap);
+  });
+}
+function speakTerm(e, term) {
+  e.stopPropagation(); if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var utt = new SpeechSynthesisUtterance(term); utt.lang='en-US'; utt.rate=0.85;
+  window.speechSynthesis.speak(utt);
+}
+function filterCards(q) {
+  var ql = q.toLowerCase();
+  document.querySelectorAll('.flashcard-wrap').forEach(function(c) {
+    var idx = parseInt(c.dataset.idx); var term = glossaryTerms[idx].term.toLowerCase(); var def = glossaryTerms[idx].def.toLowerCase();
+    c.style.display = (term.includes(ql)||def.includes(ql)) ? '' : 'none';
+  });
+}
+
+// PART 5 — Fill in Blanks
+var fibCorrectTotal = 0;
+function buildFIB() {
+  var container = document.getElementById('fib-container'); if (!container) return;
+  var html = '';
+  var globalIdx = 0;
+  fibData.forEach(function(group) {
+    html += '<div style="font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;margin-top:8px;">'+escHtml(group.label)+'</div>';
+    group.sentences.forEach(function(item) {
+      html += '<div class="fib-item">';
+      var parts = item.s.split('___');
+      parts.forEach(function(part, pi) {
+        html += escHtml(part);
+        if (pi < item.blanks.length) {
+          var ans = item.blanks[pi]; var inputW = Math.max(130, ans.length*9);
+          html += '<span class="fib-input-wrap"><input type="text" class="fib-input" style="width:'+inputW+'px" data-answer="'+escAttr(ans)+'" data-gi="'+globalIdx+'" data-pi="'+pi+'" id="fib-'+globalIdx+'-'+pi+'" placeholder="..." onblur="checkFIB(this)"><span class="fib-status" id="fs-'+globalIdx+'-'+pi+'"></span><button class="hint-btn" type="button" onclick="showHint('+globalIdx+','+pi+')">Hint</button></span>';
+        }
+      });
+      html += '</div>';
+      globalIdx++;
+    });
+  });
+  container.innerHTML = html;
+}
+function checkFIB(input) {
+  var answer = input.dataset.answer; var val = input.value.trim().toLowerCase();
+  var ansL = answer.toLowerCase();
+  if (val === '') { input.classList.remove('correct','incorrect'); document.getElementById('fs-'+input.dataset.gi+'-'+input.dataset.pi).textContent=''; return; }
+  var correct = val === ansL || (ansL==='benchmark' && val==='benchmarking') || (ansL==='actionable insights' && val==='actionable insight') || (ansL.replace(/s$/,'')===val);
+  input.classList.toggle('correct', correct); input.classList.toggle('incorrect', !correct);
+  document.getElementById('fs-'+input.dataset.gi+'-'+input.dataset.pi).textContent = correct ? '✅' : '❌';
+  var total = document.querySelectorAll('.fib-input.correct').length;
+  if (total >= 5) markProgress('fib_done');
+  updateOverallScore();
+}
+function showHint(gi, pi) {
+  var input = document.getElementById('fib-'+gi+'-'+pi); if(!input) return;
+  if (!input.value) input.value = input.dataset.answer[0]; input.focus();
+}
+
+// PART 6 — Writing
+function updateWriting(n, val) {
+  localStorage.setItem('exhib_writing'+n, val);
+  var words = val.trim()==='' ? [] : val.trim().split(/\s+/); var wc = words.length;
+  document.getElementById('wc'+n).textContent = wc+' word'+(wc!==1?'s':'');
+  var valL = val.toLowerCase(); var vocabCount = vocabKeywords.filter(function(kw){ return valL.includes(kw); }).length;
+  document.getElementById('vb'+n).classList.toggle('show', vocabCount >= 4);
+  if (wc >= 30) markProgress('writing'+n+'_started');
+}
+function checkWriting(n) {
+  var ta = document.getElementById('wt'+n); var val = ta ? ta.value.trim() : '';
+  var fb = document.getElementById('wfb'+n); if (!fb) return;
+  if (val.length < 15) { fb.style.display='block'; fb.innerHTML='⚠️ Please write a more complete answer first.'; return; }
+  var crit = writingCriteria[n]; var lower = val.toLowerCase();
+  var words = val.split(/\s+/).length;
+  var found = crit.keywords.filter(function(k){ return lower.includes(k); });
+  var vocabFound = vocabKeywords.filter(function(k){ return lower.includes(k); });
+  var connectors = ['because','therefore','as a result','which means','leads to','consequently','however','although','this causes','this results'];
+  var connFound = connectors.filter(function(c){ return lower.includes(c); });
+  var sentences = val.split(/[.!?]+/).filter(function(s){ return s.trim().length>8; });
+  var score = 0; var feedback = [];
+  if (words>=40){score+=2;}else if(words>=25){score+=1;feedback.push('📏 Aim for 40+ words (you have '+words+').');}else{feedback.push('📏 Write more — 40+ words needed (you have '+words+').');}
+  if (found.length>=3){score+=2;}else if(found.length>=1){score+=1;feedback.push('🎯 Use more topic terms. '+crit.tip);}else{feedback.push('🎯 No topic terms found. '+crit.tip);}
+  if (vocabFound.length>=5){score+=2;}else if(vocabFound.length>=3){score+=1;feedback.push('📚 Use more glossary terms ('+vocabFound.length+' found, aim 5+).');}else{feedback.push('📚 Include key glossary vocabulary.');}
+  if (connFound.length>=2){score+=1;}else if(connFound.length===1){feedback.push('🔗 Add more logical connectors (therefore, as a result…).');}else{feedback.push('🔗 Use logical connectors.');}
+  if (sentences.length>=3) score+=1;
+  var totalScore=Math.min(score,8); var pct=Math.round(totalScore/8*100);
+  var color=pct>=75?'#38a169':pct>=50?'#C9A84C':'#e53e3e'; var emoji=pct>=75?'🌟':pct>=50?'👍':'💪';
+  writingScores[n-1] = totalScore;
+  fb.style.display='block';
+  fb.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-size:18px;">'+emoji+'</span><strong style="color:'+color+';">Score: '+totalScore+' / 8</strong><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="width:'+pct+'%;height:100%;background:'+color+';border-radius:3px;transition:width 0.5s;"></div></div><span style="font-size:12px;color:'+color+';">'+pct+'%</span></div>'+'<table style="width:100%;font-size:12px;border-collapse:collapse;"><tr style="color:var(--text-secondary);"><td style="padding:3px 0;">📏 Length (40+ words)</td><td style="text-align:right;color:'+(words>=40?'#38a169':'#e53e3e')+';">'+(words>=40?'✅ '+words:'❌ '+words)+' words</td></tr><tr style="color:var(--text-secondary);"><td style="padding:3px 0;">🎯 Topic coverage</td><td style="text-align:right;color:'+(found.length>=3?'#38a169':found.length>=1?'#C9A84C':'#e53e3e')+';">'+(found.length>=3?'✅ ':'')+found.length+' terms</td></tr><tr style="color:var(--text-secondary);"><td style="padding:3px 0;">📚 Glossary terms (5+)</td><td style="text-align:right;color:'+(vocabFound.length>=5?'#38a169':vocabFound.length>=3?'#C9A84C':'#e53e3e')+';">'+(vocabFound.length>=5?'✅ ':'')+vocabFound.length+' used</td></tr><tr style="color:var(--text-secondary);"><td style="padding:3px 0;">🔗 Logical connectors</td><td style="text-align:right;color:'+(connFound.length>=2?'#38a169':'#C9A84C')+';">'+(connFound.length>=2?'✅ '+connFound.length:connFound.length)+' found</td></tr></table>'+(feedback.length>0?'<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">'+feedback.map(function(f){return '<div style="margin-bottom:4px;color:var(--text-secondary);">'+f+'</div>';}).join('')+'</div>':'<div style="margin-top:8px;color:#38a169;font-size:12px;">Excellent analytical writing!</div>');
+  if (totalScore>=6) markProgress('writing'+n+'_done');
+  updateOverallScore();
+}
+function showWritingModel(n) {
+  var fb = document.getElementById('wfb'+n); if (!fb) return;
+  fb.style.display='block';
+  fb.innerHTML='<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>'+escHtml(writingCriteria[n].model);
+}
+
+// PART 7 — Speaking Plan
+function updateSpeakingPlan() {
+  ['sp1','sp2','sp3','sp4'].forEach(function(id){ saveItem('exhib_'+id, document.getElementById(id).value||''); });
+  var total = ['sp1','sp2','sp3','sp4'].reduce(function(acc,id){ var el=document.getElementById(id); return acc+(el&&el.value.trim()?el.value.trim().split(/\s+/).length:0); },0);
+  document.getElementById('sp-wordcount').textContent = total+' word'+(total!==1?'s':'')+' in your plan';
+  if (total >= 20) markProgress('speaking_plan_done');
+}
+
+// PART 8 — Timers
+var speakingTerms = ['strategic intelligence','competitive landscape','actionable insight','disruptive technology','to benchmark','market adaptation','specialized forum','strategic direction'];
+function buildSpeakingChips() {
+  var wrap = document.getElementById('speaking-chips'); if (!wrap) return;
+  wrap.innerHTML = speakingTerms.map(function(t,i){ return '<span class="kchip" id="schip-'+i+'" onclick="toggleSpeakingChip('+i+')" tabindex="0">'+escHtml(t)+'</span>'; }).join('');
+}
+function toggleSpeakingChip(i) {
+  var chip = document.getElementById('schip-'+i); if (!chip) return;
+  chip.classList.toggle('used');
+  speakingChipsUsed = document.querySelectorAll('#speaking-chips .kchip.used').length;
+  document.getElementById('speaking-chip-count').textContent = speakingChipsUsed+' / 8 terms used';
+  if (speakingChipsUsed >= 8) markProgress('speaking_done');
+  updateOverallScore();
+}
+function startTimer(total) {
+  if (timerRunning[total]) return;
+  timerRunning[total] = true;
+  timerTimes[total] = timerTimes[total] > 0 ? timerTimes[total] : total;
+  markProgress('timer_started');
+  timerIntervals[total] = setInterval(function() {
+    timerTimes[total]--;
+    var t = timerTimes[total];
+    document.getElementById('timer-num-'+total).textContent = t;
+    var pct = t/total; var offset = 283-(283*pct);
+    document.getElementById('ring-fill-'+total).setAttribute('stroke-dashoffset', offset);
+    document.getElementById('timer-ring-'+total).classList.toggle('red', t<=10);
+    if (t<=0) { clearInterval(timerIntervals[total]); timerRunning[total]=false; document.getElementById('timer-num-'+total).textContent='0'; }
+  }, 1000);
+}
+function resetTimer(total) {
+  if (timerIntervals[total]) clearInterval(timerIntervals[total]);
+  timerRunning[total]=false; timerTimes[total]=total;
+  document.getElementById('timer-num-'+total).textContent=total;
+  document.getElementById('ring-fill-'+total).setAttribute('stroke-dashoffset','283');
+  document.getElementById('timer-ring-'+total).classList.remove('red');
+}
+
+// FINAL CHECK
+function buildFinalCheck() {
+  var grid = document.getElementById('final-grid'); if (!grid) return;
+  var html = '';
+  finalChecks.forEach(function(text, i) {
+    html += '<div class="final-check-item" id="fci-'+i+'" onclick="toggleFinalCheck('+i+')"><input type="checkbox" id="fc'+i+'" onclick="event.stopPropagation()" onchange="onFinalCheckChange()"><label for="fc'+i+'" onclick="event.stopPropagation()">'+escHtml(text)+'</label></div>';
+  });
+  grid.innerHTML = html;
+}
+function toggleFinalCheck(i) { var cb=document.getElementById('fc'+i); cb.checked=!cb.checked; onFinalCheckChange(); }
+function onFinalCheckChange() {
+  var states=[];
+  finalChecks.forEach(function(_,i){ var cb=document.getElementById('fc'+i); var item=document.getElementById('fci-'+i); var checked=cb&&cb.checked; if(item)item.classList.toggle('checked',checked); states.push(checked?'1':'0'); });
+  localStorage.setItem('exhib_finalChecks',states.join(','));
+  var total=states.filter(function(s){return s==='1';}).length;
+  document.getElementById('final-score').textContent=total+' / 12 completed';
+  if(total>=12){markProgress('final_done');triggerConfetti();}
+  updateOverallScore();
+}
+
+// CONFETTI
+function triggerConfetti() {
+  var banner=document.getElementById('excellent-banner'); banner.classList.add('show'); setTimeout(function(){banner.classList.remove('show');},4500);
+  var container=document.getElementById('confetti-container');
+  var colors=['#C9A84C','#e8c96a','#667eea','#38a169','#e53e3e','#ffffff','#0A1628','#f6ad55'];
+  for(var i=0;i<90;i++){ (function(idx){ setTimeout(function(){ var piece=document.createElement('div'); piece.className='confetti-piece'; var size=6+Math.random()*10; piece.style.cssText=['left:'+Math.random()*100+'vw','top:-20px','width:'+size+'px','height:'+size+'px','background:'+colors[Math.floor(Math.random()*colors.length)],'border-radius:'+(Math.random()>0.5?'50%':'2px'),'animation-duration:'+(2+Math.random()*3)+'s'].join(';'); container.appendChild(piece); setTimeout(function(){if(piece.parentNode)piece.parentNode.removeChild(piece);},5500); },idx*35); })(i); }
+}
+
+// OVERALL SCORE
+function updateOverallScore() {
+  var rows=[]; var totalPts=0; var earnedPts=0;
+  // Part 1 DQ
+  var dqE=0;
+  [1,2,3].forEach(function(n){ if(progressEvents['dq'+n+'_done'])dqE+=5; else{ var ta=document.getElementById('dq'+n); if(ta&&ta.value.trim().split(/\s+/).length>=15)dqE+=2; } });
+  rows.push({label:'Part 1 · Discussion Questions',earned:dqE,total:15,icon:'💬'}); totalPts+=15; earnedPts+=dqE;
+  // Part 2 CQ
+  var cqE=0;
+  [1,2,3].forEach(function(n){ if(progressEvents['cq'+n+'_done'])cqE+=5; else{ var ta=document.getElementById('cq'+n); if(ta&&ta.value.trim().split(/\s+/).length>=10)cqE+=2; } });
+  rows.push({label:'Part 2 · Comprehension Questions',earned:cqE,total:15,icon:'📝'}); totalPts+=15; earnedPts+=cqE;
+  // Part 3 categorization
+  var catE=Math.min(Object.keys(catResults).filter(function(k){return catResults[k];}).length,15);
+  rows.push({label:'Part 3 · Glossary Categories',earned:catE,total:15,icon:'🗂️'}); totalPts+=15; earnedPts+=catE;
+  // Part 5 FIB
+  var fibE=Math.min(document.querySelectorAll('.fib-input.correct').length,12);
+  rows.push({label:'Part 5 · Fill in Blanks',earned:fibE,total:12,icon:'✏️'}); totalPts+=12; earnedPts+=fibE;
+  // Part 6 Writing
+  var wE=writingScores.reduce(function(a,b){return a+b;},0);
+  rows.push({label:'Part 6 · Writing Tasks',earned:wE,total:24,icon:'✍️'}); totalPts+=24; earnedPts+=wE;
+  // Part 8 speaking chips
+  rows.push({label:'Part 8 · Speaking Terms Used',earned:speakingChipsUsed,total:8,icon:'🎤'}); totalPts+=8; earnedPts+=speakingChipsUsed;
+  // Final check
+  var fc=localStorage.getItem('exhib_finalChecks')||''; var fcDone=fc?fc.split(',').filter(function(s){return s==='1';}).length:0;
+  rows.push({label:'Self-Reflection · Checklist',earned:fcDone,total:12,icon:'✅'}); totalPts+=12; earnedPts+=fcDone;
+  var pct=totalPts>0?Math.round(earnedPts/totalPts*100):0;
+  var grade=pct>=90?'A+  Excellent':pct>=80?'A  Very Good':pct>=70?'B  Good':pct>=60?'C  Satisfactory':pct>=40?'D  Needs Practice':'Work in Progress';
+  var gradeColor=pct>=80?'#38a169':pct>=60?'#C9A84C':'#e53e3e';
+  var fill=document.getElementById('score-ring-fill'); if(fill)fill.setAttribute('stroke-dashoffset',377-(377*pct/100));
+  var pctEl=document.getElementById('score-pct'); if(pctEl)pctEl.textContent=pct+'%';
+  var gradeEl=document.getElementById('score-grade'); if(gradeEl){gradeEl.textContent=grade;gradeEl.style.color=gradeColor;}
+  var bd=document.getElementById('score-breakdown'); if(!bd)return;
+  var html='<div style="border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-secondary);margin-bottom:12px;">Score Breakdown</div>';
+  rows.forEach(function(r){ var rp=r.total>0?Math.round(r.earned/r.total*100):0; var rc=rp>=75?'#38a169':rp>=50?'#C9A84C':'#e53e3e'; html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-size:16px;flex-shrink:0;">'+r.icon+'</span><div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span style="color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+escHtml(r.label)+'</span><span style="color:'+rc+';font-weight:700;flex-shrink:0;margin-left:8px;">'+r.earned+'/'+r.total+'</span></div><div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="width:'+rp+'%;height:100%;background:'+rc+';border-radius:3px;-webkit-transition:width 0.6s ease;transition:width 0.6s ease;"></div></div></div></div>'; });
+  html+='<div style="border-top:1px solid var(--border);padding-top:12px;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:700;color:var(--text);">Total</span><span style="font-weight:800;font-size:16px;color:'+gradeColor+';">'+earnedPts+' / '+totalPts+' pts</span></div></div>';
+  bd.innerHTML=html;
+}
+
+// LOAD FROM STORAGE
+function loadFromStorage() {
+  var stored=JSON.parse(localStorage.getItem('exhib_progress')||'{}');
+  Object.keys(stored).forEach(function(k){progressEvents[k]=true;});
+  if(localStorage.getItem('exhib_caseRevealed')==='1'){document.getElementById('case-box').classList.add('visible');document.getElementById('discussion-qs').classList.add('visible');document.getElementById('reveal-btn').style.display='none';}
+  [1,2,3].forEach(function(n){var v=localStorage.getItem('exhib_dq'+n);var el=document.getElementById('dq'+n);if(v&&el)el.value=v;});
+  [1,2,3].forEach(function(n){var v=localStorage.getItem('exhib_cq'+n);var el=document.getElementById('cq'+n);if(v&&el)el.value=v;});
+  [1,2,3].forEach(function(n){var v=localStorage.getItem('exhib_writing'+n);var el=document.getElementById('wt'+n);if(v&&el){el.value=v;updateWriting(n,v);}});
+  ['sp1','sp2','sp3','sp4'].forEach(function(id){var v=localStorage.getItem('exhib_'+id);var el=document.getElementById(id);if(v&&el)el.value=v;});
+  var fc=localStorage.getItem('exhib_finalChecks');
+  if(fc){fc.split(',').forEach(function(s,i){var cb=document.getElementById('fc'+i);var item=document.getElementById('fci-'+i);if(cb&&s==='1'){cb.checked=true;if(item)item.classList.add('checked');}});var total=fc.split(',').filter(function(s){return s==='1';}).length;document.getElementById('final-score').textContent=total+' / 12 completed';}
+  updateSpeakingPlan();
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape')closeSidebar(); });
+
+function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(str){return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+</script>
+</body>
+</html>
