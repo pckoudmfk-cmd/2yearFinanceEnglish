@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Profession of an Economist — Educational Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0A1628; --gold: #C9A84C; --gold-light: #e8c96a; --white: #FFFFFF;
+    --light-gray: #F5F5F5; --mid-gray: #8892A4; --bg: #F5F5F5; --card-bg: #FFFFFF;
+    --text: #0A1628; --text-secondary: #8892A4; --border: #e0e4ec;
+    --sidebar-bg: #0A1628; --sidebar-text: #FFFFFF; --input-bg: #FFFFFF;
+    --shadow: 0 2px 16px rgba(10,22,40,0.10); --shadow-lg: 0 8px 32px rgba(10,22,40,0.16);
+    --radius: 12px; --transition: 0.22s cubic-bezier(.4,0,.2,1);
+  }
+  .dark-mode { --bg: #0A1628; --card-bg: #1a2a42; --text: #FFFFFF; --text-secondary: #8892A4; --border: #2a3a52; --sidebar-bg: #06101e; --input-bg: #1a2a42; --shadow: 0 2px 16px rgba(0,0,0,0.3); --shadow-lg: 0 8px 32px rgba(0,0,0,0.4); }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 100vh; display: -webkit-flex; display: flex; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); }
+  #progress-bar-wrap { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--border); z-index: 9999; }
+  #progress-bar-fill { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); -webkit-transition: width 0.5s ease; transition: width 0.5s ease; border-radius: 0 2px 2px 0; }
+  #progress-label { position: fixed; top: 8px; right: 70px; font-size: 11px; font-weight: 600; color: var(--gold); z-index: 9999; letter-spacing: 0.5px; }
+  #sidebar { width: 250px; min-height: 100vh; background: var(--sidebar-bg); position: fixed; left: 0; top: 0; bottom: 0; z-index: 1000; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-transition: -webkit-transform var(--transition); transition: transform var(--transition); overflow-y: auto; padding-bottom: 24px; }
+  #sidebar-logo { padding: 28px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px; }
+  #sidebar-logo .logo-title { color: var(--gold); font-size: 15px; font-weight: 700; letter-spacing: 0.3px; line-height: 1.3; }
+  #sidebar-logo .logo-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+  #sidebar nav a { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 10px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 500; padding: 10px 24px; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); cursor: pointer; }
+  #sidebar nav a:hover, #sidebar nav a.active { background: rgba(201,168,76,0.13); color: var(--gold); }
+  #sidebar nav a .nav-num { width: 20px; height: 20px; border-radius: 50%; background: rgba(201,168,76,0.18); color: var(--gold); font-size: 10px; font-weight: 700; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  #sidebar nav a.done .nav-num { background: var(--gold); color: var(--navy); }
+  #hamburger { display: none; position: fixed; top: 12px; left: 12px; z-index: 1100; background: var(--navy); border: none; border-radius: 8px; padding: 8px; cursor: pointer; -webkit-flex-direction: column; flex-direction: column; gap: 4px; }
+  #hamburger span { display: block; width: 20px; height: 2px; background: var(--gold); border-radius: 2px; -webkit-transition: var(--transition); transition: var(--transition); }
+  #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  #dark-toggle { position: fixed; top: 10px; right: 16px; z-index: 9999; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; -webkit-transition: var(--transition); transition: var(--transition); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 5px; box-shadow: var(--shadow); }
+  #main-content { margin-left: 250px; -webkit-flex: 1; flex: 1; padding: 40px 48px 60px; max-width: 1100px; }
+  .section { margin-bottom: 64px; scroll-margin-top: 32px; }
+  .section-header { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .section-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 14px; font-weight: 800; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .section-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .card { background: var(--card-bg); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); -webkit-transition: background var(--transition), border-color var(--transition); transition: background var(--transition), border-color var(--transition); }
+  .btn { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; -webkit-transition: var(--transition); transition: var(--transition); font-family: inherit; }
+  .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); box-shadow: 0 2px 8px rgba(201,168,76,0.3); }
+  .btn-primary:hover { -webkit-transform: translateY(-1px); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .btn-outline { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+  .case-box { background: linear-gradient(135deg, rgba(10,22,40,0.04) 0%, rgba(201,168,76,0.06) 100%); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 28px 32px; font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 24px; display: none; }
+  .dark-mode .case-box { background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(26,42,66,0.8) 100%); }
+  .case-box.visible { display: block; -webkit-animation: slideDown 0.4s ease; animation: slideDown 0.4s ease; }
+  .discussion-questions { display: none; }
+  .discussion-questions.visible { display: block; }
+  .dq-item { background: var(--card-bg); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; border: 1px solid var(--border); -webkit-animation: slideIn 0.4s ease backwards; animation: slideIn 0.4s ease backwards; box-shadow: var(--shadow); }
+  .dq-num { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .dq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+  .dq-textarea { width: 100%; min-height: 80px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .dq-textarea:focus { border-color: var(--gold); }
+  .vocab-text { font-size: 15px; line-height: 1.85; color: var(--text); }
+  .vocab-text p { margin-bottom: 18px; }
+  .vocab-word { color: var(--gold); font-weight: 600; cursor: pointer; border-bottom: 1.5px dashed var(--gold); position: relative; display: inline-block; }
+  .vocab-word .tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); background: var(--navy); color: #fff; font-size: 12px; font-weight: 400; padding: 8px 14px; border-radius: 8px; white-space: normal; z-index: 500; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.25); max-width: 260px; text-align: center; line-height: 1.5; min-width: 160px; }
+  .vocab-word .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--navy); }
+  .vocab-word:hover .tooltip { display: block; }
+  .search-bar { width: 100%; padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; margin-bottom: 24px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .search-bar:focus { border-color: var(--gold); }
+  .flashcard-grid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 16px; }
+  .flashcard-wrap { width: calc(25% - 12px); min-width: 150px; height: 150px; -webkit-perspective: 800px; perspective: 800px; cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .flashcard-inner { width: 100%; height: 100%; position: relative; -webkit-transform-style: preserve-3d; transform-style: preserve-3d; -webkit-transition: -webkit-transform 0.5s cubic-bezier(.4,0,.2,1); transition: transform 0.5s cubic-bezier(.4,0,.2,1); }
+  .flashcard-wrap.flipped .flashcard-inner { -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
+  .flashcard-face { position: absolute; inset: 0; border-radius: var(--radius); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; padding: 14px; text-align: center; -webkit-backface-visibility: hidden; backface-visibility: hidden; border: 1.5px solid var(--border); }
+  .flashcard-front { background: var(--card-bg); font-size: 13px; font-weight: 600; color: var(--text); box-shadow: var(--shadow); }
+  .flashcard-back { background: linear-gradient(135deg, var(--navy), #1a2a42); -webkit-transform: rotateY(180deg); transform: rotateY(180deg); font-size: 12px; color: rgba(255,255,255,0.9); line-height: 1.5; border-color: var(--gold); }
+  .fc-hint { font-size: 10px; color: var(--mid-gray); margin-top: 6px; }
+  .fib-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; font-size: 14px; line-height: 2.2; box-shadow: var(--shadow); }
+  .fib-input-wrap { display: inline-flex; align-items: center; gap: 4px; }
+  .fib-input { display: inline-block; width: 180px; padding: 4px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); vertical-align: middle; }
+  .fib-input.correct { border-color: #38a169; background: rgba(56,161,105,0.08); }
+  .fib-input.incorrect { border-color: #e53e3e; background: rgba(229,62,62,0.08); }
+  .fib-status { font-size: 14px; vertical-align: middle; }
+  .hint-btn { font-size: 11px; padding: 2px 8px; background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold); border-radius: 4px; cursor: pointer; font-family: inherit; font-weight: 600; vertical-align: middle; -webkit-transition: var(--transition); transition: var(--transition); }
+  .hint-btn:hover { background: rgba(201,168,76,0.22); }
+  .writing-scenario { background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04)); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 20px 24px; font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+  .writing-task { margin-bottom: 24px; }
+  .writing-task label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  .writing-ta { width: 100%; min-height: 120px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .writing-ta:focus { border-color: var(--gold); }
+  .writing-meta { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 12px; margin-top: 6px; }
+  .word-count { font-size: 12px; color: var(--mid-gray); }
+  .vocab-badge { display: none; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; -webkit-animation: pop 0.3s ease; animation: pop 0.3s ease; }
+  .vocab-badge.show { display: inline-block; }
+  .timer-wrap { display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; gap: 16px; padding: 28px; background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .timer-ring { position: relative; width: 100px; height: 100px; }
+  .timer-ring svg { -webkit-transform: rotate(-90deg); transform: rotate(-90deg); }
+  .timer-ring circle { fill: none; stroke-width: 6; }
+  .timer-ring .ring-bg { stroke: var(--border); }
+  .timer-ring .ring-fill { stroke: var(--gold); stroke-linecap: round; -webkit-transition: stroke-dashoffset 1s linear, stroke 0.3s; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-dasharray: 283; stroke-dashoffset: 283; }
+  .timer-ring.red .ring-fill { stroke: #e53e3e; }
+  .timer-num { position: absolute; inset: 0; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; font-size: 26px; font-weight: 700; color: var(--text); }
+  .final-grid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+  .final-check-item { width: calc(50% - 6px); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 18px; display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; -webkit-transition: border-color var(--transition), background var(--transition); transition: border-color var(--transition), background var(--transition); box-shadow: var(--shadow); cursor: pointer; }
+  .final-check-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--gold); cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; margin-top: 1px; }
+  .final-check-item.checked { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  #confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 9998; overflow: hidden; }
+  .confetti-piece { position: absolute; -webkit-animation: confettiFall linear forwards; animation: confettiFall linear forwards; }
+  #excellent-banner { display: none; position: fixed; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 28px; font-weight: 800; padding: 24px 48px; border-radius: 16px; box-shadow: 0 16px 64px rgba(201,168,76,0.5); z-index: 10000; text-align: center; }
+  #excellent-banner.show { display: block; -webkit-animation: pop 0.4s cubic-bezier(.18,.89,.32,1.28); animation: pop 0.4s cubic-bezier(.18,.89,.32,1.28); }
+  .kchip { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-block; margin: 4px; -webkit-transition: var(--transition); transition: var(--transition); }
+  .kchip:hover, .kchip.used { background: var(--gold); color: var(--navy); }
+  .cat-term { display: inline-block; background: rgba(201,168,76,0.1); border: 1.5px solid var(--gold); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: var(--gold); cursor: pointer; margin: 4px; -webkit-transition: var(--transition); transition: var(--transition); }
+  .cat-term.selected { background: var(--gold); color: var(--navy); box-shadow: 0 0 0 3px rgba(201,168,76,0.3); }
+  .cat-term.assigned-A { background: rgba(102,126,234,0.15); border-color: #667eea; color: #667eea; }
+  .cat-term.assigned-F { background: rgba(56,161,105,0.15); border-color: #38a169; color: #38a169; }
+  .cat-term.assigned-S { background: rgba(229,62,62,0.15); border-color: #e53e3e; color: #e53e3e; }
+  .cat-btn { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; border: 2px solid; -webkit-transition: var(--transition); transition: var(--transition); font-family: inherit; margin: 6px; }
+  .cat-btn-A { background: rgba(102,126,234,0.08); border-color: #667eea; color: #667eea; }
+  .cat-btn-A:hover, .cat-btn-A.active-cat { background: rgba(102,126,234,0.2); }
+  .cat-btn-F { background: rgba(56,161,105,0.08); border-color: #38a169; color: #38a169; }
+  .cat-btn-F:hover, .cat-btn-F.active-cat { background: rgba(56,161,105,0.2); }
+  .cat-btn-S { background: rgba(229,62,62,0.08); border-color: #e53e3e; color: #e53e3e; }
+  .cat-btn-S:hover, .cat-btn-S.active-cat { background: rgba(229,62,62,0.2); }
+  .speaking-plan-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; margin-bottom: 4px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .speaking-plan-input:focus { border-color: var(--gold); }
+  .speaking-plan-label { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; margin-top: 16px; display: block; }
+  .cause-effect-box { background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(10,22,40,0.03)); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; font-size: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; box-shadow: var(--shadow); }
+  .ce-arrow { color: var(--gold); font-size: 18px; font-weight: 700; flex-shrink: 0; }
+  @-webkit-keyframes slideDown { from { opacity: 0; -webkit-transform: translateY(-12px); transform: translateY(-12px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+  @-webkit-keyframes slideIn { from { opacity: 0; -webkit-transform: translateX(-16px); transform: translateX(-16px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+  @-webkit-keyframes pop { from { -webkit-transform: scale(0.7); transform: scale(0.7); opacity: 0; } to { -webkit-transform: scale(1); transform: scale(1); opacity: 1; } }
+  @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @-webkit-keyframes confettiFall { 0% { -webkit-transform: translateY(-20px) rotate(0deg); transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { -webkit-transform: translateY(105vh) rotate(720deg); transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+  @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+  .mt-16 { margin-top: 16px; } .mt-8 { margin-top: 8px; } .mb-16 { margin-bottom: 16px; }
+  .flex { display: -webkit-flex; display: flex; } .flex-center { -webkit-align-items: center; align-items: center; }
+  .gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
+  .text-gold { color: var(--gold); } .text-sm { font-size: 13px; } .text-xs { font-size: 11px; color: var(--mid-gray); } .fw-600 { font-weight: 600; }
+  @media print { #sidebar, #hamburger, #dark-toggle, #progress-bar-wrap, #progress-label, #confetti-container, #excellent-banner, .btn, .timer-wrap { display: none !important; } #main-content { margin-left: 0 !important; padding: 20px !important; } body { background: white !important; color: black !important; } .card { box-shadow: none !important; border: 1px solid #ddd !important; } }
+  @media (max-width: 900px) { #main-content { margin-left: 0; padding: 20px 20px 48px; } #hamburger { display: -webkit-flex; display: flex; } #sidebar { -webkit-transform: translateX(-100%); transform: translateX(-100%); } #sidebar.open { -webkit-transform: none; transform: none; } #sidebar-overlay.show { display: block; } .flashcard-wrap { width: calc(50% - 8px); } .final-check-item { width: 100%; } #progress-label { right: 60px; } }
+  @media (max-width: 600px) { .flashcard-wrap { width: 100%; } #main-content { padding: 16px 16px 48px; } .section-title { font-size: 18px; } .final-check-item { width: 100%; } .fib-input { width: 130px; } }
+</style>
+</head>
+<body>
+
+<div id="progress-bar-wrap"><div id="progress-bar-fill" style="width:0%"></div></div>
+<div id="progress-label">0% Complete</div>
+<button id="dark-toggle" onclick="toggleDark()"><span id="dark-icon">🌙</span><span id="dark-label">Dark</span></button>
+<button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<aside id="sidebar">
+  <div id="sidebar-logo">
+    <div class="logo-title">Economist Profession</div>
+    <div class="logo-sub">Educational Dashboard</div>
+  </div>
+  <nav>
+    <a href="#part1" onclick="smoothNav(event,'part1')" id="nav1"><span class="nav-num">1</span> Problem Case</a>
+    <a href="#part2" onclick="smoothNav(event,'part2')" id="nav2"><span class="nav-num">2</span> Main Text</a>
+    <a href="#part3" onclick="smoothNav(event,'part3')" id="nav3"><span class="nav-num">3</span> Glossary Categories</a>
+    <a href="#part4" onclick="smoothNav(event,'part4')" id="nav4"><span class="nav-num">4</span> Glossary Cards</a>
+    <a href="#part5" onclick="smoothNav(event,'part5')" id="nav5"><span class="nav-num">5</span> Cause &amp; Effect</a>
+    <a href="#part6" onclick="smoothNav(event,'part6')" id="nav6"><span class="nav-num">6</span> Writing Tasks</a>
+    <a href="#part7" onclick="smoothNav(event,'part7')" id="nav7"><span class="nav-num">7</span> Speaking Plan</a>
+    <a href="#part8" onclick="smoothNav(event,'part8')" id="nav8"><span class="nav-num">8</span> Speaking Task</a>
+    <a href="#final" onclick="smoothNav(event,'final')" id="navF"><span class="nav-num">✓</span> Self-Reflection</a>
+    <a href="#score" onclick="smoothNav(event,'score')" id="navS"><span class="nav-num">★</span> My Score</a>
+  </nav>
+</aside>
+
+<main id="main-content">
+
+<!-- PART 1 -->
+<section class="section" id="part1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Problem Case</div>
+      <div class="section-subtitle">Read the case, then answer the discussion questions before reading the main text</div>
+    </div>
+  </div>
+  <div class="card">
+    <button class="btn btn-primary mb-16" id="reveal-btn" onclick="revealCase()">▶ Reveal Case</button>
+    <div class="case-box" id="case-box">
+      <strong style="color:var(--gold);display:block;margin-bottom:12px;">📋 Case: First Job in Finance</strong>
+      A recent graduate applies for a position at a financial company. The employer requires: <strong>knowledge of economics</strong>, <strong>ability to analyse financial data</strong>, and <strong>professional communication in English</strong>.<br><br>
+      The candidate has strong theoretical knowledge but <strong>weak practical skills</strong> and <strong>poor English</strong>.
+    </div>
+    <div class="discussion-questions" id="discussion-qs">
+      <div style="margin:20px 0 14px;font-size:14px;font-weight:700;color:var(--text);">💬 Discussion Questions</div>
+      <div class="dq-item">
+        <div class="dq-num">Question 1</div>
+        <div class="dq-q">Why can this candidate be rejected? What specific skills are missing, and what risks could appear if the company hires this specialist anyway?</div>
+        <textarea class="dq-textarea" id="dq1" placeholder="Give 2–3 arguments and predict consequences... (min. 25 words)" oninput="saveItem('econ_dq1',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question 2</div>
+        <div class="dq-q">How does incorrect financial analysis create financial risks for a company? Give a specific example.</div>
+        <textarea class="dq-textarea" id="dq2" placeholder="Describe the cause-effect chain... (min. 20 words)" oninput="saveItem('econ_dq2',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question 3</div>
+        <div class="dq-q">"Professional knowledge is more important than communication skills in finance." Do you agree or disagree? Give 2 arguments and 1 counterargument.</div>
+        <textarea class="dq-textarea" id="dq3" placeholder="State your position clearly, then give arguments... (min. 30 words)" oninput="saveItem('econ_dq3',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="section" id="part2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Main Text</div>
+      <div class="section-subtitle">Hover over gold-highlighted terms to see definitions. Answer the comprehension questions below.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="vocab-text">
+      <p>The profession of an economist is based on <span class="vocab-word">analysis<span class="tooltip">the process of examining data or information carefully to understand it and draw conclusions</span></span>, <span class="vocab-word">planning<span class="tooltip">the process of deciding in advance what to do and how to achieve specific goals</span></span>, and <span class="vocab-word">decision-making<span class="tooltip">the process of choosing between options based on the available data and analysis</span></span>. Economists work with financial and economic data to <span class="vocab-word">evaluate<span class="tooltip">to assess or judge the value, quality, or performance of something</span></span> business performance and support management decisions. Their tasks <span class="vocab-word">include<span class="tooltip">to contain something as part of a whole; to involve as a necessary element</span></span> <span class="vocab-word">cost analysis<span class="tooltip">the examination of costs to understand where money is spent and identify inefficiencies</span></span>, <span class="vocab-word">financial forecasting<span class="tooltip">the process of estimating future financial performance based on current data and trends</span></span>, and <span class="vocab-word">risk assessment<span class="tooltip">the process of identifying and evaluating potential threats or uncertainties to a business</span></span>. An economist must not only understand economic concepts but also <span class="vocab-word">apply<span class="tooltip">to use knowledge or skills in a practical situation</span></span> them in real-world situations.</p>
+
+      <p>A key part of an economist's work is <span class="vocab-word">financial analysis<span class="tooltip">the examination of financial data to assess a company's performance, health, and future prospects</span></span>. Specialists analyse indicators such as <span class="vocab-word">revenue<span class="tooltip">the total income generated from a company's business activities before expenses are deducted</span></span>, <span class="vocab-word">costs<span class="tooltip">the amount of money spent to produce goods or services; expenditures</span></span>, <span class="vocab-word">profit<span class="tooltip">the financial gain remaining after all costs and expenses have been deducted from revenue</span></span>, and <span class="vocab-word">productivity<span class="tooltip">the efficiency with which a company produces output relative to inputs used</span></span> to identify trends and problems. For example, a decrease in profit may be <span class="vocab-word">caused by<span class="tooltip">to be the result of; to originate from a specific factor</span></span> rising costs or <span class="vocab-word">inefficient<span class="tooltip">not achieving maximum productivity; using more resources than necessary</span></span> operations. <span class="vocab-word">Therefore<span class="tooltip">as a result of this; consequently; for that reason</span></span>, economists must <span class="vocab-word">interpret data<span class="tooltip">to explain the meaning of data and draw meaningful conclusions from it</span></span> correctly and provide clear conclusions for decision-making.</p>
+
+      <p>Professional training in economics includes both theoretical knowledge and <span class="vocab-word">practical skills<span class="tooltip">the ability to perform specific tasks effectively in real working situations</span></span>. Students study financial systems, <span class="vocab-word">accounting principles<span class="tooltip">the standard rules and guidelines that govern how financial transactions are recorded and reported</span></span>, and business processes. However, effective training also requires the ability to work with <span class="vocab-word">financial documents<span class="tooltip">official written records related to a company's financial transactions and position</span></span>, use <span class="vocab-word">analytical tools<span class="tooltip">software or methods used to collect, process, and analyse data</span></span>, and solve real business problems. Practical skills are <span class="vocab-word">essential<span class="tooltip">absolutely necessary; extremely important and cannot be done without</span></span> for <span class="vocab-word">professional performance<span class="tooltip">the effectiveness and quality with which a person carries out their job responsibilities</span></span>.</p>
+
+      <p>The work of an economist requires a high level of responsibility. Financial decisions influence company results, <span class="vocab-word">investment outcomes<span class="tooltip">the financial results and returns produced by an investment decision</span></span>, and <span class="vocab-word">financial stability<span class="tooltip">the ability of a company to consistently meet its financial obligations over time</span></span>. Incorrect analysis or <span class="vocab-word">inaccurate data<span class="tooltip">data that contains errors or does not correctly represent the actual situation</span></span> can lead to <span class="vocab-word">financial losses<span class="tooltip">a situation in which a company spends more than it earns, resulting in negative profit</span></span> and increased risk. Therefore, economists must ensure <span class="vocab-word">accuracy<span class="tooltip">the quality of being correct, precise, and free from errors</span></span>, follow professional standards, and justify their conclusions.</p>
+
+      <p>In modern finance, English plays an important professional role. Financial specialists use English to work with <span class="vocab-word">international documents<span class="tooltip">official financial or legal papers used in cross-border business and regulatory contexts</span></span>, communicate with partners, and participate in global financial operations. English is necessary for understanding financial reports, contracts, and <span class="vocab-word">regulatory requirements<span class="tooltip">legal rules and standards that companies must comply with in their area of operation</span></span>. Poor <span class="vocab-word">language skills<span class="tooltip">the ability to communicate effectively in a specific language, both in writing and speech</span></span> can lead to misunderstandings, errors, and financial risks in <span class="vocab-word">international communication<span class="tooltip">the exchange of information between people or organisations from different countries</span></span>.</p>
+    </div>
+
+    <div style="border-top:1px solid var(--border);margin-top:28px;padding-top:24px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">📝 Comprehension Questions</div>
+      <div class="dq-item">
+        <div class="dq-num">Question A</div>
+        <div class="dq-q">What are the three main tasks of an economist mentioned in the first paragraph?</div>
+        <textarea class="dq-textarea" id="cq1" placeholder="Name all three and briefly describe each..." oninput="saveItem('econ_cq1',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(1)">📋 Model</button>
+        </div>
+        <div id="cq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question B</div>
+        <div class="dq-q">According to the text, what can cause a decrease in profit? What should an economist do in response?</div>
+        <textarea class="dq-textarea" id="cq2" placeholder="Identify causes and the economist's response..." oninput="saveItem('econ_cq2',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(2)">📋 Model</button>
+        </div>
+        <div id="cq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question C</div>
+        <div class="dq-q">Why is English described as important for finance professionals? Give two specific reasons from the text.</div>
+        <textarea class="dq-textarea" id="cq3" placeholder="Give two distinct reasons from the text..." oninput="saveItem('econ_cq3',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(3)">📋 Model</button>
+        </div>
+        <div id="cq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="section" id="part3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Glossary Categories</div>
+      <div class="section-subtitle">Click a term to select it, then click a category. One term may belong to multiple groups.</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Assign each term to its best category: Professional Activities, Financial Indicators, or Skills &amp; Tools.</p>
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="cat-btn cat-btn-A" id="catbtn-A" onclick="assignCategory('A')">🔵 Professional Activities</button>
+      <button class="cat-btn cat-btn-F" id="catbtn-F" onclick="assignCategory('F')">🟢 Financial Indicators</button>
+      <button class="cat-btn cat-btn-S" id="catbtn-S" onclick="assignCategory('S')">🔴 Skills &amp; Tools</button>
+    </div>
+    <div id="cat-terms-grid" style="margin-bottom:20px;"></div>
+    <div class="flex flex-center gap-8" style="flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="resetCategories()">↺ Reset</button>
+      <span id="cat-score" class="text-sm text-gold fw-600"></span>
+    </div>
+  </div>
+</section>
+
+<!-- PART 4 -->
+<section class="section" id="part4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Glossary Flashcards</div>
+      <div class="section-subtitle">Click a card to flip it. Use the search to filter terms.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+      <input type="text" class="search-bar" style="margin:0;flex:1;min-width:200px;" placeholder="Search terms..." oninput="filterCards(this.value)" id="card-search">
+      <button class="btn btn-outline btn-sm" onclick="flipAll()">↺ Flip All</button>
+      <button class="btn btn-outline btn-sm" onclick="resetCards()">Reset</button>
+      <button class="btn btn-outline btn-sm" onclick="speakSelected()">🔊 Pronounce</button>
+    </div>
+    <div class="flashcard-grid" id="flashcard-grid"></div>
+    <div id="card-count" style="margin-top:12px;font-size:12px;color:var(--mid-gray);"></div>
+  </div>
+</section>
+
+<!-- PART 5 — CAUSE & EFFECT -->
+<section class="section" id="part5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Cause &amp; Effect — Fill in the Blanks</div>
+      <div class="section-subtitle">Complete each sentence with the correct word or phrase from the glossary</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">These sentences describe cause-and-effect relationships in finance. Complete the missing word.</p>
+    <div id="fib-container"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="checkAllFIB()">✓ Check All</button>
+      <button class="btn btn-outline" onclick="resetFIB()">↺ Reset</button>
+      <span id="fib-score" class="text-gold fw-600" style="align-self:center;margin-left:8px;font-size:14px;"></span>
+    </div>
+  </div>
+</section>
+
+<!-- PART 6 -->
+<section class="section" id="part6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Writing Tasks</div>
+      <div class="section-subtitle">Write structured analytical responses using vocabulary from this lesson</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="writing-scenario">
+      <strong style="color:var(--gold);">📄 Context:</strong> A company has hired a specialist who has strong theoretical knowledge but cannot analyse financial data effectively and has poor English skills. You need to analyse this situation and then explain what makes a successful finance professional.
+    </div>
+
+    <div class="writing-task">
+      <label>Task 1 — Analytical Task (50+ words)<br>
+        <span style="font-weight:400;color:var(--text-secondary);">Describe the problems this company might face, what skills the specialist must improve, and what risks this situation creates. Use at least 4 glossary terms.</span>
+      </label>
+      <textarea class="writing-ta" id="w1" placeholder="The specialist may cause problems because..." oninput="saveItem('econ_w1',this.value);updateWordCount('w1','wc1','wb1')"></textarea>
+      <div class="writing-meta">
+        <span class="word-count" id="wc1">0 words</span>
+        <span class="vocab-badge" id="wb1"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✓ Evaluate</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelWriting(1)">📋 Model Answer</button>
+      </div>
+      <div id="w-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+    </div>
+
+    <div class="writing-task">
+      <label>Task 2 — Synthesis: What Makes a Successful Finance Specialist (40+ words)<br>
+        <span style="font-weight:400;color:var(--text-secondary);">Include: knowledge, practical skills, responsibility, and the role of English. 5–6 sentences. Use at least 5 glossary terms. Do NOT simply retell the text.</span>
+      </label>
+      <textarea class="writing-ta" id="w2" placeholder="A successful finance specialist combines..." oninput="saveItem('econ_w2',this.value);updateWordCount('w2','wc2','wb2')"></textarea>
+      <div class="writing-meta">
+        <span class="word-count" id="wc2">0 words</span>
+        <span class="vocab-badge" id="wb2"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✓ Evaluate</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelWriting(2)">📋 Model Answer</button>
+      </div>
+      <div id="w-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 7 -->
+<section class="section" id="part7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">Speaking Plan</div>
+      <div class="section-subtitle">Prepare your monologue structure: "Professional Requirements for an Economist"</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Plan your 1–1.5 minute monologue. Notes are saved automatically.</p>
+
+    <span class="speaking-plan-label">1. Role of an Economist &amp; Key Tasks</span>
+    <input type="text" class="speaking-plan-input" id="sp1" placeholder="e.g. Analysis, planning, decision-making, financial forecasting, risk assessment..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">2. Required Skills (Theoretical + Practical)</span>
+    <input type="text" class="speaking-plan-input" id="sp2" placeholder="e.g. Knowledge of accounting principles, ability to interpret data, use analytical tools..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">3. Role of English in Finance</span>
+    <input type="text" class="speaking-plan-input" id="sp3" placeholder="e.g. International documents, contracts, regulatory requirements, communication with partners..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">4. Professional Risks &amp; Responsibility</span>
+    <input type="text" class="speaking-plan-input" id="sp4" placeholder="e.g. Inaccurate data → financial losses, incorrect analysis → poor decisions..." oninput="saveSpeakingPlan()">
+
+    <div style="margin-top:16px;" id="sp-wordcount" class="text-xs"></div>
+  </div>
+</section>
+
+<!-- PART 8 -->
+<section class="section" id="part8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <div class="section-title">Speaking Task — Monologue</div>
+      <div class="section-subtitle">Topic: "Professional Requirements for an Economist." Use 6–8 keywords. Include 1–2 cause–effect ideas.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;">
+      <div class="timer-wrap" style="min-width:160px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Min. Time</div>
+        <div class="timer-ring" id="ring-min">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="45"/>
+            <circle class="ring-fill" id="ring-fill-min" cx="50" cy="50" r="45"/>
+          </svg>
+          <div class="timer-num" id="timer-min">1:00</div>
+        </div>
+        <div style="font-size:12px;color:var(--mid-gray);">Speak at least 60s</div>
+      </div>
+      <div class="timer-wrap" style="min-width:160px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Max. Time</div>
+        <div class="timer-ring" id="ring-max">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="45"/>
+            <circle class="ring-fill" id="ring-fill-max" cx="50" cy="50" r="45"/>
+          </svg>
+          <div class="timer-num" id="timer-max">1:30</div>
+        </div>
+        <div style="font-size:12px;color:var(--mid-gray);">Stop within 90s</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;justify-content:center;">
+        <button class="btn btn-primary" id="timer-start-btn" onclick="startTimers()">▶ Start</button>
+        <button class="btn btn-outline" onclick="resetTimers()">↺ Reset</button>
+        <div id="timer-status" style="font-size:12px;color:var(--mid-gray);text-align:center;"></div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Keyword Checklist — tick each term as you use it:</div>
+    <div id="speaking-chips"></div>
+    <div style="margin-top:12px;font-size:13px;color:var(--mid-gray);">Used: <span id="chips-used" class="text-gold fw-600">0</span> / 8 keywords</div>
+    <div id="speaking-score-msg" style="margin-top:8px;font-size:13px;color:var(--gold);font-weight:600;display:none;"></div>
+  </div>
+</section>
+
+<!-- SELF-REFLECTION -->
+<section class="section" id="final">
+  <div class="section-header">
+    <div class="section-num">✓</div>
+    <div>
+      <div class="section-title">Self-Reflection</div>
+      <div class="section-subtitle">Rate your performance honestly — this affects your final score</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="final-grid" id="reflection-grid"></div>
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Self-Reflection Score: <span id="reflection-score" class="text-gold">0</span> / 12</div>
+  </div>
+</section>
+
+<!-- SCORE -->
+<section class="section" id="score">
+  <div class="section-header">
+    <div class="section-num">★</div>
+    <div>
+      <div class="section-title">My Score</div>
+      <div class="section-subtitle">Complete all sections and calculate your total</div>
+    </div>
+  </div>
+  <div class="card">
+    <div id="score-breakdown" style="margin-bottom:24px;"></div>
+    <button class="btn btn-primary" onclick="calcScore()">📊 Calculate Score</button>
+    <div id="total-score-display" style="margin-top:24px;text-align:center;"></div>
+  </div>
+</section>
+
+</main>
+<div id="confetti-container"></div>
+<div id="excellent-banner"></div>
+
+<script>
+var PREFIX = 'econ_';
+function saveItem(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function loadItem(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}}
+
+function toggleDark(){var d=document.body.classList.toggle('dark-mode');saveItem(PREFIX+'dark',d?'1':'');document.getElementById('dark-icon').textContent=d?'☀️':'🌙';document.getElementById('dark-label').textContent=d?'Light':'Dark';}
+if(loadItem(PREFIX+'dark')==='1'){document.body.classList.add('dark-mode');document.getElementById('dark-icon').textContent='☀️';document.getElementById('dark-label').textContent='Light';}
+
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebar-overlay').classList.toggle('show');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('show');}
+function smoothNav(e,id){e.preventDefault();closeSidebar();document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+
+window.addEventListener('scroll',function(){var h=document.documentElement.scrollHeight-window.innerHeight;var p=h>0?Math.round((window.scrollY/h)*100):0;document.getElementById('progress-bar-fill').style.width=p+'%';document.getElementById('progress-label').textContent=p+'% Complete';});
+
+var glossaryTerms=[
+  {term:"financial analysis",def:"the examination of financial data to assess a company's performance, health, and future prospects",ru:"финансовый анализ"},
+  {term:"financial forecasting",def:"the process of estimating future financial performance based on current data and trends",ru:"финансовое прогнозирование"},
+  {term:"risk assessment",def:"the process of identifying and evaluating potential threats or uncertainties to a business",ru:"оценка рисков"},
+  {term:"cost analysis",def:"the examination of costs to understand where money is spent and identify inefficiencies",ru:"анализ затрат"},
+  {term:"decision-making",def:"the process of choosing between options based on available data and analysis",ru:"принятие решений"},
+  {term:"revenue",def:"the total income generated from a company's business activities before expenses",ru:"выручка"},
+  {term:"costs",def:"the amount of money spent to produce goods or services; expenditures",ru:"затраты, издержки"},
+  {term:"profit",def:"the financial gain remaining after all costs have been deducted from revenue",ru:"прибыль"},
+  {term:"productivity",def:"the efficiency with which a company produces output relative to inputs used",ru:"производительность"},
+  {term:"to interpret data",def:"to explain the meaning of data and draw meaningful conclusions from it",ru:"интерпретировать данные"},
+  {term:"accounting principles",def:"the standard rules and guidelines governing how financial transactions are recorded and reported",ru:"принципы бухгалтерского учёта"},
+  {term:"financial documents",def:"official written records related to a company's financial transactions and position",ru:"финансовые документы"},
+  {term:"analytical tools",def:"software or methods used to collect, process, and analyse data",ru:"аналитические инструменты"},
+  {term:"practical skills",def:"the ability to perform specific tasks effectively in real working situations",ru:"практические навыки"},
+  {term:"professional performance",def:"the effectiveness and quality with which a person carries out their job responsibilities",ru:"профессиональная деятельность"},
+  {term:"investment outcomes",def:"the financial results and returns produced by an investment decision",ru:"результаты инвестиций"},
+  {term:"financial stability",def:"the ability of a company to consistently meet its financial obligations over time",ru:"финансовая стабильность"},
+  {term:"inaccurate data",def:"data that contains errors or does not correctly represent the actual situation",ru:"неточные данные"},
+  {term:"financial losses",def:"a situation in which a company spends more than it earns, resulting in negative profit",ru:"финансовые потери"},
+  {term:"accuracy",def:"the quality of being correct, precise, and free from errors in financial data",ru:"точность"},
+  {term:"international communication",def:"the exchange of information between people or organisations from different countries",ru:"международная коммуникация"},
+  {term:"regulatory requirements",def:"legal rules and standards that companies must comply with in their area of operation",ru:"нормативные требования"},
+  {term:"language skills",def:"the ability to communicate effectively in a specific language, both in writing and speech",ru:"языковые навыки"},
+  {term:"to be caused by",def:"to result from a specific factor; to have a particular origin or source",ru:"быть вызванным"},
+  {term:"inefficient",def:"not achieving maximum productivity; using more resources than necessary to produce results",ru:"неэффективный"},
+  {term:"essential",def:"absolutely necessary; extremely important and cannot be done without",ru:"необходимый, существенный"}
+];
+
+var dqCriteria={
+  1:{keywords:['financial analysis','practical skills','risk','english','communication','decisions','losses','inaccurate','incorrect','performance','risk assessment'],minWords:25,
+     model:"The candidate may be rejected because financial analysis requires practical skills, not just theoretical knowledge. Without the ability to analyse data, the specialist may produce inaccurate conclusions, leading to poor decisions and financial losses. Additionally, poor English skills create significant risks in international communication — misunderstandings in contracts or regulatory requirements can have serious consequences. The company should prioritise hiring candidates who can both apply knowledge and communicate professionally in English.",
+     tip:"Mention practical skills, financial analysis, risk, English/communication, and consequences like financial losses."},
+  2:{keywords:['incorrect analysis','financial losses','risk','decisions','profit','costs','stability','inaccurate','data'],minWords:20,
+     model:"Incorrect financial analysis can create serious risks. For example, if an economist fails to identify rising costs as a cause of declining profit, management may not take corrective action, leading to continued financial losses. Furthermore, inaccurate data can distort forecasting, causing poor investment decisions that affect overall financial stability. Therefore, accuracy in analysis is directly linked to the company's ability to remain profitable and competitive.",
+     tip:"Describe a specific cause-effect chain: incorrect analysis → poor decisions → financial losses or instability."},
+  3:{keywords:['knowledge','communication','english','international','risk','language','professional','analysis','both','important','however'],minWords:30,
+     model:"I disagree that professional knowledge is more important than communication skills, as both are essential in modern finance. First, an economist with deep knowledge but poor English cannot work with international documents, participate in global operations, or communicate with foreign partners — creating serious risks. Second, financial reports and regulatory requirements are often in English, so language skills directly affect accuracy and professional performance. However, one counterargument is that technical knowledge forms the foundation: without understanding financial analysis and risk assessment, language skills alone cannot produce good outcomes. Therefore, the ideal finance specialist must develop both competencies equally.",
+     tip:"State your position clearly, give 2 arguments, then provide 1 counterargument. Use terms like English, communication, knowledge, professional performance."}
+};
+
+function revealCase(){document.getElementById('case-box').classList.add('visible');document.getElementById('discussion-qs').classList.add('visible');document.getElementById('reveal-btn').style.display='none';saveItem(PREFIX+'caseRevealed','1');}
+if(loadItem(PREFIX+'caseRevealed')==='1'){revealCase();}
+
+function checkDQ(n){var ta=document.getElementById('dq'+n);var txt=ta.value.toLowerCase();var fb=document.getElementById('dq-fb'+n);var c=dqCriteria[n];var words=ta.value.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;var found=c.keywords.filter(function(k){return txt.includes(k);});var score=0;if(words>=c.minWords)score++;score+=Math.min(found.length,3);if(score>5)score=5;var pct=score/5;var color=pct>=0.8?'#38a169':pct>=0.5?'#C9A84C':'#e53e3e';fb.style.display='block';fb.style.background=pct>=0.8?'rgba(56,161,105,0.08)':pct>=0.5?'rgba(201,168,76,0.08)':'rgba(229,62,62,0.08)';fb.style.border='1px solid '+color;fb.innerHTML='<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+(found.length>0?'Key terms found: <em>'+found.slice(0,3).join(', ')+'</em>. ':'No key terms detected. ')+'<br><span style="color:var(--mid-gray);font-size:12px;">Tip: '+c.tip+'</span>';saveItem(PREFIX+'dq'+n+'score',score);}
+function showModelDQ(n){var fb=document.getElementById('dq-fb'+n);fb.style.display='block';fb.style.background='rgba(201,168,76,0.06)';fb.style.border='1px solid var(--gold)';fb.innerHTML='<strong style="color:var(--gold)">📋 Model Answer:</strong><br>'+dqCriteria[n].model;}
+
+var cqCriteria={
+  1:{keywords:['cost analysis','financial forecasting','risk assessment','analysis','planning','decision-making','tasks','include'],
+     model:"The three main tasks are: cost analysis (examining costs to identify inefficiencies), financial forecasting (estimating future performance based on data), and risk assessment (identifying and evaluating potential business threats). Economists perform these tasks to support management decisions and evaluate business performance."},
+  2:{keywords:['costs','inefficient','profit','interpret','rising','decrease','conclusions','analysis'],
+     model:"A decrease in profit can be caused by rising costs or inefficient operations. In response, an economist must interpret data correctly to identify the root cause, then provide clear, accurate conclusions to management so they can make informed decisions to improve performance."},
+  3:{keywords:['international documents','english','contracts','regulatory requirements','misunderstandings','errors','partners','communication','reports'],
+     model:"Two reasons: first, financial specialists need English to work with international documents, financial reports, and contracts that are often written in English. Second, English is essential for communicating with international partners and participating in global financial operations. Poor language skills can lead to misunderstandings, errors, and financial risks."}
+};
+
+function checkCQ(n){var ta=document.getElementById('cq'+n);var txt=ta.value.toLowerCase();var fb=document.getElementById('cq-fb'+n);var c=cqCriteria[n];var found=c.keywords.filter(function(k){return txt.includes(k);});var score=Math.min(Math.round((found.length/Math.max(c.keywords.length*0.5,1))*5),5);var pct=score/5;var color=pct>=0.8?'#38a169':pct>=0.5?'#C9A84C':'#e53e3e';fb.style.display='block';fb.style.background=pct>=0.8?'rgba(56,161,105,0.08)':pct>=0.5?'rgba(201,168,76,0.08)':'rgba(229,62,62,0.08)';fb.style.border='1px solid '+color;fb.innerHTML='<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+(found.length>0?'Keywords found: <em>'+found.join(', ')+'</em>.':'Key terms not detected.');saveItem(PREFIX+'cq'+n+'score',score);}
+function showModelCQ(n){var fb=document.getElementById('cq-fb'+n);fb.style.display='block';fb.style.background='rgba(201,168,76,0.06)';fb.style.border='1px solid var(--gold)';fb.innerHTML='<strong style="color:var(--gold)">📋 Model Answer:</strong><br>'+cqCriteria[n].model;}
+
+var catTerms=[
+  {label:"financial analysis",cats:['A']},
+  {label:"financial forecasting",cats:['A']},
+  {label:"risk assessment",cats:['A']},
+  {label:"cost analysis",cats:['A']},
+  {label:"decision-making",cats:['A']},
+  {label:"accounting principles",cats:['A','S']},
+  {label:"revenue",cats:['F']},
+  {label:"costs",cats:['F']},
+  {label:"profit",cats:['F']},
+  {label:"productivity",cats:['F']},
+  {label:"investment outcomes",cats:['F']},
+  {label:"financial stability",cats:['F']},
+  {label:"financial losses",cats:['F']},
+  {label:"to interpret data",cats:['S']},
+  {label:"analytical tools",cats:['S']},
+  {label:"practical skills",cats:['S']},
+  {label:"language skills",cats:['S']},
+  {label:"accuracy",cats:['S','A']},
+  {label:"financial documents",cats:['S','A']},
+  {label:"inaccurate data",cats:['S','F']}
+];
+var catSelected=null,catAssignments={};
+function renderCatTerms(){var s=loadItem(PREFIX+'catAssignments');if(s){try{catAssignments=JSON.parse(s);}catch(e){}}var grid=document.getElementById('cat-terms-grid');grid.innerHTML='';catTerms.forEach(function(t,i){var el=document.createElement('span');el.className='cat-term';el.id='cterm-'+i;el.textContent=t.label;el.onclick=function(){selectCatTerm(i);};if(catAssignments[i])el.classList.add('assigned-'+catAssignments[i]);grid.appendChild(el);});updateCatScore();}
+function selectCatTerm(i){document.querySelectorAll('.cat-term').forEach(function(el){el.classList.remove('selected');});catSelected=i;document.getElementById('cterm-'+i).classList.add('selected');}
+function assignCategory(cat){if(catSelected===null){alert('Please click a term first.');return;}catAssignments[catSelected]=cat;saveItem(PREFIX+'catAssignments',JSON.stringify(catAssignments));var el=document.getElementById('cterm-'+catSelected);el.classList.remove('selected','assigned-A','assigned-F','assigned-S');el.classList.add('assigned-'+cat);catSelected=null;updateCatScore();}
+function updateCatScore(){var correct=0;Object.keys(catAssignments).forEach(function(i){if(catTerms[i]&&catTerms[i].cats.indexOf(catAssignments[i])!==-1)correct++;});var score=Math.round((correct/catTerms.length)*15);document.getElementById('cat-score').textContent=correct+'/'+catTerms.length+' correct — '+score+'/15 pts';saveItem(PREFIX+'catScore',score);}
+function resetCategories(){catAssignments={};saveItem(PREFIX+'catAssignments','{}');catSelected=null;renderCatTerms();}
+
+function renderCards(filter){var grid=document.getElementById('flashcard-grid');grid.innerHTML='';var terms=filter?glossaryTerms.filter(function(t){return t.term.toLowerCase().includes(filter.toLowerCase())||t.def.toLowerCase().includes(filter.toLowerCase());}):glossaryTerms;terms.forEach(function(t,i){var wrap=document.createElement('div');wrap.className='flashcard-wrap';var flipped=loadItem(PREFIX+'fc_'+t.term)==='1';if(flipped)wrap.classList.add('flipped');wrap.innerHTML='<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div><div style="font-size:13px;font-weight:600;">'+t.term+'</div><div class="fc-hint">click to flip</div></div></div><div class="flashcard-face flashcard-back"><div><div style="font-weight:600;margin-bottom:6px;">'+t.def+'</div><div style="font-size:11px;color:rgba(201,168,76,0.8);margin-top:6px;">'+t.ru+'</div></div></div></div>';wrap.onclick=function(){wrap.classList.toggle('flipped');saveItem(PREFIX+'fc_'+t.term,wrap.classList.contains('flipped')?'1':'');};grid.appendChild(wrap);});document.getElementById('card-count').textContent=terms.length+' of '+glossaryTerms.length+' terms shown';}
+function filterCards(v){renderCards(v);}
+function flipAll(){document.querySelectorAll('.flashcard-wrap').forEach(function(w){w.classList.toggle('flipped');});}
+function resetCards(){document.getElementById('card-search').value='';renderCards('');}
+function speakSelected(){var sel=null;document.querySelectorAll('.flashcard-wrap').forEach(function(w){if(w.classList.contains('flipped'))sel=w;});if(!sel){alert('Flip a card first to hear it pronounced.');return;}var term=sel.querySelector('.flashcard-front div div').textContent;if(window.speechSynthesis){var u=new SpeechSynthesisUtterance(term);u.lang='en-GB';window.speechSynthesis.speak(u);}}
+
+var fibData=[
+  {pre:"Financial specialists analyse indicators such as revenue,",blank:"costs",post:", and profit to identify trends and problems.",hint:"c__ts",alts:['expenditures','spending']},
+  {pre:"Incorrect analysis or",blank:"inaccurate",post:"data can lead to financial losses and increased risk.",hint:"inac___ate",alts:['incorrect','wrong']},
+  {pre:"Economists must",blank:"interpret",post:"data correctly and provide clear conclusions for decision-making.",hint:"inter___t",alts:['analyse','analyze']},
+  {pre:"Poor language skills can lead to misunderstandings and errors in",blank:"international",post:"communication.",hint:"inter___ional",alts:['global','cross-border']},
+  {pre:"A key part of an economist's work is financial",blank:"analysis",post:", which includes examining revenue, costs, and profit.",hint:"ana___is",alts:[]},
+  {pre:"Professional training requires both theoretical knowledge and",blank:"practical",post:"skills to solve real business problems.",hint:"prac___al",alts:['applied','hands-on']}
+];
+
+function renderFIB(){var container=document.getElementById('fib-container');container.innerHTML='';fibData.forEach(function(item,i){var saved=loadItem(PREFIX+'fib'+i);var div=document.createElement('div');div.className='fib-item';div.innerHTML=item.pre+' <span class="fib-input-wrap"><input type="text" class="fib-input" id="fib-inp-'+i+'" value="'+saved+'" placeholder="___" oninput="saveItem(\''+PREFIX+'fib'+i+'\',this.value)"><span class="fib-status" id="fib-st-'+i+'"></span><button class="hint-btn" onclick="showFIBHint('+i+')">Hint</button></span> '+item.post;container.appendChild(div);if(saved)checkFIBItem(i,false);});}
+function showFIBHint(i){document.getElementById('fib-st-'+i).textContent='💡 '+fibData[i].hint;}
+function checkFIBItem(i,showResult){var inp=document.getElementById('fib-inp-'+i);var val=inp.value.trim().toLowerCase();var correct=val===fibData[i].blank.toLowerCase()||fibData[i].alts.some(function(a){return val===a.toLowerCase();});inp.classList.remove('correct','incorrect');if(val){inp.classList.add(correct?'correct':'incorrect');document.getElementById('fib-st-'+i).textContent=correct?'✅':(showResult?'❌ '+fibData[i].blank:'');}return correct;}
+function checkAllFIB(){var score=0;fibData.forEach(function(_,i){if(checkFIBItem(i,true))score++;});var pts=score*2;document.getElementById('fib-score').textContent=score+'/6 correct — '+pts+'/12 pts';saveItem(PREFIX+'fibScore',pts);}
+function resetFIB(){fibData.forEach(function(_,i){var inp=document.getElementById('fib-inp-'+i);inp.value='';inp.classList.remove('correct','incorrect');document.getElementById('fib-st-'+i).textContent='';saveItem(PREFIX+'fib'+i,'');});document.getElementById('fib-score').textContent='';}
+
+var writingCriteria={
+  1:{minWords:50,topicKW:['financial analysis','risk assessment','english','communication','losses','inaccurate','practical skills','decisions','performance','risk'],vocabKW:['financial analysis','risk assessment','inaccurate data','financial losses','practical skills','professional performance','analytical tools','accuracy','language skills','international communication','decision-making','costs','profit'],connectors:['because','however','therefore','furthermore','as a result','in addition','consequently','due to','moreover','this means','this can lead to'],
+    model:"The specialist may cause serious problems because of their inability to perform effective financial analysis. Without the ability to interpret data and use analytical tools, they risk producing inaccurate conclusions, which can lead to poor decision-making and ultimately financial losses. Furthermore, poor language skills create risks in international communication — misunderstandings in contracts or regulatory requirements can be costly. To improve, the specialist must develop both practical analytical skills and English language proficiency. The company risks reduced professional performance and potential damage to its financial stability and reputation if these gaps are not addressed."},
+  2:{minWords:40,topicKW:['knowledge','practical','responsibility','english','skills','analysis','professional','communication','accuracy','risk'],vocabKW:['financial analysis','financial forecasting','risk assessment','practical skills','professional performance','accounting principles','language skills','accuracy','international communication','financial stability','decision-making','analytical tools'],connectors:['furthermore','however','therefore','in addition','not only','but also','as a result','because','consequently'],
+    model:"A successful finance specialist must combine theoretical knowledge with strong practical skills to be effective in their role. Deep understanding of accounting principles and financial analysis enables them to interpret data accurately and support sound decision-making. Furthermore, responsibility is essential: inaccurate data or incorrect analysis can result in financial losses and affect investment outcomes. The role of English cannot be underestimated — in today's global economy, financial specialists must communicate in English to work with international documents and partners. Therefore, professional performance at the highest level requires a balance of technical expertise, analytical skills, and effective language skills."}
+};
+
+function updateWordCount(taId,wcId,wbId){var val=document.getElementById(taId).value;var words=val.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;document.getElementById(wcId).textContent=words+' words';var n=taId==='w1'?1:2;var c=writingCriteria[n];var vLow=val.toLowerCase();var vocabFound=c.vocabKW.filter(function(k){return vLow.includes(k.toLowerCase());}).length;var wb=document.getElementById(wbId);if(vocabFound>=3){wb.textContent=vocabFound+' vocab terms';wb.classList.add('show');}else{wb.classList.remove('show');}}
+
+function checkWriting(n){var val=document.getElementById('w'+n).value;var vLow=val.toLowerCase();var c=writingCriteria[n];var words=val.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;var topicFound=c.topicKW.filter(function(k){return vLow.includes(k.toLowerCase());});var vocabFound=c.vocabKW.filter(function(k){return vLow.includes(k.toLowerCase());});var connFound=c.connectors.filter(function(k){return vLow.includes(k.toLowerCase());});var sentences=val.split(/[.!?]+/).filter(function(s){return s.trim().length>10;}).length;var score=0;var details=[];if(words>=c.minWords){score+=2;details.push('✅ Length ('+words+' words) +2');}else{details.push('❌ Length ('+words+'/'+c.minWords+' words needed) +0');}var ts=topicFound.length>=3?2:topicFound.length>=2?1:0;score+=ts;details.push((ts>0?'✅':'❌')+' Topic keywords ('+topicFound.length+' found: '+topicFound.slice(0,3).join(', ')+') +'+ts);var vs=vocabFound.length>=5?2:vocabFound.length>=3?1:0;score+=vs;details.push((vs>0?'✅':'❌')+' Glossary vocab ('+vocabFound.length+' terms) +'+vs);var cs=connFound.length>=2?1:0;score+=cs;details.push((cs>0?'✅':'❌')+' Logical connectors ('+connFound.slice(0,3).join(', ')+') +'+cs);var ss=sentences>=3?1:0;score+=ss;details.push((ss>0?'✅':'❌')+' Sentence variety ('+sentences+' sentences) +'+ss);var pct=score/8;var color=pct>=0.75?'#38a169':pct>=0.5?'#C9A84C':'#e53e3e';var fb=document.getElementById('w-fb'+n);fb.style.display='block';fb.style.background=pct>=0.75?'rgba(56,161,105,0.08)':pct>=0.5?'rgba(201,168,76,0.08)':'rgba(229,62,62,0.08)';fb.style.border='1px solid '+color;fb.innerHTML='<strong style="color:'+color+'">Score: '+score+'/8</strong><br>'+details.join('<br>');saveItem(PREFIX+'w'+n+'score',score);}
+function showModelWriting(n){var fb=document.getElementById('w-fb'+n);fb.style.display='block';fb.style.background='rgba(201,168,76,0.06)';fb.style.border='1px solid var(--gold)';fb.innerHTML='<strong style="color:var(--gold)">📋 Model Answer:</strong><br>'+writingCriteria[n].model;}
+
+function saveSpeakingPlan(){['sp1','sp2','sp3','sp4'].forEach(function(id){saveItem(PREFIX+id,document.getElementById(id).value);});var total=['sp1','sp2','sp3','sp4'].reduce(function(acc,id){return acc+document.getElementById(id).value.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;},0);document.getElementById('sp-wordcount').textContent='Total words in notes: '+total;}
+['sp1','sp2','sp3','sp4'].forEach(function(id){var v=loadItem(PREFIX+id);if(v)document.getElementById(id).value=v;});saveSpeakingPlan();
+
+var timerMin=null,timerMax=null,runningMin=false,runningMax=false;
+function fmtTime(s){var m=Math.floor(s/60);var sec=s%60;return m+':'+(sec<10?'0':'')+sec;}
+function setRing(id,elapsed,total,isMax){var fill=document.getElementById(id);fill.style.strokeDashoffset=283-((elapsed/total)*283);if(isMax&&elapsed/total>0.75)fill.closest('.timer-ring').classList.add('red');}
+function startTimers(){if(runningMin||runningMax)return;runningMin=true;runningMax=true;document.getElementById('timer-start-btn').disabled=true;document.getElementById('timer-status').textContent='Speaking...';var elMin=0,elMax=0;timerMin=setInterval(function(){elMin++;document.getElementById('timer-min').textContent=fmtTime(Math.max(0,60-elMin));setRing('ring-fill-min',elMin,60,false);if(elMin>=60){clearInterval(timerMin);runningMin=false;document.getElementById('timer-min').textContent='✓';document.getElementById('timer-status').textContent='Min. time reached!';}},1000);timerMax=setInterval(function(){elMax++;document.getElementById('timer-max').textContent=fmtTime(Math.max(0,90-elMax));setRing('ring-fill-max',elMax,90,true);if(elMax>=90){clearInterval(timerMax);runningMax=false;document.getElementById('timer-max').textContent='0:00';document.getElementById('timer-status').textContent='Time is up!';}},1000);}
+function resetTimers(){clearInterval(timerMin);clearInterval(timerMax);runningMin=false;runningMax=false;document.getElementById('timer-min').textContent='1:00';document.getElementById('timer-max').textContent='1:30';document.getElementById('ring-fill-min').style.strokeDashoffset=283;document.getElementById('ring-fill-max').style.strokeDashoffset=283;document.getElementById('ring-min').classList.remove('red');document.getElementById('ring-max').classList.remove('red');document.getElementById('timer-start-btn').disabled=false;document.getElementById('timer-status').textContent='';}
+
+var speakingTerms=['financial analysis','financial forecasting','risk assessment','practical skills','decision-making','accounting principles','financial stability','international communication'];
+var chipsUsed={};
+function renderChips(){var s=loadItem(PREFIX+'chipsUsed');if(s){try{chipsUsed=JSON.parse(s);}catch(e){}}var container=document.getElementById('speaking-chips');container.innerHTML='';speakingTerms.forEach(function(term,i){var chip=document.createElement('span');chip.className='kchip'+(chipsUsed[i]?' used':'');chip.textContent=term;chip.onclick=function(){toggleSpeakingChip(i);};container.appendChild(chip);});updateChipScore();}
+function toggleSpeakingChip(i){chipsUsed[i]=!chipsUsed[i];saveItem(PREFIX+'chipsUsed',JSON.stringify(chipsUsed));document.querySelectorAll('.kchip')[i].classList.toggle('used',chipsUsed[i]);updateChipScore();}
+function updateChipScore(){var used=Object.values(chipsUsed).filter(Boolean).length;document.getElementById('chips-used').textContent=used;var score=Math.round((used/8)*8);saveItem(PREFIX+'chipsScore',score);if(used>=6){document.getElementById('speaking-score-msg').style.display='block';document.getElementById('speaking-score-msg').textContent='★ '+score+'/8 pts — Great vocabulary use!';}}
+
+var reflectionItems=["I can explain the role and main tasks of an economist","I can describe the difference between financial analysis and financial forecasting","I understand how inaccurate data leads to financial losses","I can use at least 8 glossary terms correctly in written and spoken English","I can write an analytical response using cause-effect reasoning","I spoke for at least 60 seconds using the keyword checklist"];
+function renderReflection(){var grid=document.getElementById('reflection-grid');grid.innerHTML='';var saved=loadItem(PREFIX+'reflection');var savedArr=saved?JSON.parse(saved):[];reflectionItems.forEach(function(item,i){var el=document.createElement('div');el.className='final-check-item'+(savedArr[i]?' checked':'');el.id='refl-'+i;el.innerHTML='<input type="checkbox" id="rchk-'+i+'" '+(savedArr[i]?'checked':'')+' onchange="toggleReflection('+i+')">'+'<label for="rchk-'+i+'" style="cursor:pointer;">'+item+'</label>';el.onclick=function(e){if(e.target.tagName!=='INPUT')document.getElementById('rchk-'+i).click();};grid.appendChild(el);});updateReflectionScore();}
+function toggleReflection(i){var saved=loadItem(PREFIX+'reflection');var arr=saved?JSON.parse(saved):Array(reflectionItems.length).fill(false);arr[i]=document.getElementById('rchk-'+i).checked;saveItem(PREFIX+'reflection',JSON.stringify(arr));document.getElementById('refl-'+i).classList.toggle('checked',arr[i]);updateReflectionScore();}
+function updateReflectionScore(){var saved=loadItem(PREFIX+'reflection');var arr=saved?JSON.parse(saved):[];var checked=arr.filter(Boolean).length;var score=Math.round((checked/reflectionItems.length)*12);document.getElementById('reflection-score').textContent=score;saveItem(PREFIX+'reflScore',score);}
+
+function calcScore(){var dq=[1,2,3].reduce(function(a,n){return a+(parseInt(loadItem(PREFIX+'dq'+n+'score'))||0);},0);var cq=[1,2,3].reduce(function(a,n){return a+(parseInt(loadItem(PREFIX+'cq'+n+'score'))||0);},0);var cat=parseInt(loadItem(PREFIX+'catScore'))||0;var fib=parseInt(loadItem(PREFIX+'fibScore'))||0;var wr=(parseInt(loadItem(PREFIX+'w1score'))||0)+(parseInt(loadItem(PREFIX+'w2score'))||0);var chips=parseInt(loadItem(PREFIX+'chipsScore'))||0;var refl=parseInt(loadItem(PREFIX+'reflScore'))||0;var total=dq+cq+cat+fib+wr+chips+refl;var maxTotal=93;var pct=Math.round((total/maxTotal)*100);var breakdown=[{label:'Discussion Questions (×3)',score:dq,max:15},{label:'Comprehension Questions (×3)',score:cq,max:15},{label:'Glossary Categories',score:cat,max:15},{label:'Fill in the Blanks',score:fib,max:12},{label:'Writing Tasks (×2)',score:wr,max:16},{label:'Speaking Keywords',score:chips,max:8},{label:'Self-Reflection',score:refl,max:12}];var html='<table style="width:100%;border-collapse:collapse;font-size:14px;"><tr style="border-bottom:2px solid var(--gold);"><th style="text-align:left;padding:8px 4px;color:var(--text-secondary);">Section</th><th style="text-align:right;padding:8px 4px;color:var(--text-secondary);">Score</th><th style="text-align:right;padding:8px 4px;color:var(--text-secondary);">Max</th></tr>';breakdown.forEach(function(b){html+='<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 4px;">'+b.label+'</td><td style="text-align:right;padding:8px 4px;font-weight:600;color:var(--gold);">'+b.score+'</td><td style="text-align:right;padding:8px 4px;color:var(--text-secondary);">'+b.max+'</td></tr>';});html+='<tr><td style="padding:10px 4px;font-weight:700;font-size:15px;">TOTAL</td><td style="text-align:right;padding:10px 4px;font-weight:800;font-size:15px;color:var(--gold);">'+total+'</td><td style="text-align:right;padding:10px 4px;font-weight:700;">'+maxTotal+'</td></tr></table>';document.getElementById('score-breakdown').innerHTML=html;var grade=pct>=90?'Excellent! 🏆':pct>=75?'Great work! ⭐':pct>=60?'Good effort! 👍':'Keep practising 📚';document.getElementById('total-score-display').innerHTML='<div style="font-size:48px;font-weight:800;color:var(--gold);">'+total+'<span style="font-size:24px;color:var(--text-secondary);">/'+maxTotal+'</span></div><div style="font-size:20px;font-weight:700;margin-top:4px;">'+pct+'% — '+grade+'</div>';saveItem(PREFIX+'totalScore',total);if(pct>=80){showConfetti();showBanner(grade);}}
+
+function showConfetti(){var container=document.getElementById('confetti-container');container.innerHTML='';var colors=['#C9A84C','#e8c96a','#0A1628','#667eea','#38a169'];for(var i=0;i<60;i++){var piece=document.createElement('div');piece.className='confetti-piece';var size=Math.random()*10+5;piece.style.cssText='left:'+Math.random()*100+'%;width:'+size+'px;height:'+size+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';animation-duration:'+(Math.random()*2+2)+'s;animation-delay:'+(Math.random()*1.5)+'s;';container.appendChild(piece);}setTimeout(function(){container.innerHTML='';},5000);}
+function showBanner(text){var b=document.getElementById('excellent-banner');b.textContent=text;b.classList.add('show');setTimeout(function(){b.classList.remove('show');},2500);}
+
+renderCatTerms();renderCards('');renderFIB();renderChips();renderReflection();
+['dq1','dq2','dq3'].forEach(function(id){var v=loadItem(PREFIX+id);if(v)document.getElementById(id).value=v;});
+['cq1','cq2','cq3'].forEach(function(id){var v=loadItem(PREFIX+id);if(v)document.getElementById(id).value=v;});
+['w1','w2'].forEach(function(id){var v=loadItem(PREFIX+id);if(v){document.getElementById(id).value=v;updateWordCount(id,'wc'+id.slice(1),'wb'+id.slice(1));}});
+
+var navSections=['part1','part2','part3','part4','part5','part6','part7','part8','final','score'];
+var navIds=['nav1','nav2','nav3','nav4','nav5','nav6','nav7','nav8','navF','navS'];
+window.addEventListener('scroll',function(){var scrollY=window.scrollY+80;navSections.forEach(function(id,i){var el=document.getElementById(id);if(el){var navEl=document.getElementById(navIds[i]);if(navEl)navEl.classList.toggle('active',scrollY>=el.offsetTop&&scrollY<el.offsetTop+el.offsetHeight);}});});
+</script>
+</body>
+</html>
