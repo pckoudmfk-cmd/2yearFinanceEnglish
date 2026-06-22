@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Entities &amp; Financial Reporting — Educational Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0A1628; --gold: #C9A84C; --gold-light: #e8c96a; --white: #FFFFFF;
+    --light-gray: #F5F5F5; --mid-gray: #8892A4; --bg: #F5F5F5; --card-bg: #FFFFFF;
+    --text: #0A1628; --text-secondary: #8892A4; --border: #e0e4ec;
+    --sidebar-bg: #0A1628; --sidebar-text: #FFFFFF; --input-bg: #FFFFFF;
+    --shadow: 0 2px 16px rgba(10,22,40,0.10); --shadow-lg: 0 8px 32px rgba(10,22,40,0.16);
+    --radius: 12px; --transition: 0.22s cubic-bezier(.4,0,.2,1);
+  }
+  .dark-mode { --bg: #0A1628; --card-bg: #1a2a42; --text: #FFFFFF; --text-secondary: #8892A4; --border: #2a3a52; --sidebar-bg: #06101e; --input-bg: #1a2a42; --shadow: 0 2px 16px rgba(0,0,0,0.3); --shadow-lg: 0 8px 32px rgba(0,0,0,0.4); }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 100vh; display: -webkit-flex; display: flex; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); }
+  #progress-bar-wrap { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--border); z-index: 9999; }
+  #progress-bar-fill { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); -webkit-transition: width 0.5s ease; transition: width 0.5s ease; border-radius: 0 2px 2px 0; }
+  #progress-label { position: fixed; top: 8px; right: 70px; font-size: 11px; font-weight: 600; color: var(--gold); z-index: 9999; letter-spacing: 0.5px; }
+  #sidebar { width: 250px; min-height: 100vh; background: var(--sidebar-bg); position: fixed; left: 0; top: 0; bottom: 0; z-index: 1000; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-transition: -webkit-transform var(--transition); transition: transform var(--transition); overflow-y: auto; padding-bottom: 24px; }
+  #sidebar-logo { padding: 28px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px; }
+  #sidebar-logo .logo-title { color: var(--gold); font-size: 15px; font-weight: 700; letter-spacing: 0.3px; line-height: 1.3; }
+  #sidebar-logo .logo-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+  #sidebar nav a { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 10px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 500; padding: 10px 24px; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); cursor: pointer; }
+  #sidebar nav a:hover, #sidebar nav a.active { background: rgba(201,168,76,0.13); color: var(--gold); }
+  #sidebar nav a .nav-num { width: 20px; height: 20px; border-radius: 50%; background: rgba(201,168,76,0.18); color: var(--gold); font-size: 10px; font-weight: 700; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  #sidebar nav a.done .nav-num { background: var(--gold); color: var(--navy); }
+  #hamburger { display: none; position: fixed; top: 12px; left: 12px; z-index: 1100; background: var(--navy); border: none; border-radius: 8px; padding: 8px; cursor: pointer; -webkit-flex-direction: column; flex-direction: column; gap: 4px; }
+  #hamburger span { display: block; width: 20px; height: 2px; background: var(--gold); border-radius: 2px; -webkit-transition: var(--transition); transition: var(--transition); }
+  #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  #dark-toggle { position: fixed; top: 10px; right: 16px; z-index: 9999; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; -webkit-transition: var(--transition); transition: var(--transition); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 5px; box-shadow: var(--shadow); }
+  #main-content { margin-left: 250px; -webkit-flex: 1; flex: 1; padding: 40px 48px 60px; max-width: 1100px; }
+  .section { margin-bottom: 64px; scroll-margin-top: 32px; }
+  .section-header { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .section-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 14px; font-weight: 800; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .section-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .card { background: var(--card-bg); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); -webkit-transition: background var(--transition), border-color var(--transition); transition: background var(--transition), border-color var(--transition); }
+  .btn { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; -webkit-transition: var(--transition); transition: var(--transition); font-family: inherit; }
+  .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); box-shadow: 0 2px 8px rgba(201,168,76,0.3); }
+  .btn-primary:hover { -webkit-transform: translateY(-1px); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .btn-outline { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+  .case-box { background: linear-gradient(135deg, rgba(10,22,40,0.04) 0%, rgba(201,168,76,0.06) 100%); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 28px 32px; font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 24px; display: none; }
+  .dark-mode .case-box { background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(26,42,66,0.8) 100%); }
+  .case-box.visible { display: block; -webkit-animation: slideDown 0.4s ease; animation: slideDown 0.4s ease; }
+  .discussion-questions { display: none; }
+  .discussion-questions.visible { display: block; }
+  .dq-item { background: var(--card-bg); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; border: 1px solid var(--border); -webkit-animation: slideIn 0.4s ease backwards; animation: slideIn 0.4s ease backwards; box-shadow: var(--shadow); }
+  .dq-num { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .dq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+  .dq-textarea { width: 100%; min-height: 80px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .dq-textarea:focus { border-color: var(--gold); }
+  .vocab-text { font-size: 15px; line-height: 1.85; color: var(--text); }
+  .vocab-text p { margin-bottom: 18px; }
+  .vocab-word { color: var(--gold); font-weight: 600; cursor: pointer; border-bottom: 1.5px dashed var(--gold); position: relative; display: inline-block; }
+  .vocab-word .tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); background: var(--navy); color: #fff; font-size: 12px; font-weight: 400; padding: 8px 14px; border-radius: 8px; white-space: normal; z-index: 500; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.25); max-width: 260px; text-align: center; line-height: 1.5; min-width: 160px; }
+  .vocab-word .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--navy); }
+  .vocab-word:hover .tooltip { display: block; }
+  .search-bar { width: 100%; padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; margin-bottom: 24px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .search-bar:focus { border-color: var(--gold); }
+  .flashcard-grid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 16px; }
+  .flashcard-wrap { width: calc(25% - 12px); min-width: 150px; height: 150px; -webkit-perspective: 800px; perspective: 800px; cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .flashcard-inner { width: 100%; height: 100%; position: relative; -webkit-transform-style: preserve-3d; transform-style: preserve-3d; -webkit-transition: -webkit-transform 0.5s cubic-bezier(.4,0,.2,1); transition: transform 0.5s cubic-bezier(.4,0,.2,1); }
+  .flashcard-wrap.flipped .flashcard-inner { -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
+  .flashcard-face { position: absolute; inset: 0; border-radius: var(--radius); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; padding: 14px; text-align: center; -webkit-backface-visibility: hidden; backface-visibility: hidden; border: 1.5px solid var(--border); }
+  .flashcard-front { background: var(--card-bg); font-size: 13px; font-weight: 600; color: var(--text); box-shadow: var(--shadow); }
+  .flashcard-back { background: linear-gradient(135deg, var(--navy), #1a2a42); -webkit-transform: rotateY(180deg); transform: rotateY(180deg); font-size: 12px; color: rgba(255,255,255,0.9); line-height: 1.5; border-color: var(--gold); }
+  .fc-hint { font-size: 10px; color: var(--mid-gray); margin-top: 6px; }
+  .fib-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; font-size: 14px; line-height: 2.2; box-shadow: var(--shadow); }
+  .fib-input-wrap { display: inline-flex; align-items: center; gap: 4px; }
+  .fib-input { display: inline-block; width: 180px; padding: 4px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); vertical-align: middle; }
+  .fib-input.correct { border-color: #38a169; background: rgba(56,161,105,0.08); }
+  .fib-input.incorrect { border-color: #e53e3e; background: rgba(229,62,62,0.08); }
+  .fib-status { font-size: 14px; vertical-align: middle; }
+  .hint-btn { font-size: 11px; padding: 2px 8px; background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold); border-radius: 4px; cursor: pointer; font-family: inherit; font-weight: 600; vertical-align: middle; -webkit-transition: var(--transition); transition: var(--transition); }
+  .hint-btn:hover { background: rgba(201,168,76,0.22); }
+  .writing-scenario { background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04)); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 20px 24px; font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+  .writing-task { margin-bottom: 24px; }
+  .writing-task label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  .writing-ta { width: 100%; min-height: 120px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .writing-ta:focus { border-color: var(--gold); }
+  .writing-meta { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 12px; margin-top: 6px; }
+  .word-count { font-size: 12px; color: var(--mid-gray); }
+  .vocab-badge { display: none; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; -webkit-animation: pop 0.3s ease; animation: pop 0.3s ease; }
+  .vocab-badge.show { display: inline-block; }
+  .timer-wrap { display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; gap: 16px; padding: 28px; background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .timer-ring { position: relative; width: 100px; height: 100px; }
+  .timer-ring svg { -webkit-transform: rotate(-90deg); transform: rotate(-90deg); }
+  .timer-ring circle { fill: none; stroke-width: 6; }
+  .timer-ring .ring-bg { stroke: var(--border); }
+  .timer-ring .ring-fill { stroke: var(--gold); stroke-linecap: round; -webkit-transition: stroke-dashoffset 1s linear, stroke 0.3s; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-dasharray: 283; stroke-dashoffset: 283; }
+  .timer-ring.red .ring-fill { stroke: #e53e3e; }
+  .timer-num { position: absolute; inset: 0; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; font-size: 26px; font-weight: 700; color: var(--text); }
+  .final-grid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+  .final-check-item { width: calc(50% - 6px); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 18px; display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; -webkit-transition: border-color var(--transition), background var(--transition); transition: border-color var(--transition), background var(--transition); box-shadow: var(--shadow); cursor: pointer; }
+  .final-check-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--gold); cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; margin-top: 1px; }
+  .final-check-item.checked { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  #confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 9998; overflow: hidden; }
+  .confetti-piece { position: absolute; -webkit-animation: confettiFall linear forwards; animation: confettiFall linear forwards; }
+  #excellent-banner { display: none; position: fixed; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 28px; font-weight: 800; padding: 24px 48px; border-radius: 16px; box-shadow: 0 16px 64px rgba(201,168,76,0.5); z-index: 10000; text-align: center; }
+  #excellent-banner.show { display: block; -webkit-animation: pop 0.4s cubic-bezier(.18,.89,.32,1.28); animation: pop 0.4s cubic-bezier(.18,.89,.32,1.28); }
+  .kchip { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-block; margin: 4px; -webkit-transition: var(--transition); transition: var(--transition); }
+  .kchip:hover, .kchip.used { background: var(--gold); color: var(--navy); }
+  .cat-term { display: inline-block; background: rgba(201,168,76,0.1); border: 1.5px solid var(--gold); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: var(--gold); cursor: pointer; margin: 4px; -webkit-transition: var(--transition); transition: var(--transition); }
+  .cat-term.selected { background: var(--gold); color: var(--navy); box-shadow: 0 0 0 3px rgba(201,168,76,0.3); }
+  .cat-term.assigned-S { background: rgba(102,126,234,0.15); border-color: #667eea; color: #667eea; }
+  .cat-term.assigned-R { background: rgba(56,161,105,0.15); border-color: #38a169; color: #38a169; }
+  .cat-term.assigned-P { background: rgba(229,62,62,0.15); border-color: #e53e3e; color: #e53e3e; }
+  .cat-btn { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; border: 2px solid; -webkit-transition: var(--transition); transition: var(--transition); font-family: inherit; margin: 6px; }
+  .cat-btn-S { background: rgba(102,126,234,0.08); border-color: #667eea; color: #667eea; }
+  .cat-btn-S:hover, .cat-btn-S.active-cat { background: rgba(102,126,234,0.2); }
+  .cat-btn-R { background: rgba(56,161,105,0.08); border-color: #38a169; color: #38a169; }
+  .cat-btn-R:hover, .cat-btn-R.active-cat { background: rgba(56,161,105,0.2); }
+  .cat-btn-P { background: rgba(229,62,62,0.08); border-color: #e53e3e; color: #e53e3e; }
+  .cat-btn-P:hover, .cat-btn-P.active-cat { background: rgba(229,62,62,0.2); }
+  .speaking-plan-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; margin-bottom: 4px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .speaking-plan-input:focus { border-color: var(--gold); }
+  .speaking-plan-label { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; margin-top: 16px; display: block; }
+  @-webkit-keyframes slideDown { from { opacity: 0; -webkit-transform: translateY(-12px); transform: translateY(-12px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+  @-webkit-keyframes slideIn { from { opacity: 0; -webkit-transform: translateX(-16px); transform: translateX(-16px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+  @-webkit-keyframes pop { from { -webkit-transform: scale(0.7); transform: scale(0.7); opacity: 0; } to { -webkit-transform: scale(1); transform: scale(1); opacity: 1; } }
+  @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @-webkit-keyframes confettiFall { 0% { -webkit-transform: translateY(-20px) rotate(0deg); transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { -webkit-transform: translateY(105vh) rotate(720deg); transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+  @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+  @-webkit-keyframes flash { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @keyframes flash { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .mt-16 { margin-top: 16px; } .mt-8 { margin-top: 8px; } .mb-16 { margin-bottom: 16px; }
+  .flex { display: -webkit-flex; display: flex; } .flex-center { -webkit-align-items: center; align-items: center; }
+  .gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
+  .text-gold { color: var(--gold); } .text-sm { font-size: 13px; } .text-xs { font-size: 11px; color: var(--mid-gray); } .fw-600 { font-weight: 600; }
+  @media print { #sidebar, #hamburger, #dark-toggle, #progress-bar-wrap, #progress-label, #confetti-container, #excellent-banner, .btn, .timer-wrap { display: none !important; } #main-content { margin-left: 0 !important; padding: 20px !important; } body { background: white !important; color: black !important; } .card { box-shadow: none !important; border: 1px solid #ddd !important; } }
+  @media (max-width: 900px) { #main-content { margin-left: 0; padding: 20px 20px 48px; } #hamburger { display: -webkit-flex; display: flex; } #sidebar { -webkit-transform: translateX(-100%); transform: translateX(-100%); } #sidebar.open { -webkit-transform: none; transform: none; } #sidebar-overlay.show { display: block; } .flashcard-wrap { width: calc(50% - 8px); } .final-check-item { width: 100%; } #progress-label { right: 60px; } }
+  @media (max-width: 600px) { .flashcard-wrap { width: 100%; } #main-content { padding: 16px 16px 48px; } .section-title { font-size: 18px; } .final-check-item { width: 100%; } .fib-input { width: 130px; } }
+</style>
+</head>
+<body>
+
+<div id="progress-bar-wrap"><div id="progress-bar-fill" style="width:0%"></div></div>
+<div id="progress-label">0% Complete</div>
+<button id="dark-toggle" onclick="toggleDark()"><span id="dark-icon">🌙</span><span id="dark-label">Dark</span></button>
+<button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<aside id="sidebar">
+  <div id="sidebar-logo">
+    <div class="logo-title">Business Entities</div>
+    <div class="logo-sub">Educational Dashboard</div>
+  </div>
+  <nav>
+    <a href="#part1" onclick="smoothNav(event,'part1')" id="nav1"><span class="nav-num">1</span> Professional Situation</a>
+    <a href="#part2" onclick="smoothNav(event,'part2')" id="nav2"><span class="nav-num">2</span> Main Text</a>
+    <a href="#part3" onclick="smoothNav(event,'part3')" id="nav3"><span class="nav-num">3</span> Glossary Categories</a>
+    <a href="#part4" onclick="smoothNav(event,'part4')" id="nav4"><span class="nav-num">4</span> Glossary Cards</a>
+    <a href="#part5" onclick="smoothNav(event,'part5')" id="nav5"><span class="nav-num">5</span> Fill in Blanks</a>
+    <a href="#part6" onclick="smoothNav(event,'part6')" id="nav6"><span class="nav-num">6</span> Writing Tasks</a>
+    <a href="#part7" onclick="smoothNav(event,'part7')" id="nav7"><span class="nav-num">7</span> Speaking Plan</a>
+    <a href="#part8" onclick="smoothNav(event,'part8')" id="nav8"><span class="nav-num">8</span> Speaking Task</a>
+    <a href="#final" onclick="smoothNav(event,'final')" id="navF"><span class="nav-num">✓</span> Self-Reflection</a>
+    <a href="#score" onclick="smoothNav(event,'score')" id="navS"><span class="nav-num">★</span> My Score</a>
+  </nav>
+</aside>
+
+<main id="main-content">
+
+<!-- PART 1 -->
+<section class="section" id="part1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Professional Situation</div>
+      <div class="section-subtitle">Read the scenario, then answer the discussion questions</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">A professional scenario is hidden below. Reveal it, then respond to the questions.</p>
+    <button class="btn btn-primary" id="reveal-btn" onclick="revealCase()">▶ Reveal Situation</button>
+    <div class="case-box" id="case-box">
+      <strong style="color:var(--gold);display:block;margin-bottom:12px;">📋 Professional Situation</strong>
+      You are a <strong>junior financial analyst at a boutique consulting firm</strong>. Your client — Maria Sokolova, who currently runs a small IT consulting practice as a sole proprietor — is planning to scale her business and bring in two co-founders. She needs to understand the key differences between registering as an <strong>LLC</strong> or a <strong>corporation</strong>, and what financial reporting obligations each structure involves. Your manager asks you to prepare a concise advisory brief and present it to the client at a meeting next week.
+    </div>
+    <div class="discussion-questions" id="discussion-qs">
+      <div style="margin:20px 0 14px;font-size:14px;font-weight:700;color:var(--text);">💬 Discussion Questions</div>
+      <div class="dq-item">
+        <div class="dq-num">Question 1</div>
+        <div class="dq-q">What are the key financial advantages and disadvantages of a sole proprietorship compared to an LLC?</div>
+        <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts... (min. 20 words)" oninput="saveItem('biz_dq1',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question 2</div>
+        <div class="dq-q">Why would a fast-growing technology company choose to incorporate as a corporation despite the risk of double taxation?</div>
+        <textarea class="dq-textarea" id="dq2" placeholder="Mention at least 2 specific reasons..." oninput="saveItem('biz_dq2',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question 3</div>
+        <div class="dq-q">How does accurate financial reporting benefit both a company and its external stakeholders?</div>
+        <textarea class="dq-textarea" id="dq3" placeholder="Give 2-3 specific benefits..." oninput="saveItem('biz_dq3',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="section" id="part2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Main Text</div>
+      <div class="section-subtitle">Hover over gold-highlighted terms to see definitions. Answer the comprehension questions below.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="vocab-text">
+      <p>When launching or expanding a business, one of the most consequential decisions an <span class="vocab-word">entrepreneur<span class="tooltip">a person who organises and operates a business, taking on financial risk to do so</span></span> faces is selecting the appropriate legal structure. Each type of <span class="vocab-word">business entity<span class="tooltip">a legal structure under which a business is organised and operated</span></span> carries distinct <span class="vocab-word">financial implications<span class="tooltip">the financial consequences of a particular business decision or structure</span></span>, affecting everything from taxation to <span class="vocab-word">access to capital<span class="tooltip">the ability to obtain funds for business operations or growth</span></span> and day-to-day operations.</p>
+
+      <p>The simplest form is a <span class="vocab-word">sole proprietorship<span class="tooltip">a business owned and run by one individual with no legal distinction between owner and business</span></span>. It is easy to establish, involves minimal <span class="vocab-word">regulatory requirements<span class="tooltip">legal rules that businesses must follow in their area of operation</span></span>, and gives the owner full control over <span class="vocab-word">decision-making<span class="tooltip">the process of choosing between options based on available information</span></span>. Profits are taxed as personal income, offering <span class="vocab-word">flexibility in taxation<span class="tooltip">the ability to choose or adapt how and when taxes are paid</span></span>. However, the critical drawback is <span class="vocab-word">unlimited liability<span class="tooltip">a situation where the business owner is personally responsible for all debts and obligations</span></span> — if the business incurs debts and financial obligations, the owner's personal assets are fully exposed. Administrative costs remain low, making this structure most common among independent professionals and small operators.</p>
+
+      <p>A <span class="vocab-word">limited liability company (LLC)<span class="tooltip">a flexible business structure that combines partnership advantages with limited personal liability</span></span> offers a more balanced alternative. It combines operational flexibility with the protective <span class="vocab-word">governance structure<span class="tooltip">the system of rules and practices by which a company is directed and controlled</span></span> of a corporation. Members benefit from <span class="vocab-word">limited liability<span class="tooltip">protection that limits an owner's financial responsibility to the amount they have invested</span></span>, meaning their personal assets are shielded from business debts. LLCs are especially popular among <span class="vocab-word">small and medium-sized enterprises<span class="tooltip">businesses with a relatively small number of employees and moderate revenue</span></span> because they allow owners to maintain operational control while avoiding <span class="vocab-word">double taxation<span class="tooltip">a situation where the same income is taxed twice — once at the corporate level and again as personal income</span></span>. The exact rules vary by <span class="vocab-word">jurisdiction<span class="tooltip">the legal authority and geographic area in which specific laws apply</span></span>.</p>
+
+      <p>For large-scale business operations requiring significant investment, a <span class="vocab-word">corporation<span class="tooltip">a large-scale legal entity with a separate legal identity that can issue shares and raise capital</span></span> is often the preferred choice. Corporations can raise capital through the <span class="vocab-word">issuance of shares<span class="tooltip">the process of creating and selling shares to investors in order to raise capital</span></span>, making them attractive to investors who seek <span class="vocab-word">expected returns<span class="tooltip">the anticipated financial gains from an investment</span></span>. The downside includes higher <span class="vocab-word">administrative costs<span class="tooltip">the expenses associated with managing and running a business</span></span>, complex regulatory requirements, and double taxation — whereby profits are taxed at the corporate level and dividends are taxed again in the hands of shareholders.</p>
+
+      <p>Regardless of business structure, <span class="vocab-word">financial reporting<span class="tooltip">the process of disclosing financial information to management, investors, and regulators</span></span> is a cornerstone of sound management. <span class="vocab-word">Financial statements<span class="tooltip">formal records that show the financial activities and position of a business</span></span> provide a detailed picture of an organisation's <span class="vocab-word">financial position<span class="tooltip">a snapshot of a company's assets, liabilities, and equity at a given point in time</span></span> and performance. The three core documents are: the <span class="vocab-word">income statement<span class="tooltip">a financial report showing revenue, expenses, and profit over a specific period</span></span>, which reports <span class="vocab-word">revenue<span class="tooltip">the total income generated from a company's business activities before expenses</span></span>, expenses, and <span class="vocab-word">profit<span class="tooltip">the financial gain remaining after all costs and expenses have been deducted from revenue</span></span>; the <span class="vocab-word">balance sheet<span class="tooltip">a financial statement listing a company's assets, liabilities, and shareholders' equity at a point in time</span></span>, which lists <span class="vocab-word">assets<span class="tooltip">resources owned or controlled by a company that have economic value</span></span>, <span class="vocab-word">liabilities<span class="tooltip">financial obligations or debts that a company owes to external parties</span></span>, and <span class="vocab-word">equity<span class="tooltip">the residual interest in a company's assets after deducting its liabilities; the owners' stake</span></span>; and the <span class="vocab-word">cash flow statement<span class="tooltip">a report that tracks how cash moves in and out of a business over a period</span></span>, which shows how money moves in and out of the business.</p>
+
+      <p>Reliable reporting depends on <span class="vocab-word">accuracy<span class="tooltip">the quality of being correct, precise, and free from errors in financial data</span></span> and <span class="vocab-word">transparency<span class="tooltip">openness and clarity in the way financial information is reported and disclosed</span></span>. Incorrect, incomplete, or inaccurate information can mislead users and lead to poor decisions — damaging <span class="vocab-word">financial stability<span class="tooltip">the ability of a company to consistently meet its financial obligations over time</span></span> and eroding stakeholder trust. Investors, lenders, and regulators all rely on financial data to evaluate results, assess outcomes, and make informed decisions. By following accounting standards and maintaining transparent reporting, businesses increase trust, demonstrate <span class="vocab-word">liquidity<span class="tooltip">the ease with which a company can convert assets to cash to meet short-term obligations</span></span>, and build the credibility necessary for long-term growth.</p>
+    </div>
+
+    <div style="border-top:1px solid var(--border);margin-top:28px;padding-top:24px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">📝 Comprehension Questions</div>
+      <div class="dq-item">
+        <div class="dq-num">Question A</div>
+        <div class="dq-q">What is the main financial risk of operating as a sole proprietorship?</div>
+        <textarea class="dq-textarea" id="cq1" placeholder="Identify the risk and explain it..." oninput="saveItem('biz_cq1',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(1)">📋 Model</button>
+        </div>
+        <div id="cq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question B</div>
+        <div class="dq-q">According to the text, which business structure is subject to double taxation, and why?</div>
+        <textarea class="dq-textarea" id="cq2" placeholder="Name the structure and explain the mechanism..." oninput="saveItem('biz_cq2',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(2)">📋 Model</button>
+        </div>
+        <div id="cq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question C</div>
+        <div class="dq-q">What three financial documents are described as the core of financial reporting?</div>
+        <textarea class="dq-textarea" id="cq3" placeholder="Name and briefly describe all three..." oninput="saveItem('biz_cq3',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(3)">📋 Model</button>
+        </div>
+        <div id="cq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="section" id="part3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Glossary Categories</div>
+      <div class="section-subtitle">Click a term to select it, then click a category to assign it. One term may belong to multiple groups.</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Select a term, then click its best category. Correct assignments highlight in the category's colour.</p>
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="cat-btn cat-btn-S" id="catbtn-S" onclick="assignCategory('S')">🔵 Business Structure</button>
+      <button class="cat-btn cat-btn-R" id="catbtn-R" onclick="assignCategory('R')">🟢 Financial Reporting</button>
+      <button class="cat-btn cat-btn-P" id="catbtn-P" onclick="assignCategory('P')">🔴 Capital &amp; Performance</button>
+    </div>
+    <div id="cat-terms-grid" style="margin-bottom:20px;"></div>
+    <div class="flex flex-center gap-8" style="flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="resetCategories()">↺ Reset</button>
+      <span id="cat-score" class="text-sm text-gold fw-600"></span>
+    </div>
+  </div>
+</section>
+
+<!-- PART 4 -->
+<section class="section" id="part4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Glossary Flashcards</div>
+      <div class="section-subtitle">Click a card to flip it. Use the search to filter terms.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+      <input type="text" class="search-bar" style="margin:0;flex:1;min-width:200px;" placeholder="Search terms..." oninput="filterCards(this.value)" id="card-search">
+      <button class="btn btn-outline btn-sm" onclick="flipAll()">↺ Flip All</button>
+      <button class="btn btn-outline btn-sm" onclick="resetCards()">Reset</button>
+      <button class="btn btn-outline btn-sm" onclick="speakSelected()">🔊 Pronounce</button>
+    </div>
+    <div class="flashcard-grid" id="flashcard-grid"></div>
+    <div id="card-count" style="margin-top:12px;font-size:12px;color:var(--mid-gray);"></div>
+  </div>
+</section>
+
+<!-- PART 5 -->
+<section class="section" id="part5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Fill in the Blanks</div>
+      <div class="section-subtitle">Complete each sentence with the correct term from the glossary</div>
+    </div>
+  </div>
+  <div class="card">
+    <div id="fib-container"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="checkAllFIB()">✓ Check All</button>
+      <button class="btn btn-outline" onclick="resetFIB()">↺ Reset</button>
+      <span id="fib-score" class="text-gold fw-600" style="align-self:center;margin-left:8px;font-size:14px;"></span>
+    </div>
+  </div>
+</section>
+
+<!-- PART 6 -->
+<section class="section" id="part6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Writing Tasks</div>
+      <div class="section-subtitle">Write structured responses using vocabulary from this lesson</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="writing-scenario">
+      <strong style="color:var(--gold);">📄 Context:</strong> You are preparing an advisory brief for your client Maria Sokolova. She needs to understand the differences between an LLC and a corporation, and why accurate financial reporting is important for her growing business.
+    </div>
+
+    <div class="writing-task">
+      <label>Task 1 — Advisory Recommendation (50+ words)<br>
+        <span style="font-weight:400;color:var(--text-secondary);">Recommend either an LLC or a corporation for Maria's expanding IT business. Justify your recommendation using at least 4 glossary terms.</span>
+      </label>
+      <textarea class="writing-ta" id="w1" placeholder="Start with: 'Based on the client's goals, I recommend...'" oninput="saveItem('biz_w1',this.value);updateWordCount('w1','wc1','wb1')"></textarea>
+      <div class="writing-meta">
+        <span class="word-count" id="wc1">0 words</span>
+        <span class="vocab-badge" id="wb1"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✓ Evaluate</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelWriting(1)">📋 Model Answer</button>
+      </div>
+      <div id="w-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+    </div>
+
+    <div class="writing-task">
+      <label>Task 2 — Explaining Financial Reporting (40+ words)<br>
+        <span style="font-weight:400;color:var(--text-secondary);">Explain to a non-specialist colleague why financial reporting matters for a business. Use at least 5 glossary terms.</span>
+      </label>
+      <textarea class="writing-ta" id="w2" placeholder="Start with: 'Financial reporting is essential because...'" oninput="saveItem('biz_w2',this.value);updateWordCount('w2','wc2','wb2')"></textarea>
+      <div class="writing-meta">
+        <span class="word-count" id="wc2">0 words</span>
+        <span class="vocab-badge" id="wb2"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✓ Evaluate</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelWriting(2)">📋 Model Answer</button>
+      </div>
+      <div id="w-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 7 -->
+<section class="section" id="part7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">Speaking Plan</div>
+      <div class="section-subtitle">Prepare your advisory presentation notes before speaking</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Fill in your key points before the speaking task. Notes are saved automatically.</p>
+
+    <span class="speaking-plan-label">1. Client Profile &amp; Business Goal</span>
+    <input type="text" class="speaking-plan-input" id="sp1" placeholder="e.g. Maria Sokolova, IT consulting, plans to scale with 2 co-founders..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">2. Recommended Business Structure</span>
+    <input type="text" class="speaking-plan-input" id="sp2" placeholder="e.g. LLC — because limited liability, flexible governance, avoids double taxation..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">3. Financial Reporting Requirements</span>
+    <input type="text" class="speaking-plan-input" id="sp3" placeholder="e.g. Must prepare income statement, balance sheet, cash flow statement..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">4. Key Risk to Highlight</span>
+    <input type="text" class="speaking-plan-input" id="sp4" placeholder="e.g. Inaccurate reporting misleads stakeholders and leads to poor decisions..." oninput="saveSpeakingPlan()">
+
+    <div style="margin-top:16px;" id="sp-wordcount" class="text-xs"></div>
+  </div>
+</section>
+
+<!-- PART 8 -->
+<section class="section" id="part8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <div class="section-title">Speaking Task</div>
+      <div class="section-subtitle">Present your advisory brief. Use the keyword chips — tick each one as you say it.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;">
+      <div class="timer-wrap" style="min-width:160px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Min. Time</div>
+        <div class="timer-ring" id="ring-min">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="45"/>
+            <circle class="ring-fill" id="ring-fill-min" cx="50" cy="50" r="45"/>
+          </svg>
+          <div class="timer-num" id="timer-min">1:30</div>
+        </div>
+        <div style="font-size:12px;color:var(--mid-gray);">Speak at least 90s</div>
+      </div>
+      <div class="timer-wrap" style="min-width:160px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Max. Time</div>
+        <div class="timer-ring" id="ring-max">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="45"/>
+            <circle class="ring-fill" id="ring-fill-max" cx="50" cy="50" r="45"/>
+          </svg>
+          <div class="timer-num" id="timer-max">2:00</div>
+        </div>
+        <div style="font-size:12px;color:var(--mid-gray);">Stop within 120s</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;justify-content:center;">
+        <button class="btn btn-primary" id="timer-start-btn" onclick="startTimers()">▶ Start</button>
+        <button class="btn btn-outline" onclick="resetTimers()">↺ Reset</button>
+        <div id="timer-status" style="font-size:12px;color:var(--mid-gray);text-align:center;"></div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Keyword Checklist — tick each term as you use it:</div>
+    <div id="speaking-chips"></div>
+    <div style="margin-top:12px;font-size:13px;color:var(--mid-gray);">Used: <span id="chips-used" class="text-gold fw-600">0</span> / 8 keywords</div>
+    <div id="speaking-score-msg" style="margin-top:8px;font-size:13px;color:var(--gold);font-weight:600;display:none;"></div>
+  </div>
+</section>
+
+<!-- PART 9 SELF-REFLECTION -->
+<section class="section" id="final">
+  <div class="section-header">
+    <div class="section-num">✓</div>
+    <div>
+      <div class="section-title">Self-Reflection</div>
+      <div class="section-subtitle">Rate your performance honestly — this affects your final score</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="final-grid" id="reflection-grid"></div>
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Self-Reflection Score: <span id="reflection-score" class="text-gold">0</span> / 12</div>
+  </div>
+</section>
+
+<!-- SCORE -->
+<section class="section" id="score">
+  <div class="section-header">
+    <div class="section-num">★</div>
+    <div>
+      <div class="section-title">My Score</div>
+      <div class="section-subtitle">Complete all sections and calculate your total</div>
+    </div>
+  </div>
+  <div class="card">
+    <div id="score-breakdown" style="margin-bottom:24px;"></div>
+    <button class="btn btn-primary" onclick="calcScore()">📊 Calculate Score</button>
+    <div id="total-score-display" style="margin-top:24px;text-align:center;"></div>
+  </div>
+</section>
+
+</main>
+
+<div id="confetti-container"></div>
+<div id="excellent-banner"></div>
+
+<script>
+var PREFIX = 'biz_';
+
+function saveItem(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
+function loadItem(k) { try { return localStorage.getItem(k) || ''; } catch(e){ return ''; } }
+
+// Dark mode
+function toggleDark() {
+  var d = document.body.classList.toggle('dark-mode');
+  saveItem(PREFIX+'dark', d ? '1' : '');
+  document.getElementById('dark-icon').textContent = d ? '☀️' : '🌙';
+  document.getElementById('dark-label').textContent = d ? 'Light' : 'Dark';
+}
+if (loadItem(PREFIX+'dark') === '1') { document.body.classList.add('dark-mode'); document.getElementById('dark-icon').textContent = '☀️'; document.getElementById('dark-label').textContent = 'Light'; }
+
+// Sidebar
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); }
+function smoothNav(e, id) { e.preventDefault(); closeSidebar(); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+// Progress bar
+window.addEventListener('scroll', function() {
+  var h = document.documentElement.scrollHeight - window.innerHeight;
+  var p = h > 0 ? Math.round((window.scrollY / h) * 100) : 0;
+  document.getElementById('progress-bar-fill').style.width = p + '%';
+  document.getElementById('progress-label').textContent = p + '% Complete';
+});
+
+// ===== GLOSSARY =====
+var glossaryTerms = [
+  {term:"entrepreneur", def:"a person who organises and operates a business, taking on financial risk", ru:"предприниматель"},
+  {term:"sole proprietorship", def:"a business owned and run by one individual with no legal distinction between owner and business", ru:"индивидуальное предпринимательство (ИП)"},
+  {term:"limited liability company (LLC)", def:"a flexible business structure that combines partnership advantages with limited personal liability", ru:"общество с ограниченной ответственностью (ООО)"},
+  {term:"corporation", def:"a large-scale legal entity with separate legal identity that can issue shares and raise capital", ru:"корпорация / акционерное общество"},
+  {term:"business entities", def:"the different legal structures under which a business can be organised and operated", ru:"виды бизнеса, формы предприятий"},
+  {term:"financial implications", def:"the financial consequences of a particular business decision or structure", ru:"финансовые последствия"},
+  {term:"unlimited liability", def:"a situation where the owner is personally responsible for all debts and business obligations", ru:"неограниченная ответственность"},
+  {term:"limited liability", def:"protection that limits an owner's financial responsibility to the amount invested", ru:"ограниченная ответственность"},
+  {term:"double taxation", def:"a situation where the same income is taxed twice: at corporate level and again as personal income", ru:"двойное налогообложение"},
+  {term:"access to capital", def:"the ability to obtain funds for business operations or growth", ru:"доступ к капиталу"},
+  {term:"governance structure", def:"the system of rules and practices by which a company is directed and controlled", ru:"структура управления"},
+  {term:"regulatory requirements", def:"legal rules that businesses must comply with in their area of operation", ru:"нормативные требования"},
+  {term:"issuance of shares", def:"the process of creating and selling shares to investors in order to raise capital", ru:"выпуск акций"},
+  {term:"jurisdiction", def:"the legal authority and geographic area in which specific laws apply", ru:"юрисдикция"},
+  {term:"administrative costs", def:"the expenses associated with managing and running a business", ru:"административные расходы"},
+  {term:"financial reporting", def:"the process of disclosing financial information to management, investors, and regulators", ru:"финансовая отчетность"},
+  {term:"financial statement", def:"a formal document that shows the financial activities and position of a business", ru:"финансовый отчет"},
+  {term:"income statement", def:"a financial report showing revenue, expenses, and profit over a specific period", ru:"отчет о прибылях и убытках"},
+  {term:"balance sheet", def:"a financial statement listing a company's assets, liabilities, and equity at a point in time", ru:"бухгалтерский баланс"},
+  {term:"cash flow statement", def:"a report that tracks how cash moves in and out of a business over a period", ru:"отчет о движении денежных средств"},
+  {term:"assets", def:"resources owned or controlled by a company that have economic value", ru:"активы"},
+  {term:"liabilities", def:"financial obligations or debts that a company owes to external parties", ru:"обязательства / пассивы"},
+  {term:"equity", def:"the residual interest in assets after deducting liabilities; the owners' stake", ru:"собственный капитал"},
+  {term:"revenue", def:"the total income generated from a company's business activities before expenses", ru:"выручка / доход"},
+  {term:"profit", def:"the financial gain remaining after all costs and expenses have been deducted from revenue", ru:"прибыль"},
+  {term:"transparency", def:"openness and clarity in how financial information is reported and disclosed", ru:"прозрачность"},
+  {term:"accuracy", def:"the quality of being correct, precise, and free from errors in financial data", ru:"точность"},
+  {term:"liquidity", def:"the ease with which a company can convert assets to cash to meet short-term obligations", ru:"ликвидность"},
+  {term:"financial stability", def:"the ability of a company to consistently meet its financial obligations over time", ru:"финансовая стабильность"},
+  {term:"decision-making", def:"the process of choosing between options based on available information", ru:"принятие решений"}
+];
+
+// ===== DQ =====
+var dqCriteria = {
+  1: {
+    keywords:['unlimited liability','limited liability','personal assets','taxation','flexibility','debts','control','decision-making'],
+    minWords:20,
+    model:"A sole proprietorship is easy to establish and offers full control over decision-making and flexibility in taxation. However, the main disadvantage is unlimited liability — if the business incurs debts, the owner's personal assets are at risk. An LLC, by contrast, provides limited liability protection, keeping personal assets separate from business obligations, which significantly reduces financial risk.",
+    tip:"Mention unlimited liability (sole proprietorship) vs limited liability (LLC), and taxation flexibility."
+  },
+  2: {
+    keywords:['shares','capital','investors','returns','issuance','access to capital','large-scale','growth','corporation'],
+    minWords:20,
+    model:"A corporation can raise capital through the issuance of shares, making it highly attractive to external investors who seek expected returns. This access to capital supports large-scale business growth and expansion. Although double taxation and higher administrative costs are drawbacks, for a fast-growing tech company, the ability to attract significant investment outweighs these disadvantages.",
+    tip:"Focus on issuance of shares, access to capital, investors, and expected returns."
+  },
+  3: {
+    keywords:['transparency','accuracy','decision-making','trust','investors','mislead','financial statement','reliable','stability'],
+    minWords:20,
+    model:"Accurate financial reporting builds trust with investors, lenders, and regulators by providing transparent, reliable data about financial position and performance. It enables stakeholders to make informed decisions and evaluate results correctly. Inaccurate or incomplete information can mislead users, lead to poor decisions, and damage the company's financial stability and credibility.",
+    tip:"Include transparency, accuracy, decision-making, and the consequences of inaccurate information."
+  }
+};
+
+function revealCase() {
+  document.getElementById('case-box').classList.add('visible');
+  document.getElementById('discussion-qs').classList.add('visible');
+  document.getElementById('reveal-btn').style.display = 'none';
+  saveItem(PREFIX+'caseRevealed','1');
+}
+if (loadItem(PREFIX+'caseRevealed') === '1') { revealCase(); }
+
+function checkDQ(n) {
+  var ta = document.getElementById('dq'+n);
+  var txt = ta.value.toLowerCase();
+  var fb = document.getElementById('dq-fb'+n);
+  var c = dqCriteria[n];
+  var words = ta.value.trim().split(/\s+/).filter(w=>w.length>0).length;
+  var found = c.keywords.filter(k=>txt.includes(k));
+  var score = 0;
+  if (words >= c.minWords) score++;
+  score += Math.min(found.length, 3);
+  if (score > 5) score = 5;
+  var pct = score/5;
+  var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
+  fb.style.display = 'block';
+  fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
+  fb.style.border = '1px solid ' + color;
+  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
+    (found.length > 0 ? 'Good use of: <em>'+found.slice(0,3).join(', ')+'</em>. ' : 'No key terms found. ')+
+    '<br><span style="color:var(--mid-gray);font-size:12px;">Tip: '+c.tip+'</span>';
+  saveItem(PREFIX+'dq'+n+'score', score);
+  updateProgress();
+}
+
+function showModelDQ(n) {
+  var fb = document.getElementById('dq-fb'+n);
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.06)';
+  fb.style.border = '1px solid var(--gold)';
+  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + dqCriteria[n].model;
+}
+
+// ===== CQ =====
+var cqCriteria = {
+  1: {
+    keywords:['unlimited liability','personal assets','responsible','debts','obligations','risk'],
+    model:"The main financial risk of a sole proprietorship is unlimited liability. This means the owner is personally responsible for all debts and financial obligations of the business. If the business fails or incurs debts, the owner's personal assets — such as savings or property — can be seized to cover those obligations."
+  },
+  2: {
+    keywords:['corporation','profits','corporate','dividends','shareholders','taxed','twice'],
+    model:"Corporations are subject to double taxation. This means corporate profits are taxed at the company level first. Then, when those profits are distributed to shareholders as dividends, they are taxed again as personal income. So the same income is effectively taxed twice."
+  },
+  3: {
+    keywords:['income statement','balance sheet','cash flow'],
+    model:"The three core financial documents are: the income statement (showing revenue, expenses, and profit); the balance sheet (listing assets, liabilities, and equity); and the cash flow statement (tracking how cash moves in and out of the business)."
+  }
+};
+
+function checkCQ(n) {
+  var ta = document.getElementById('cq'+n);
+  var txt = ta.value.toLowerCase();
+  var fb = document.getElementById('cq-fb'+n);
+  var c = cqCriteria[n];
+  var found = c.keywords.filter(k=>txt.includes(k));
+  var score = Math.min(Math.round((found.length / Math.max(c.keywords.length * 0.5, 1)) * 5), 5);
+  var pct = score/5;
+  var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
+  fb.style.display = 'block';
+  fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
+  fb.style.border = '1px solid ' + color;
+  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
+    (found.length > 0 ? 'Keywords found: <em>'+found.join(', ')+'</em>.' : 'Key terms not detected.');
+  saveItem(PREFIX+'cq'+n+'score', score);
+  updateProgress();
+}
+
+function showModelCQ(n) {
+  var fb = document.getElementById('cq-fb'+n);
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.06)';
+  fb.style.border = '1px solid var(--gold)';
+  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + cqCriteria[n].model;
+}
+
+// ===== CATEGORIES =====
+var catTerms = [
+  {label:"sole proprietorship", cats:['S']},
+  {label:"limited liability company", cats:['S']},
+  {label:"corporation", cats:['S']},
+  {label:"governance structure", cats:['S']},
+  {label:"unlimited liability", cats:['S']},
+  {label:"limited liability", cats:['S']},
+  {label:"jurisdiction", cats:['S']},
+  {label:"regulatory requirements", cats:['S','R']},
+  {label:"financial reporting", cats:['R']},
+  {label:"financial statement", cats:['R']},
+  {label:"income statement", cats:['R','P']},
+  {label:"balance sheet", cats:['R','P']},
+  {label:"cash flow statement", cats:['R']},
+  {label:"transparency", cats:['R']},
+  {label:"accuracy", cats:['R']},
+  {label:"financial stability", cats:['R','P']},
+  {label:"revenue", cats:['P']},
+  {label:"profit", cats:['P']},
+  {label:"equity", cats:['P']},
+  {label:"assets", cats:['P']},
+  {label:"liabilities", cats:['P']},
+  {label:"access to capital", cats:['P','S']},
+  {label:"issuance of shares", cats:['P','S']},
+  {label:"liquidity", cats:['P']}
+];
+
+var catSelected = null;
+var catAssignments = {};
+
+function renderCatTerms() {
+  var s = loadItem(PREFIX+'catAssignments');
+  if (s) { try { catAssignments = JSON.parse(s); } catch(e){} }
+  var grid = document.getElementById('cat-terms-grid');
+  grid.innerHTML = '';
+  catTerms.forEach(function(t, i) {
+    var el = document.createElement('span');
+    el.className = 'cat-term';
+    el.id = 'cterm-'+i;
+    el.textContent = t.label;
+    el.onclick = function() { selectCatTerm(i); };
+    if (catAssignments[i]) {
+      el.classList.add('assigned-'+catAssignments[i]);
+    }
+    grid.appendChild(el);
+  });
+  updateCatScore();
+}
+
+function selectCatTerm(i) {
+  document.querySelectorAll('.cat-term').forEach(function(el){ el.classList.remove('selected'); });
+  catSelected = i;
+  var el = document.getElementById('cterm-'+i);
+  el.classList.add('selected');
+}
+
+function assignCategory(cat) {
+  if (catSelected === null) { alert('Please click a term first.'); return; }
+  var t = catTerms[catSelected];
+  var correct = t.cats.indexOf(cat) !== -1;
+  catAssignments[catSelected] = cat;
+  saveItem(PREFIX+'catAssignments', JSON.stringify(catAssignments));
+  var el = document.getElementById('cterm-'+catSelected);
+  el.classList.remove('selected','assigned-S','assigned-R','assigned-P');
+  el.classList.add('assigned-'+cat);
+  catSelected = null;
+  updateCatScore();
+}
+
+function updateCatScore() {
+  var correct = 0;
+  Object.keys(catAssignments).forEach(function(i) {
+    if (catTerms[i] && catTerms[i].cats.indexOf(catAssignments[i]) !== -1) correct++;
+  });
+  var total = catTerms.length;
+  var score = Math.round((correct / total) * 15);
+  document.getElementById('cat-score').textContent = correct + '/' + total + ' correct — ' + score + '/15 pts';
+  saveItem(PREFIX+'catScore', score);
+  updateProgress();
+}
+
+function resetCategories() {
+  catAssignments = {};
+  saveItem(PREFIX+'catAssignments', '{}');
+  catSelected = null;
+  renderCatTerms();
+}
+
+// ===== FLASHCARDS =====
+function renderCards(filter) {
+  var grid = document.getElementById('flashcard-grid');
+  grid.innerHTML = '';
+  var terms = filter ? glossaryTerms.filter(function(t){ return t.term.toLowerCase().includes(filter.toLowerCase()) || t.def.toLowerCase().includes(filter.toLowerCase()); }) : glossaryTerms;
+  terms.forEach(function(t, i) {
+    var wrap = document.createElement('div');
+    wrap.className = 'flashcard-wrap';
+    wrap.id = 'fc-'+i;
+    var flipped = loadItem(PREFIX+'fc_'+t.term) === '1';
+    if (flipped) wrap.classList.add('flipped');
+    wrap.innerHTML = '<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div><div style="font-size:13px;font-weight:600;">' + t.term + '</div><div class="fc-hint">click to flip</div></div></div><div class="flashcard-face flashcard-back"><div><div style="font-weight:600;margin-bottom:6px;">' + t.def + '</div><div style="font-size:11px;color:rgba(201,168,76,0.8);margin-top:6px;">' + t.ru + '</div></div></div></div>';
+    wrap.onclick = function() {
+      wrap.classList.toggle('flipped');
+      saveItem(PREFIX+'fc_'+t.term, wrap.classList.contains('flipped') ? '1' : '');
+    };
+    grid.appendChild(wrap);
+  });
+  document.getElementById('card-count').textContent = terms.length + ' of ' + glossaryTerms.length + ' terms shown';
+}
+
+function filterCards(v) { renderCards(v); }
+function flipAll() { document.querySelectorAll('.flashcard-wrap').forEach(function(w){ w.classList.toggle('flipped'); }); }
+function resetCards() { document.getElementById('card-search').value = ''; renderCards(''); }
+function speakSelected() {
+  var sel = null;
+  document.querySelectorAll('.flashcard-wrap').forEach(function(w){ if (w.classList.contains('flipped')) sel = w; });
+  if (!sel) { alert('Flip a card first to hear it pronounced.'); return; }
+  var term = sel.querySelector('.flashcard-front div div').textContent;
+  if (window.speechSynthesis) { var u = new SpeechSynthesisUtterance(term); u.lang = 'en-GB'; window.speechSynthesis.speak(u); }
+}
+
+// ===== FILL IN BLANKS =====
+var fibData = [
+  {pre:"A sole proprietorship involves", blank:"unlimited", post:"liability, meaning the owner is personally responsible for all business debts.", hint:"un___ited", alts:[]},
+  {pre:"An LLC protects its members through", blank:"limited", post:"liability, keeping personal assets separate from business obligations.", hint:"li___ed", alts:[]},
+  {pre:"Corporations can raise capital by issuing", blank:"shares", post:", which attracts investors seeking financial returns.", hint:"s___es", alts:['stock','equity shares']},
+  {pre:"The", blank:"income", post:"statement shows a company's revenue, expenses, and profit over a reporting period.", hint:"inc___e", alts:['profit and loss','p&l']},
+  {pre:"A balance sheet lists the company's assets,", blank:"liabilities", post:", and equity.", hint:"li___ities", alts:['debts','obligations']},
+  {pre:"Stakeholders rely on", blank:"transparent", post:"reporting to make informed financial and investment decisions.", hint:"tr___parent", alts:['accurate','reliable','transparency']}
+];
+
+function renderFIB() {
+  var container = document.getElementById('fib-container');
+  container.innerHTML = '';
+  fibData.forEach(function(item, i) {
+    var saved = loadItem(PREFIX+'fib'+i);
+    var div = document.createElement('div');
+    div.className = 'fib-item';
+    div.innerHTML = item.pre + ' <span class="fib-input-wrap"><input type="text" class="fib-input" id="fib-inp-'+i+'" value="'+saved+'" placeholder="___" oninput="saveItem(\''+PREFIX+'fib'+i+'\',this.value)"><span class="fib-status" id="fib-st-'+i+'"></span><button class="hint-btn" onclick="showFIBHint('+i+')">Hint</button></span> ' + item.post;
+    container.appendChild(div);
+    if (saved) checkFIBItem(i, false);
+  });
+}
+
+function showFIBHint(i) { document.getElementById('fib-st-'+i).textContent = '💡 ' + fibData[i].hint; }
+
+function checkFIBItem(i, showResult) {
+  var inp = document.getElementById('fib-inp-'+i);
+  var val = inp.value.trim().toLowerCase();
+  var correct = val === fibData[i].blank.toLowerCase() || fibData[i].alts.some(function(a){ return val === a.toLowerCase(); });
+  inp.classList.remove('correct','incorrect');
+  if (val) {
+    inp.classList.add(correct ? 'correct' : 'incorrect');
+    document.getElementById('fib-st-'+i).textContent = correct ? '✅' : (showResult ? '❌ ' + fibData[i].blank : '');
+  }
+  return correct;
+}
+
+function checkAllFIB() {
+  var score = 0;
+  fibData.forEach(function(_, i){ if (checkFIBItem(i, true)) score++; });
+  var pts = score * 2;
+  document.getElementById('fib-score').textContent = score + '/6 correct — ' + pts + '/12 pts';
+  saveItem(PREFIX+'fibScore', pts);
+  updateProgress();
+}
+
+function resetFIB() {
+  fibData.forEach(function(_, i){
+    var inp = document.getElementById('fib-inp-'+i);
+    inp.value = ''; inp.classList.remove('correct','incorrect');
+    document.getElementById('fib-st-'+i).textContent = '';
+    saveItem(PREFIX+'fib'+i, '');
+  });
+  document.getElementById('fib-score').textContent = '';
+}
+
+// ===== WRITING =====
+var writingCriteria = {
+  1: {
+    minWords:50,
+    topicKW:['LLC','corporation','limited liability','double taxation','governance','issuance of shares','access to capital','administrative costs','regulatory requirements','unlimited liability'],
+    vocabKW:['LLC','corporation','limited liability','double taxation','governance structure','issuance of shares','access to capital','administrative costs','regulatory requirements','unlimited liability','sole proprietorship','jurisdiction','equity','financial implications'],
+    connectors:['because','however','although','therefore','furthermore','in addition','moreover','as a result','consequently','nevertheless','on the other hand','first','secondly','finally','in contrast'],
+    model:"Based on the client's goals, I recommend registering as a limited liability company (LLC). This structure provides limited liability protection for all three co-founders, ensuring their personal assets remain separate from business obligations. Unlike a corporation, an LLC avoids double taxation and involves lower administrative costs, which is beneficial for a growing business. The governance structure is also flexible, allowing the founders to maintain operational control. Furthermore, LLC registration requirements vary by jurisdiction, so it is important to verify local rules. Overall, an LLC offers the right balance of protection, flexibility, and cost-efficiency for Maria's expanding business."
+  },
+  2: {
+    minWords:40,
+    topicKW:['financial statement','income statement','balance sheet','transparency','accuracy','decision-making','mislead','trust','financial stability','cash flow','investors','stakeholders'],
+    vocabKW:['financial statement','income statement','balance sheet','cash flow statement','transparency','accuracy','decision-making','financial stability','liquidity','assets','liabilities','equity','revenue','profit','financial reporting'],
+    connectors:['because','however','although','therefore','furthermore','in addition','moreover','as a result','for example','in contrast','first','secondly','finally'],
+    model:"Financial reporting is essential because it provides stakeholders — including investors, lenders, and regulators — with accurate, transparent information about a company's financial position and performance. The three core financial statements are the income statement (showing revenue and profit), the balance sheet (listing assets, liabilities, and equity), and the cash flow statement. Accuracy and transparency in reporting enable stakeholders to make informed decisions and evaluate results correctly. Inaccurate or incomplete information can mislead users, lead to poor decisions, and damage the company's financial stability and reputation. Therefore, reliable reporting is fundamental to building trust and ensuring long-term credibility."
+  }
+};
+
+function updateWordCount(taId, wcId, wbId) {
+  var val = document.getElementById(taId).value;
+  var words = val.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
+  document.getElementById(wcId).textContent = words + ' words';
+  var c = taId === 'w1' ? writingCriteria[1] : writingCriteria[2];
+  var vLow = val.toLowerCase();
+  var vocabFound = c.vocabKW.filter(function(k){ return vLow.includes(k.toLowerCase()); }).length;
+  var wb = document.getElementById(wbId);
+  if (vocabFound >= 3) { wb.textContent = vocabFound + ' vocab terms'; wb.classList.add('show'); }
+  else { wb.classList.remove('show'); }
+}
+
+function checkWriting(n) {
+  var val = document.getElementById('w'+n).value;
+  var vLow = val.toLowerCase();
+  var c = writingCriteria[n];
+  var words = val.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
+  var topicFound = c.topicKW.filter(function(k){ return vLow.includes(k.toLowerCase()); });
+  var vocabFound = c.vocabKW.filter(function(k){ return vLow.includes(k.toLowerCase()); });
+  var connFound = c.connectors.filter(function(k){ return vLow.includes(k.toLowerCase()); });
+  var sentences = val.split(/[.!?]+/).filter(function(s){ return s.trim().length > 10; }).length;
+  var score = 0;
+  var details = [];
+  if (words >= c.minWords) { score += 2; details.push('✅ Length (' + words + ' words) +2'); }
+  else { details.push('❌ Length (' + words + '/' + c.minWords + ' words needed) +0'); }
+  var topicScore = Math.min(topicFound.length, 3) >= 3 ? 2 : Math.min(topicFound.length, 3) >= 2 ? 1 : 0;
+  score += topicScore;
+  details.push((topicScore > 0 ? '✅' : '❌') + ' Topic keywords (' + topicFound.length + ' found: ' + topicFound.slice(0,3).join(', ') + ') +' + topicScore);
+  var vocabScore = vocabFound.length >= 5 ? 2 : vocabFound.length >= 3 ? 1 : 0;
+  score += vocabScore;
+  details.push((vocabScore > 0 ? '✅' : '❌') + ' Glossary vocab (' + vocabFound.length + ' terms) +' + vocabScore);
+  var connScore = connFound.length >= 2 ? 1 : 0;
+  score += connScore;
+  details.push((connScore > 0 ? '✅' : '❌') + ' Logical connectors (' + connFound.slice(0,3).join(', ') + ') +' + connScore);
+  var sentScore = sentences >= 3 ? 1 : 0;
+  score += sentScore;
+  details.push((sentScore > 0 ? '✅' : '❌') + ' Sentence variety (' + sentences + ' sentences) +' + sentScore);
+  var maxScore = 8;
+  var pct = score / maxScore;
+  var color = pct >= 0.75 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
+  var fb = document.getElementById('w-fb'+n);
+  fb.style.display = 'block';
+  fb.style.background = pct >= 0.75 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
+  fb.style.border = '1px solid ' + color;
+  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/'+maxScore+'</strong><br>' + details.join('<br>');
+  saveItem(PREFIX+'w'+n+'score', score);
+  updateProgress();
+}
+
+function showModelWriting(n) {
+  var fb = document.getElementById('w-fb'+n);
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.06)';
+  fb.style.border = '1px solid var(--gold)';
+  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + writingCriteria[n].model;
+}
+
+// ===== SPEAKING PLAN =====
+function saveSpeakingPlan() {
+  ['sp1','sp2','sp3','sp4'].forEach(function(id){
+    saveItem(PREFIX+id, document.getElementById(id).value);
+  });
+  var total = ['sp1','sp2','sp3','sp4'].reduce(function(acc, id){
+    return acc + document.getElementById(id).value.trim().split(/\s+/).filter(function(w){ return w.length>0; }).length;
+  }, 0);
+  document.getElementById('sp-wordcount').textContent = 'Total words in notes: ' + total;
+}
+
+['sp1','sp2','sp3','sp4'].forEach(function(id){
+  var saved = loadItem(PREFIX+id);
+  if (saved) document.getElementById(id).value = saved;
+});
+saveSpeakingPlan();
+
+// ===== TIMERS =====
+var timerMin = null, timerMax = null;
+var secMin = 90, secMax = 120;
+var runningMin = false, runningMax = false;
+
+function fmtTime(s) { var m = Math.floor(s/60); var sec = s%60; return m+':'+(sec<10?'0':'')+sec; }
+function setRing(id, elapsed, total, isMax) {
+  var circ = 283;
+  var pct = elapsed / total;
+  var fill = document.getElementById(id);
+  fill.style.strokeDashoffset = circ - (pct * circ);
+  if (isMax && pct > 0.75) fill.closest('.timer-ring').classList.add('red');
+}
+
+function startTimers() {
+  if (runningMin || runningMax) return;
+  runningMin = true; runningMax = true;
+  document.getElementById('timer-start-btn').disabled = true;
+  document.getElementById('timer-status').textContent = 'Speaking...';
+  var elapsedMin = 0, elapsedMax = 0;
+  timerMin = setInterval(function() {
+    elapsedMin++;
+    secMin = Math.max(0, 90 - elapsedMin);
+    document.getElementById('timer-min').textContent = fmtTime(secMin);
+    setRing('ring-fill-min', elapsedMin, 90, false);
+    if (elapsedMin >= 90) {
+      clearInterval(timerMin); runningMin = false;
+      document.getElementById('timer-min').textContent = '✓';
+      document.getElementById('timer-status').textContent = 'Min. time reached!';
+    }
+  }, 1000);
+  timerMax = setInterval(function() {
+    elapsedMax++;
+    secMax = Math.max(0, 120 - elapsedMax);
+    document.getElementById('timer-max').textContent = fmtTime(secMax);
+    setRing('ring-fill-max', elapsedMax, 120, true);
+    if (elapsedMax >= 120) {
+      clearInterval(timerMax); runningMax = false;
+      document.getElementById('timer-max').textContent = '0:00';
+      document.getElementById('timer-status').textContent = 'Time is up!';
+      document.getElementById('ring-max').classList.add('red');
+    }
+  }, 1000);
+}
+
+function resetTimers() {
+  clearInterval(timerMin); clearInterval(timerMax);
+  runningMin = false; runningMax = false; secMin = 90; secMax = 120;
+  document.getElementById('timer-min').textContent = '1:30';
+  document.getElementById('timer-max').textContent = '2:00';
+  document.getElementById('ring-fill-min').style.strokeDashoffset = 283;
+  document.getElementById('ring-fill-max').style.strokeDashoffset = 283;
+  document.getElementById('ring-min').classList.remove('red');
+  document.getElementById('ring-max').classList.remove('red');
+  document.getElementById('timer-start-btn').disabled = false;
+  document.getElementById('timer-status').textContent = '';
+}
+
+// ===== SPEAKING CHIPS =====
+var speakingTerms = [
+  'sole proprietorship','limited liability','double taxation','issuance of shares',
+  'financial statement','balance sheet','transparency','governance structure'
+];
+var chipsUsed = {};
+
+function renderChips() {
+  var s = loadItem(PREFIX+'chipsUsed');
+  if (s) { try { chipsUsed = JSON.parse(s); } catch(e){} }
+  var container = document.getElementById('speaking-chips');
+  container.innerHTML = '';
+  speakingTerms.forEach(function(term, i) {
+    var chip = document.createElement('span');
+    chip.className = 'kchip' + (chipsUsed[i] ? ' used' : '');
+    chip.textContent = term;
+    chip.id = 'kchip-'+i;
+    chip.onclick = function() { toggleSpeakingChip(i); };
+    container.appendChild(chip);
+  });
+  updateChipScore();
+}
+
+function toggleSpeakingChip(i) {
+  chipsUsed[i] = !chipsUsed[i];
+  saveItem(PREFIX+'chipsUsed', JSON.stringify(chipsUsed));
+  document.getElementById('kchip-'+i).classList.toggle('used', chipsUsed[i]);
+  updateChipScore();
+}
+
+function updateChipScore() {
+  var used = Object.values(chipsUsed).filter(Boolean).length;
+  document.getElementById('chips-used').textContent = used;
+  var score = Math.round((used / 8) * 8);
+  saveItem(PREFIX+'chipsScore', score);
+  if (used >= 6) {
+    document.getElementById('speaking-score-msg').style.display = 'block';
+    document.getElementById('speaking-score-msg').textContent = '★ ' + score + '/8 pts — Great vocabulary use!';
+  }
+  updateProgress();
+}
+
+// ===== SELF-REFLECTION =====
+var reflectionItems = [
+  "I can explain the differences between sole proprietorship, LLC, and corporation",
+  "I understand what double taxation means and which entity it applies to",
+  "I know the three main financial statements and what each shows",
+  "I can use at least 10 glossary terms correctly in context",
+  "I can write a structured advisory recommendation using key vocabulary",
+  "I spoke for at least 90 seconds using the keyword checklist"
+];
+
+function renderReflection() {
+  var grid = document.getElementById('reflection-grid');
+  grid.innerHTML = '';
+  var saved = loadItem(PREFIX+'reflection');
+  var savedArr = saved ? JSON.parse(saved) : [];
+  reflectionItems.forEach(function(item, i) {
+    var el = document.createElement('div');
+    el.className = 'final-check-item' + (savedArr[i] ? ' checked' : '');
+    el.id = 'refl-'+i;
+    el.innerHTML = '<input type="checkbox" id="rchk-'+i+'" '+(savedArr[i]?'checked':'')+' onchange="toggleReflection('+i+')">' +
+      '<label for="rchk-'+i+'" style="cursor:pointer;">'+item+'</label>';
+    el.onclick = function(e) { if (e.target.tagName !== 'INPUT') document.getElementById('rchk-'+i).click(); };
+    grid.appendChild(el);
+  });
+  updateReflectionScore();
+}
+
+function toggleReflection(i) {
+  var saved = loadItem(PREFIX+'reflection');
+  var arr = saved ? JSON.parse(saved) : Array(reflectionItems.length).fill(false);
+  arr[i] = document.getElementById('rchk-'+i).checked;
+  saveItem(PREFIX+'reflection', JSON.stringify(arr));
+  document.getElementById('refl-'+i).classList.toggle('checked', arr[i]);
+  updateReflectionScore();
+}
+
+function updateReflectionScore() {
+  var saved = loadItem(PREFIX+'reflection');
+  var arr = saved ? JSON.parse(saved) : [];
+  var checked = arr.filter(Boolean).length;
+  var score = Math.round((checked / reflectionItems.length) * 12);
+  document.getElementById('reflection-score').textContent = score;
+  saveItem(PREFIX+'reflScore', score);
+  updateProgress();
+}
+
+// ===== SCORE =====
+function calcScore() {
+  var dq = [1,2,3].reduce(function(a,n){ return a + (parseInt(loadItem(PREFIX+'dq'+n+'score'))||0); }, 0);
+  var cq = [1,2,3].reduce(function(a,n){ return a + (parseInt(loadItem(PREFIX+'cq'+n+'score'))||0); }, 0);
+  var cat = parseInt(loadItem(PREFIX+'catScore')) || 0;
+  var fib = parseInt(loadItem(PREFIX+'fibScore')) || 0;
+  var wr = (parseInt(loadItem(PREFIX+'w1score'))||0) + (parseInt(loadItem(PREFIX+'w2score'))||0);
+  var chips = parseInt(loadItem(PREFIX+'chipsScore')) || 0;
+  var refl = parseInt(loadItem(PREFIX+'reflScore')) || 0;
+  var total = dq + cq + cat + fib + wr + chips + refl;
+  var maxTotal = 93;
+  var pct = Math.round((total/maxTotal)*100);
+
+  var breakdown = [
+    {label:'Discussion Questions (×3)', score:dq, max:15},
+    {label:'Comprehension Questions (×3)', score:cq, max:15},
+    {label:'Glossary Categories', score:cat, max:15},
+    {label:'Fill in the Blanks', score:fib, max:12},
+    {label:'Writing Tasks (×2)', score:wr, max:16},
+    {label:'Speaking Keywords', score:chips, max:8},
+    {label:'Self-Reflection', score:refl, max:12}
+  ];
+
+  var html = '<table style="width:100%;border-collapse:collapse;font-size:14px;">';
+  html += '<tr style="border-bottom:2px solid var(--gold);"><th style="text-align:left;padding:8px 4px;color:var(--text-secondary);">Section</th><th style="text-align:right;padding:8px 4px;color:var(--text-secondary);">Score</th><th style="text-align:right;padding:8px 4px;color:var(--text-secondary);">Max</th></tr>';
+  breakdown.forEach(function(b) {
+    html += '<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 4px;">' + b.label + '</td><td style="text-align:right;padding:8px 4px;font-weight:600;color:var(--gold);">' + b.score + '</td><td style="text-align:right;padding:8px 4px;color:var(--text-secondary);">' + b.max + '</td></tr>';
+  });
+  html += '<tr><td style="padding:10px 4px;font-weight:700;font-size:15px;">TOTAL</td><td style="text-align:right;padding:10px 4px;font-weight:800;font-size:15px;color:var(--gold);">' + total + '</td><td style="text-align:right;padding:10px 4px;font-weight:700;">' + maxTotal + '</td></tr>';
+  html += '</table>';
+  document.getElementById('score-breakdown').innerHTML = html;
+
+  var grade = pct >= 90 ? 'Excellent! 🏆' : pct >= 75 ? 'Great work! ⭐' : pct >= 60 ? 'Good effort! 👍' : 'Keep practising 📚';
+  document.getElementById('total-score-display').innerHTML =
+    '<div style="font-size:48px;font-weight:800;color:var(--gold);">' + total + '<span style="font-size:24px;color:var(--text-secondary);">/' + maxTotal + '</span></div>' +
+    '<div style="font-size:20px;font-weight:700;margin-top:4px;">' + pct + '% — ' + grade + '</div>';
+
+  saveItem(PREFIX+'totalScore', total);
+  if (pct >= 80) { showConfetti(); showBanner(grade); }
+}
+
+function updateProgress() {}
+
+// ===== CONFETTI =====
+function showConfetti() {
+  var container = document.getElementById('confetti-container');
+  container.innerHTML = '';
+  var colors = ['#C9A84C','#e8c96a','#0A1628','#667eea','#38a169'];
+  for (var i = 0; i < 60; i++) {
+    var piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    var size = Math.random() * 10 + 5;
+    piece.style.cssText = 'left:'+Math.random()*100+'%;width:'+size+'px;height:'+size+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';animation-duration:'+(Math.random()*2+2)+'s;animation-delay:'+(Math.random()*1.5)+'s;';
+    container.appendChild(piece);
+  }
+  setTimeout(function(){ container.innerHTML = ''; }, 5000);
+}
+
+function showBanner(text) {
+  var b = document.getElementById('excellent-banner');
+  b.textContent = text;
+  b.classList.add('show');
+  setTimeout(function(){ b.classList.remove('show'); }, 2500);
+}
+
+// ===== INIT =====
+renderCatTerms();
+renderCards('');
+renderFIB();
+renderChips();
+renderReflection();
+
+// Restore saved values
+['dq1','dq2','dq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; } });
+['cq1','cq2','cq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; } });
+['w1','w2'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; updateWordCount(id, 'wc'+id.slice(1), 'wb'+id.slice(1)); } });
+
+// Active nav highlighting
+var navSections = ['part1','part2','part3','part4','part5','part6','part7','part8','final','score'];
+var navIds = ['nav1','nav2','nav3','nav4','nav5','nav6','nav7','nav8','navF','navS'];
+window.addEventListener('scroll', function() {
+  var scrollY = window.scrollY + 80;
+  navSections.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (el) {
+      var top = el.offsetTop;
+      var bot = top + el.offsetHeight;
+      var navEl = document.getElementById(navIds[i]);
+      if (navEl) navEl.classList.toggle('active', scrollY >= top && scrollY < bot);
+    }
+  });
+});
+</script>
+</body>
+</html>
