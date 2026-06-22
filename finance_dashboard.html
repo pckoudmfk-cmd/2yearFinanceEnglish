@@ -452,7 +452,7 @@
   .flashcard-wrap {
     width: calc(25% - 12px);
     min-width: 150px;
-    height: 130px;
+    height: 150px;
     -webkit-perspective: 800px;
     perspective: 800px;
     cursor: pointer;
@@ -1027,6 +1027,7 @@
     <a href="#part8" onclick="smoothNav(event,'part8')" id="nav8" tabindex="0"><span class="nav-num">8</span> Synthesis</a>
     <a href="#part9" onclick="smoothNav(event,'part9')" id="nav9" tabindex="0"><span class="nav-num">9</span> Professional Output</a>
     <a href="#final" onclick="smoothNav(event,'final')" id="navF" tabindex="0"><span class="nav-num">✓</span> Final Check</a>
+    <a href="#score" onclick="smoothNav(event,'score')" id="navS" tabindex="0"><span class="nav-num">★</span> My Score</a>
   </nav>
 </aside>
 
@@ -1056,17 +1057,32 @@
         <div class="dq-item">
           <div class="dq-num">Question 1</div>
           <div class="dq-q">Why is revenue not enough for investors to evaluate a company's financial health?</div>
-          <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts here..." oninput="saveDQ(1,this.value)" aria-label="Answer to question 1"></textarea>
+          <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts here... (min. 2 sentences)" oninput="saveDQ(1,this.value)" aria-label="Answer to question 1"></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✓ Check Answer</button>
+            <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
+          </div>
+          <div id="dq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
         </div>
         <div class="dq-item">
           <div class="dq-num">Question 2</div>
           <div class="dq-q">What should investors analyse beyond revenue to get a complete picture?</div>
-          <textarea class="dq-textarea" id="dq2" placeholder="Write your thoughts here..." oninput="saveDQ(2,this.value)" aria-label="Answer to question 2"></textarea>
+          <textarea class="dq-textarea" id="dq2" placeholder="List at least 3 types of information..." oninput="saveDQ(2,this.value)" aria-label="Answer to question 2"></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✓ Check Answer</button>
+            <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
+          </div>
+          <div id="dq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
         </div>
         <div class="dq-item">
           <div class="dq-num">Question 3</div>
-          <div class="dq-q">What risks come from relying on incorrect or incomplete financial reports?</div>
-          <textarea class="dq-textarea" id="dq3" placeholder="Write your thoughts here..." oninput="saveDQ(3,this.value)" aria-label="Answer to question 3"></textarea>
+          <div class="dq-q">What risks come from relying on incorrect or incomplete financial reports? Give 2–3 arguments.</div>
+          <textarea class="dq-textarea" id="dq3" placeholder="Argument 1: ... Argument 2: ... Argument 3: ..." oninput="saveDQ(3,this.value)" aria-label="Answer to question 3"></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✓ Check Answer</button>
+            <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
+          </div>
+          <div id="dq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
         </div>
       </div>
     </div>
@@ -1085,17 +1101,25 @@
       <div class="vocab-text">
         <p>
           <span class="vocab-word">Financial reporting<span class="tooltip">the process of producing formal statements of a company's financial activities and position</span></span>
-          is a key element of business activity. It provides essential information about a company's financial position and performance. Managers, investors, and regulators all rely on this information to make
+          is a key element of business activity. It provides information about a company's financial position and performance. Managers, investors, and regulators use this information to
+          <span class="vocab-word">evaluate<span class="tooltip">to assess or examine something carefully</span></span>
+          how effectively the company
+          <span class="vocab-word">operates<span class="tooltip">to run or manage a business or process</span></span>
+          and whether it is financially
+          <span class="vocab-word">stable<span class="tooltip">not likely to change or fail; consistent</span></span>.
+          Without
+          <span class="vocab-word">reliable<span class="tooltip">able to be trusted; consistently accurate</span></span>
+          financial reporting, it is difficult to make
           <span class="vocab-word">informed decisions<span class="tooltip">choices made based on accurate, complete information</span></span>.
         </p>
         <p>
-          There are three main
+          The main
           <span class="vocab-word">financial statements<span class="tooltip">formal records of a company's financial activities</span></span>
-          that form the foundation of financial reporting. The
+          present different aspects of a company's activity. The
           <span class="vocab-word">income statement<span class="tooltip">a report showing revenue, expenses, and profit over a period</span></span>
           shows
           <span class="vocab-word">revenue<span class="tooltip">the total income generated by a company from its business activities</span></span>,
-          expenses, and profit, revealing whether a company is
+          expenses, and profit, helping to understand whether the company is
           <span class="vocab-word">profitable<span class="tooltip">generating more income than expenses; making a profit</span></span>.
           The
           <span class="vocab-word">balance sheet<span class="tooltip">a statement showing assets, liabilities, and equity at a point in time</span></span>
@@ -1104,26 +1128,42 @@
           <span class="vocab-word">liabilities<span class="tooltip">debts or financial obligations owed by a company</span></span>,
           and
           <span class="vocab-word">equity<span class="tooltip">the owner's interest in the company after liabilities are deducted</span></span>,
-          showing what a company owns and owes. The
+          which reflect the company's financial structure. The
           <span class="vocab-word">cash flow statement<span class="tooltip">a report showing actual cash inflows and outflows</span></span>
-          tracks
-          <span class="vocab-word">liquidity<span class="tooltip">the ability to convert assets into cash quickly</span></span>,
-          showing actual cash movements.
+          explains how money moves in and out of the business, showing whether the company has enough
+          <span class="vocab-word">liquidity<span class="tooltip">the ability to convert assets into cash quickly</span></span>
+          to operate.
+        </p>
+        <p>
+          However, financial data must be analyzed carefully. High
+          <span class="vocab-word">revenue<span class="tooltip">the total income generated by a company from its business activities</span></span>
+          does not always mean
+          <span class="vocab-word">strong performance<span class="tooltip">achieving excellent financial or operational results</span></span>.
+          If expenses are also high, profit may be low or even negative. Financial analysis helps identify
+          <span class="vocab-word">inefficiencies<span class="tooltip">processes or areas that waste resources or underperform</span></span>,
+          risks, and potential problems. It allows managers to improve operations and helps investors evaluate whether the company is a good investment.
         </p>
         <p>
           Accuracy and
           <span class="vocab-word">transparency<span class="tooltip">openness and clarity in sharing financial information</span></span>
-          are fundamental to financial reporting.
-          <span class="vocab-word">Reliable data<span class="tooltip">information that is accurate, consistent, and trustworthy</span></span>
-          allows stakeholders to evaluate a company's real performance. Incomplete or misleading reports can lead to poor decisions and damage financial trust.
+          are essential in financial reporting. Incorrect or
+          <span class="vocab-word">incomplete<span class="tooltip">missing important information or not fully finished</span></span>
+          information can
+          <span class="vocab-word">mislead<span class="tooltip">to give a false or inaccurate impression</span></span>
+          users and lead to
+          <span class="vocab-word">poor decisions<span class="tooltip">choices made without sufficient or accurate information</span></span>.
+          Companies must
+          <span class="vocab-word">follow accounting standards<span class="tooltip">to comply with established financial reporting rules</span></span>
+          and provide clear and
+          <span class="vocab-word">reliable data<span class="tooltip">information that is accurate, consistent, and trustworthy</span></span>.
+          Transparent reporting increases trust and reduces financial risk for investors and partners.
         </p>
         <p>
-          Financial analysis helps identify
-          <span class="vocab-word">inefficiencies<span class="tooltip">processes or areas that waste resources or underperform</span></span>
-          and areas for improvement. By examining financial statements carefully, managers can make better operational decisions. Investors can assess whether a company represents a strong performance or carries hidden risks.
-        </p>
-        <p>
-          Financial reporting is not just a compliance requirement — it is a strategic tool. Companies that follow accounting standards and provide transparent reports build credibility. This credibility helps them attract investment and operate more effectively in competitive markets.
+          Financial reporting is directly connected to
+          <span class="vocab-word">decision-making<span class="tooltip">the process of choosing a course of action based on analysis</span></span>.
+          Managers use financial data to plan budgets, control costs, and develop strategies. Investors
+          <span class="vocab-word">rely on<span class="tooltip">to depend on something as a source of support or information</span></span>
+          reports to assess risks and expected returns. Therefore, high-quality financial reporting is not only a formal requirement but also a strategic tool for business development.
         </p>
       </div>
     </div>
@@ -1253,24 +1293,39 @@
         <textarea class="writing-ta" id="wt1" placeholder="Analyse the key financial issue... (minimum 30 words)" oninput="updateWriting(1,this.value)"></textarea>
         <div class="writing-meta">
           <span class="word-count" id="wc1">0 words</span>
-          <span class="vocab-badge" id="vb1">⭐ Good use of vocabulary!</span>
+          <span class="vocab-badge" id="vb1">⭐ Good vocabulary!</span>
         </div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showWritingModel(1)">📋 Model</button>
+        </div>
+        <div id="wfb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid var(--border);"></div>
       </div>
       <div class="writing-task">
         <label for="wt2">2. What should the company improve about its financial reporting?</label>
         <textarea class="writing-ta" id="wt2" placeholder="Suggest improvements... (minimum 30 words)" oninput="updateWriting(2,this.value)"></textarea>
         <div class="writing-meta">
           <span class="word-count" id="wc2">0 words</span>
-          <span class="vocab-badge" id="vb2">⭐ Good use of vocabulary!</span>
+          <span class="vocab-badge" id="vb2">⭐ Good vocabulary!</span>
         </div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showWritingModel(2)">📋 Model</button>
+        </div>
+        <div id="wfb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid var(--border);"></div>
       </div>
       <div class="writing-task">
         <label for="wt3">3. What risks does this situation create for investors and stakeholders?</label>
         <textarea class="writing-ta" id="wt3" placeholder="Discuss the risks... (minimum 30 words)" oninput="updateWriting(3,this.value)"></textarea>
         <div class="writing-meta">
           <span class="word-count" id="wc3">0 words</span>
-          <span class="vocab-badge" id="vb3">⭐ Good use of vocabulary!</span>
+          <span class="vocab-badge" id="vb3">⭐ Good vocabulary!</span>
         </div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-primary btn-sm" onclick="checkWriting(3)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showWritingModel(3)">📋 Model</button>
+        </div>
+        <div id="wfb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid var(--border);"></div>
       </div>
     </div>
   </section>
@@ -1374,6 +1429,36 @@
     </div>
   </section>
 
+  <!-- ═══════════ OVERALL SCORE ═══════════ -->
+  <section class="section" id="score">
+    <div class="section-header">
+      <div class="section-num">★</div>
+      <div>
+        <div class="section-title">My Overall Score</div>
+        <div class="section-subtitle">Aggregated results from all checked tasks</div>
+      </div>
+    </div>
+    <div class="card" id="score-card">
+      <div id="score-overview" style="text-align:center;padding:24px 0 16px;">
+        <div id="score-ring-wrap" style="display:inline-block;position:relative;width:140px;height:140px;">
+          <svg width="140" height="140" viewBox="0 0 140 140" style="-webkit-transform:rotate(-90deg);transform:rotate(-90deg);">
+            <circle cx="70" cy="70" r="60" fill="none" stroke="var(--border)" stroke-width="10"/>
+            <circle id="score-ring-fill" cx="70" cy="70" r="60" fill="none" stroke="var(--gold)" stroke-width="10" stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377" style="-webkit-transition:stroke-dashoffset 1s ease;transition:stroke-dashoffset 1s ease;"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <div id="score-pct" style="font-size:30px;font-weight:800;color:var(--gold);">0%</div>
+            <div style="font-size:11px;color:var(--text-secondary);">Overall</div>
+          </div>
+        </div>
+        <div id="score-grade" style="margin-top:12px;font-size:18px;font-weight:700;color:var(--text);">Complete tasks to see your grade</div>
+      </div>
+      <div id="score-breakdown" style="margin-top:4px;"></div>
+      <div style="margin-top:20px;text-align:center;">
+        <button class="btn btn-primary" onclick="updateOverallScore()">🔄 Refresh Score</button>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- ── Confetti + Banner ── -->
@@ -1385,36 +1470,36 @@
 //  DATA
 // ══════════════════════════════════════════════════════════
 var glossaryTerms = [
-  {term:"to evaluate",def:"to assess or examine something carefully"},
-  {term:"to operate",def:"to run or manage a business or process"},
-  {term:"stable",def:"not likely to change or fail; consistent"},
-  {term:"reliable",def:"able to be trusted; consistently accurate"},
-  {term:"informed decision",def:"a choice made based on accurate, complete information"},
-  {term:"financial statement",def:"a formal record of a company's financial activities"},
-  {term:"revenue",def:"the total income generated by a company from its business activities"},
-  {term:"profitable",def:"generating more income than expenses; making a profit"},
-  {term:"asset",def:"anything of value owned by a company"},
-  {term:"cash flow statement",def:"a report showing actual cash inflows and outflows"},
-  {term:"liability",def:"a debt or financial obligation owed by a company"},
-  {term:"equity",def:"the owner's interest in the company after liabilities are deducted"},
-  {term:"liquidity",def:"the ability to convert assets into cash quickly"},
-  {term:"strong performance",def:"achieving excellent financial or operational results"},
-  {term:"inefficiency",def:"a process or area that wastes resources or underperforms"},
-  {term:"transparency",def:"openness and clarity in sharing financial information"},
-  {term:"income statement",def:"a report showing revenue, expenses, and profit over a period"},
-  {term:"incomplete",def:"missing important information or not fully finished"},
-  {term:"to mislead",def:"to give a false or inaccurate impression"},
-  {term:"poor decision",def:"a choice made without sufficient or accurate information"},
-  {term:"to follow accounting standards",def:"to comply with established financial reporting rules"},
-  {term:"reliable data",def:"information that is accurate, consistent, and trustworthy"},
-  {term:"to rely on",def:"to depend on something as a source of support or information"},
-  {term:"balance sheet",def:"a statement showing assets, liabilities, and equity at a point in time"},
-  {term:"stakeholder",def:"any person or group with an interest in a company's performance"},
-  {term:"compliance",def:"following rules, laws, or standards"},
-  {term:"credibility",def:"the quality of being trusted and believed"},
-  {term:"operational",def:"relating to the day-to-day functions of a business"},
-  {term:"strategic",def:"relating to long-term planning and goal-setting"},
-  {term:"audit",def:"an official examination of financial records for accuracy"}
+  {term:"to evaluate",def:"to assess or examine something carefully",ru:"оценивать"},
+  {term:"to operate",def:"to run or manage a business or process",ru:"функционировать, управлять"},
+  {term:"stable",def:"not likely to change or fail; consistent",ru:"стабильный, устойчивый"},
+  {term:"reliable",def:"able to be trusted; consistently accurate",ru:"надёжный, достоверный"},
+  {term:"informed decision",def:"a choice made based on accurate, complete information",ru:"обоснованное решение"},
+  {term:"financial statement",def:"a formal record of a company's financial activities",ru:"финансовый отчёт"},
+  {term:"revenue",def:"the total income generated by a company from its business activities",ru:"выручка, доход"},
+  {term:"profitable",def:"generating more income than expenses; making a profit",ru:"прибыльный, рентабельный"},
+  {term:"asset",def:"anything of value owned by a company",ru:"актив, имущество"},
+  {term:"cash flow statement",def:"a report showing actual cash inflows and outflows",ru:"отчёт о движении денежных средств"},
+  {term:"liability",def:"a debt or financial obligation owed by a company",ru:"обязательство, задолженность"},
+  {term:"equity",def:"the owner's interest in the company after liabilities are deducted",ru:"собственный капитал"},
+  {term:"liquidity",def:"the ability to convert assets into cash quickly",ru:"ликвидность"},
+  {term:"strong performance",def:"achieving excellent financial or operational results",ru:"высокие показатели"},
+  {term:"inefficiency",def:"a process or area that wastes resources or underperforms",ru:"неэффективность"},
+  {term:"transparency",def:"openness and clarity in sharing financial information",ru:"прозрачность, открытость"},
+  {term:"income statement",def:"a report showing revenue, expenses, and profit over a period",ru:"отчёт о прибылях и убытках"},
+  {term:"incomplete",def:"missing important information or not fully finished",ru:"неполный, незавершённый"},
+  {term:"to mislead",def:"to give a false or inaccurate impression",ru:"вводить в заблуждение"},
+  {term:"poor decision",def:"a choice made without sufficient or accurate information",ru:"ошибочное решение"},
+  {term:"to follow accounting standards",def:"to comply with established financial reporting rules",ru:"соблюдать стандарты учёта"},
+  {term:"reliable data",def:"information that is accurate, consistent, and trustworthy",ru:"достоверные данные"},
+  {term:"to rely on",def:"to depend on something as a source of support or information",ru:"полагаться, опираться на"},
+  {term:"balance sheet",def:"a statement showing assets, liabilities, and equity at a point in time",ru:"бухгалтерский баланс"},
+  {term:"stakeholder",def:"any person or group with an interest in a company's performance",ru:"заинтересованная сторона"},
+  {term:"compliance",def:"following rules, laws, or standards",ru:"соответствие, соблюдение норм"},
+  {term:"credibility",def:"the quality of being trusted and believed",ru:"доверие, достоверность"},
+  {term:"operational",def:"relating to the day-to-day functions of a business",ru:"операционный, текущий"},
+  {term:"strategic",def:"relating to long-term planning and goal-setting",ru:"стратегический"},
+  {term:"audit",def:"an official examination of financial records for accuracy",ru:"аудит, проверка"}
 ];
 
 var fibData = [
@@ -1489,6 +1574,7 @@ document.addEventListener('DOMContentLoaded', function() {
   buildFinalCheck();
   loadFromStorage();
   updateProgress();
+  updateOverallScore();
 });
 
 window.addEventListener('scroll', updateNavHighlight);
@@ -1529,8 +1615,8 @@ function smoothNav(e, id) {
   if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
 }
 function updateNavHighlight() {
-  var sections = ['part1','part2','part3','part4','part4b','part5','part6','part7','part8','part9','final'];
-  var navIds   = ['nav1','nav2','nav3','nav4','nav4b','nav5','nav6','nav7','nav8','nav9','navF'];
+  var sections = ['part1','part2','part3','part4','part4b','part5','part6','part7','part8','part9','final','score'];
+  var navIds   = ['nav1','nav2','nav3','nav4','nav4b','nav5','nav6','nav7','nav8','nav9','navF','navS'];
   var scrollY  = window.scrollY + 120;
   var active   = 0;
   sections.forEach(function(id, i) {
@@ -1592,6 +1678,83 @@ function saveDQ(n, val) {
   localStorage.setItem('dq'+n, val);
 }
 
+var dqCriteria = {
+  1: {
+    keywords: ['profit','expenses','cost','loss','cash','debt','liab','net','margin','income'],
+    minWords: 20,
+    model: "Revenue only shows income, but it does not reveal expenses or costs. Even with high revenue, a company can have low or negative profit if expenses are high. Investors must also look at profit margins, cash flow, and liabilities to understand real financial health.",
+    tip: "Mention: expenses, profit, costs, cash flow, liabilities, net income."
+  },
+  2: {
+    keywords: ['profit','cash flow','balance','liabilit','asset','equit','income statement','debt','margin','transparenc','liquid','expense'],
+    minWords: 20,
+    model: "Investors should analyse profit margins, the balance sheet (assets and liabilities), cash flow statements, liquidity, and the quality of financial reporting. Transparency and reliability of data are also important to assess the real financial position.",
+    tip: "Mention: profit, cash flow, balance sheet, assets, liabilities, liquidity, transparency."
+  },
+  3: {
+    keywords: ['poor decision','mislead','trust','risk','investor','wrong','inaccurat','loss','fraud','penalt','credib','stakeholder','market'],
+    minWords: 25,
+    model: "First, incorrect reports can mislead investors, causing them to make poor investment decisions. Second, stakeholders may lose trust in the company, damaging its credibility and making it harder to attract capital. Third, companies that provide inaccurate reports risk legal penalties and regulatory consequences.",
+    tip: "Include: poor decisions, mislead, investor trust, financial risk, credibility, consequences."
+  }
+};
+
+function checkDQ(n) {
+  var ta = document.getElementById('dq'+n);
+  var val = ta ? ta.value.trim() : '';
+  var fb = document.getElementById('dq-fb'+n);
+  if (!fb) return;
+  if (val.length < 10) {
+    fb.style.display = 'block';
+    fb.style.background = 'rgba(229,62,62,0.08)';
+    fb.style.border = '1px solid rgba(229,62,62,0.3)';
+    fb.innerHTML = '⚠️ Please write a more complete answer first.';
+    return;
+  }
+  var crit = dqCriteria[n];
+  var lower = val.toLowerCase();
+  var words = val.split(/\s+/).length;
+  var found = crit.keywords.filter(function(k){ return lower.includes(k); });
+  var score = 0;
+  var feedback = [];
+  if (words >= crit.minWords) { score += 2; } else { feedback.push('📏 Try to write at least '+crit.minWords+' words (you have '+words+').'); }
+  if (found.length >= 3) { score += 3; } else if (found.length >= 1) { score += 1; feedback.push('📚 Use more key terms — '+crit.tip); } else { feedback.push('📚 No key vocabulary detected. '+crit.tip); }
+  var hasCause = lower.includes(' because') || lower.includes(' therefore') || lower.includes(' as a result') || lower.includes(' which means') || lower.includes(' leads to') || lower.includes(' so ');
+  if (hasCause) { score += 1; } else { feedback.push('🔗 Try to add a cause-effect link (because, therefore, as a result…).'); }
+  var hasMulti = val.includes('.') && val.split('.').filter(function(s){ return s.trim().length > 5; }).length >= 2;
+  if (hasMulti) score += 1;
+  var totalScore = Math.min(score, 5);
+  var pct = Math.round(totalScore / 5 * 100);
+  var color = pct >= 80 ? '#38a169' : pct >= 50 ? '#C9A84C' : '#e53e3e';
+  var emoji = pct >= 80 ? '🌟' : pct >= 50 ? '👍' : '💪';
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.05)';
+  fb.style.border = '1px solid var(--border)';
+  fb.innerHTML =
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">' +
+      '<span style="font-size:18px;">'+emoji+'</span>' +
+      '<strong style="color:'+color+';">Score: '+totalScore+' / 5</strong>' +
+      '<div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;">' +
+        '<div style="width:'+pct+'%;height:100%;background:'+color+';border-radius:3px;transition:width 0.5s;"></div>' +
+      '</div>' +
+    '</div>' +
+    (found.length > 0 ? '<div style="color:#38a169;font-size:12px;margin-bottom:6px;">✅ Key terms used: <em>'+found.slice(0,5).join(', ')+'</em></div>' : '') +
+    (feedback.length > 0 ? '<div style="color:var(--text-secondary);">'+feedback.map(function(f){ return '<div style="margin-bottom:4px;">'+f+'</div>'; }).join('')+'</div>' : '<div style="color:#38a169;">Great answer! You covered the key ideas well.</div>');
+  if (totalScore >= 4) markProgress('dq'+n+'_done');
+  updateOverallScore();
+}
+
+var dqModelShown = {};
+function showModelDQ(n) {
+  var fb = document.getElementById('dq-fb'+n);
+  if (!fb) return;
+  var model = dqCriteria[n].model;
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(102,126,234,0.06)';
+  fb.style.border = '1px solid rgba(102,126,234,0.3)';
+  fb.innerHTML = '<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>' + escHtml(model);
+}
+
 // ══════════════════════════════════════════════════════════
 //  PART 3 — Matching
 // ══════════════════════════════════════════════════════════
@@ -1628,6 +1791,7 @@ function selectMatch(type, id) {
     var allCorrect = Object.values(matchResults).filter(function(v){ return v === true; }).length;
     document.getElementById('match-score').textContent = allCorrect + ' / 5 correct';
     if (allCorrect === 5) markProgress('matching_done');
+    updateOverallScore();
   }
 }
 function resetMatching() {
@@ -1657,15 +1821,34 @@ function buildFlashcards() {
     wrap.innerHTML =
       '<div class="flashcard-inner">' +
         '<div class="flashcard-face flashcard-front">' +
-          '<div><div style="font-size:13px;font-weight:600;">'+escHtml(t.term)+'</div>' +
-          '<div class="fc-hint">Click to flip</div></div>' +
+          '<div style="width:100%">' +
+            '<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">'+escHtml(t.term)+'</div>' +
+            '<div style="font-size:11px;color:var(--gold);font-style:italic;margin-bottom:6px;">'+escHtml(t.ru||'')+'</div>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+              '<span class="fc-hint">Click to flip</span>' +
+              '<button class="fc-audio-btn" onclick="speakTerm(event,\''+escAttr(t.term)+'\')" title="Listen" style="background:rgba(201,168,76,0.15);border:1px solid var(--gold);color:var(--gold);border-radius:6px;padding:2px 7px;font-size:13px;cursor:pointer;line-height:1;">🔊</button>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
-        '<div class="flashcard-face flashcard-back">'+escHtml(t.def)+'</div>' +
+        '<div class="flashcard-face flashcard-back">' +
+          '<div style="width:100%;text-align:left;">' +
+            '<div style="font-size:11px;color:rgba(255,255,255,0.9);line-height:1.5;margin-bottom:6px;">'+escHtml(t.def)+'</div>' +
+            '<div style="font-size:11px;color:var(--gold);font-style:italic;border-top:1px solid rgba(201,168,76,0.3);padding-top:5px;">'+escHtml(t.ru||'')+'</div>' +
+          '</div>' +
+        '</div>' +
       '</div>';
-    wrap.addEventListener('click', function(){ this.classList.toggle('flipped'); });
+    wrap.addEventListener('click', function(e){ if(!e.target.classList.contains('fc-audio-btn')) this.classList.toggle('flipped'); });
     wrap.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); this.classList.toggle('flipped'); } });
     grid.appendChild(wrap);
   });
+}
+function speakTerm(e, term) {
+  e.stopPropagation();
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var utt = new SpeechSynthesisUtterance(term);
+  utt.lang = 'en-US'; utt.rate = 0.85;
+  window.speechSynthesis.speak(utt);
 }
 function filterCards(q) {
   var ql = q.toLowerCase();
@@ -1719,6 +1902,7 @@ function checkFIB(input) {
   document.getElementById('fs-'+input.dataset.si+'-'+input.dataset.pi).textContent = correct ? '✅' : '❌';
   var totalCorrect = document.querySelectorAll('.fib-input.correct').length;
   if (totalCorrect >= 3) markProgress('fib_done');
+  updateOverallScore();
 }
 function showHint(si, pi) {
   var input = document.getElementById('fib-'+si+'-'+pi);
@@ -1763,6 +1947,26 @@ function revealMiddle(idx) {
 // ══════════════════════════════════════════════════════════
 //  PART 6 — Analytical Writing
 // ══════════════════════════════════════════════════════════
+var writingCriteria = {
+  1: {
+    keywords: ['profit','expense','cost','margin','inefficien','low profit','high expense','financial problem','revenue','loss'],
+    model: "The main financial problem is that despite high revenue of $10 million, the profit margin is only 2%, which means expenses are extremely high. This indicates poor cost management and possible inefficiency in operations. The unclear financial reports make it difficult to identify where costs are excessive.",
+    tip: "Focus on: low profit margin, high expenses, inefficiency, cost management."
+  },
+  2: {
+    keywords: ['transparenc','standard','income statement','balance sheet','cash flow','accurat','clear','reliab','accounting','breakdown','detail','report'],
+    model: "The company should improve the transparency and clarity of its financial reports by providing detailed breakdowns of expenses. Following accounting standards would make reports more reliable. It should also produce accurate income statements and balance sheets so stakeholders can evaluate its performance effectively.",
+    tip: "Mention: transparency, accounting standards, income statement, reliable data, clear reporting."
+  },
+  3: {
+    keywords: ['risk','investor','mislead','poor decision','trust','credib','stakeholder','inaccurat','loss','penalt','financial risk','incomplete'],
+    model: "The unclear financial reports create significant financial risk for investors and stakeholders. Investors may make poor decisions based on incomplete or misleading information. This can lead to financial losses and damage the company's credibility. Stakeholders may lose trust, making it harder to attract future investment.",
+    tip: "Include: financial risk, mislead investors, poor decisions, trust, credibility, consequences."
+  }
+};
+
+var writingScores = [0, 0, 0];
+
 function updateWriting(n, val) {
   localStorage.setItem('writing'+n, val);
   var words = val.trim() === '' ? [] : val.trim().split(/\s+/);
@@ -1776,6 +1980,80 @@ function updateWriting(n, val) {
     writingProgress[n-1] = true;
     markProgress('writing_done');
   }
+}
+
+function checkWriting(n) {
+  var ta = document.getElementById('wt'+n);
+  var val = ta ? ta.value.trim() : '';
+  var fb = document.getElementById('wfb'+n);
+  if (!fb) return;
+  if (val.length < 15) {
+    fb.style.display = 'block';
+    fb.innerHTML = '⚠️ Please write a more complete answer first.';
+    return;
+  }
+  var crit = writingCriteria[n];
+  var lower = val.toLowerCase();
+  var words = val.split(/\s+/).length;
+  var found = crit.keywords.filter(function(k){ return lower.includes(k); });
+  var vocabFound = vocabKeywords.filter(function(k){ return lower.includes(k); });
+  var score = 0;
+  var feedback = [];
+  // Criterion 1: length
+  if (words >= 40) { score += 2; } else if (words >= 25) { score += 1; feedback.push('📏 Aim for 40+ words for a full answer (you have '+words+').'); } else { feedback.push('📏 Write more — at least 40 words needed (you have '+words+').'); }
+  // Criterion 2: topic keywords
+  if (found.length >= 3) { score += 2; } else if (found.length >= 1) { score += 1; feedback.push('🎯 Use more topic-specific terms. '+crit.tip); } else { feedback.push('🎯 No topic terms detected. '+crit.tip); }
+  // Criterion 3: glossary vocabulary
+  if (vocabFound.length >= 4) { score += 2; } else if (vocabFound.length >= 2) { score += 1; feedback.push('📚 Use more glossary terms (currently: '+vocabFound.length+', aim for 4+).'); } else { feedback.push('📚 Include key financial vocabulary from the glossary.'); }
+  // Criterion 4: cause-effect / logical connectors
+  var connectors = ['because','therefore','as a result','which means','leads to','consequently','however','although','this causes','this results'];
+  var connFound = connectors.filter(function(c){ return lower.includes(c); });
+  if (connFound.length >= 2) { score += 1; } else if (connFound.length === 1) { score += 0; feedback.push('🔗 Add more logical connectors (therefore, as a result, which means…).'); } else { feedback.push('🔗 Use logical connectors to connect your ideas.'); }
+  // Criterion 5: multiple sentences
+  var sentences = val.split(/[.!?]+/).filter(function(s){ return s.trim().length > 8; });
+  if (sentences.length >= 3) { score += 1; }
+  var totalScore = Math.min(score, 8);
+  var pct = Math.round(totalScore / 8 * 100);
+  var color = pct >= 75 ? '#38a169' : pct >= 50 ? '#C9A84C' : '#e53e3e';
+  var emoji = pct >= 75 ? '🌟' : pct >= 50 ? '👍' : '💪';
+  writingScores[n-1] = totalScore;
+  fb.style.display = 'block';
+  fb.innerHTML =
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">' +
+      '<span style="font-size:18px;">'+emoji+'</span>' +
+      '<strong style="color:'+color+';">Score: '+totalScore+' / 8</strong>' +
+      '<div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;">' +
+        '<div style="width:'+pct+'%;height:100%;background:'+color+';border-radius:3px;transition:width 0.5s;"></div>' +
+      '</div>' +
+      '<span style="font-size:12px;color:'+color+';">'+pct+'%</span>' +
+    '</div>' +
+    '<table style="width:100%;font-size:12px;border-collapse:collapse;">' +
+      '<tr style="color:var(--text-secondary);">' +
+        '<td style="padding:3px 0;">📏 Length (40+ words)</td>' +
+        '<td style="text-align:right;color:'+(words>=40?'#38a169':'#e53e3e')+';">'+(words>=40?'✅ '+words+' words':'❌ '+words+' words')+'</td>' +
+      '</tr>' +
+      '<tr style="color:var(--text-secondary);">' +
+        '<td style="padding:3px 0;">🎯 Topic coverage</td>' +
+        '<td style="text-align:right;color:'+(found.length>=3?'#38a169':found.length>=1?'#C9A84C':'#e53e3e')+';">'+(found.length>=3?'✅ '+found.length+' terms':found.length+' terms')+'</td>' +
+      '</tr>' +
+      '<tr style="color:var(--text-secondary);">' +
+        '<td style="padding:3px 0;">📚 Glossary terms (4+)</td>' +
+        '<td style="text-align:right;color:'+(vocabFound.length>=4?'#38a169':vocabFound.length>=2?'#C9A84C':'#e53e3e')+';">'+(vocabFound.length>=4?'✅':'')+''+vocabFound.length+' used</td>' +
+      '</tr>' +
+      '<tr style="color:var(--text-secondary);">' +
+        '<td style="padding:3px 0;">🔗 Logical connectors</td>' +
+        '<td style="text-align:right;color:'+(connFound.length>=2?'#38a169':'#C9A84C')+';">'+(connFound.length>=2?'✅ '+connFound.length:connFound.length+' found')+'</td>' +
+      '</tr>' +
+    '</table>' +
+    (feedback.length > 0 ? '<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">'+feedback.map(function(f){ return '<div style="margin-bottom:4px;color:var(--text-secondary);">'+f+'</div>'; }).join('')+'</div>' : '<div style="margin-top:8px;color:#38a169;font-size:12px;">Excellent analytical writing!</div>');
+  updateOverallScore();
+}
+
+function showWritingModel(n) {
+  var fb = document.getElementById('wfb'+n);
+  if (!fb) return;
+  fb.style.display = 'block';
+  fb.innerHTML = '<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>' + escHtml(writingCriteria[n].model);
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1914,6 +2192,7 @@ function checkOrder() {
   });
   document.getElementById('order-score').textContent = correct + ' / '+synthSentences.length+' in correct position';
   markProgress('order_checked');
+  updateOverallScore();
 }
 function shuffleSentences() {
   for (var i = currentOrder.length-1; i > 0; i--) {
@@ -2199,6 +2478,7 @@ function updateFinalCheckUI() {
   document.getElementById('final-score').textContent = total + ' / 12 completed';
   if (total >= 6)  markProgress('final_6');
   if (total >= 12) { markProgress('final_12'); triggerConfetti(); }
+  updateOverallScore();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -2268,6 +2548,95 @@ function loadFromStorage() {
     var total = fc.split(',').filter(function(s){ return s==='1'; }).length;
     document.getElementById('final-score').textContent = total + ' / 12 completed';
   }
+}
+
+// ══════════════════════════════════════════════════════════
+//  OVERALL SCORE
+// ══════════════════════════════════════════════════════════
+function updateOverallScore() {
+  var rows = [];
+  var totalPoints = 0, earnedPoints = 0;
+
+  // Part 1: Discussion Questions (3 × 5 pts)
+  var dqTotal = 15, dqEarned = 0;
+  [1,2,3].forEach(function(n) {
+    if (progressEvents['dq'+n+'_done']) dqEarned += 5;
+    else {
+      var ta = document.getElementById('dq'+n);
+      if (ta && ta.value.trim().split(/\s+/).length >= 15) dqEarned += 2;
+    }
+  });
+  rows.push({label:'Part 1 · Discussion Questions', earned:dqEarned, total:dqTotal, icon:'💬'});
+  totalPoints += dqTotal; earnedPoints += dqEarned;
+
+  // Part 3: Matching (5 pts)
+  var matchPts = Object.values(matchResults).filter(function(v){ return v===true; }).length;
+  rows.push({label:'Part 3 · Text Matching', earned:matchPts, total:5, icon:'🔗'});
+  totalPoints += 5; earnedPoints += matchPts;
+
+  // Part 4B: Fill in Blanks (counted correct inputs × 2, max 12)
+  var fibCorrect = document.querySelectorAll('.fib-input.correct').length;
+  rows.push({label:'Part 4B · Fill in Blanks', earned:Math.min(fibCorrect*2,12), total:12, icon:'✏️'});
+  totalPoints += 12; earnedPoints += Math.min(fibCorrect*2,12);
+
+  // Part 5: Cause-Effect (4 pts)
+  rows.push({label:'Part 5 · Cause & Effect', earned:causeRevealed, total:4, icon:'⚡'});
+  totalPoints += 4; earnedPoints += causeRevealed;
+
+  // Part 6: Analytical Writing (3 × 8 pts)
+  var wTotal = 24, wEarned = writingScores.reduce(function(a,b){ return a+b; }, 0);
+  rows.push({label:'Part 6 · Analytical Writing', earned:wEarned, total:wTotal, icon:'✍️'});
+  totalPoints += wTotal; earnedPoints += wEarned;
+
+  // Part 8: Synthesis Order
+  var synPts = progressEvents['order_checked'] ? 3 : 0;
+  rows.push({label:'Part 8 · Synthesis Builder', earned:synPts, total:3, icon:'🧩'});
+  totalPoints += 3; earnedPoints += synPts;
+
+  // Final Check (12 pts)
+  var fc = localStorage.getItem('finalChecks') || '';
+  var fcDone = fc ? fc.split(',').filter(function(s){ return s==='1'; }).length : 0;
+  rows.push({label:'Final Check · Self-Assessment', earned:fcDone, total:12, icon:'✅'});
+  totalPoints += 12; earnedPoints += fcDone;
+
+  var pct = totalPoints > 0 ? Math.round(earnedPoints / totalPoints * 100) : 0;
+  var grade = pct >= 90 ? 'A+  Excellent' : pct >= 80 ? 'A  Very Good' : pct >= 70 ? 'B  Good' : pct >= 60 ? 'C  Satisfactory' : pct >= 40 ? 'D  Needs Practice' : 'Work in Progress';
+  var gradeColor = pct >= 80 ? '#38a169' : pct >= 60 ? '#C9A84C' : '#e53e3e';
+
+  var fill = document.getElementById('score-ring-fill');
+  if (fill) fill.setAttribute('stroke-dashoffset', 377 - (377 * pct / 100));
+  var pctEl = document.getElementById('score-pct');
+  if (pctEl) pctEl.textContent = pct + '%';
+  var gradeEl = document.getElementById('score-grade');
+  if (gradeEl) { gradeEl.textContent = grade; gradeEl.style.color = gradeColor; }
+
+  var bd = document.getElementById('score-breakdown');
+  if (!bd) return;
+  var html = '<div style="border-top:1px solid var(--border);padding-top:16px;">';
+  html += '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-secondary);margin-bottom:12px;">Score Breakdown</div>';
+  rows.forEach(function(r) {
+    var rowPct = r.total > 0 ? Math.round(r.earned/r.total*100) : 0;
+    var rowColor = rowPct >= 75 ? '#38a169' : rowPct >= 50 ? '#C9A84C' : '#e53e3e';
+    html +=
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">' +
+        '<span style="font-size:16px;flex-shrink:0;">'+r.icon+'</span>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;">' +
+            '<span style="color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+escHtml(r.label)+'</span>' +
+            '<span style="color:'+rowColor+';font-weight:700;flex-shrink:0;margin-left:8px;">'+r.earned+'/'+r.total+'</span>' +
+          '</div>' +
+          '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;">' +
+            '<div style="width:'+rowPct+'%;height:100%;background:'+rowColor+';border-radius:3px;-webkit-transition:width 0.6s ease;transition:width 0.6s ease;"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  });
+  html += '<div style="border-top:1px solid var(--border);padding-top:12px;display:flex;justify-content:space-between;align-items:center;">' +
+    '<span style="font-weight:700;color:var(--text);">Total</span>' +
+    '<span style="font-weight:800;font-size:16px;color:'+gradeColor+';">'+earnedPoints+' / '+totalPoints+' pts</span>' +
+  '</div>';
+  html += '</div>';
+  bd.innerHTML = html;
 }
 
 // ══════════════════════════════════════════════════════════
