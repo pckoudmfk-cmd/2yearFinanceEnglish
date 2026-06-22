@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Russian Education System — Educational Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0A1628; --gold: #C9A84C; --gold-light: #e8c96a; --white: #FFFFFF;
+    --light-gray: #F5F5F5; --mid-gray: #8892A4; --bg: #F5F5F5; --card-bg: #FFFFFF;
+    --text: #0A1628; --text-secondary: #8892A4; --border: #e0e4ec;
+    --sidebar-bg: #0A1628; --sidebar-text: #FFFFFF; --input-bg: #FFFFFF;
+    --shadow: 0 2px 16px rgba(10,22,40,0.10); --shadow-lg: 0 8px 32px rgba(10,22,40,0.16);
+    --radius: 12px; --transition: 0.22s cubic-bezier(.4,0,.2,1);
+  }
+  .dark-mode { --bg: #0A1628; --card-bg: #1a2a42; --text: #FFFFFF; --text-secondary: #8892A4; --border: #2a3a52; --sidebar-bg: #06101e; --input-bg: #1a2a42; --shadow: 0 2px 16px rgba(0,0,0,0.3); --shadow-lg: 0 8px 32px rgba(0,0,0,0.4); }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 100vh; display: -webkit-flex; display: flex; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); }
+  #progress-bar-wrap { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--border); z-index: 9999; }
+  #progress-bar-fill { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); -webkit-transition: width 0.5s ease; transition: width 0.5s ease; border-radius: 0 2px 2px 0; }
+  #progress-label { position: fixed; top: 8px; right: 70px; font-size: 11px; font-weight: 600; color: var(--gold); z-index: 9999; letter-spacing: 0.5px; }
+  #sidebar { width: 250px; min-height: 100vh; background: var(--sidebar-bg); position: fixed; left: 0; top: 0; bottom: 0; z-index: 1000; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-transition: -webkit-transform var(--transition); transition: transform var(--transition); overflow-y: auto; padding-bottom: 24px; }
+  #sidebar-logo { padding: 28px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px; }
+  #sidebar-logo .logo-title { color: var(--gold); font-size: 15px; font-weight: 700; letter-spacing: 0.3px; line-height: 1.3; }
+  #sidebar-logo .logo-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+  #sidebar nav a { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 10px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 500; padding: 10px 24px; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); cursor: pointer; }
+  #sidebar nav a:hover, #sidebar nav a.active { background: rgba(201,168,76,0.13); color: var(--gold); }
+  #sidebar nav a .nav-num { width: 20px; height: 20px; border-radius: 50%; background: rgba(201,168,76,0.18); color: var(--gold); font-size: 10px; font-weight: 700; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  #sidebar nav a.done .nav-num { background: var(--gold); color: var(--navy); }
+  #hamburger { display: none; position: fixed; top: 12px; left: 12px; z-index: 1100; background: var(--navy); border: none; border-radius: 8px; padding: 8px; cursor: pointer; -webkit-flex-direction: column; flex-direction: column; gap: 4px; }
+  #hamburger span { display: block; width: 20px; height: 2px; background: var(--gold); border-radius: 2px; -webkit-transition: var(--transition); transition: var(--transition); }
+  #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  #dark-toggle { position: fixed; top: 10px; right: 16px; z-index: 9999; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; -webkit-transition: var(--transition); transition: var(--transition); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 5px; box-shadow: var(--shadow); }
+  #main-content { margin-left: 250px; -webkit-flex: 1; flex: 1; padding: 40px 48px 60px; max-width: 1100px; }
+  .section { margin-bottom: 64px; scroll-margin-top: 32px; }
+  .section-header { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .section-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 14px; font-weight: 800; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .section-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .card { background: var(--card-bg); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); -webkit-transition: background var(--transition), border-color var(--transition); transition: background var(--transition), border-color var(--transition); }
+  .btn { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; -webkit-transition: var(--transition); transition: var(--transition); font-family: inherit; }
+  .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); box-shadow: 0 2px 8px rgba(201,168,76,0.3); }
+  .btn-primary:hover { -webkit-transform: translateY(-1px); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .btn-outline { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+  .case-box { background: linear-gradient(135deg, rgba(10,22,40,0.04) 0%, rgba(201,168,76,0.06) 100%); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 28px 32px; font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 24px; display: none; }
+  .dark-mode .case-box { background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(26,42,66,0.8) 100%); }
+  .case-box.visible { display: block; -webkit-animation: slideDown 0.4s ease; animation: slideDown 0.4s ease; }
+  .discussion-questions { display: none; }
+  .discussion-questions.visible { display: block; }
+  .dq-item { background: var(--card-bg); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; border: 1px solid var(--border); -webkit-animation: slideIn 0.4s ease backwards; animation: slideIn 0.4s ease backwards; box-shadow: var(--shadow); }
+  .dq-num { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .dq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+  .dq-textarea { width: 100%; min-height: 80px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .dq-textarea:focus { border-color: var(--gold); }
+  .vocab-text { font-size: 15px; line-height: 1.85; color: var(--text); }
+  .vocab-text p { margin-bottom: 18px; }
+  .vocab-word { color: var(--gold); font-weight: 600; cursor: pointer; border-bottom: 1.5px dashed var(--gold); position: relative; display: inline-block; }
+  .vocab-word .tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); background: var(--navy); color: #fff; font-size: 12px; font-weight: 400; padding: 8px 14px; border-radius: 8px; white-space: normal; z-index: 500; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.25); max-width: 260px; text-align: center; line-height: 1.5; min-width: 160px; }
+  .vocab-word .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--navy); }
+  .vocab-word:hover .tooltip { display: block; }
+  .search-bar { width: 100%; padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; margin-bottom: 24px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .search-bar:focus { border-color: var(--gold); }
+  .flashcard-grid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 16px; }
+  .flashcard-wrap { width: calc(25% - 12px); min-width: 150px; height: 150px; -webkit-perspective: 800px; perspective: 800px; cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; }
+  .flashcard-inner { width: 100%; height: 100%; position: relative; -webkit-transform-style: preserve-3d; transform-style: preserve-3d; -webkit-transition: -webkit-transform 0.5s cubic-bezier(.4,0,.2,1); transition: transform 0.5s cubic-bezier(.4,0,.2,1); }
+  .flashcard-wrap.flipped .flashcard-inner { -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
+  .flashcard-face { position: absolute; inset: 0; border-radius: var(--radius); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; padding: 14px; text-align: center; -webkit-backface-visibility: hidden; backface-visibility: hidden; border: 1.5px solid var(--border); }
+  .flashcard-front { background: var(--card-bg); font-size: 13px; font-weight: 600; color: var(--text); box-shadow: var(--shadow); }
+  .flashcard-back { background: linear-gradient(135deg, var(--navy), #1a2a42); -webkit-transform: rotateY(180deg); transform: rotateY(180deg); font-size: 12px; color: rgba(255,255,255,0.9); line-height: 1.5; border-color: var(--gold); }
+  .fc-hint { font-size: 10px; color: var(--mid-gray); margin-top: 6px; }
+  .fib-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; font-size: 14px; line-height: 2.2; box-shadow: var(--shadow); }
+  .fib-input-wrap { display: inline-flex; align-items: center; gap: 4px; }
+  .fib-input { display: inline-block; width: 200px; padding: 4px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); vertical-align: middle; }
+  .fib-input.correct { border-color: #38a169; background: rgba(56,161,105,0.08); }
+  .fib-input.incorrect { border-color: #e53e3e; background: rgba(229,62,62,0.08); }
+  .fib-status { font-size: 14px; vertical-align: middle; }
+  .hint-btn { font-size: 11px; padding: 2px 8px; background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold); border-radius: 4px; cursor: pointer; font-family: inherit; font-weight: 600; vertical-align: middle; -webkit-transition: var(--transition); transition: var(--transition); }
+  .hint-btn:hover { background: rgba(201,168,76,0.22); }
+  .writing-scenario { background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04)); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 20px 24px; font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+  .writing-task { margin-bottom: 24px; }
+  .writing-task label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  .writing-ta { width: 100%; min-height: 120px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .writing-ta:focus { border-color: var(--gold); }
+  .writing-meta { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 12px; margin-top: 6px; }
+  .word-count { font-size: 12px; color: var(--mid-gray); }
+  .vocab-badge { display: none; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; -webkit-animation: pop 0.3s ease; animation: pop 0.3s ease; }
+  .vocab-badge.show { display: inline-block; }
+  .timer-wrap { display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; gap: 16px; padding: 28px; background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .timer-ring { position: relative; width: 100px; height: 100px; }
+  .timer-ring svg { -webkit-transform: rotate(-90deg); transform: rotate(-90deg); }
+  .timer-ring circle { fill: none; stroke-width: 6; }
+  .timer-ring .ring-bg { stroke: var(--border); }
+  .timer-ring .ring-fill { stroke: var(--gold); stroke-linecap: round; -webkit-transition: stroke-dashoffset 1s linear, stroke 0.3s; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-dasharray: 283; stroke-dashoffset: 283; }
+  .timer-ring.red .ring-fill { stroke: #e53e3e; }
+  .timer-num { position: absolute; inset: 0; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; font-size: 26px; font-weight: 700; color: var(--text); }
+  .final-grid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+  .final-check-item { width: calc(50% - 6px); background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 18px; display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; -webkit-transition: border-color var(--transition), background var(--transition); transition: border-color var(--transition), background var(--transition); box-shadow: var(--shadow); cursor: pointer; }
+  .final-check-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--gold); cursor: pointer; -webkit-flex-shrink: 0; flex-shrink: 0; margin-top: 1px; }
+  .final-check-item.checked { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  #confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 9998; overflow: hidden; }
+  .confetti-piece { position: absolute; -webkit-animation: confettiFall linear forwards; animation: confettiFall linear forwards; }
+  #excellent-banner { display: none; position: fixed; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 28px; font-weight: 800; padding: 24px 48px; border-radius: 16px; box-shadow: 0 16px 64px rgba(201,168,76,0.5); z-index: 10000; text-align: center; }
+  #excellent-banner.show { display: block; -webkit-animation: pop 0.4s cubic-bezier(.18,.89,.32,1.28); animation: pop 0.4s cubic-bezier(.18,.89,.32,1.28); }
+  .kchip { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-block; margin: 4px; -webkit-transition: var(--transition); transition: var(--transition); }
+  .kchip:hover, .kchip.used { background: var(--gold); color: var(--navy); }
+  .cat-term { display: inline-block; background: rgba(201,168,76,0.1); border: 1.5px solid var(--gold); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: var(--gold); cursor: pointer; margin: 4px; -webkit-transition: var(--transition); transition: var(--transition); }
+  .cat-term.selected { background: var(--gold); color: var(--navy); box-shadow: 0 0 0 3px rgba(201,168,76,0.3); }
+  .cat-term.assigned-S { background: rgba(102,126,234,0.15); border-color: #667eea; color: #667eea; }
+  .cat-term.assigned-C { background: rgba(229,62,62,0.15); border-color: #e53e3e; color: #e53e3e; }
+  .cat-term.assigned-R { background: rgba(56,161,105,0.15); border-color: #38a169; color: #38a169; }
+  .cat-btn { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; border: 2px solid; -webkit-transition: var(--transition); transition: var(--transition); font-family: inherit; margin: 6px; }
+  .cat-btn-S { background: rgba(102,126,234,0.08); border-color: #667eea; color: #667eea; }
+  .cat-btn-S:hover, .cat-btn-S.active-cat { background: rgba(102,126,234,0.2); }
+  .cat-btn-C { background: rgba(229,62,62,0.08); border-color: #e53e3e; color: #e53e3e; }
+  .cat-btn-C:hover, .cat-btn-C.active-cat { background: rgba(229,62,62,0.2); }
+  .cat-btn-R { background: rgba(56,161,105,0.08); border-color: #38a169; color: #38a169; }
+  .cat-btn-R:hover, .cat-btn-R.active-cat { background: rgba(56,161,105,0.2); }
+  .speaking-plan-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; margin-bottom: 4px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .speaking-plan-input:focus { border-color: var(--gold); }
+  .speaking-plan-label { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; margin-top: 16px; display: block; }
+  @-webkit-keyframes slideDown { from { opacity: 0; -webkit-transform: translateY(-12px); transform: translateY(-12px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+  @-webkit-keyframes slideIn { from { opacity: 0; -webkit-transform: translateX(-16px); transform: translateX(-16px); } to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+  @-webkit-keyframes pop { from { -webkit-transform: scale(0.7); transform: scale(0.7); opacity: 0; } to { -webkit-transform: scale(1); transform: scale(1); opacity: 1; } }
+  @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @-webkit-keyframes confettiFall { 0% { -webkit-transform: translateY(-20px) rotate(0deg); transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { -webkit-transform: translateY(105vh) rotate(720deg); transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+  @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+  .mt-16 { margin-top: 16px; } .mt-8 { margin-top: 8px; } .mb-16 { margin-bottom: 16px; }
+  .flex { display: -webkit-flex; display: flex; } .flex-center { -webkit-align-items: center; align-items: center; }
+  .gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
+  .text-gold { color: var(--gold); } .text-sm { font-size: 13px; } .text-xs { font-size: 11px; color: var(--mid-gray); } .fw-600 { font-weight: 600; }
+  @media print { #sidebar, #hamburger, #dark-toggle, #progress-bar-wrap, #progress-label, #confetti-container, #excellent-banner, .btn, .timer-wrap { display: none !important; } #main-content { margin-left: 0 !important; padding: 20px !important; } body { background: white !important; color: black !important; } .card { box-shadow: none !important; border: 1px solid #ddd !important; } }
+  @media (max-width: 900px) { #main-content { margin-left: 0; padding: 20px 20px 48px; } #hamburger { display: -webkit-flex; display: flex; } #sidebar { -webkit-transform: translateX(-100%); transform: translateX(-100%); } #sidebar.open { -webkit-transform: none; transform: none; } #sidebar-overlay.show { display: block; } .flashcard-wrap { width: calc(50% - 8px); } .final-check-item { width: 100%; } #progress-label { right: 60px; } }
+  @media (max-width: 600px) { .flashcard-wrap { width: 100%; } #main-content { padding: 16px 16px 48px; } .section-title { font-size: 18px; } .final-check-item { width: 100%; } .fib-input { width: 130px; } }
+</style>
+</head>
+<body>
+
+<div id="progress-bar-wrap"><div id="progress-bar-fill" style="width:0%"></div></div>
+<div id="progress-label">0% Complete</div>
+<button id="dark-toggle" onclick="toggleDark()"><span id="dark-icon">🌙</span><span id="dark-label">Dark</span></button>
+<button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<aside id="sidebar">
+  <div id="sidebar-logo">
+    <div class="logo-title">Russian Education</div>
+    <div class="logo-sub">Educational Dashboard</div>
+  </div>
+  <nav>
+    <a href="#part1" onclick="smoothNav(event,'part1')" id="nav1"><span class="nav-num">1</span> Professional Situation</a>
+    <a href="#part2" onclick="smoothNav(event,'part2')" id="nav2"><span class="nav-num">2</span> Main Text</a>
+    <a href="#part3" onclick="smoothNav(event,'part3')" id="nav3"><span class="nav-num">3</span> Glossary Categories</a>
+    <a href="#part4" onclick="smoothNav(event,'part4')" id="nav4"><span class="nav-num">4</span> Glossary Cards</a>
+    <a href="#part5" onclick="smoothNav(event,'part5')" id="nav5"><span class="nav-num">5</span> Fill in Blanks</a>
+    <a href="#part6" onclick="smoothNav(event,'part6')" id="nav6"><span class="nav-num">6</span> Writing Tasks</a>
+    <a href="#part7" onclick="smoothNav(event,'part7')" id="nav7"><span class="nav-num">7</span> Speaking Plan</a>
+    <a href="#part8" onclick="smoothNav(event,'part8')" id="nav8"><span class="nav-num">8</span> Speaking Task</a>
+    <a href="#final" onclick="smoothNav(event,'final')" id="navF"><span class="nav-num">✓</span> Self-Reflection</a>
+    <a href="#score" onclick="smoothNav(event,'score')" id="navS"><span class="nav-num">★</span> My Score</a>
+  </nav>
+</aside>
+
+<main id="main-content">
+
+<!-- PART 1 -->
+<section class="section" id="part1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Professional Situation</div>
+      <div class="section-subtitle">Read the scenario, then answer the discussion questions</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">A professional scenario is hidden below. Reveal it, then respond to the questions.</p>
+    <button class="btn btn-primary" id="reveal-btn" onclick="revealCase()">▶ Reveal Situation</button>
+    <div class="case-box" id="case-box">
+      <strong style="color:var(--gold);display:block;margin-bottom:12px;">📋 Professional Situation</strong>
+      You are an <strong>analyst at an international education consulting firm</strong>. Your client — a European NGO focused on education policy — is preparing a comparative report on national education systems. You have been asked to write a section on the <strong>Russian education system</strong>, covering its historical foundations, current structure, key strengths, and main challenges. Your report will inform recommendations for international partnerships and educational investment decisions.
+    </div>
+    <div class="discussion-questions" id="discussion-qs">
+      <div style="margin:20px 0 14px;font-size:14px;font-weight:700;color:var(--text);">💬 Discussion Questions</div>
+      <div class="dq-item">
+        <div class="dq-num">Question 1</div>
+        <div class="dq-q">What are the main strengths of the Russian education system that make it competitive internationally?</div>
+        <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts... (min. 20 words)" oninput="saveItem('edu_dq1',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question 2</div>
+        <div class="dq-q">What are the key challenges facing the Russian education system, particularly in rural regions?</div>
+        <textarea class="dq-textarea" id="dq2" placeholder="Name at least 2 specific challenges..." oninput="saveItem('edu_dq2',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question 3</div>
+        <div class="dq-q">How are ongoing reforms addressing the need for digital literacy and critical thinking in Russian schools?</div>
+        <textarea class="dq-textarea" id="dq3" placeholder="Describe specific initiatives or approaches..." oninput="saveItem('edu_dq3',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✓ Check Answer</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
+        </div>
+        <div id="dq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="section" id="part2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Main Text</div>
+      <div class="section-subtitle">Hover over gold-highlighted terms to see definitions. Answer the comprehension questions below.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="vocab-text">
+      <p>The Russian education system is <span class="vocab-word">long-standing<span class="tooltip">having existed for a long time; well-established</span></span> and has continuously <span class="vocab-word">evolved<span class="tooltip">developed gradually over time, adapting to new circumstances</span></span> since the early Soviet era. A mass <span class="vocab-word">literacy campaign<span class="tooltip">an organised effort to teach reading and writing to a large part of the population</span></span> in the 1920s laid the foundation for near-universal education. Today, the system is overseen by the <span class="vocab-word">Ministry of Education and Science<span class="tooltip">the government body responsible for education policy and standards in Russia</span></span>, which works to <span class="vocab-word">ensure<span class="tooltip">to make certain that something happens or is provided</span></span> consistent standards across a vast and diverse country. Education <span class="vocab-word">remains<span class="tooltip">continues to be; stays in a particular state</span></span> a <span class="vocab-word">vital driver<span class="tooltip">a key force or factor that strongly influences development or progress</span></span> of national development and a shared social value.</p>
+
+      <p><span class="vocab-word">Compulsory education<span class="tooltip">schooling that the law requires all children to attend, typically from age 6–7 to 15–16</span></span> begins at age six or seven and <span class="vocab-word">introduces<span class="tooltip">brings in or presents something for the first time</span></span> children to <span class="vocab-word">basic literacy<span class="tooltip">the ability to read and write at a fundamental level</span></span> and <span class="vocab-word">numeracy<span class="tooltip">the ability to understand and work with numbers</span></span>. The national <span class="vocab-word">curriculum<span class="tooltip">the subjects and content taught in schools, defined by educational authorities</span></span> provides a <span class="vocab-word">well-rounded foundation<span class="tooltip">a broad and balanced base of knowledge covering many subjects</span></span>, with a <span class="vocab-word">particular<span class="tooltip">special or specific; more than usual</span></span> emphasis on mathematics and the sciences. Historically, the state has <span class="vocab-word">prioritised<span class="tooltip">treated something as more important than others; given it higher attention or resources</span></span> access to education in <span class="vocab-word">rural regions<span class="tooltip">areas outside of cities, often with lower population density and fewer resources</span></span> through infrastructure investment, though <span class="vocab-word">disparities<span class="tooltip">noticeable differences or inequalities between groups or regions</span></span> between urban and rural areas persist.</p>
+
+      <p><span class="vocab-word">Secondary education<span class="tooltip">the level of schooling following primary school, typically for students aged 14–17</span></span> prepares students for higher education or professional life. It <span class="vocab-word">culminates<span class="tooltip">reaches the highest or final point; concludes with</span></span> in the <span class="vocab-word">Unified State Exam (USE)<span class="tooltip">a standardised national examination taken at the end of secondary school in Russia, used for university admission</span></span>, which <span class="vocab-word">serves as a gateway<span class="tooltip">acts as the main entry point or qualifying stage for the next step</span></span> to higher education. University <span class="vocab-word">admission<span class="tooltip">the process of being accepted into an educational institution</span></span> <span class="vocab-word">relies heavily on<span class="tooltip">depends a great deal on; is largely determined by</span></span> USE scores. Russian higher education is <span class="vocab-word">noted for<span class="tooltip">well-known or recognised for a particular quality or achievement</span></span> its strong programmes in <span class="vocab-word">cybersecurity<span class="tooltip">the practice of protecting computer systems and networks from digital attacks</span></span>, <span class="vocab-word">robotics<span class="tooltip">the design, construction, and use of automated machines</span></span>, and engineering — fields that <span class="vocab-word">shape<span class="tooltip">influence or determine the direction of something</span></span> national competitiveness.</p>
+
+      <p>Recent <span class="vocab-word">ongoing reforms<span class="tooltip">changes and improvements to a system that are currently in progress</span></span> reflect Russia's commitment to modernising education. The <span class="vocab-word">Federal Law on Education<span class="tooltip">the main piece of legislation governing the Russian education system</span></span> and various <span class="vocab-word">initiatives<span class="tooltip">new plans or programmes introduced to achieve a specific goal</span></span> aim to <span class="vocab-word">promote<span class="tooltip">to support, encourage, or actively advance something</span></span> <span class="vocab-word">digital literacy<span class="tooltip">the ability to use digital tools and technology effectively and critically</span></span> and <span class="vocab-word">expand<span class="tooltip">to increase in size, scope, or reach</span></span> <span class="vocab-word">online learning platforms<span class="tooltip">web-based systems that deliver educational content and courses</span></span>. These efforts aim to <span class="vocab-word">equip<span class="tooltip">to provide with the skills, knowledge, or resources needed</span></span> students with skills for the modern economy and support <span class="vocab-word">career advancement<span class="tooltip">the process of progressing to higher levels within a professional field</span></span>.</p>
+
+      <p>Despite these strengths, the system faces significant challenges. <span class="vocab-word">Underfunding<span class="tooltip">a situation where insufficient money is allocated to a programme or institution</span></span> in certain regions leads to <span class="vocab-word">inadequate facilities<span class="tooltip">buildings and equipment that are not sufficient in quality or quantity</span></span>, <span class="vocab-word">shortages of<span class="tooltip">situations where there is not enough of something needed</span></span> qualified teachers, and a widening <span class="vocab-word">education gap<span class="tooltip">a difference in educational outcomes or access between different groups or regions</span></span> between urban and rural schools. Critics also point to an over-reliance on <span class="vocab-word">rote memorisation<span class="tooltip">learning by repetition and memorising information without necessarily understanding it</span></span>, which can limit the development of <span class="vocab-word">critical thinking<span class="tooltip">the ability to analyse information objectively and make reasoned judgements</span></span>. Reforms promoting <span class="vocab-word">student-centred approaches<span class="tooltip">teaching methods that focus on the student's active involvement rather than passive listening</span></span> and <span class="vocab-word">inclusive education<span class="tooltip">an approach that ensures all students, including those with special needs, learn together</span></span> reflect <span class="vocab-word">shared priorities<span class="tooltip">goals or values that multiple stakeholders or countries agree on</span></span> with international educational frameworks.</p>
+    </div>
+
+    <div style="border-top:1px solid var(--border);margin-top:28px;padding-top:24px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">📝 Comprehension Questions</div>
+      <div class="dq-item">
+        <div class="dq-num">Question A</div>
+        <div class="dq-q">What examination marks the end of secondary education in Russia, and what is its main purpose?</div>
+        <textarea class="dq-textarea" id="cq1" placeholder="Name the exam and explain its role..." oninput="saveItem('edu_cq1',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(1)">📋 Model</button>
+        </div>
+        <div id="cq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question B</div>
+        <div class="dq-q">According to the text, what teaching practice has been criticised, and what does it limit?</div>
+        <textarea class="dq-textarea" id="cq2" placeholder="Identify the practice and explain the criticism..." oninput="saveItem('edu_cq2',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(2)">📋 Model</button>
+        </div>
+        <div id="cq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+      <div class="dq-item">
+        <div class="dq-num">Question C</div>
+        <div class="dq-q">What are two specific goals of Russia's ongoing education reforms mentioned in the text?</div>
+        <textarea class="dq-textarea" id="cq3" placeholder="List two goals with supporting detail..." oninput="saveItem('edu_cq3',this.value)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✓ Check</button>
+          <button class="btn btn-outline btn-sm" onclick="showModelCQ(3)">📋 Model</button>
+        </div>
+        <div id="cq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="section" id="part3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Glossary Categories</div>
+      <div class="section-subtitle">Click a term to select it, then click a category to assign it. One term may belong to multiple groups.</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Select a term, then click its best category. Correct assignments highlight in the category's colour.</p>
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="cat-btn cat-btn-S" id="catbtn-S" onclick="assignCategory('S')">🔵 System &amp; Structure</button>
+      <button class="cat-btn cat-btn-C" id="catbtn-C" onclick="assignCategory('C')">🔴 Challenges</button>
+      <button class="cat-btn cat-btn-R" id="catbtn-R" onclick="assignCategory('R')">🟢 Reform &amp; Innovation</button>
+    </div>
+    <div id="cat-terms-grid" style="margin-bottom:20px;"></div>
+    <div class="flex flex-center gap-8" style="flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="resetCategories()">↺ Reset</button>
+      <span id="cat-score" class="text-sm text-gold fw-600"></span>
+    </div>
+  </div>
+</section>
+
+<!-- PART 4 -->
+<section class="section" id="part4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Glossary Flashcards</div>
+      <div class="section-subtitle">Click a card to flip it. Use the search to filter terms.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+      <input type="text" class="search-bar" style="margin:0;flex:1;min-width:200px;" placeholder="Search terms..." oninput="filterCards(this.value)" id="card-search">
+      <button class="btn btn-outline btn-sm" onclick="flipAll()">↺ Flip All</button>
+      <button class="btn btn-outline btn-sm" onclick="resetCards()">Reset</button>
+      <button class="btn btn-outline btn-sm" onclick="speakSelected()">🔊 Pronounce</button>
+    </div>
+    <div class="flashcard-grid" id="flashcard-grid"></div>
+    <div id="card-count" style="margin-top:12px;font-size:12px;color:var(--mid-gray);"></div>
+  </div>
+</section>
+
+<!-- PART 5 -->
+<section class="section" id="part5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Fill in the Blanks</div>
+      <div class="section-subtitle">Complete each sentence with the correct term from the glossary</div>
+    </div>
+  </div>
+  <div class="card">
+    <div id="fib-container"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="checkAllFIB()">✓ Check All</button>
+      <button class="btn btn-outline" onclick="resetFIB()">↺ Reset</button>
+      <span id="fib-score" class="text-gold fw-600" style="align-self:center;margin-left:8px;font-size:14px;"></span>
+    </div>
+  </div>
+</section>
+
+<!-- PART 6 -->
+<section class="section" id="part6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Writing Tasks</div>
+      <div class="section-subtitle">Write structured responses using vocabulary from this lesson</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="writing-scenario">
+      <strong style="color:var(--gold);">📄 Context:</strong> You are completing the education policy report for your NGO client. Your section on Russia must be balanced — acknowledging both the system's strengths and the challenges it faces.
+    </div>
+
+    <div class="writing-task">
+      <label>Task 1 — Strengths of the Russian Education System (50+ words)<br>
+        <span style="font-weight:400;color:var(--text-secondary);">Write a paragraph for the report describing at least two strengths of the Russian education system. Use a minimum of 4 glossary terms.</span>
+      </label>
+      <textarea class="writing-ta" id="w1" placeholder="The Russian education system is notable for..." oninput="saveItem('edu_w1',this.value);updateWordCount('w1','wc1','wb1')"></textarea>
+      <div class="writing-meta">
+        <span class="word-count" id="wc1">0 words</span>
+        <span class="vocab-badge" id="wb1"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✓ Evaluate</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelWriting(1)">📋 Model Answer</button>
+      </div>
+      <div id="w-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+    </div>
+
+    <div class="writing-task">
+      <label>Task 2 — Challenges and Reform Recommendations (40+ words)<br>
+        <span style="font-weight:400;color:var(--text-secondary);">Write a paragraph outlining the main challenges and suggest how reforms could address them. Use at least 5 glossary terms.</span>
+      </label>
+      <textarea class="writing-ta" id="w2" placeholder="Despite its strengths, the Russian education system faces..." oninput="saveItem('edu_w2',this.value);updateWordCount('w2','wc2','wb2')"></textarea>
+      <div class="writing-meta">
+        <span class="word-count" id="wc2">0 words</span>
+        <span class="vocab-badge" id="wb2"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✓ Evaluate</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelWriting(2)">📋 Model Answer</button>
+      </div>
+      <div id="w-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 7 -->
+<section class="section" id="part7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">Speaking Plan</div>
+      <div class="section-subtitle">Prepare your presentation notes before the speaking task</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="text-sm mb-16" style="color:var(--text-secondary);">Fill in your key points. Notes are saved automatically.</p>
+
+    <span class="speaking-plan-label">1. Historical Background</span>
+    <input type="text" class="speaking-plan-input" id="sp1" placeholder="e.g. Long-standing system, literacy campaigns, Ministry of Education oversees..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">2. System Structure (compulsory → secondary → higher)</span>
+    <input type="text" class="speaking-plan-input" id="sp2" placeholder="e.g. Compulsory from age 6, USE as gateway to university admission..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">3. Key Strengths</span>
+    <input type="text" class="speaking-plan-input" id="sp3" placeholder="e.g. Strong in cybersecurity, robotics, well-rounded curriculum, digital literacy..." oninput="saveSpeakingPlan()">
+
+    <span class="speaking-plan-label">4. Challenges &amp; Reforms</span>
+    <input type="text" class="speaking-plan-input" id="sp4" placeholder="e.g. Underfunding in rural areas, education gap, rote memorisation, ongoing reforms..." oninput="saveSpeakingPlan()">
+
+    <div style="margin-top:16px;" id="sp-wordcount" class="text-xs"></div>
+  </div>
+</section>
+
+<!-- PART 8 -->
+<section class="section" id="part8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <div class="section-title">Speaking Task</div>
+      <div class="section-subtitle">Present your section of the education report. Use the keyword chips — tick each one as you say it.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;">
+      <div class="timer-wrap" style="min-width:160px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Min. Time</div>
+        <div class="timer-ring" id="ring-min">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="45"/>
+            <circle class="ring-fill" id="ring-fill-min" cx="50" cy="50" r="45"/>
+          </svg>
+          <div class="timer-num" id="timer-min">1:30</div>
+        </div>
+        <div style="font-size:12px;color:var(--mid-gray);">Speak at least 90s</div>
+      </div>
+      <div class="timer-wrap" style="min-width:160px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Max. Time</div>
+        <div class="timer-ring" id="ring-max">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="45"/>
+            <circle class="ring-fill" id="ring-fill-max" cx="50" cy="50" r="45"/>
+          </svg>
+          <div class="timer-num" id="timer-max">2:00</div>
+        </div>
+        <div style="font-size:12px;color:var(--mid-gray);">Stop within 120s</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;justify-content:center;">
+        <button class="btn btn-primary" id="timer-start-btn" onclick="startTimers()">▶ Start</button>
+        <button class="btn btn-outline" onclick="resetTimers()">↺ Reset</button>
+        <div id="timer-status" style="font-size:12px;color:var(--mid-gray);text-align:center;"></div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Keyword Checklist — tick each term as you use it:</div>
+    <div id="speaking-chips"></div>
+    <div style="margin-top:12px;font-size:13px;color:var(--mid-gray);">Used: <span id="chips-used" class="text-gold fw-600">0</span> / 8 keywords</div>
+    <div id="speaking-score-msg" style="margin-top:8px;font-size:13px;color:var(--gold);font-weight:600;display:none;"></div>
+  </div>
+</section>
+
+<!-- PART 9 SELF-REFLECTION -->
+<section class="section" id="final">
+  <div class="section-header">
+    <div class="section-num">✓</div>
+    <div>
+      <div class="section-title">Self-Reflection</div>
+      <div class="section-subtitle">Rate your performance honestly — this affects your final score</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="final-grid" id="reflection-grid"></div>
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Self-Reflection Score: <span id="reflection-score" class="text-gold">0</span> / 12</div>
+  </div>
+</section>
+
+<!-- SCORE -->
+<section class="section" id="score">
+  <div class="section-header">
+    <div class="section-num">★</div>
+    <div>
+      <div class="section-title">My Score</div>
+      <div class="section-subtitle">Complete all sections and calculate your total</div>
+    </div>
+  </div>
+  <div class="card">
+    <div id="score-breakdown" style="margin-bottom:24px;"></div>
+    <button class="btn btn-primary" onclick="calcScore()">📊 Calculate Score</button>
+    <div id="total-score-display" style="margin-top:24px;text-align:center;"></div>
+  </div>
+</section>
+
+</main>
+
+<div id="confetti-container"></div>
+<div id="excellent-banner"></div>
+
+<script>
+var PREFIX = 'edu_';
+
+function saveItem(k, v) { try { localStorage.setItem(k, v); } catch(e){} }
+function loadItem(k) { try { return localStorage.getItem(k) || ''; } catch(e){ return ''; } }
+
+function toggleDark() {
+  var d = document.body.classList.toggle('dark-mode');
+  saveItem(PREFIX+'dark', d ? '1' : '');
+  document.getElementById('dark-icon').textContent = d ? '☀️' : '🌙';
+  document.getElementById('dark-label').textContent = d ? 'Light' : 'Dark';
+}
+if (loadItem(PREFIX+'dark') === '1') { document.body.classList.add('dark-mode'); document.getElementById('dark-icon').textContent = '☀️'; document.getElementById('dark-label').textContent = 'Light'; }
+
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); }
+function smoothNav(e, id) { e.preventDefault(); closeSidebar(); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+window.addEventListener('scroll', function() {
+  var h = document.documentElement.scrollHeight - window.innerHeight;
+  var p = h > 0 ? Math.round((window.scrollY / h) * 100) : 0;
+  document.getElementById('progress-bar-fill').style.width = p + '%';
+  document.getElementById('progress-label').textContent = p + '% Complete';
+});
+
+var glossaryTerms = [
+  {term:"long-standing", def:"having existed for a long time; well-established over many years", ru:"давно существующий"},
+  {term:"to evolve", def:"to develop gradually over time, adapting to new circumstances", ru:"развиваться"},
+  {term:"literacy campaign", def:"an organised effort to teach reading and writing to a large part of the population", ru:"кампания по ликвидации безграмотности"},
+  {term:"Ministry of Education and Science", def:"the government body responsible for education policy and standards", ru:"Министерство образования и науки"},
+  {term:"to ensure", def:"to make certain that something happens or is provided", ru:"обеспечивать"},
+  {term:"vital driver", def:"a key force or factor that strongly influences development or progress", ru:"жизненно важный фактор"},
+  {term:"compulsory education", def:"schooling that the law requires all children to attend", ru:"обязательное образование"},
+  {term:"basic literacy", def:"the ability to read and write at a fundamental level", ru:"базовая грамотность"},
+  {term:"numeracy", def:"the ability to understand and work with numbers", ru:"счёт, арифметика"},
+  {term:"curriculum", def:"the subjects and content taught in schools, defined by educational authorities", ru:"учебная программа"},
+  {term:"well-rounded foundation", def:"a broad and balanced base of knowledge covering many different subjects", ru:"разносторонняя основа"},
+  {term:"to prioritise", def:"to treat something as more important than others; to give it higher attention or resources", ru:"ставить приоритетом"},
+  {term:"rural regions", def:"areas outside of cities, often with lower population density and fewer resources", ru:"сельские регионы"},
+  {term:"disparities", def:"noticeable differences or inequalities between groups or regions", ru:"неравенство, несоответствие"},
+  {term:"secondary education", def:"the level of schooling following primary school, typically for students aged 14–17", ru:"среднее образование"},
+  {term:"to culminate", def:"to reach the highest or final point; to conclude with something", ru:"завершаться, заканчиваться"},
+  {term:"Unified State Exam (USE)", def:"a standardised national examination taken at the end of secondary school in Russia, used for university admission", ru:"Единый государственный экзамен (ЕГЭ)"},
+  {term:"serves as a gateway", def:"acts as the main entry point or qualifying stage for the next step", ru:"служит входным билетом, проходом"},
+  {term:"admission", def:"the process of being accepted into an educational institution", ru:"поступление"},
+  {term:"to be noted for", def:"to be well-known or recognised for a particular quality or achievement", ru:"быть известным благодаря"},
+  {term:"cybersecurity", def:"the practice of protecting computer systems and networks from digital attacks", ru:"кибербезопасность"},
+  {term:"robotics", def:"the design, construction, and use of automated machines", ru:"робототехника"},
+  {term:"ongoing reforms", def:"changes and improvements to a system that are currently in progress", ru:"продолжающиеся реформы"},
+  {term:"digital literacy", def:"the ability to use digital tools and technology effectively and critically", ru:"цифровая грамотность"},
+  {term:"online learning platforms", def:"web-based systems that deliver educational content and courses remotely", ru:"платформы онлайн-обучения"},
+  {term:"underfunding", def:"a situation where insufficient money is allocated to a programme or institution", ru:"недостаточное финансирование"},
+  {term:"inadequate facilities", def:"buildings and equipment that are not sufficient in quality or quantity", ru:"недостаточная инфраструктура"},
+  {term:"education gap", def:"a difference in educational outcomes or access between different groups or regions", ru:"разрыв в образовании"},
+  {term:"rote memorisation", def:"learning by repetition without necessarily understanding the material", ru:"зубрёжка, запоминание наизусть"},
+  {term:"critical thinking", def:"the ability to analyse information objectively and make reasoned judgements", ru:"критическое мышление"},
+  {term:"student-centred approach", def:"a teaching method that focuses on the student's active involvement rather than passive listening", ru:"подход, ориентированный на студента"},
+  {term:"inclusive education", def:"an approach that ensures all students, including those with special needs, learn together", ru:"инклюзивное образование"}
+];
+
+var dqCriteria = {
+  1: {
+    keywords:['cybersecurity','robotics','curriculum','well-rounded','numeracy','mathematics','science','higher education','digital literacy','engineering'],
+    minWords:20,
+    model:"The Russian education system is well known for its strong emphasis on mathematics and sciences, producing highly skilled graduates in cybersecurity, robotics, and engineering. The national curriculum provides a well-rounded foundation that develops both analytical and technical skills. Additionally, higher education institutions are internationally recognised, and ongoing reforms are promoting digital literacy to keep pace with technological change.",
+    tip:"Mention the curriculum, cybersecurity/robotics, well-rounded foundation, or digital literacy."
+  },
+  2: {
+    keywords:['underfunding','disparities','rural','education gap','inadequate facilities','rote memorisation','shortage','critical thinking','urban'],
+    minWords:20,
+    model:"The Russian education system faces significant challenges, particularly in rural regions. Underfunding leads to inadequate facilities and a shortage of qualified teachers, widening the education gap between urban and rural schools. In addition, an over-reliance on rote memorisation has been criticised for limiting students' critical thinking skills. These disparities make it harder to ensure equal access to quality education across the country.",
+    tip:"Include underfunding, rural disparities, education gap, and rote memorisation."
+  },
+  3: {
+    keywords:['digital literacy','online learning','reforms','Federal Law','initiative','student-centred','inclusive','critical thinking','career advancement'],
+    minWords:20,
+    model:"Ongoing reforms in Russia aim to promote digital literacy and expand online learning platforms, equipping students with the skills needed for modern careers and career advancement. The Federal Law on Education and related initiatives also support a shift toward student-centred approaches and inclusive education, moving away from passive rote memorisation toward active learning that develops critical thinking.",
+    tip:"Mention digital literacy, online learning platforms, student-centred approaches, and inclusive education."
+  }
+};
+
+function revealCase() {
+  document.getElementById('case-box').classList.add('visible');
+  document.getElementById('discussion-qs').classList.add('visible');
+  document.getElementById('reveal-btn').style.display = 'none';
+  saveItem(PREFIX+'caseRevealed','1');
+}
+if (loadItem(PREFIX+'caseRevealed') === '1') { revealCase(); }
+
+function checkDQ(n) {
+  var ta = document.getElementById('dq'+n);
+  var txt = ta.value.toLowerCase();
+  var fb = document.getElementById('dq-fb'+n);
+  var c = dqCriteria[n];
+  var words = ta.value.trim().split(/\s+/).filter(function(w){ return w.length>0; }).length;
+  var found = c.keywords.filter(function(k){ return txt.includes(k); });
+  var score = 0;
+  if (words >= c.minWords) score++;
+  score += Math.min(found.length, 3);
+  if (score > 5) score = 5;
+  var pct = score/5;
+  var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
+  fb.style.display = 'block';
+  fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
+  fb.style.border = '1px solid ' + color;
+  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
+    (found.length > 0 ? 'Good use of: <em>'+found.slice(0,3).join(', ')+'</em>. ' : 'No key terms detected. ')+
+    '<br><span style="color:var(--mid-gray);font-size:12px;">Tip: '+c.tip+'</span>';
+  saveItem(PREFIX+'dq'+n+'score', score);
+}
+
+function showModelDQ(n) {
+  var fb = document.getElementById('dq-fb'+n);
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.06)';
+  fb.style.border = '1px solid var(--gold)';
+  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + dqCriteria[n].model;
+}
+
+var cqCriteria = {
+  1: {
+    keywords:['unified state exam','use','secondary','gateway','admission','university','higher education'],
+    model:"The Unified State Exam (USE) marks the end of secondary education in Russia. It serves as a gateway to higher education, as university admission relies heavily on USE scores. It is a standardised national examination that assesses students' knowledge across subjects and determines which universities and programmes they can enter."
+  },
+  2: {
+    keywords:['rote memorisation','critical thinking','limit','passive','repetition'],
+    model:"Rote memorisation has been criticised as a dominant teaching practice. Critics argue that it limits students' ability to develop critical thinking, as students learn to repeat information without necessarily understanding or analysing it. This approach is seen as less effective for preparing students for modern, complex professional environments."
+  },
+  3: {
+    keywords:['digital literacy','online learning','student-centred','inclusive','reform','initiative'],
+    model:"Two key goals of Russia's ongoing reforms are: first, to promote digital literacy and expand online learning platforms, equipping students with modern technological skills; and second, to introduce student-centred approaches and inclusive education, shifting away from passive rote learning toward active, participatory teaching methods."
+  }
+};
+
+function checkCQ(n) {
+  var ta = document.getElementById('cq'+n);
+  var txt = ta.value.toLowerCase();
+  var fb = document.getElementById('cq-fb'+n);
+  var c = cqCriteria[n];
+  var found = c.keywords.filter(function(k){ return txt.includes(k); });
+  var score = Math.min(Math.round((found.length / Math.max(c.keywords.length * 0.5, 1)) * 5), 5);
+  var pct = score/5;
+  var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
+  fb.style.display = 'block';
+  fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
+  fb.style.border = '1px solid ' + color;
+  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
+    (found.length > 0 ? 'Keywords found: <em>'+found.join(', ')+'</em>.' : 'Key terms not detected.');
+  saveItem(PREFIX+'cq'+n+'score', score);
+}
+
+function showModelCQ(n) {
+  var fb = document.getElementById('cq-fb'+n);
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.06)';
+  fb.style.border = '1px solid var(--gold)';
+  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + cqCriteria[n].model;
+}
+
+var catTerms = [
+  {label:"compulsory education", cats:['S']},
+  {label:"secondary education", cats:['S']},
+  {label:"Unified State Exam (USE)", cats:['S']},
+  {label:"curriculum", cats:['S']},
+  {label:"admission", cats:['S']},
+  {label:"Ministry of Education", cats:['S']},
+  {label:"well-rounded foundation", cats:['S']},
+  {label:"underfunding", cats:['C']},
+  {label:"disparities", cats:['C']},
+  {label:"rote memorisation", cats:['C']},
+  {label:"education gap", cats:['C']},
+  {label:"inadequate facilities", cats:['C']},
+  {label:"shortage of teachers", cats:['C']},
+  {label:"digital literacy", cats:['R']},
+  {label:"online learning platforms", cats:['R']},
+  {label:"ongoing reforms", cats:['R']},
+  {label:"inclusive education", cats:['R']},
+  {label:"critical thinking", cats:['R','C']},
+  {label:"student-centred approach", cats:['R']},
+  {label:"cybersecurity", cats:['S','R']},
+  {label:"robotics", cats:['S','R']},
+  {label:"career advancement", cats:['R']}
+];
+
+var catSelected = null;
+var catAssignments = {};
+
+function renderCatTerms() {
+  var s = loadItem(PREFIX+'catAssignments');
+  if (s) { try { catAssignments = JSON.parse(s); } catch(e){} }
+  var grid = document.getElementById('cat-terms-grid');
+  grid.innerHTML = '';
+  catTerms.forEach(function(t, i) {
+    var el = document.createElement('span');
+    el.className = 'cat-term';
+    el.id = 'cterm-'+i;
+    el.textContent = t.label;
+    el.onclick = function() { selectCatTerm(i); };
+    if (catAssignments[i]) el.classList.add('assigned-'+catAssignments[i]);
+    grid.appendChild(el);
+  });
+  updateCatScore();
+}
+
+function selectCatTerm(i) {
+  document.querySelectorAll('.cat-term').forEach(function(el){ el.classList.remove('selected'); });
+  catSelected = i;
+  document.getElementById('cterm-'+i).classList.add('selected');
+}
+
+function assignCategory(cat) {
+  if (catSelected === null) { alert('Please click a term first.'); return; }
+  catAssignments[catSelected] = cat;
+  saveItem(PREFIX+'catAssignments', JSON.stringify(catAssignments));
+  var el = document.getElementById('cterm-'+catSelected);
+  el.classList.remove('selected','assigned-S','assigned-C','assigned-R');
+  el.classList.add('assigned-'+cat);
+  catSelected = null;
+  updateCatScore();
+}
+
+function updateCatScore() {
+  var correct = 0;
+  Object.keys(catAssignments).forEach(function(i) {
+    if (catTerms[i] && catTerms[i].cats.indexOf(catAssignments[i]) !== -1) correct++;
+  });
+  var total = catTerms.length;
+  var score = Math.round((correct / total) * 15);
+  document.getElementById('cat-score').textContent = correct + '/' + total + ' correct — ' + score + '/15 pts';
+  saveItem(PREFIX+'catScore', score);
+}
+
+function resetCategories() {
+  catAssignments = {};
+  saveItem(PREFIX+'catAssignments', '{}');
+  catSelected = null;
+  renderCatTerms();
+}
+
+function renderCards(filter) {
+  var grid = document.getElementById('flashcard-grid');
+  grid.innerHTML = '';
+  var terms = filter ? glossaryTerms.filter(function(t){ return t.term.toLowerCase().includes(filter.toLowerCase()) || t.def.toLowerCase().includes(filter.toLowerCase()); }) : glossaryTerms;
+  terms.forEach(function(t, i) {
+    var wrap = document.createElement('div');
+    wrap.className = 'flashcard-wrap';
+    var flipped = loadItem(PREFIX+'fc_'+t.term) === '1';
+    if (flipped) wrap.classList.add('flipped');
+    wrap.innerHTML = '<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div><div style="font-size:13px;font-weight:600;">' + t.term + '</div><div class="fc-hint">click to flip</div></div></div><div class="flashcard-face flashcard-back"><div><div style="font-weight:600;margin-bottom:6px;">' + t.def + '</div><div style="font-size:11px;color:rgba(201,168,76,0.8);margin-top:6px;">' + t.ru + '</div></div></div></div>';
+    wrap.onclick = function() { wrap.classList.toggle('flipped'); saveItem(PREFIX+'fc_'+t.term, wrap.classList.contains('flipped') ? '1' : ''); };
+    grid.appendChild(wrap);
+  });
+  document.getElementById('card-count').textContent = terms.length + ' of ' + glossaryTerms.length + ' terms shown';
+}
+
+function filterCards(v) { renderCards(v); }
+function flipAll() { document.querySelectorAll('.flashcard-wrap').forEach(function(w){ w.classList.toggle('flipped'); }); }
+function resetCards() { document.getElementById('card-search').value = ''; renderCards(''); }
+function speakSelected() {
+  var sel = null;
+  document.querySelectorAll('.flashcard-wrap').forEach(function(w){ if (w.classList.contains('flipped')) sel = w; });
+  if (!sel) { alert('Flip a card first to hear it pronounced.'); return; }
+  var term = sel.querySelector('.flashcard-front div div').textContent;
+  if (window.speechSynthesis) { var u = new SpeechSynthesisUtterance(term); u.lang = 'en-GB'; window.speechSynthesis.speak(u); }
+}
+
+var fibData = [
+  {pre:"The Russian education system is overseen by the", blank:"Ministry", post:"of Education and Science, which ensures consistent standards nationwide.", hint:"M___try", alts:['ministry of education']},
+  {pre:"Secondary education culminates in the Unified State", blank:"Exam", post:"(USE), which serves as a gateway to higher education.", hint:"Ex__", alts:['examination','use']},
+  {pre:"An over-reliance on rote", blank:"memorisation", post:"has been criticised for limiting students' critical thinking skills.", hint:"mem___sation", alts:['memorization','rote learning']},
+  {pre:"Russian universities are particularly noted for strong programmes in cybersecurity and", blank:"robotics", post:", reflecting the country's technological strengths.", hint:"rob___ics", alts:[]},
+  {pre:"Ongoing reforms aim to promote digital", blank:"literacy", post:"and expand online learning platforms across the country.", hint:"lit___cy", alts:[]},
+  {pre:"Underfunding in rural regions has led to inadequate facilities and a widening education", blank:"gap", post:"between urban and rural schools.", hint:"g__", alts:[]}
+];
+
+function renderFIB() {
+  var container = document.getElementById('fib-container');
+  container.innerHTML = '';
+  fibData.forEach(function(item, i) {
+    var saved = loadItem(PREFIX+'fib'+i);
+    var div = document.createElement('div');
+    div.className = 'fib-item';
+    div.innerHTML = item.pre + ' <span class="fib-input-wrap"><input type="text" class="fib-input" id="fib-inp-'+i+'" value="'+saved+'" placeholder="___" oninput="saveItem(\''+PREFIX+'fib'+i+'\',this.value)"><span class="fib-status" id="fib-st-'+i+'"></span><button class="hint-btn" onclick="showFIBHint('+i+')">Hint</button></span> ' + item.post;
+    container.appendChild(div);
+    if (saved) checkFIBItem(i, false);
+  });
+}
+
+function showFIBHint(i) { document.getElementById('fib-st-'+i).textContent = '💡 ' + fibData[i].hint; }
+
+function checkFIBItem(i, showResult) {
+  var inp = document.getElementById('fib-inp-'+i);
+  var val = inp.value.trim().toLowerCase();
+  var correct = val === fibData[i].blank.toLowerCase() || fibData[i].alts.some(function(a){ return val === a.toLowerCase(); });
+  inp.classList.remove('correct','incorrect');
+  if (val) {
+    inp.classList.add(correct ? 'correct' : 'incorrect');
+    document.getElementById('fib-st-'+i).textContent = correct ? '✅' : (showResult ? '❌ ' + fibData[i].blank : '');
+  }
+  return correct;
+}
+
+function checkAllFIB() {
+  var score = 0;
+  fibData.forEach(function(_, i){ if (checkFIBItem(i, true)) score++; });
+  var pts = score * 2;
+  document.getElementById('fib-score').textContent = score + '/6 correct — ' + pts + '/12 pts';
+  saveItem(PREFIX+'fibScore', pts);
+}
+
+function resetFIB() {
+  fibData.forEach(function(_, i){
+    var inp = document.getElementById('fib-inp-'+i);
+    inp.value = ''; inp.classList.remove('correct','incorrect');
+    document.getElementById('fib-st-'+i).textContent = '';
+    saveItem(PREFIX+'fib'+i, '');
+  });
+  document.getElementById('fib-score').textContent = '';
+}
+
+var writingCriteria = {
+  1: {
+    minWords:50,
+    topicKW:['cybersecurity','robotics','curriculum','well-rounded','digital literacy','higher education','compulsory','mathematics','science','engineering'],
+    vocabKW:['cybersecurity','robotics','curriculum','well-rounded foundation','digital literacy','compulsory education','secondary education','noted for','ongoing reforms','numeracy','vital driver','career advancement'],
+    connectors:['because','however','although','therefore','furthermore','in addition','moreover','additionally','as a result','for example','in particular','first','secondly','finally'],
+    model:"The Russian education system is notable for its strong academic traditions and internationally recognised achievements in several fields. The national curriculum provides a well-rounded foundation, with a particular emphasis on mathematics, sciences, and numeracy. Higher education institutions are noted for their excellent programmes in cybersecurity, robotics, and engineering, making graduates highly competitive internationally. Furthermore, ongoing reforms are promoting digital literacy and expanding online learning platforms, equipping students with the skills needed for career advancement in the modern economy. These strengths make Russia a vital driver of technological development."
+  },
+  2: {
+    minWords:40,
+    topicKW:['underfunding','disparities','rural','education gap','rote memorisation','critical thinking','inclusive','digital literacy','ongoing reforms','student-centred'],
+    vocabKW:['underfunding','disparities','rural regions','education gap','rote memorisation','critical thinking','inclusive education','ongoing reforms','digital literacy','student-centred','inadequate facilities','shortage'],
+    connectors:['however','although','therefore','nevertheless','despite','furthermore','in addition','as a result','consequently','on the other hand'],
+    model:"Despite its strengths, the Russian education system faces significant challenges. Underfunding in rural regions has led to inadequate facilities and a shortage of qualified teachers, creating a growing education gap between urban and rural schools. Furthermore, an over-reliance on rote memorisation limits the development of critical thinking skills. However, ongoing reforms are beginning to address these issues through promoting digital literacy, expanding online learning platforms, and encouraging student-centred approaches. A shift toward inclusive education reflects shared priorities with international frameworks and could help reduce existing disparities."
+  }
+};
+
+function updateWordCount(taId, wcId, wbId) {
+  var val = document.getElementById(taId).value;
+  var words = val.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
+  document.getElementById(wcId).textContent = words + ' words';
+  var n = taId === 'w1' ? 1 : 2;
+  var c = writingCriteria[n];
+  var vLow = val.toLowerCase();
+  var vocabFound = c.vocabKW.filter(function(k){ return vLow.includes(k.toLowerCase()); }).length;
+  var wb = document.getElementById(wbId);
+  if (vocabFound >= 3) { wb.textContent = vocabFound + ' vocab terms'; wb.classList.add('show'); }
+  else { wb.classList.remove('show'); }
+}
+
+function checkWriting(n) {
+  var val = document.getElementById('w'+n).value;
+  var vLow = val.toLowerCase();
+  var c = writingCriteria[n];
+  var words = val.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
+  var topicFound = c.topicKW.filter(function(k){ return vLow.includes(k.toLowerCase()); });
+  var vocabFound = c.vocabKW.filter(function(k){ return vLow.includes(k.toLowerCase()); });
+  var connFound = c.connectors.filter(function(k){ return vLow.includes(k.toLowerCase()); });
+  var sentences = val.split(/[.!?]+/).filter(function(s){ return s.trim().length > 10; }).length;
+  var score = 0;
+  var details = [];
+  if (words >= c.minWords) { score += 2; details.push('✅ Length (' + words + ' words) +2'); }
+  else { details.push('❌ Length (' + words + '/' + c.minWords + ' words needed) +0'); }
+  var topicScore = topicFound.length >= 3 ? 2 : topicFound.length >= 2 ? 1 : 0;
+  score += topicScore;
+  details.push((topicScore > 0 ? '✅' : '❌') + ' Topic keywords (' + topicFound.length + ' found: ' + topicFound.slice(0,3).join(', ') + ') +' + topicScore);
+  var vocabScore = vocabFound.length >= 5 ? 2 : vocabFound.length >= 3 ? 1 : 0;
+  score += vocabScore;
+  details.push((vocabScore > 0 ? '✅' : '❌') + ' Glossary vocab (' + vocabFound.length + ' terms) +' + vocabScore);
+  var connScore = connFound.length >= 2 ? 1 : 0;
+  score += connScore;
+  details.push((connScore > 0 ? '✅' : '❌') + ' Logical connectors (' + connFound.slice(0,3).join(', ') + ') +' + connScore);
+  var sentScore = sentences >= 3 ? 1 : 0;
+  score += sentScore;
+  details.push((sentScore > 0 ? '✅' : '❌') + ' Sentence variety (' + sentences + ' sentences) +' + sentScore);
+  var pct = score / 8;
+  var color = pct >= 0.75 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
+  var fb = document.getElementById('w-fb'+n);
+  fb.style.display = 'block';
+  fb.style.background = pct >= 0.75 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
+  fb.style.border = '1px solid ' + color;
+  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/8</strong><br>' + details.join('<br>');
+  saveItem(PREFIX+'w'+n+'score', score);
+}
+
+function showModelWriting(n) {
+  var fb = document.getElementById('w-fb'+n);
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.06)';
+  fb.style.border = '1px solid var(--gold)';
+  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + writingCriteria[n].model;
+}
+
+function saveSpeakingPlan() {
+  ['sp1','sp2','sp3','sp4'].forEach(function(id){ saveItem(PREFIX+id, document.getElementById(id).value); });
+  var total = ['sp1','sp2','sp3','sp4'].reduce(function(acc, id){
+    return acc + document.getElementById(id).value.trim().split(/\s+/).filter(function(w){ return w.length>0; }).length;
+  }, 0);
+  document.getElementById('sp-wordcount').textContent = 'Total words in notes: ' + total;
+}
+['sp1','sp2','sp3','sp4'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) document.getElementById(id).value = v; });
+saveSpeakingPlan();
+
+var timerMin = null, timerMax = null;
+var runningMin = false, runningMax = false;
+
+function fmtTime(s) { var m = Math.floor(s/60); var sec = s%60; return m+':'+(sec<10?'0':'')+sec; }
+function setRing(id, elapsed, total, isMax) {
+  var circ = 283;
+  var fill = document.getElementById(id);
+  fill.style.strokeDashoffset = circ - ((elapsed / total) * circ);
+  if (isMax && elapsed / total > 0.75) fill.closest('.timer-ring').classList.add('red');
+}
+
+function startTimers() {
+  if (runningMin || runningMax) return;
+  runningMin = true; runningMax = true;
+  document.getElementById('timer-start-btn').disabled = true;
+  document.getElementById('timer-status').textContent = 'Speaking...';
+  var elMin = 0, elMax = 0;
+  timerMin = setInterval(function() {
+    elMin++;
+    document.getElementById('timer-min').textContent = fmtTime(Math.max(0, 90 - elMin));
+    setRing('ring-fill-min', elMin, 90, false);
+    if (elMin >= 90) { clearInterval(timerMin); runningMin = false; document.getElementById('timer-min').textContent = '✓'; document.getElementById('timer-status').textContent = 'Min. time reached!'; }
+  }, 1000);
+  timerMax = setInterval(function() {
+    elMax++;
+    document.getElementById('timer-max').textContent = fmtTime(Math.max(0, 120 - elMax));
+    setRing('ring-fill-max', elMax, 120, true);
+    if (elMax >= 120) { clearInterval(timerMax); runningMax = false; document.getElementById('timer-max').textContent = '0:00'; document.getElementById('timer-status').textContent = 'Time is up!'; }
+  }, 1000);
+}
+
+function resetTimers() {
+  clearInterval(timerMin); clearInterval(timerMax);
+  runningMin = false; runningMax = false;
+  document.getElementById('timer-min').textContent = '1:30';
+  document.getElementById('timer-max').textContent = '2:00';
+  document.getElementById('ring-fill-min').style.strokeDashoffset = 283;
+  document.getElementById('ring-fill-max').style.strokeDashoffset = 283;
+  document.getElementById('ring-min').classList.remove('red');
+  document.getElementById('ring-max').classList.remove('red');
+  document.getElementById('timer-start-btn').disabled = false;
+  document.getElementById('timer-status').textContent = '';
+}
+
+var speakingTerms = [
+  'compulsory education','Unified State Exam','rote memorisation','digital literacy',
+  'education gap','ongoing reforms','critical thinking','well-rounded foundation'
+];
+var chipsUsed = {};
+
+function renderChips() {
+  var s = loadItem(PREFIX+'chipsUsed');
+  if (s) { try { chipsUsed = JSON.parse(s); } catch(e){} }
+  var container = document.getElementById('speaking-chips');
+  container.innerHTML = '';
+  speakingTerms.forEach(function(term, i) {
+    var chip = document.createElement('span');
+    chip.className = 'kchip' + (chipsUsed[i] ? ' used' : '');
+    chip.textContent = term;
+    chip.onclick = function() { toggleSpeakingChip(i); };
+    container.appendChild(chip);
+  });
+  updateChipScore();
+}
+
+function toggleSpeakingChip(i) {
+  chipsUsed[i] = !chipsUsed[i];
+  saveItem(PREFIX+'chipsUsed', JSON.stringify(chipsUsed));
+  document.querySelectorAll('.kchip')[i].classList.toggle('used', chipsUsed[i]);
+  updateChipScore();
+}
+
+function updateChipScore() {
+  var used = Object.values(chipsUsed).filter(Boolean).length;
+  document.getElementById('chips-used').textContent = used;
+  var score = Math.round((used / 8) * 8);
+  saveItem(PREFIX+'chipsScore', score);
+  if (used >= 6) {
+    document.getElementById('speaking-score-msg').style.display = 'block';
+    document.getElementById('speaking-score-msg').textContent = '★ ' + score + '/8 pts — Great vocabulary use!';
+  }
+}
+
+var reflectionItems = [
+  "I can describe the structure of the Russian education system (compulsory → secondary → higher)",
+  "I can explain the role and purpose of the Unified State Exam (USE)",
+  "I understand the key challenges: underfunding, education gap, rote memorisation",
+  "I can use at least 10 glossary terms correctly in context",
+  "I can write a structured paragraph on strengths and challenges using key vocabulary",
+  "I spoke for at least 90 seconds using the keyword checklist"
+];
+
+function renderReflection() {
+  var grid = document.getElementById('reflection-grid');
+  grid.innerHTML = '';
+  var saved = loadItem(PREFIX+'reflection');
+  var savedArr = saved ? JSON.parse(saved) : [];
+  reflectionItems.forEach(function(item, i) {
+    var el = document.createElement('div');
+    el.className = 'final-check-item' + (savedArr[i] ? ' checked' : '');
+    el.id = 'refl-'+i;
+    el.innerHTML = '<input type="checkbox" id="rchk-'+i+'" '+(savedArr[i]?'checked':'')+' onchange="toggleReflection('+i+')">' +
+      '<label for="rchk-'+i+'" style="cursor:pointer;">'+item+'</label>';
+    el.onclick = function(e) { if (e.target.tagName !== 'INPUT') document.getElementById('rchk-'+i).click(); };
+    grid.appendChild(el);
+  });
+  updateReflectionScore();
+}
+
+function toggleReflection(i) {
+  var saved = loadItem(PREFIX+'reflection');
+  var arr = saved ? JSON.parse(saved) : Array(reflectionItems.length).fill(false);
+  arr[i] = document.getElementById('rchk-'+i).checked;
+  saveItem(PREFIX+'reflection', JSON.stringify(arr));
+  document.getElementById('refl-'+i).classList.toggle('checked', arr[i]);
+  updateReflectionScore();
+}
+
+function updateReflectionScore() {
+  var saved = loadItem(PREFIX+'reflection');
+  var arr = saved ? JSON.parse(saved) : [];
+  var checked = arr.filter(Boolean).length;
+  var score = Math.round((checked / reflectionItems.length) * 12);
+  document.getElementById('reflection-score').textContent = score;
+  saveItem(PREFIX+'reflScore', score);
+}
+
+function calcScore() {
+  var dq = [1,2,3].reduce(function(a,n){ return a + (parseInt(loadItem(PREFIX+'dq'+n+'score'))||0); }, 0);
+  var cq = [1,2,3].reduce(function(a,n){ return a + (parseInt(loadItem(PREFIX+'cq'+n+'score'))||0); }, 0);
+  var cat = parseInt(loadItem(PREFIX+'catScore')) || 0;
+  var fib = parseInt(loadItem(PREFIX+'fibScore')) || 0;
+  var wr = (parseInt(loadItem(PREFIX+'w1score'))||0) + (parseInt(loadItem(PREFIX+'w2score'))||0);
+  var chips = parseInt(loadItem(PREFIX+'chipsScore')) || 0;
+  var refl = parseInt(loadItem(PREFIX+'reflScore')) || 0;
+  var total = dq + cq + cat + fib + wr + chips + refl;
+  var maxTotal = 93;
+  var pct = Math.round((total/maxTotal)*100);
+
+  var breakdown = [
+    {label:'Discussion Questions (×3)', score:dq, max:15},
+    {label:'Comprehension Questions (×3)', score:cq, max:15},
+    {label:'Glossary Categories', score:cat, max:15},
+    {label:'Fill in the Blanks', score:fib, max:12},
+    {label:'Writing Tasks (×2)', score:wr, max:16},
+    {label:'Speaking Keywords', score:chips, max:8},
+    {label:'Self-Reflection', score:refl, max:12}
+  ];
+
+  var html = '<table style="width:100%;border-collapse:collapse;font-size:14px;">';
+  html += '<tr style="border-bottom:2px solid var(--gold);"><th style="text-align:left;padding:8px 4px;color:var(--text-secondary);">Section</th><th style="text-align:right;padding:8px 4px;color:var(--text-secondary);">Score</th><th style="text-align:right;padding:8px 4px;color:var(--text-secondary);">Max</th></tr>';
+  breakdown.forEach(function(b) {
+    html += '<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 4px;">'+b.label+'</td><td style="text-align:right;padding:8px 4px;font-weight:600;color:var(--gold);">'+b.score+'</td><td style="text-align:right;padding:8px 4px;color:var(--text-secondary);">'+b.max+'</td></tr>';
+  });
+  html += '<tr><td style="padding:10px 4px;font-weight:700;font-size:15px;">TOTAL</td><td style="text-align:right;padding:10px 4px;font-weight:800;font-size:15px;color:var(--gold);">'+total+'</td><td style="text-align:right;padding:10px 4px;font-weight:700;">'+maxTotal+'</td></tr>';
+  html += '</table>';
+  document.getElementById('score-breakdown').innerHTML = html;
+
+  var grade = pct >= 90 ? 'Excellent! 🏆' : pct >= 75 ? 'Great work! ⭐' : pct >= 60 ? 'Good effort! 👍' : 'Keep practising 📚';
+  document.getElementById('total-score-display').innerHTML =
+    '<div style="font-size:48px;font-weight:800;color:var(--gold);">'+total+'<span style="font-size:24px;color:var(--text-secondary);">/'+maxTotal+'</span></div>'+
+    '<div style="font-size:20px;font-weight:700;margin-top:4px;">'+pct+'% — '+grade+'</div>';
+
+  saveItem(PREFIX+'totalScore', total);
+  if (pct >= 80) { showConfetti(); showBanner(grade); }
+}
+
+function showConfetti() {
+  var container = document.getElementById('confetti-container');
+  container.innerHTML = '';
+  var colors = ['#C9A84C','#e8c96a','#0A1628','#667eea','#38a169'];
+  for (var i = 0; i < 60; i++) {
+    var piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    var size = Math.random() * 10 + 5;
+    piece.style.cssText = 'left:'+Math.random()*100+'%;width:'+size+'px;height:'+size+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';animation-duration:'+(Math.random()*2+2)+'s;animation-delay:'+(Math.random()*1.5)+'s;';
+    container.appendChild(piece);
+  }
+  setTimeout(function(){ container.innerHTML = ''; }, 5000);
+}
+
+function showBanner(text) {
+  var b = document.getElementById('excellent-banner');
+  b.textContent = text;
+  b.classList.add('show');
+  setTimeout(function(){ b.classList.remove('show'); }, 2500);
+}
+
+renderCatTerms();
+renderCards('');
+renderFIB();
+renderChips();
+renderReflection();
+['dq1','dq2','dq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) document.getElementById(id).value = v; });
+['cq1','cq2','cq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) document.getElementById(id).value = v; });
+['w1','w2'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; updateWordCount(id, 'wc'+id.slice(1), 'wb'+id.slice(1)); } });
+
+var navSections = ['part1','part2','part3','part4','part5','part6','part7','part8','final','score'];
+var navIds = ['nav1','nav2','nav3','nav4','nav5','nav6','nav7','nav8','navF','navS'];
+window.addEventListener('scroll', function() {
+  var scrollY = window.scrollY + 80;
+  navSections.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (el) {
+      var navEl = document.getElementById(navIds[i]);
+      if (navEl) navEl.classList.toggle('active', scrollY >= el.offsetTop && scrollY < el.offsetTop + el.offsetHeight);
+    }
+  });
+});
+</script>
+</body>
+</html>
