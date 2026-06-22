@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance & Financial Reporting — Interactive Dashboard</title>
+<style>
+  :root {
+    --navy: #0A1628;
+    --navy2: #112240;
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --white: #FFFFFF;
+    --gray: #F4F6FA;
+    --gray2: #E2E8F0;
+    --text: #1A2B4A;
+    --text2: #4A5568;
+    --green: #22C55E;
+    --red: #EF4444;
+    --blue: #3B82F6;
+    --shadow: 0 4px 24px rgba(10,22,40,0.10);
+    --radius: 16px;
+    --transition: 0.32s cubic-bezier(.4,0,.2,1);
+  }
+  .dark-mode {
+    --navy: #060E1C;
+    --navy2: #0D1B32;
+    --gray: #101F38;
+    --gray2: #1A2B4A;
+    --text: #E8EFF8;
+    --text2: #94A3B8;
+    --white: #152238;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+    background: var(--gray);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === TOP BAR === */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--navy);
+    padding: 0 24px;
+    height: 60px;
+    display: -webkit-flex; display: flex;
+    -webkit-align-items: center; align-items: center;
+    -webkit-justify-content: space-between; justify-content: space-between;
+    -webkit-box-shadow: 0 2px 16px rgba(0,0,0,0.3); box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  }
+  .topbar-title { color: var(--gold); font-size: 17px; font-weight: 700; letter-spacing: 0.3px; }
+  .topbar-title span { color: #fff; font-weight: 400; }
+  .topbar-right { display: -webkit-flex; display: flex; gap: 12px; -webkit-align-items: center; align-items: center; }
+  .btn-icon {
+    background: rgba(201,168,76,0.15); border: none; color: var(--gold);
+    border-radius: 8px; width: 36px; height: 36px; cursor: pointer; font-size: 16px;
+    display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
+    -webkit-justify-content: center; justify-content: center;
+    -webkit-transition: background var(--transition); transition: background var(--transition);
+  }
+  .btn-icon:hover { background: rgba(201,168,76,0.3); }
+
+  /* === PROGRESS BAR === */
+  .progress-bar-wrap {
+    position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
+    height: 4px; background: var(--navy2);
+  }
+  .progress-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    width: 0%; -webkit-transition: width 0.5s ease; transition: width 0.5s ease;
+  }
+
+  /* === LAYOUT === */
+  .layout {
+    display: -webkit-flex; display: flex;
+    padding-top: 64px;
+    min-height: 100vh;
+  }
+
+  /* === SIDEBAR === */
+  .sidebar {
+    width: 240px; min-width: 240px;
+    background: var(--navy);
+    position: fixed; top: 64px; left: 0; bottom: 0;
+    overflow-y: auto; z-index: 80;
+    padding: 16px 0 40px;
+    -webkit-transition: -webkit-transform var(--transition); transition: transform var(--transition);
+  }
+  .sidebar-section { padding: 6px 16px 2px; font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 8px; }
+  .nav-item {
+    display: -webkit-flex; display: flex;
+    -webkit-align-items: center; align-items: center;
+    gap: 10px; padding: 10px 20px;
+    color: rgba(255,255,255,0.65); font-size: 13px; font-weight: 500;
+    cursor: pointer; border: none; background: none; width: 100%; text-align: left;
+    -webkit-transition: all var(--transition); transition: all var(--transition);
+    border-left: 3px solid transparent;
+  }
+  .nav-item:hover { color: #fff; background: rgba(255,255,255,0.06); }
+  .nav-item.active { color: var(--gold); background: rgba(201,168,76,0.1); border-left-color: var(--gold); }
+  .nav-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.25); flex-shrink: 0; }
+  .nav-item.done .nav-dot { background: var(--green); }
+  .nav-item.active .nav-dot { background: var(--gold); }
+
+  /* === MAIN CONTENT === */
+  .main {
+    margin-left: 240px;
+    padding: 32px 32px 80px;
+    flex: 1;
+    max-width: 960px;
+  }
+
+  /* === SECTIONS === */
+  .section { display: none; -webkit-animation: fadeIn 0.4s ease; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+  @-webkit-keyframes fadeIn { from { opacity:0; -webkit-transform: translateY(12px); } to { opacity:1; -webkit-transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+  .section-header {
+    display: -webkit-flex; display: flex;
+    -webkit-align-items: flex-start; align-items: flex-start;
+    gap: 16px; margin-bottom: 28px;
+  }
+  .section-num {
+    background: var(--gold); color: var(--navy); font-weight: 800; font-size: 13px;
+    border-radius: 8px; width: 40px; height: 40px; flex-shrink: 0;
+    display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center;
+  }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .section-sub { font-size: 14px; color: var(--text2); margin-top: 4px; }
+
+  /* === CARDS === */
+  .card {
+    background: var(--white); border-radius: var(--radius);
+    padding: 24px; margin-bottom: 20px;
+    -webkit-box-shadow: var(--shadow); box-shadow: var(--shadow);
+  }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+
+  /* === BUTTONS === */
+  .btn {
+    display: inline-flex; -webkit-align-items: center; align-items: center;
+    gap: 8px; padding: 10px 20px;
+    border-radius: 10px; border: none; cursor: pointer; font-size: 14px; font-weight: 600;
+    -webkit-transition: all var(--transition); transition: all var(--transition);
+  }
+  .btn-primary { background: var(--gold); color: var(--navy); }
+  .btn-primary:hover { background: var(--gold-light); -webkit-transform: translateY(-1px); transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--gold); border: 2px solid var(--gold); }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); }
+  .btn-sm { padding: 7px 14px; font-size: 13px; }
+
+  /* === PART 1 — PROBLEM CASE === */
+  .problem-case {
+    background: linear-gradient(135deg, var(--navy), var(--navy2));
+    border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
+    border-left: 4px solid var(--gold); position: relative; overflow: hidden;
+  }
+  .problem-case::before {
+    content: '⚠'; position: absolute; right: 20px; top: 16px;
+    font-size: 48px; opacity: 0.08;
+  }
+  .problem-case p { color: rgba(255,255,255,0.85); line-height: 1.7; font-size: 15px; }
+  .problem-case .case-title { color: var(--gold); font-weight: 700; font-size: 16px; margin-bottom: 10px; }
+
+  .task-box { background: var(--gray); border-radius: 12px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--gray2); }
+  .task-label { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .task-question { font-size: 14px; color: var(--text); margin-bottom: 6px; line-height: 1.6; }
+
+  .reveal-area { display: none; margin-top: 16px; }
+  .reveal-area.shown { display: block; -webkit-animation: fadeIn 0.3s ease; animation: fadeIn 0.3s ease; }
+  .answer-input { width: 100%; min-height: 80px; border: 2px solid var(--gray2); border-radius: 10px; padding: 12px; font-size: 14px; font-family: inherit; resize: vertical; background: var(--white); color: var(--text); -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
+  .answer-input:focus { outline: none; border-color: var(--gold); }
+
+  /* === PART 2 — TEXT === */
+  .reading-text { font-size: 15px; line-height: 1.85; color: var(--text); }
+  .reading-text p { margin-bottom: 16px; }
+  .vocab-hl { background: rgba(201,168,76,0.18); border-bottom: 2px solid var(--gold); cursor: pointer; border-radius: 3px; padding: 0 2px; position: relative; -webkit-transition: background var(--transition); transition: background var(--transition); }
+  .vocab-hl:hover { background: rgba(201,168,76,0.35); }
+  .vocab-tooltip {
+    display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+    -webkit-transform: translateX(-50%); transform: translateX(-50%);
+    background: var(--navy); color: #fff; font-size: 12px; padding: 8px 12px;
+    border-radius: 8px; width: 200px; text-align: center; z-index: 200;
+    pointer-events: none; line-height: 1.4; white-space: normal;
+    -webkit-box-shadow: 0 4px 12px rgba(0,0,0,0.3); box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .vocab-tooltip::after { content:''; position:absolute; top:100%; left:50%; -webkit-transform:translateX(-50%); transform:translateX(-50%); border:5px solid transparent; border-top-color: var(--navy); }
+  .vocab-hl:hover .vocab-tooltip { display: block; }
+
+  /* === PART 3 — MATCHING === */
+  .match-grid { display: -webkit-flex; display: flex; flex-wrap: wrap; gap: 16px; }
+  .match-col { flex: 1; min-width: 220px; }
+  .match-col-title { font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .match-item {
+    background: var(--gray); border: 2px solid var(--gray2); border-radius: 10px;
+    padding: 12px 16px; margin-bottom: 8px; font-size: 13px; cursor: pointer;
+    -webkit-transition: all var(--transition); transition: all var(--transition); user-select: none;
+  }
+  .match-item:hover { border-color: var(--gold); background: rgba(201,168,76,0.07); }
+  .match-item.selected { border-color: var(--gold); background: rgba(201,168,76,0.15); color: var(--navy); font-weight: 600; }
+  .match-item.correct { border-color: var(--green); background: rgba(34,197,94,0.1); }
+  .match-item.incorrect { border-color: var(--red); background: rgba(239,68,68,0.1); }
+
+  .match-target {
+    background: var(--gray); border: 2px dashed var(--gray2); border-radius: 10px;
+    padding: 12px 16px; margin-bottom: 8px; font-size: 13px; cursor: pointer; min-height: 46px;
+    -webkit-transition: all var(--transition); transition: all var(--transition);
+    display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 8px;
+  }
+  .match-target:hover { border-color: var(--gold); }
+  .match-target.filled { border-style: solid; border-color: var(--gold); background: rgba(201,168,76,0.07); }
+  .match-target.correct { border-color: var(--green); background: rgba(34,197,94,0.1); }
+  .match-target.incorrect { border-color: var(--red); background: rgba(239,68,68,0.1); }
+  .match-label { font-weight: 700; color: var(--gold); min-width: 20px; }
+
+  /* === PART 4 — GLOSSARY === */
+  .search-input {
+    width: 100%; padding: 12px 16px; border: 2px solid var(--gray2); border-radius: 12px;
+    font-size: 14px; font-family: inherit; background: var(--white); color: var(--text);
+    margin-bottom: 16px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition);
+  }
+  .search-input:focus { outline: none; border-color: var(--gold); }
+  .gloss-grid { display: -webkit-flex; display: flex; flex-wrap: wrap; gap: 12px; }
+  .gloss-card {
+    width: 150px; height: 100px; perspective: 600px; cursor: pointer; flex-shrink: 0;
+  }
+  .gloss-inner {
+    width: 100%; height: 100%; position: relative;
+    -webkit-transform-style: preserve-3d; transform-style: preserve-3d;
+    -webkit-transition: -webkit-transform 0.5s ease; transition: transform 0.5s ease;
+  }
+  .gloss-card.flipped .gloss-inner { -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
+  .gloss-front, .gloss-back {
+    position: absolute; width: 100%; height: 100%; border-radius: 12px;
+    display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
+    -webkit-justify-content: center; justify-content: center; text-align: center; padding: 8px;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  }
+  .gloss-front { background: var(--navy); color: var(--gold); font-weight: 700; font-size: 12px; line-height: 1.3; }
+  .gloss-back { background: var(--gold); color: var(--navy); font-size: 11px; font-weight: 500; line-height: 1.4; -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
+
+  /* Categorization */
+  .cat-zones { display: -webkit-flex; display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .cat-zone {
+    flex: 1; min-width: 180px; background: var(--white); border: 2px dashed var(--gray2);
+    border-radius: 12px; padding: 14px; min-height: 120px;
+    -webkit-transition: border-color var(--transition); transition: border-color var(--transition);
+  }
+  .cat-zone.drag-over { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+  .cat-zone-title { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .cat-chip {
+    display: inline-block; padding: 4px 10px; background: var(--navy); color: #fff;
+    border-radius: 20px; font-size: 11px; margin: 3px; cursor: grab;
+    -webkit-transition: -webkit-transform 0.2s; transition: transform 0.2s;
+  }
+  .cat-chip:active { cursor: grabbing; -webkit-transform: scale(1.05); transform: scale(1.05); }
+  .cat-pool { display: -webkit-flex; display: flex; flex-wrap: wrap; gap: 6px; padding: 12px; background: var(--gray); border-radius: 12px; min-height: 50px; margin-bottom: 12px; }
+
+  /* Fill-in-blank */
+  .fill-item { margin-bottom: 16px; }
+  .fill-sentence { font-size: 15px; color: var(--text); line-height: 1.8; }
+  .fill-input {
+    border: none; border-bottom: 2px solid var(--gold); background: transparent;
+    font-size: 15px; font-family: inherit; color: var(--text); padding: 2px 6px;
+    width: 200px; -webkit-transition: border-color var(--transition); transition: border-color var(--transition);
+    outline: none;
+  }
+  .fill-input.correct { border-bottom-color: var(--green); color: var(--green); }
+  .fill-input.incorrect { border-bottom-color: var(--red); color: var(--red); }
+
+  /* === PART 5 — CAUSE-EFFECT === */
+  .causal-chain { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 0; margin-bottom: 20px; flex-wrap: wrap; }
+  .chain-node {
+    background: var(--white); border: 2px solid var(--gray2); border-radius: 12px;
+    padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--text);
+    min-width: 130px; text-align: center; flex-shrink: 0;
+  }
+  .chain-node.cause { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+  .chain-node.effect { border-color: var(--blue); background: rgba(59,130,246,0.1); color: var(--blue); }
+  .chain-arrow { font-size: 20px; color: var(--gold); padding: 0 8px; flex-shrink: 0; }
+  .chain-blank {
+    background: var(--gray); border: 2px dashed var(--gray2); border-radius: 12px;
+    padding: 12px 16px; min-width: 150px; text-align: center; cursor: pointer; font-size: 13px;
+    color: var(--text2); -webkit-transition: all var(--transition); transition: all var(--transition);
+  }
+  .chain-blank:hover { border-color: var(--gold); color: var(--text); }
+  .chain-blank.revealed { border-style: solid; border-color: var(--green); background: rgba(34,197,94,0.1); color: var(--green); font-weight: 600; }
+
+  /* === PART 6 — ANALYTICAL TASK === */
+  .situation-grid { display: -webkit-flex; display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .situation-item {
+    flex: 1; min-width: 140px; background: var(--navy); color: var(--white);
+    border-radius: 12px; padding: 14px; text-align: center;
+  }
+  .situation-item .si-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .situation-item .si-value { font-size: 16px; font-weight: 700; }
+  .situation-item.warn .si-value { color: var(--red); }
+  .situation-item.ok .si-value { color: var(--green); }
+  .word-counter { font-size: 12px; color: var(--text2); margin-top: 8px; }
+  .glossary-detected { font-size: 12px; color: var(--green); margin-top: 4px; font-weight: 600; }
+
+  /* === PART 7 — DEBATE === */
+  .timer-ring-wrap { display: -webkit-flex; display: flex; -webkit-justify-content: center; justify-content: center; margin: 20px 0; }
+  .timer-ring { position: relative; width: 120px; height: 120px; }
+  .timer-ring svg { -webkit-transform: rotate(-90deg); transform: rotate(-90deg); }
+  .timer-ring circle { fill: none; stroke: var(--gray2); stroke-width: 8; }
+  .timer-ring .progress-ring { stroke: var(--gold); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 339.3; stroke-dashoffset: 0; -webkit-transition: stroke-dashoffset 1s linear; transition: stroke-dashoffset 1s linear; }
+  .timer-text { position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%,-50%); transform: translate(-50%,-50%); font-size: 28px; font-weight: 700; color: var(--gold); }
+
+  /* === PART 8 — SYNTHESIS BUILDER === */
+  .build-pool { display: -webkit-flex; display: flex; flex-wrap: wrap; gap: 8px; padding: 16px; background: var(--gray); border-radius: 12px; min-height: 60px; margin-bottom: 12px; }
+  .build-target { min-height: 100px; background: var(--white); border: 2px dashed var(--gray2); border-radius: 12px; padding: 12px; margin-bottom: 12px; display: -webkit-flex; display: flex; flex-wrap: wrap; gap: 8px; -webkit-align-content: flex-start; align-content: flex-start; }
+  .build-target.drag-over { border-color: var(--gold); }
+  .build-chip {
+    padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: grab;
+    -webkit-user-select: none; user-select: none;
+    -webkit-transition: -webkit-transform 0.15s; transition: transform 0.15s;
+    background: var(--navy); color: #fff;
+  }
+  .build-chip:active { cursor: grabbing; -webkit-transform: scale(1.04); transform: scale(1.04); }
+  .build-chip.in-target { background: var(--gold); color: var(--navy); font-weight: 600; }
+
+  /* === PART 9 — OPTIONS === */
+  .option-cards { display: -webkit-flex; display: flex; flex-direction: column; gap: 14px; }
+  .option-card {
+    background: var(--white); border-radius: var(--radius);
+    border: 2px solid var(--gray2); overflow: hidden;
+    -webkit-transition: border-color var(--transition); transition: border-color var(--transition);
+    -webkit-box-shadow: var(--shadow); box-shadow: var(--shadow);
+  }
+  .option-card.open { border-color: var(--gold); }
+  .option-header {
+    display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
+    gap: 14px; padding: 18px 20px; cursor: pointer;
+    -webkit-transition: background var(--transition); transition: background var(--transition);
+  }
+  .option-header:hover { background: rgba(201,168,76,0.05); }
+  .option-num { background: var(--gold); color: var(--navy); font-weight: 800; border-radius: 8px; width: 32px; height: 32px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .option-title { font-weight: 700; font-size: 15px; }
+  .option-role { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .option-chevron { margin-left: auto; font-size: 18px; color: var(--text2); -webkit-transition: -webkit-transform var(--transition); transition: transform var(--transition); }
+  .option-card.open .option-chevron { -webkit-transform: rotate(180deg); transform: rotate(180deg); }
+  .option-body { display: none; padding: 0 20px 20px; }
+  .option-card.open .option-body { display: block; -webkit-animation: fadeIn 0.3s ease; animation: fadeIn 0.3s ease; }
+  .req-list { margin: 10px 0; padding-left: 18px; }
+  .req-list li { font-size: 13px; color: var(--text2); margin-bottom: 6px; line-height: 1.5; }
+
+  /* === FINAL CHECK === */
+  .checklist { list-style: none; }
+  .check-item {
+    display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center;
+    gap: 14px; padding: 14px 16px; border-radius: 12px; margin-bottom: 10px;
+    background: var(--gray); cursor: pointer;
+    -webkit-transition: all var(--transition); transition: all var(--transition);
+    border: 2px solid transparent;
+  }
+  .check-item:hover { background: rgba(201,168,76,0.07); }
+  .check-item.checked { background: rgba(34,197,94,0.08); border-color: var(--green); }
+  .check-box {
+    width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--gray2);
+    display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center;
+    flex-shrink: 0; font-size: 14px;
+    -webkit-transition: all var(--transition); transition: all var(--transition);
+  }
+  .check-item.checked .check-box { background: var(--green); border-color: var(--green); color: #fff; }
+  .check-text { font-size: 14px; font-weight: 500; }
+
+  /* === CONFETTI === */
+  .confetti-piece {
+    position: fixed; width: 10px; height: 10px; border-radius: 2px;
+    pointer-events: none; z-index: 9999;
+    -webkit-animation: confettiFall 2.5s ease-out forwards; animation: confettiFall 2.5s ease-out forwards;
+  }
+  @-webkit-keyframes confettiFall {
+    0% { opacity:1; -webkit-transform: translate(0,0) rotate(0deg); }
+    100% { opacity:0; -webkit-transform: translate(var(--dx), 600px) rotate(720deg); }
+  }
+  @keyframes confettiFall {
+    0% { opacity:1; transform: translate(0,0) rotate(0deg); }
+    100% { opacity:0; transform: translate(var(--dx), 600px) rotate(720deg); }
+  }
+
+  /* === CELEBRATION BANNER === */
+  .celebration {
+    display: none; background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: var(--radius); padding: 24px; text-align: center; margin-top: 20px;
+    -webkit-animation: fadeIn 0.5s ease; animation: fadeIn 0.5s ease;
+  }
+  .celebration.show { display: block; }
+  .celebration h3 { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .celebration p { color: var(--navy); font-size: 14px; opacity: 0.8; }
+
+  /* === VOCAB FLOATING === */
+  .vocab-float {
+    position: fixed; right: 20px; top: 80px; width: 180px;
+    background: var(--navy); border-radius: 12px; padding: 14px;
+    -webkit-box-shadow: var(--shadow); box-shadow: var(--shadow);
+    z-index: 70; display: none;
+  }
+  .vocab-float.visible { display: block; }
+  .vf-title { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .vf-list { list-style: none; }
+  .vf-list li { font-size: 12px; color: rgba(255,255,255,0.7); padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .sidebar { -webkit-transform: translateX(-240px); transform: translateX(-240px); }
+    .sidebar.open { -webkit-transform: translateX(0); transform: translateX(0); }
+    .main { margin-left: 0; padding: 20px 16px 60px; }
+    .gloss-card { width: 130px; height: 90px; }
+    .vocab-float { display: none !important; }
+  }
+
+  @media print {
+    .sidebar, .topbar, .progress-bar-wrap, .vocab-float, .btn { display: none !important; }
+    .main { margin-left: 0; }
+    .section { display: block !important; }
+  }
+
+  /* === STAT CARDS === */
+  .stat-row { display: -webkit-flex; display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+  .stat-card {
+    flex: 1; min-width: 110px; background: var(--white); border-radius: 14px; padding: 16px;
+    -webkit-box-shadow: var(--shadow); box-shadow: var(--shadow); text-align: center;
+  }
+  .stat-num { font-size: 28px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+  .stat-label { font-size: 12px; color: var(--text2); font-weight: 500; }
+
+  /* === TAG === */
+  .tag { display: inline-block; padding: 3px 10px; background: rgba(201,168,76,0.15); color: var(--gold); border-radius: 20px; font-size: 12px; font-weight: 600; margin-right: 6px; margin-bottom: 4px; }
+
+  /* === NOTICE === */
+  .notice { background: rgba(201,168,76,0.1); border-left: 3px solid var(--gold); border-radius: 0 10px 10px 0; padding: 12px 16px; font-size: 13px; color: var(--text2); margin-bottom: 16px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-title">💰 <span>Finance &amp;</span> Financial Reporting</div>
+  <div class="topbar-right">
+    <button class="btn-icon" id="darkToggle" title="Toggle dark mode">🌙</button>
+    <button class="btn-icon" id="printBtn" title="Print">🖨</button>
+    <button class="btn-icon" id="menuToggle" title="Menu" style="display:none">☰</button>
+  </div>
+</header>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+
+<!-- FLOATING VOCAB -->
+<div class="vocab-float" id="vocabFloat">
+  <div class="vf-title">📚 Terms Used</div>
+  <ul class="vf-list" id="vocabUsedList"><li style="color:rgba(255,255,255,0.4);font-style:italic">Start writing...</li></ul>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-section">Overview</div>
+  <button class="nav-item active" data-sec="intro" onclick="showSection('intro',this)"><span class="nav-dot"></span>Dashboard</button>
+
+  <div class="sidebar-section">Content</div>
+  <button class="nav-item" data-sec="part1" onclick="showSection('part1',this)"><span class="nav-dot"></span>Part 1 · Problem Case</button>
+  <button class="nav-item" data-sec="part2" onclick="showSection('part2',this)"><span class="nav-dot"></span>Part 2 · Reading Text</button>
+  <button class="nav-item" data-sec="part3" onclick="showSection('part3',this)"><span class="nav-dot"></span>Part 3 · Text Structure</button>
+
+  <div class="sidebar-section">Practice</div>
+  <button class="nav-item" data-sec="part4" onclick="showSection('part4',this)"><span class="nav-dot"></span>Part 4 · Glossary</button>
+  <button class="nav-item" data-sec="part5" onclick="showSection('part5',this)"><span class="nav-dot"></span>Part 5 · Cause–Effect</button>
+  <button class="nav-item" data-sec="part6" onclick="showSection('part6',this)"><span class="nav-dot"></span>Part 6 · Analysis</button>
+
+  <div class="sidebar-section">Advanced</div>
+  <button class="nav-item" data-sec="part7" onclick="showSection('part7',this)"><span class="nav-dot"></span>Part 7 · Critical Thinking</button>
+  <button class="nav-item" data-sec="part8" onclick="showSection('part8',this)"><span class="nav-dot"></span>Part 8 · Synthesis</button>
+  <button class="nav-item" data-sec="part9" onclick="showSection('part9',this)"><span class="nav-dot"></span>Part 9 · Output Task</button>
+
+  <div class="sidebar-section">Reflection</div>
+  <button class="nav-item" data-sec="final" onclick="showSection('final',this)"><span class="nav-dot"></span>Final Check</button>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- INTRO -->
+<section class="section active" id="intro">
+  <div class="section-header">
+    <div class="section-num">📊</div>
+    <div>
+      <div class="section-title">Finance &amp; Financial Reporting</div>
+      <div class="section-sub">Interactive Educational Dashboard · B2 Business English</div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-num">9</div><div class="stat-label">Sections</div></div>
+    <div class="stat-card"><div class="stat-num">30+</div><div class="stat-label">Vocab Terms</div></div>
+    <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Tasks</div></div>
+    <div class="stat-card"><div class="stat-num" id="doneCount">0</div><div class="stat-label">Completed</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 Learning Objectives</div>
+    <div style="display:-webkit-flex;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+      <span class="tag">Financial Statements</span>
+      <span class="tag">Revenue vs Profit</span>
+      <span class="tag">Transparency</span>
+      <span class="tag">Decision-Making</span>
+      <span class="tag">Financial Risk</span>
+      <span class="tag">Cause-Effect Logic</span>
+    </div>
+    <p style="font-size:14px;color:var(--text2);line-height:1.7">Work through all 9 parts in order — from problem analysis and reading comprehension to critical thinking and professional output. Track your progress above.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 How to Use</div>
+    <div style="display:-webkit-flex;display:flex;flex-direction:column;gap:10px">
+      <div style="display:-webkit-flex;display:flex;gap:12px;-webkit-align-items:flex-start;align-items:flex-start">
+        <span style="font-size:20px">📖</span>
+        <div><strong style="font-size:13px">Parts 1–2:</strong> <span style="font-size:13px;color:var(--text2)">Read the case and text. Hover vocabulary terms for definitions.</span></div>
+      </div>
+      <div style="display:-webkit-flex;display:flex;gap:12px;-webkit-align-items:flex-start;align-items:flex-start">
+        <span style="font-size:20px">🧩</span>
+        <div><strong style="font-size:13px">Parts 3–5:</strong> <span style="font-size:13px;color:var(--text2)">Interactive matching, fill-in-blanks, and cause-effect diagrams.</span></div>
+      </div>
+      <div style="display:-webkit-flex;display:flex;gap:12px;-webkit-align-items:flex-start;align-items:flex-start">
+        <span style="font-size:20px">✍️</span>
+        <div><strong style="font-size:13px">Parts 6–8:</strong> <span style="font-size:13px;color:var(--text2)">Write analytical responses using glossary terms.</span></div>
+      </div>
+      <div style="display:-webkit-flex;display:flex;gap:12px;-webkit-align-items:flex-start;align-items:flex-start">
+        <span style="font-size:20px">🎤</span>
+        <div><strong style="font-size:13px">Part 9:</strong> <span style="font-size:13px;color:var(--text2)">Choose a professional output format with timed speaking tasks.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="showSection('part1', document.querySelector('[data-sec=part1]'))">Start Learning →</button>
+</section>
+
+<!-- PART 1 -->
+<section class="section" id="part1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Problem Case</div>
+      <div class="section-sub">Think Before Text · Activate Prior Knowledge</div>
+    </div>
+  </div>
+
+  <div class="problem-case">
+    <div class="case-title">Case: Company Performance Problem</div>
+    <p>A company reports <strong>high revenue</strong>, but investors are <strong>not satisfied</strong>. The financial report shows <strong>unclear results</strong>.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Task 1 — Discussion Questions</div>
+    <div class="notice">Think about each question before writing. Use financial logic and your own knowledge.</div>
+
+    <div class="task-box">
+      <div class="task-label">Question 1</div>
+      <div class="task-question">❓ Why is revenue <em>not enough</em> to evaluate a company's performance?</div>
+      <textarea class="answer-input" placeholder="Write your answer here... (Think: what else matters besides revenue?)"></textarea>
+      <div id="hint1" style="margin-top:8px;display:none">
+        <div class="notice">💡 Hint: Consider <strong>expenses, profit, and cash flow</strong>. High revenue with high costs = low or negative profit.</div>
+      </div>
+      <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="toggleHint('hint1',this)">Show Hint</button>
+    </div>
+
+    <div class="task-box">
+      <div class="task-label">Question 2</div>
+      <div class="task-question">❓ What information should investors analyze besides revenue?</div>
+      <textarea class="answer-input" placeholder="List at least 3 types of information..."></textarea>
+      <div id="hint2" style="margin-top:8px;display:none">
+        <div class="notice">💡 Hint: Think about <strong>profit margins, cash flow, liabilities, equity, and financial ratios</strong>.</div>
+      </div>
+      <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="toggleHint('hint2',this)">Show Hint</button>
+    </div>
+
+    <div class="task-box">
+      <div class="task-label">Question 3</div>
+      <div class="task-question">❓ What risks can appear if financial reports are incorrect? Give 2–3 arguments and predict consequences.</div>
+      <textarea class="answer-input" placeholder="Argument 1: ... Argument 2: ... Argument 3: ..."></textarea>
+      <div id="hint3" style="margin-top:8px;display:none">
+        <div class="notice">💡 Hint: Consider <strong>investor trust, legal consequences, poor decisions, market instability</strong>.</div>
+      </div>
+      <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="toggleHint('hint3',this)">Show Hint</button>
+    </div>
+
+    <div style="margin-top:16px;display:-webkit-flex;display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="markDone('part1')">✓ Mark Complete</button>
+      <button class="btn btn-outline" onclick="showSection('part2', document.querySelector('[data-sec=part2]'))">Next: Reading Text →</button>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="section" id="part2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Finance and Financial Reporting</div>
+      <div class="section-sub">Main Text · Hover highlighted terms for definitions</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="notice">📌 Hover over <span class="vocab-hl" style="position:static">highlighted terms<span class="vocab-tooltip">This is how tooltips work!</span></span> to see definitions. Each term links to the glossary.</div>
+
+    <div class="reading-text">
+      <p><span class="vocab-hl">Financial reporting<span class="vocab-tooltip">The process of producing financial statements that disclose an organization's financial status.</span></span> is a key element of business activity. It provides information about a company's <span class="vocab-hl">financial position<span class="vocab-tooltip">A snapshot of what a company owns (assets) and owes (liabilities) at a specific point in time.</span></span> and performance. <span class="vocab-hl">Managers<span class="vocab-tooltip">People responsible for controlling or administering an organization.</span></span>, <span class="vocab-hl">investors<span class="vocab-tooltip">People or organizations that provide capital expecting a financial return.</span></span>, and regulators use this information to <span class="vocab-hl">evaluate<span class="vocab-tooltip">To assess or judge the value, quality or performance of something.</span></span> how effectively the company operates and whether it is financially <span class="vocab-hl">stable<span class="vocab-tooltip">Financially stable = consistent, not prone to large fluctuations in performance.</span></span>. Without <span class="vocab-hl">reliable<span class="vocab-tooltip">Reliable = consistently good in quality; can be trusted to be accurate.</span></span> financial reporting, it is difficult to make <span class="vocab-hl">informed decisions<span class="vocab-tooltip">Decisions made with sufficient knowledge and understanding of the situation.</span></span>.</p>
+
+      <p>The main <span class="vocab-hl">financial statements<span class="vocab-tooltip">Formal records of financial activities — typically income statement, balance sheet, and cash flow statement.</span></span> present different aspects of a company's activity. The <span class="vocab-hl">income statement<span class="vocab-tooltip">A financial statement showing revenues, expenses, and profit over a period of time. Also called P&amp;L.</span></span> shows <span class="vocab-hl">revenue<span class="vocab-tooltip">The total income generated by a company from its business activities before expenses.</span></span>, expenses, and profit, helping to understand whether the company is <span class="vocab-hl">profitable<span class="vocab-tooltip">Generating more revenue than expenses; yielding financial gain.</span></span>. The <span class="vocab-hl">balance sheet<span class="vocab-tooltip">A financial statement showing assets, liabilities and equity at a specific date.</span></span> presents <span class="vocab-hl">assets<span class="vocab-tooltip">Resources owned or controlled by a company that have economic value.</span></span>, <span class="vocab-hl">liabilities<span class="vocab-tooltip">Financial obligations or debts owed by a company to others.</span></span>, and <span class="vocab-hl">equity<span class="vocab-tooltip">The residual interest in assets after deducting liabilities; owners' stake.</span></span>, which reflect the company's financial structure. The <span class="vocab-hl">cash flow statement<span class="vocab-tooltip">A financial statement showing how cash moves in and out of a business.</span></span> explains how money moves in and out of the business, showing whether the company has enough <span class="vocab-hl">liquidity<span class="vocab-tooltip">The ability to meet short-term financial obligations; how easily assets can be converted to cash.</span></span> to operate.</p>
+
+      <p>However, financial data must be analyzed carefully. High <span class="vocab-hl">revenue<span class="vocab-tooltip">Total income from sales and services before any deductions.</span></span> does not always mean <span class="vocab-hl">strong performance<span class="vocab-tooltip">Achieving significantly good financial and operational results.</span></span>. If expenses are also high, profit may be low or even negative. <span class="vocab-hl">Financial analysis<span class="vocab-tooltip">The process of evaluating financial data to understand performance and make decisions.</span></span> helps identify <span class="vocab-hl">inefficiencies<span class="vocab-tooltip">Failure to make the best use of resources; wasteful processes in a business.</span></span>, risks, and potential problems. It allows managers to improve operations and helps investors evaluate whether the company is a good investment.</p>
+
+      <p>Accuracy and <span class="vocab-hl">transparency<span class="vocab-tooltip">Openness and honesty in financial reporting; disclosing all relevant information clearly.</span></span> are essential in financial reporting. Incorrect or <span class="vocab-hl">incomplete<span class="vocab-tooltip">Not having all necessary parts; missing important information.</span></span> information can <span class="vocab-hl">mislead<span class="vocab-tooltip">To cause someone to have a wrong idea or impression about something.</span></span> users and lead to <span class="vocab-hl">poor decisions<span class="vocab-tooltip">Choices made without sufficient or accurate information, leading to negative outcomes.</span></span>. Companies must <span class="vocab-hl">follow accounting standards<span class="vocab-tooltip">To comply with official rules governing financial record-keeping (e.g. IFRS, GAAP).</span></span> and provide clear and reliable data. Transparent reporting increases trust and reduces financial risk for investors and partners.</p>
+
+      <p>Financial reporting is directly connected to <span class="vocab-hl">decision-making<span class="vocab-tooltip">The process of making choices based on available information and analysis.</span></span>. Managers use financial data to plan budgets, control costs, and develop strategies. Investors <span class="vocab-hl">rely on<span class="vocab-tooltip">To depend on something as a source of support or information.</span></span> reports to assess risks and expected returns. Therefore, high-quality financial reporting is not only a formal requirement but also a strategic tool for business development.</p>
+    </div>
+  </div>
+
+  <div style="display:-webkit-flex;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-primary" onclick="markDone('part2')">✓ Mark Complete</button>
+    <button class="btn btn-outline" onclick="showSection('part3', document.querySelector('[data-sec=part3]'))">Next: Text Structure →</button>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="section" id="part3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Text Structure Analysis</div>
+      <div class="section-sub">Task 2 · Match each paragraph to its main idea</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Task 2 — Paragraph Matching</div>
+    <div class="notice">Click a paragraph summary on the left, then click the matching description on the right. Check your answers when done.</div>
+
+    <div class="match-grid">
+      <div class="match-col">
+        <div class="match-col-title">📄 Paragraphs</div>
+        <div class="match-item" onclick="selectMatch('p','P1')" id="match-p-P1">Paragraph 1: Intro — what financial reporting is and who uses it</div>
+        <div class="match-item" onclick="selectMatch('p','P2')" id="match-p-P2">Paragraph 2: The three main financial statements explained</div>
+        <div class="match-item" onclick="selectMatch('p','P3')" id="match-p-P3">Paragraph 3: Why analysis is needed; high revenue ≠ good results</div>
+        <div class="match-item" onclick="selectMatch('p','P4')" id="match-p-P4">Paragraph 4: Accuracy and transparency matter for trust</div>
+        <div class="match-item" onclick="selectMatch('p','P5')" id="match-p-P5">Paragraph 5: Connection to decision-making and strategy</div>
+      </div>
+      <div class="match-col">
+        <div class="match-col-title">🏷 Main Ideas</div>
+        <div class="match-target" onclick="selectMatch('t','A')" id="match-t-A"><span class="match-label">A)</span> Accuracy and transparency</div>
+        <div class="match-target" onclick="selectMatch('t','B')" id="match-t-B"><span class="match-label">B)</span> Decision-making</div>
+        <div class="match-target" onclick="selectMatch('t','C')" id="match-t-C"><span class="match-label">C)</span> Importance of analysis</div>
+        <div class="match-target" onclick="selectMatch('t','D')" id="match-t-D"><span class="match-label">D)</span> Types of financial statements</div>
+        <div class="match-target" onclick="selectMatch('t','E')" id="match-t-E"><span class="match-label">E)</span> Role of financial reporting</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:-webkit-flex;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="checkMatching()">Check Answers</button>
+      <button class="btn btn-outline" onclick="resetMatching()">Reset</button>
+      <button class="btn btn-outline" onclick="markDone('part3')">✓ Mark Complete</button>
+    </div>
+    <div id="matchFeedback" style="margin-top:12px;font-size:14px;font-weight:600;display:none"></div>
+  </div>
+</section>
+
+<!-- PART 4 -->
+<section class="section" id="part4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Professional Glossary</div>
+      <div class="section-sub">Tasks 3 &amp; 4 · Learn, Categorize, and Use Terms</div>
+    </div>
+  </div>
+
+  <!-- Glossary Cards -->
+  <div class="card">
+    <div class="card-title">📚 Vocabulary Cards · Click to flip</div>
+    <input class="search-input" type="text" id="glossSearch" placeholder="🔍 Search terms..." oninput="filterGloss()">
+    <div class="gloss-grid" id="glossGrid"></div>
+  </div>
+
+  <!-- Task 3: Categorization -->
+  <div class="card">
+    <div class="card-title">Task 3 — Categorize the Terms</div>
+    <div class="notice">Drag terms from the pool below into the correct category. Or click a term to cycle it.</div>
+    <div id="catPool" class="cat-pool"></div>
+    <div class="cat-zones">
+      <div class="cat-zone" id="zone-A" ondragover="catDragOver(event,'A')" ondragleave="catDragLeave('A')" ondrop="catDrop(event,'A')">
+        <div class="cat-zone-title">📋 A · Financial Documents</div>
+      </div>
+      <div class="cat-zone" id="zone-B" ondragover="catDragOver(event,'B')" ondragleave="catDragLeave('B')" ondrop="catDrop(event,'B')">
+        <div class="cat-zone-title">💰 B · Financial Elements</div>
+      </div>
+      <div class="cat-zone" id="zone-C" ondragover="catDragOver(event,'C')" ondragleave="catDragLeave('C')" ondrop="catDrop(event,'C')">
+        <div class="cat-zone-title">🔍 C · Analysis &amp; Results</div>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="checkCat()">Check Categorization</button>
+    <div id="catFeedback" style="margin-top:10px;font-size:13px;font-weight:600;display:none"></div>
+  </div>
+
+  <!-- Task 4: Fill-in-blank -->
+  <div class="card">
+    <div class="card-title">Task 4 — Complete the Sentences</div>
+    <div class="notice">Fill each blank with the correct term. Press Enter or click Check to validate.</div>
+
+    <div class="fill-item">
+      <div class="fill-sentence">The <input class="fill-input" id="fill1" placeholder="___________" data-answer="income statement" onkeydown="checkFillEnter(event,'fill1')"> shows revenue and expenses.</div>
+    </div>
+    <div class="fill-item">
+      <div class="fill-sentence">The <input class="fill-input" id="fill2" placeholder="___________" data-answer="balance sheet" onkeydown="checkFillEnter(event,'fill2')"> presents assets and liabilities.</div>
+    </div>
+    <div class="fill-item">
+      <div class="fill-sentence"><input class="fill-input" id="fill3" placeholder="___________" data-answer="financial analysis" onkeydown="checkFillEnter(event,'fill3')"> helps identify risks and problems.</div>
+    </div>
+    <div class="fill-item">
+      <div class="fill-sentence"><input class="fill-input" id="fill4" placeholder="___________" data-answer="transparency" onkeydown="checkFillEnter(event,'fill4')"> builds trust between a company and investors.</div>
+    </div>
+
+    <div style="margin-top:14px;display:-webkit-flex;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="checkAllFills()">Check Answers</button>
+      <button class="btn btn-outline btn-sm" onclick="revealFills()">Reveal Answers</button>
+      <button class="btn btn-outline btn-sm" onclick="markDone('part4')">✓ Mark Complete</button>
+    </div>
+    <div id="fillFeedback" style="margin-top:10px;font-size:13px;font-weight:600;display:none"></div>
+  </div>
+</section>
+
+<!-- PART 5 -->
+<section class="section" id="part5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Cause–Effect Chains</div>
+      <div class="section-sub">Task 5 · Click the blank boxes to reveal answers</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Task 5 — Complete the Cause–Effect Logic</div>
+    <div class="notice">Click each blank (?) to reveal the missing link. Think before you click!</div>
+
+    <div class="causal-chain">
+      <div class="chain-node cause">High Revenue</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-blank" onclick="revealChain(this,'does NOT guarantee profit')" title="Click to reveal">?</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node effect">Real Performance</div>
+    </div>
+
+    <div class="causal-chain">
+      <div class="chain-node cause">High Expenses</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-blank" onclick="revealChain(this,'reduces or eliminates')" title="Click to reveal">?</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node effect">Profit</div>
+    </div>
+
+    <div class="causal-chain">
+      <div class="chain-node cause">Incorrect Reporting</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-blank" onclick="revealChain(this,'misleads and distorts')" title="Click to reveal">?</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node effect">Investor Decisions</div>
+    </div>
+
+    <div class="causal-chain">
+      <div class="chain-node cause">Transparency</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-blank" onclick="revealChain(this,'builds and strengthens')" title="Click to reveal">?</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node effect">Financial Trust</div>
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="card-title">💬 Write Your Own Cause-Effect Chain</div>
+      <textarea class="answer-input" placeholder="Write your own example: [cause] → [mechanism] → [effect]. Use glossary terms!" style="min-height:60px"></textarea>
+    </div>
+
+    <div style="margin-top:14px">
+      <button class="btn btn-primary" onclick="markDone('part5')">✓ Mark Complete</button>
+    </div>
+  </div>
+</section>
+
+<!-- PART 6 -->
+<section class="section" id="part6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Analytical Task</div>
+      <div class="section-sub">Task 6 · Write a full analysis using glossary terms</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Situation</div>
+    <div class="situation-grid">
+      <div class="situation-item ok"><div class="si-label">Revenue</div><div class="si-value">HIGH ↑</div></div>
+      <div class="situation-item warn"><div class="si-label">Profit</div><div class="si-value">LOW ↓</div></div>
+      <div class="situation-item warn"><div class="si-label">Financial Reports</div><div class="si-value">UNCLEAR</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Task 6 — Your Analysis</div>
+    <div class="notice">Answer: What is the main problem? What should the company improve? What risk does this situation create? Write 5–6 sentences using at least <strong>5 glossary terms</strong>.</div>
+
+    <div style="margin-bottom:12px">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:8px;font-weight:600">📖 Example (for reference):</div>
+      <div style="background:var(--gray);border-radius:10px;padding:14px;font-size:13px;color:var(--text2);line-height:1.7;border-left:3px solid var(--gold)">
+        The company has high <em>revenue</em>, but low <em>profit</em>, which shows high <em>expenses</em>. The main problem is inefficient financial management. The company should improve <em>financial reporting</em> and conduct better <em>financial analysis</em>. This situation creates <em>financial risk</em>.
+      </div>
+    </div>
+
+    <textarea class="answer-input" id="analysisText" placeholder="Write your analysis here... (5–6 sentences, use: revenue, profit, financial reporting, transparency, financial analysis, risk, liquidity, income statement...)" style="min-height:140px" oninput="analyzeText()"></textarea>
+    <div class="word-counter" id="wordCount">Words: 0 / 80 target</div>
+    <div class="glossary-detected" id="termsDetected" style="display:none"></div>
+
+    <div style="margin-top:14px;display:-webkit-flex;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="markDone('part6')">✓ Mark Complete</button>
+    </div>
+  </div>
+</section>
+
+<!-- PART 7 -->
+<section class="section" id="part7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">Critical Thinking</div>
+      <div class="section-sub">Task 7 · Debate with a timer</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Statement to Debate</div>
+    <div style="background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:12px;padding:20px;text-align:center;margin-bottom:20px">
+      <p style="color:var(--gold);font-size:18px;font-weight:700;line-height:1.4;">"Financial reports are more important than real business performance."</p>
+    </div>
+
+    <div class="notice">State your position, give 2 arguments, provide 1 counterargument. Use at least 4 glossary terms. You have 60 seconds!</div>
+
+    <div class="timer-ring-wrap">
+      <div class="timer-ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="54"/>
+          <circle cx="60" cy="60" r="54" class="progress-ring" id="timerRing"/>
+        </svg>
+        <div class="timer-text" id="timerText">60</div>
+      </div>
+    </div>
+
+    <div style="display:-webkit-flex;display:flex;gap:10px;-webkit-justify-content:center;justify-content:center;margin-bottom:20px">
+      <button class="btn btn-primary" id="timerStartBtn" onclick="startDebateTimer()">▶ Start Timer</button>
+      <button class="btn btn-outline" onclick="resetDebateTimer()">↺ Reset</button>
+    </div>
+
+    <div class="task-box">
+      <div class="task-label">Your Position</div>
+      <textarea class="answer-input" placeholder="I agree / I disagree because..." style="min-height:60px"></textarea>
+    </div>
+    <div class="task-box">
+      <div class="task-label">Argument 1</div>
+      <textarea class="answer-input" placeholder="First, financial reports allow investors to..." style="min-height:60px"></textarea>
+    </div>
+    <div class="task-box">
+      <div class="task-label">Argument 2</div>
+      <textarea class="answer-input" placeholder="Secondly, transparency in reporting..." style="min-height:60px"></textarea>
+    </div>
+    <div class="task-box">
+      <div class="task-label">Counterargument</div>
+      <textarea class="answer-input" placeholder="However, one could argue that real performance..." style="min-height:60px"></textarea>
+    </div>
+
+    <button class="btn btn-primary" onclick="markDone('part7')" style="margin-top:8px">✓ Mark Complete</button>
+  </div>
+</section>
+
+<!-- PART 8 -->
+<section class="section" id="part8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <div class="section-title">Synthesis</div>
+      <div class="section-sub">Task 8 · Build your paragraph by arranging ideas</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Task 8 — Synthesis Builder</div>
+    <div class="notice">Drag sentence blocks from the pool into the writing area to build a logical paragraph about why financial reporting is important. Or write your own below.</div>
+
+    <div class="card-title" style="margin-top:0">Sentence Pool — drag to arrange:</div>
+    <div class="build-pool" id="buildPool">
+      <div class="build-chip" draggable="true" data-id="s1" ondragstart="buildDragStart(event)">Financial statements show assets, liabilities, and profit.</div>
+      <div class="build-chip" draggable="true" data-id="s2" ondragstart="buildDragStart(event)">Reliable reporting helps investors make informed decisions.</div>
+      <div class="build-chip" draggable="true" data-id="s3" ondragstart="buildDragStart(event)">Without transparency, reports can mislead stakeholders.</div>
+      <div class="build-chip" draggable="true" data-id="s4" ondragstart="buildDragStart(event)">Financial analysis identifies risks and inefficiencies.</div>
+      <div class="build-chip" draggable="true" data-id="s5" ondragstart="buildDragStart(event)">Therefore, high-quality reporting is a strategic business tool.</div>
+      <div class="build-chip" draggable="true" data-id="s6" ondragstart="buildDragStart(event)">Managers rely on financial data to plan budgets and strategies.</div>
+    </div>
+
+    <div class="card-title">Your Paragraph:</div>
+    <div class="build-target" id="buildTarget" ondragover="buildDragOver(event)" ondrop="buildDrop(event)" ondragleave="buildDragLeave(event)">
+      <span style="color:var(--text2);font-size:13px;font-style:italic;width:100%">Drag sentences here to build your paragraph...</span>
+    </div>
+
+    <div class="card-title" style="margin-top:8px">Or write your own synthesis (5–6 sentences):</div>
+    <textarea class="answer-input" placeholder="Financial reporting is important because... Include: financial statements, analysis, risks, decision-making." style="min-height:110px"></textarea>
+
+    <div style="margin-top:14px;display:-webkit-flex;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="clearBuildTarget()">Clear Paragraph</button>
+      <button class="btn btn-primary" onclick="markDone('part8')">✓ Mark Complete</button>
+    </div>
+  </div>
+</section>
+
+<!-- PART 9 -->
+<section class="section" id="part9">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <div>
+      <div class="section-title">Professional Output Task</div>
+      <div class="section-sub">Choose ONE format and complete it</div>
+    </div>
+  </div>
+
+  <div class="notice" style="margin-bottom:20px">Requirements for all options: professional vocabulary · cause–effect logic · understanding of financial reporting · use 5–8 glossary terms</div>
+
+  <div class="option-cards">
+
+    <div class="option-card" id="opt1">
+      <div class="option-header" onclick="toggleOption('opt1')">
+        <div class="option-num">1</div>
+        <div>
+          <div class="option-title">Investment Pitch</div>
+          <div class="option-role">Role: Financial Analyst</div>
+        </div>
+        <div class="option-chevron">⌄</div>
+      </div>
+      <div class="option-body">
+        <div class="notice">Present a short evaluation of a company. Time: 1.5 minutes. Use 6–8 glossary terms. Include 1 cause-effect link. Give a clear conclusion.</div>
+        <ul class="req-list">
+          <li>What financial reporting shows about the company</li>
+          <li>What problems can appear</li>
+          <li>Why analysis is important</li>
+          <li>Conclusion: good investment or risky?</li>
+        </ul>
+        <div style="margin:12px 0;display:-webkit-flex;display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="startOptionTimer(90,'timer-opt1-text','timer-opt1-ring')">▶ 1.5 min Timer</button>
+          <button class="btn btn-outline btn-sm" onclick="resetOptionTimer('timer-opt1-text','timer-opt1-ring',90)">↺ Reset</button>
+        </div>
+        <div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:12px;margin-bottom:12px">
+          <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gray2)" stroke-width="4"/><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round" stroke-dasharray="163.4" id="timer-opt1-ring" style="-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;-webkit-transition:stroke-dashoffset 1s linear;transition:stroke-dashoffset 1s linear;"/></svg>
+          <span id="timer-opt1-text" style="font-size:22px;font-weight:700;color:var(--gold)">1:30</span>
+        </div>
+        <textarea class="answer-input" placeholder="Start your investment pitch here..." style="min-height:100px"></textarea>
+      </div>
+    </div>
+
+    <div class="option-card" id="opt2">
+      <div class="option-header" onclick="toggleOption('opt2')">
+        <div class="option-num">2</div>
+        <div>
+          <div class="option-title">Error Analysis</div>
+          <div class="option-role">Role: Financial Analyst</div>
+        </div>
+        <div class="option-chevron">⌄</div>
+      </div>
+      <div class="option-body">
+        <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:14px;margin-bottom:12px;font-size:13px;line-height:1.7;color:var(--text)">
+          <strong style="color:var(--red)">❌ Flawed Report to Analyze:</strong><br>
+          "A company with high revenue always has strong performance. Financial analysis is not necessary. Transparency does not affect investor decisions. Financial reports are only formal documents."
+        </div>
+        <div class="notice">Identify 3–4 errors, correct the information, and explain why each is incorrect. Use 6–8 glossary terms.</div>
+        <div style="margin:12px 0;display:-webkit-flex;display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="startOptionTimer(90,'timer-opt2-text','timer-opt2-ring')">▶ 1.5 min Timer</button>
+          <button class="btn btn-outline btn-sm" onclick="resetOptionTimer('timer-opt2-text','timer-opt2-ring',90)">↺ Reset</button>
+        </div>
+        <div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:12px;margin-bottom:12px">
+          <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gray2)" stroke-width="4"/><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round" stroke-dasharray="163.4" id="timer-opt2-ring" style="-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;-webkit-transition:stroke-dashoffset 1s linear;transition:stroke-dashoffset 1s linear;"/></svg>
+          <span id="timer-opt2-text" style="font-size:22px;font-weight:700;color:var(--gold)">1:30</span>
+        </div>
+        <textarea class="answer-input" placeholder="Error 1: '...' This is incorrect because... The correct statement is..." style="min-height:120px"></textarea>
+      </div>
+    </div>
+
+    <div class="option-card" id="opt3">
+      <div class="option-header" onclick="toggleOption('opt3')">
+        <div class="option-num">3</div>
+        <div>
+          <div class="option-title">Keyword-Based Speaking</div>
+          <div class="option-role">No text — use keywords only</div>
+        </div>
+        <div class="option-chevron">⌄</div>
+      </div>
+      <div class="option-body">
+        <div class="notice">Use ALL keywords below, connect ideas logically. Include 2 cause–effect links. 1–1.5 minutes.</div>
+        <div style="display:-webkit-flex;display:flex;flex-wrap:wrap;gap:8px;margin:12px 0">
+          <span class="tag">revenue</span><span class="tag">profit</span><span class="tag">financial statement</span>
+          <span class="tag">analysis</span><span class="tag">transparency</span><span class="tag">risk</span>
+          <span class="tag">decision-making</span>
+        </div>
+        <div style="margin:12px 0;display:-webkit-flex;display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="startOptionTimer(90,'timer-opt3-text','timer-opt3-ring')">▶ 1.5 min Timer</button>
+          <button class="btn btn-outline btn-sm" onclick="resetOptionTimer('timer-opt3-text','timer-opt3-ring',90)">↺ Reset</button>
+        </div>
+        <div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:12px;margin-bottom:12px">
+          <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gray2)" stroke-width="4"/><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round" stroke-dasharray="163.4" id="timer-opt3-ring" style="-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;-webkit-transition:stroke-dashoffset 1s linear;transition:stroke-dashoffset 1s linear;"/></svg>
+          <span id="timer-opt3-text" style="font-size:22px;font-weight:700;color:var(--gold)">1:30</span>
+        </div>
+        <textarea class="answer-input" placeholder="Notes for speaking... (keywords, outline, key links)" style="min-height:80px"></textarea>
+      </div>
+    </div>
+
+    <div class="option-card" id="opt4">
+      <div class="option-header" onclick="toggleOption('opt4')">
+        <div class="option-num">4</div>
+        <div>
+          <div class="option-title">Micro-Debate</div>
+          <div class="option-role">Statement: "High revenue means good business performance"</div>
+        </div>
+        <div class="option-chevron">⌄</div>
+      </div>
+      <div class="option-body">
+        <div style="background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:10px;padding:14px;margin-bottom:12px">
+          <p style="color:var(--gold);font-weight:700;text-align:center;font-size:15px">"High revenue means good business performance."</p>
+        </div>
+        <div class="notice">Take a position. Give 2 arguments and 1 counterargument. Use 5–6 glossary terms. 1 minute max.</div>
+        <div style="margin:12px 0;display:-webkit-flex;display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="startOptionTimer(60,'timer-opt4-text','timer-opt4-ring')">▶ 1 min Timer</button>
+          <button class="btn btn-outline btn-sm" onclick="resetOptionTimer('timer-opt4-text','timer-opt4-ring',60)">↺ Reset</button>
+        </div>
+        <div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:12px;margin-bottom:12px">
+          <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gray2)" stroke-width="4"/><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round" stroke-dasharray="163.4" id="timer-opt4-ring" style="-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;-webkit-transition:stroke-dashoffset 1s linear;transition:stroke-dashoffset 1s linear;"/></svg>
+          <span id="timer-opt4-text" style="font-size:22px;font-weight:700;color:var(--gold)">1:00</span>
+        </div>
+        <textarea class="answer-input" placeholder="Position: I agree/disagree... Arg1: ... Arg2: ... Counter: ..." style="min-height:100px"></textarea>
+      </div>
+    </div>
+
+    <div class="option-card" id="opt5">
+      <div class="option-header" onclick="toggleOption('opt5')">
+        <div class="option-num">5</div>
+        <div>
+          <div class="option-title">Expert Voice Message</div>
+          <div class="option-role">"Why Financial Reporting Is Important"</div>
+        </div>
+        <div class="option-chevron">⌄</div>
+      </div>
+      <div class="option-body">
+        <div class="notice">Record or prepare a short expert explanation. Choose ONE focus: financial statements / analysis / risks / decision-making. 40–60 seconds. Use 4–5 glossary terms.</div>
+        <div style="display:-webkit-flex;display:flex;flex-wrap:wrap;gap:8px;margin:12px 0">
+          <button class="btn btn-outline btn-sm" id="focusFS" onclick="selectFocus('FS','Financial Statements')">📄 Financial Statements</button>
+          <button class="btn btn-outline btn-sm" id="focusAN" onclick="selectFocus('AN','Analysis')">🔍 Analysis</button>
+          <button class="btn btn-outline btn-sm" id="focusRI" onclick="selectFocus('RI','Risks')">⚠ Risks</button>
+          <button class="btn btn-outline btn-sm" id="focusDM" onclick="selectFocus('DM','Decision-Making')">🎯 Decision-Making</button>
+        </div>
+        <div style="margin:12px 0;display:-webkit-flex;display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="startOptionTimer(60,'timer-opt5-text','timer-opt5-ring')">▶ 60s Timer</button>
+          <button class="btn btn-outline btn-sm" onclick="resetOptionTimer('timer-opt5-text','timer-opt5-ring',60)">↺ Reset</button>
+        </div>
+        <div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:12px;margin-bottom:12px">
+          <svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gray2)" stroke-width="4"/><circle cx="30" cy="30" r="26" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round" stroke-dasharray="163.4" id="timer-opt5-ring" style="-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-webkit-transform-origin:50% 50%;transform-origin:50% 50%;-webkit-transition:stroke-dashoffset 1s linear;transition:stroke-dashoffset 1s linear;"/></svg>
+          <span id="timer-opt5-text" style="font-size:22px;font-weight:700;color:var(--gold)">1:00</span>
+        </div>
+        <textarea class="answer-input" id="voiceScript" placeholder="Script/notes for your expert message..." style="min-height:90px"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:20px">
+    <button class="btn btn-primary" onclick="markDone('part9')">✓ Mark Complete</button>
+  </div>
+</section>
+
+<!-- FINAL CHECK -->
+<section class="section" id="final">
+  <div class="section-header">
+    <div class="section-num">✓</div>
+    <div>
+      <div class="section-title">Final Reflection</div>
+      <div class="section-sub">Check your learning outcomes</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Self-Assessment Checklist</div>
+    <ul class="checklist">
+      <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">✔ I can explain what financial reporting is and why it matters</div></li>
+      <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">✔ I understand the three main financial statements</div></li>
+      <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">✔ I can distinguish between revenue and profit</div></li>
+      <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">✔ I can identify financial risks from incorrect reporting</div></li>
+      <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">✔ I understand why transparency is essential</div></li>
+      <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">✔ I can use cause-effect logic in financial contexts</div></li>
+      <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-text">✔ I can use at least 10 professional glossary terms correctly</div></li>
+    </ul>
+    <div id="checkScore" style="margin-top:14px;font-size:14px;color:var(--text2)">0 / 7 completed</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Reflection Prompts</div>
+    <div class="task-box">
+      <div class="task-label">Complete the sentence</div>
+      <div class="task-question">Financial reporting is important because...</div>
+      <textarea class="answer-input" placeholder="Write your reflection..." style="min-height:70px"></textarea>
+    </div>
+    <div class="task-box">
+      <div class="task-label">Growth Area</div>
+      <div class="task-question">I still need to improve...</div>
+      <textarea class="answer-input" placeholder="Be specific about what you want to practice more..." style="min-height:60px"></textarea>
+    </div>
+  </div>
+
+  <div class="celebration" id="celebration">
+    <h3>🎉 Excellent Work!</h3>
+    <p>You've completed the Finance & Financial Reporting dashboard. Your professional vocabulary is growing!</p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+// =============================================
+// DATA
+// =============================================
+const glossaryData = [
+  { term: 'revenue', def: 'Total income from sales before expenses are deducted.' },
+  { term: 'profit', def: 'Revenue minus expenses; what remains after costs.' },
+  { term: 'income statement', def: 'Financial statement showing revenues, expenses, and profit (P&L).' },
+  { term: 'balance sheet', def: 'Snapshot of assets, liabilities, and equity at one date.' },
+  { term: 'cash flow statement', def: 'Shows how cash moves in/out of a business.' },
+  { term: 'asset', def: 'Resource owned by a company with economic value.' },
+  { term: 'liability', def: 'Financial obligation or debt owed by a company.' },
+  { term: 'equity', def: "Owners' stake = assets minus liabilities." },
+  { term: 'liquidity', def: 'Ability to meet short-term obligations; cash availability.' },
+  { term: 'transparency', def: 'Openness and honesty in disclosing financial information.' },
+  { term: 'financial analysis', def: 'Evaluating financial data to assess performance & risks.' },
+  { term: 'to evaluate', def: 'To assess the value, quality, or performance of something.' },
+  { term: 'reliable', def: 'Consistently accurate and trustworthy.' },
+  { term: 'informed decision', def: 'Choice made based on sufficient, accurate information.' },
+  { term: 'profitable', def: 'Generating more revenue than expenses; financially successful.' },
+  { term: 'strong performance', def: 'Achieving significantly positive financial/operational results.' },
+  { term: 'inefficiency', def: 'Failure to use resources effectively; wasteful processes.' },
+  { term: 'to mislead', def: 'To give a false impression; cause incorrect understanding.' },
+  { term: 'poor decision', def: 'Choice that leads to negative outcomes due to bad information.' },
+  { term: 'financial risk', def: 'Possibility of financial loss or negative outcome.' },
+  { term: 'stable', def: 'Consistent and not prone to large fluctuations.' },
+  { term: 'incomplete', def: 'Missing necessary parts or information.' },
+  { term: 'to rely on', def: 'To depend on as a source of support or information.' },
+  { term: 'decision-making', def: 'Process of making choices based on analysis and data.' },
+  { term: 'accounting standard', def: 'Official rules governing financial record-keeping (IFRS, GAAP).' },
+  { term: 'financial position', def: 'Snapshot of what a company owns and owes at a given time.' },
+  { term: 'to operate', def: 'To run or manage a business or process.' },
+  { term: 'reliable data', def: 'Accurate, consistent information that can be trusted.' },
+];
+
+const catAnswers = {
+  A: ['income statement','balance sheet','cash flow statement','financial statement'],
+  B: ['asset','liability','equity','revenue','profit','liquidity'],
+  C: ['financial analysis','to evaluate','transparency','reliable','inefficiency','strong performance','financial risk']
+};
+
+const matchAnswers = { P1:'E', P2:'D', P3:'C', P4:'A', P5:'B' };
+
+// =============================================
+// STATE
+// =============================================
+let doneSections = JSON.parse(localStorage.getItem('finance_done') || '[]');
+let matchSelected = { p: null, t: null };
+let matchPairs = {};
+let debateTimer = null, debateTime = 60, debateRunning = false;
+let optionTimers = {};
+let dragItem = null, buildDragEl = null;
+let checksDone = 0;
+
+// =============================================
+// INIT
+// =============================================
+document.addEventListener('DOMContentLoaded', function() {
+  buildGlossary();
+  buildCatPool();
+  restoreDone();
+  updateProgress();
+
+  // mobile menu
+  var mt = document.getElementById('menuToggle');
+  if (window.innerWidth <= 768) mt.style.display = 'flex';
+  mt.addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  // dark mode
+  var dm = localStorage.getItem('finance_dark');
+  if (dm === '1') document.body.classList.add('dark-mode');
+
+  document.getElementById('darkToggle').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('finance_dark', document.body.classList.contains('dark-mode') ? '1' : '0');
+  });
+
+  document.getElementById('printBtn').addEventListener('click', function() { window.print(); });
+});
+
+// =============================================
+// NAVIGATION
+// =============================================
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+  saveProgress();
+}
+
+// =============================================
+// PROGRESS
+// =============================================
+function markDone(id) {
+  if (doneSections.indexOf(id) === -1) doneSections.push(id);
+  localStorage.setItem('finance_done', JSON.stringify(doneSections));
+  updateProgress();
+  var navBtn = document.querySelector('[data-sec=' + id + ']');
+  if (navBtn) navBtn.classList.add('done');
+}
+
+function restoreDone() {
+  doneSections.forEach(function(id) {
+    var nb = document.querySelector('[data-sec=' + id + ']');
+    if (nb) nb.classList.add('done');
+  });
+}
+
+function updateProgress() {
+  var total = 9;
+  var done = doneSections.filter(function(d) { return d.indexOf('part') === 0; }).length;
+  document.getElementById('progressFill').style.width = (done / total * 100) + '%';
+  document.getElementById('doneCount').textContent = done;
+}
+
+function saveProgress() {}
+
+// =============================================
+// HINTS
+// =============================================
+function toggleHint(id, btn) {
+  var el = document.getElementById(id);
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    btn.textContent = 'Hide Hint';
+  } else {
+    el.style.display = 'none';
+    btn.textContent = 'Show Hint';
+  }
+}
+
+// =============================================
+// MATCHING (PART 3)
+// =============================================
+function selectMatch(type, id) {
+  if (type === 'p') {
+    document.querySelectorAll('[id^=match-p-]').forEach(function(el) { el.classList.remove('selected'); });
+    document.getElementById('match-p-' + id).classList.add('selected');
+    matchSelected.p = id;
+  } else {
+    document.querySelectorAll('[id^=match-t-]').forEach(function(el) { el.classList.remove('selected'); });
+    document.getElementById('match-t-' + id).classList.add('selected');
+    matchSelected.t = id;
+  }
+  if (matchSelected.p && matchSelected.t) {
+    matchPairs[matchSelected.p] = matchSelected.t;
+    var pEl = document.getElementById('match-p-' + matchSelected.p);
+    var tEl = document.getElementById('match-t-' + matchSelected.t);
+    pEl.classList.remove('selected'); pEl.style.opacity = '0.7';
+    tEl.classList.remove('selected');
+    tEl.innerHTML = '<span class="match-label">' + matchSelected.t + ')</span> ' + tEl.textContent.replace(/^[A-E]\) /, '') + ' ← P' + matchSelected.p.replace('P','');
+    tEl.classList.add('filled');
+    matchSelected = { p: null, t: null };
+  }
+}
+
+function checkMatching() {
+  var correct = 0, total = Object.keys(matchAnswers).length;
+  Object.keys(matchPairs).forEach(function(p) {
+    var isCorrect = matchPairs[p] === matchAnswers[p];
+    document.getElementById('match-p-' + p).classList.add(isCorrect ? 'correct' : 'incorrect');
+    document.getElementById('match-t-' + matchPairs[p]).classList.add(isCorrect ? 'correct' : 'incorrect');
+    if (isCorrect) correct++;
+  });
+  var fb = document.getElementById('matchFeedback');
+  fb.style.display = 'block';
+  if (correct === total) {
+    fb.textContent = '✅ Perfect! All ' + total + ' matches correct!';
+    fb.style.color = 'var(--green)';
+    markDone('part3');
+  } else {
+    fb.textContent = correct + ' / ' + total + ' correct. Review the incorrect ones.';
+    fb.style.color = 'var(--red)';
+  }
+}
+
+function resetMatching() {
+  matchPairs = {}; matchSelected = { p: null, t: null };
+  document.querySelectorAll('[id^=match-p-],[id^=match-t-]').forEach(function(el) {
+    el.classList.remove('selected','correct','incorrect','filled');
+    el.style.opacity = '';
+  });
+  document.getElementById('match-t-A').innerHTML = '<span class="match-label">A)</span> Accuracy and transparency';
+  document.getElementById('match-t-B').innerHTML = '<span class="match-label">B)</span> Decision-making';
+  document.getElementById('match-t-C').innerHTML = '<span class="match-label">C)</span> Importance of analysis';
+  document.getElementById('match-t-D').innerHTML = '<span class="match-label">D)</span> Types of financial statements';
+  document.getElementById('match-t-E').innerHTML = '<span class="match-label">E)</span> Role of financial reporting';
+  document.getElementById('matchFeedback').style.display = 'none';
+}
+
+// =============================================
+// GLOSSARY (PART 4)
+// =============================================
+function buildGlossary() {
+  var grid = document.getElementById('glossGrid');
+  grid.innerHTML = '';
+  glossaryData.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'gloss-card';
+    card.dataset.term = item.term.toLowerCase();
+    card.innerHTML = '<div class="gloss-inner"><div class="gloss-front">' + item.term + '</div><div class="gloss-back">' + item.def + '</div></div>';
+    card.addEventListener('click', function() { card.classList.toggle('flipped'); });
+    grid.appendChild(card);
+  });
+}
+
+function filterGloss() {
+  var q = document.getElementById('glossSearch').value.toLowerCase();
+  document.querySelectorAll('.gloss-card').forEach(function(c) {
+    c.style.display = c.dataset.term.includes(q) ? '' : 'none';
+  });
+}
+
+// =============================================
+// CATEGORIZATION
+// =============================================
+function buildCatPool() {
+  var pool = document.getElementById('catPool');
+  var terms = ['income statement','balance sheet','cash flow statement','asset','liability','equity','revenue','profit','liquidity','financial analysis','transparency','inefficiency','financial risk','strong performance','reliable'];
+  terms.forEach(function(t) {
+    var chip = document.createElement('div');
+    chip.className = 'cat-chip';
+    chip.textContent = t;
+    chip.draggable = true;
+    chip.dataset.term = t;
+    chip.addEventListener('dragstart', function(e) {
+      dragItem = chip;
+      e.dataTransfer.setData('text/plain', t);
+    });
+    chip.addEventListener('click', function() {
+      // cycle through zones on click
+      var zones = ['A','B','C'];
+      var cur = chip.dataset.zone;
+      var next = cur ? zones[(zones.indexOf(cur) + 1) % 3] : 'A';
+      var oldZone = cur ? document.getElementById('zone-' + cur) : pool;
+      oldZone.removeChild(chip);
+      chip.dataset.zone = next;
+      document.getElementById('zone-' + next).appendChild(chip);
+    });
+    pool.appendChild(chip);
+  });
+}
+
+function catDragOver(e, zone) {
+  e.preventDefault();
+  document.getElementById('zone-' + zone).classList.add('drag-over');
+}
+function catDragLeave(zone) {
+  document.getElementById('zone-' + zone).classList.remove('drag-over');
+}
+function catDrop(e, zone) {
+  e.preventDefault();
+  document.getElementById('zone-' + zone).classList.remove('drag-over');
+  var t = e.dataTransfer.getData('text/plain');
+  if (dragItem) {
+    dragItem.dataset.zone = zone;
+    document.getElementById('zone-' + zone).appendChild(dragItem);
+    dragItem = null;
+  }
+}
+
+function checkCat() {
+  var correct = 0, total = 0;
+  ['A','B','C'].forEach(function(z) {
+    var zone = document.getElementById('zone-' + z);
+    var chips = zone.querySelectorAll('.cat-chip');
+    chips.forEach(function(chip) {
+      total++;
+      var term = chip.dataset.term;
+      var isCorrect = catAnswers[z] && catAnswers[z].indexOf(term) !== -1;
+      chip.style.background = isCorrect ? 'var(--green)' : 'var(--red)';
+      if (isCorrect) correct++;
+    });
+  });
+  var fb = document.getElementById('catFeedback');
+  fb.style.display = 'block';
+  fb.textContent = correct + ' / ' + total + ' correctly categorized. ' + (correct === total ? '🎉 Perfect!' : 'Review incorrect terms.');
+  fb.style.color = correct === total ? 'var(--green)' : 'var(--red)';
+}
+
+// =============================================
+// FILL-IN-BLANK (PART 4)
+// =============================================
+function checkFillEnter(e, id) {
+  if (e.key === 'Enter') checkFill(id);
+}
+function checkFill(id) {
+  var input = document.getElementById(id);
+  var val = input.value.trim().toLowerCase();
+  var ans = input.dataset.answer.toLowerCase();
+  if (val === ans || ans.includes(val) && val.length > 4) {
+    input.classList.remove('incorrect'); input.classList.add('correct');
+  } else {
+    input.classList.remove('correct'); input.classList.add('incorrect');
+  }
+}
+function checkAllFills() {
+  ['fill1','fill2','fill3','fill4'].forEach(checkFill);
+  var correct = document.querySelectorAll('.fill-input.correct').length;
+  var fb = document.getElementById('fillFeedback');
+  fb.style.display = 'block';
+  fb.textContent = correct + ' / 4 correct. ' + (correct === 4 ? '🎉 All correct!' : 'Try again!');
+  fb.style.color = correct === 4 ? 'var(--green)' : 'var(--red)';
+  if (correct === 4) markDone('part4');
+}
+function revealFills() {
+  ['fill1','fill2','fill3','fill4'].forEach(function(id) {
+    var inp = document.getElementById(id);
+    inp.value = inp.dataset.answer;
+    inp.classList.add('correct');
+  });
+}
+
+// =============================================
+// CAUSE-EFFECT (PART 5)
+// =============================================
+function revealChain(el, text) {
+  el.textContent = text;
+  el.classList.add('revealed');
+}
+
+// =============================================
+// ANALYSIS TEXT (PART 6)
+// =============================================
+var glossaryTermsList = glossaryData.map(function(g) { return g.term.toLowerCase(); });
+
+function analyzeText() {
+  var text = document.getElementById('analysisText').value;
+  var words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  document.getElementById('wordCount').textContent = 'Words: ' + words + ' / 80 target';
+
+  var lower = text.toLowerCase();
+  var found = glossaryTermsList.filter(function(t) { return lower.includes(t); });
+
+  var vocabUsed = document.getElementById('vocabUsedList');
+  var vf = document.getElementById('vocabFloat');
+  if (found.length > 0) {
+    vf.classList.add('visible');
+    vocabUsed.innerHTML = found.slice(0,10).map(function(t) { return '<li>' + t + '</li>'; }).join('');
+  } else {
+    vf.classList.remove('visible');
+  }
+
+  var det = document.getElementById('termsDetected');
+  if (found.length >= 5) {
+    det.style.display = 'block';
+    det.textContent = '✅ ' + found.length + ' glossary terms detected: ' + found.join(', ');
+  } else if (found.length > 0) {
+    det.style.display = 'block';
+    det.textContent = '📌 ' + found.length + ' term(s) found so far. Need 5+: ' + found.join(', ');
+    det.style.color = 'var(--gold)';
+  } else {
+    det.style.display = 'none';
+  }
+}
+
+// =============================================
+// DEBATE TIMER (PART 7)
+// =============================================
+function startDebateTimer() {
+  if (debateRunning) return;
+  debateRunning = true;
+  document.getElementById('timerStartBtn').textContent = '⏱ Running...';
+  document.getElementById('timerStartBtn').disabled = true;
+  var circumference = 2 * Math.PI * 54; // 339.3
+  debateTimer = setInterval(function() {
+    debateTime--;
+    document.getElementById('timerText').textContent = debateTime;
+    var offset = circumference * (1 - debateTime / 60);
+    document.getElementById('timerRing').style.strokeDashoffset = offset;
+    if (debateTime <= 0) {
+      clearInterval(debateTimer);
+      document.getElementById('timerText').textContent = '✓';
+      document.getElementById('timerStartBtn').textContent = '▶ Start Timer';
+      document.getElementById('timerStartBtn').disabled = false;
+      debateRunning = false;
+      debateTime = 60;
+    }
+  }, 1000);
+}
+function resetDebateTimer() {
+  clearInterval(debateTimer); debateRunning = false; debateTime = 60;
+  document.getElementById('timerText').textContent = '60';
+  document.getElementById('timerRing').style.strokeDashoffset = 0;
+  document.getElementById('timerStartBtn').textContent = '▶ Start Timer';
+  document.getElementById('timerStartBtn').disabled = false;
+}
+
+// =============================================
+// OPTION TIMERS (PART 9)
+// =============================================
+function startOptionTimer(total, textId, ringId) {
+  var key = ringId;
+  if (optionTimers[key]) { clearInterval(optionTimers[key]); }
+  var remaining = total;
+  var circumference = 163.4;
+  var ring = document.getElementById(ringId);
+  var textEl = document.getElementById(textId);
+
+  optionTimers[key] = setInterval(function() {
+    remaining--;
+    var mins = Math.floor(remaining / 60);
+    var secs = remaining % 60;
+    textEl.textContent = mins > 0 ? mins + ':' + (secs < 10 ? '0' : '') + secs : remaining + 's';
+    ring.style.strokeDashoffset = circumference * (1 - remaining / total);
+    if (remaining <= 0) {
+      clearInterval(optionTimers[key]);
+      textEl.textContent = '✓';
+    }
+  }, 1000);
+}
+function resetOptionTimer(textId, ringId, total) {
+  var key = ringId;
+  if (optionTimers[key]) clearInterval(optionTimers[key]);
+  var mins = Math.floor(total / 60), secs = total % 60;
+  document.getElementById(textId).textContent = mins > 0 ? mins + ':' + (secs < 10 ? '0' : '') + secs : total + 's';
+  document.getElementById(ringId).style.strokeDashoffset = 0;
+}
+
+// =============================================
+// OPTION CARDS TOGGLE
+// =============================================
+function toggleOption(id) {
+  var card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+// =============================================
+// FOCUS SELECTION (OPT5)
+// =============================================
+function selectFocus(id, label) {
+  ['FS','AN','RI','DM'].forEach(function(f) {
+    var btn = document.getElementById('focus' + f);
+    btn.classList.remove('btn-primary'); btn.classList.add('btn-outline');
+  });
+  document.getElementById('focus' + id).classList.remove('btn-outline');
+  document.getElementById('focus' + id).classList.add('btn-primary');
+  document.getElementById('voiceScript').placeholder = 'Script for focus: ' + label + '. Explain clearly with one example and a cause-effect link...';
+}
+
+// =============================================
+// SYNTHESIS BUILDER (PART 8)
+// =============================================
+function buildDragStart(e) {
+  buildDragEl = e.target;
+  e.dataTransfer.setData('text/plain', e.target.dataset.id);
+}
+function buildDragOver(e) {
+  e.preventDefault();
+  document.getElementById('buildTarget').classList.add('drag-over');
+}
+function buildDragLeave(e) {
+  document.getElementById('buildTarget').classList.remove('drag-over');
+}
+function buildDrop(e) {
+  e.preventDefault();
+  document.getElementById('buildTarget').classList.remove('drag-over');
+  var target = document.getElementById('buildTarget');
+  // Remove placeholder
+  var placeholder = target.querySelector('span[style]');
+  if (placeholder) target.removeChild(placeholder);
+  if (buildDragEl) {
+    var clone = buildDragEl.cloneNode(true);
+    clone.classList.add('in-target');
+    clone.draggable = false;
+    clone.addEventListener('click', function() { target.removeChild(clone); });
+    target.appendChild(clone);
+    buildDragEl = null;
+  }
+}
+function clearBuildTarget() {
+  var t = document.getElementById('buildTarget');
+  t.innerHTML = '<span style="color:var(--text2);font-size:13px;font-style:italic;width:100%">Drag sentences here to build your paragraph...</span>';
+}
+
+// =============================================
+// FINAL CHECKLIST
+// =============================================
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+  if (item.classList.contains('checked')) item.querySelector('.check-box').textContent = '✓';
+  else item.querySelector('.check-box').textContent = '';
+  checksDone = document.querySelectorAll('.check-item.checked').length;
+  document.getElementById('checkScore').textContent = checksDone + ' / 7 completed';
+  if (checksDone === 7) {
+    document.getElementById('celebration').classList.add('show');
+    markDone('final');
+    launchConfetti();
+  }
+}
+
+// =============================================
+// CONFETTI
+// =============================================
+function launchConfetti() {
+  var colors = ['#C9A84C','#E8C96A','#22C55E','#3B82F6','#F59E0B','#EF4444'];
+  for (var i = 0; i < 60; i++) {
+    (function(i) {
+      setTimeout(function() {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        var x = Math.random() * window.innerWidth;
+        var dx = (Math.random() - 0.5) * 200;
+        piece.style.cssText = 'left:' + x + 'px;top:' + (window.scrollY + 80) + 'px;background:' + colors[Math.floor(Math.random() * colors.length)] + ';--dx:' + dx + 'px;animation-duration:' + (2 + Math.random()) + 's';
+        document.body.appendChild(piece);
+        setTimeout(function() { if (piece.parentNode) piece.parentNode.removeChild(piece); }, 3500);
+      }, i * 40);
+    })(i);
+  }
+}
+</script>
+</body>
+</html>
