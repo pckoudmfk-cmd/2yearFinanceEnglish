@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing & Strategy in Financial Organizations</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0A1628;--navy2:#0d1e38;--navy3:#112244;
+    --gold:#C9A84C;--gold2:#e8c96a;--gold3:#f5e6b0;
+    --text:#e8eaf0;--text2:#b0b8cc;--text3:#7a8299;
+    --green:#2ecc71;--red:#e74c3c;--blue:#3498db;
+    --card:#13233d;--card2:#1a2e50;--border:#1e3560;
+    --radius:12px;--shadow:0 4px 20px rgba(0,0,0,0.4);
+  }
+  body.light-mode{--navy:#f0f4ff;--navy2:#e8eeff;--navy3:#dde6ff;--text:#1a2244;--text2:#3a4466;--text3:#6a7499;--card:#ffffff;--card2:#f5f8ff;--border:#c8d4f0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+  .header{background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 100%);border-bottom:2px solid var(--gold);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .header-left h1{font-size:1.25rem;font-weight:700;color:var(--gold)}
+  .header-left p{font-size:.8rem;color:var(--text2);margin-top:2px}
+  .header-right{display:flex;align-items:center;gap:10px}
+  .score-chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.85rem;font-weight:600;color:var(--gold)}
+  .theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text2);cursor:pointer;font-size:.8rem;transition:.2s}
+  .theme-btn:hover{border-color:var(--gold);color:var(--gold)}
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--navy2);overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab{padding:12px 18px;font-size:.8rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;letter-spacing:.3px;text-transform:uppercase}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+  .main{max-width:900px;margin:0 auto;padding:24px 16px}
+  .section{display:none}
+  .section.active{display:block}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .card h2{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .card h3{font-size:.9rem;font-weight:600;color:var(--text2);margin:12px 0 8px}
+  .lesson-text p{font-size:.9rem;line-height:1.75;color:var(--text2);margin-bottom:12px}
+  .highlight{color:var(--gold2);font-weight:600}
+  .case-box{background:var(--navy3);border-left:3px solid var(--gold);border-radius:8px;padding:16px;margin-bottom:16px}
+  .case-box .role{font-size:.75rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .case-box p{font-size:.875rem;color:var(--text2);line-height:1.6}
+  .question-block{margin-bottom:20px}
+  .question-block .q-label{font-size:.8rem;font-weight:700;color:var(--gold2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+  .question-block .q-text{font-size:.9rem;color:var(--text);margin-bottom:10px;line-height:1.5}
+  textarea{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.875rem;line-height:1.5;resize:vertical;min-height:80px;font-family:inherit;transition:.2s}
+  textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+  .check-btn{background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:8px 18px;font-size:.8rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
+  .check-btn:hover{background:var(--gold2)}
+  .feedback{margin-top:8px;padding:10px 14px;border-radius:8px;font-size:.82rem;line-height:1.5;display:none}
+  .feedback.show{display:block}
+  .feedback.good{background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);color:#7effc8}
+  .feedback.ok{background:rgba(243,156,18,.12);border:1px solid rgba(243,156,18,.3);color:#f5c842}
+  .feedback.poor{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);color:#ff9090}
+  .search-bar{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:.875rem;margin-bottom:16px;font-family:inherit}
+  .search-bar:focus{outline:none;border-color:var(--gold)}
+  .category-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .cat-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s}
+  .cat-btn:hover,.cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
+  .glossary-grid{display:grid;gap:10px}
+  .flip-card{height:110px;perspective:1000px;cursor:pointer}
+  .flip-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s;-webkit-transform-style:preserve-3d;-webkit-transition:-webkit-transform .5s}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+  .flip-front,.flip-back{position:absolute;width:100%;height:100%;border-radius:var(--radius);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;border:1px solid var(--border)}
+  .flip-front{background:var(--card2)}
+  .flip-back{background:var(--navy3);transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+  .flip-front .term{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:4px}
+  .flip-front .cat-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  .cat-M .cat-tag{color:#3498db}
+  .cat-S .cat-tag{color:#2ecc71}
+  .cat-P .cat-tag{color:#e74c3c}
+  .flip-back .ru{font-size:.85rem;color:var(--text2);line-height:1.5}
+  .speak-btn{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:.9rem;padding:4px;transition:.2s}
+  .speak-btn:hover{color:var(--gold)}
+  .card-count{font-size:.75rem;color:var(--text3);margin-top:4px}
+  .match-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px}
+  .match-item{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .match-term{font-size:.875rem;font-weight:600;color:var(--text)}
+  .match-select{background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text);font-size:.8rem;cursor:pointer;font-family:inherit}
+  .match-select:focus{outline:none;border-color:var(--gold)}
+  .match-result{display:inline-block;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:.7rem;font-weight:700}
+  .fib-sentence{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px;font-size:.875rem;line-height:1.7;color:var(--text2)}
+  .fib-sentence b{color:var(--gold)}
+  .blank-input{background:transparent;border:none;border-bottom:2px solid var(--gold);padding:2px 8px;color:var(--text);font-size:.875rem;font-family:inherit;min-width:160px;text-align:center;outline:none;transition:.2s}
+  .blank-input:focus{border-bottom-color:var(--gold2)}
+  .blank-input.correct{border-bottom-color:var(--green);color:var(--green)}
+  .blank-input.wrong{border-bottom-color:var(--red);color:var(--red)}
+  .criteria-list{display:grid;gap:6px;margin:10px 0}
+  .criterion{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--text2)}
+  .criterion .cnum{font-size:.9rem;width:22px;height:22px;border-radius:50%;background:var(--navy3);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);flex-shrink:0}
+  .writing-score-row{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .writing-score-label{font-size:.8rem;color:var(--text3)}
+  .writing-score-val{font-size:1.1rem;font-weight:700;color:var(--gold)}
+  .timer-wrap{display:flex;flex-direction:column;align-items:center;margin:16px 0}
+  .timer-svg{transform:rotate(-90deg)}
+  .timer-bg{fill:none;stroke:var(--border);stroke-width:8}
+  .timer-ring{fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .5s linear,stroke .3s;stroke-dasharray:283;stroke-dashoffset:0}
+  .timer-text{font-size:1.5rem;font-weight:700;color:var(--text);text-anchor:middle;dominant-baseline:central}
+  .timer-label{font-size:.75rem;color:var(--text3);margin-top:4px;text-anchor:middle}
+  .timer-controls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+  .timer-btn{padding:9px 20px;border-radius:8px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s}
+  .timer-btn.start{background:var(--gold);color:var(--navy)}
+  .timer-btn.start:hover{background:var(--gold2)}
+  .timer-btn.stop{background:var(--card2);border:1px solid var(--border);color:var(--text)}
+  .timer-btn.stop:hover{border-color:var(--red);color:var(--red)}
+  .chips-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .chip{background:var(--navy3);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:.8rem;color:var(--text2);cursor:pointer;transition:.2s}
+  .chip:hover,.chip.used{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold)}
+  .speaking-plan{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:12px 0}
+  .speaking-plan h4{font-size:.8rem;font-weight:700;color:var(--gold);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
+  .speaking-plan ol{padding-left:18px}
+  .speaking-plan li{font-size:.82rem;color:var(--text2);margin-bottom:5px;line-height:1.4}
+  .reflect-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+  .reflect-item .r-label{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.4}
+  .star-row{display:flex;gap:8px}
+  .star{font-size:1.4rem;cursor:pointer;filter:grayscale(1);transition:.2s}
+  .star:hover,.star.lit{filter:grayscale(0)}
+  .r-note{width:100%;margin-top:8px;background:var(--navy2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:.8rem;font-family:inherit;resize:none;min-height:50px}
+  .r-note:focus{outline:none;border-color:var(--gold)}
+  .progress-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+  .progress-section h2{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:16px}
+  .progress-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .progress-row label{font-size:.8rem;color:var(--text2);width:130px;flex-shrink:0}
+  .progress-bar{flex:1;height:8px;background:var(--navy2);border-radius:4px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px;transition:width .5s}
+  .progress-row span{font-size:.8rem;color:var(--gold);width:40px;text-align:right}
+  .total-score{text-align:center;padding:16px;background:var(--navy2);border-radius:10px;margin-top:8px}
+  .total-score .big{font-size:2rem;font-weight:800;color:var(--gold)}
+  .total-score .sub{font-size:.8rem;color:var(--text3);margin-top:2px}
+  .badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:800}
+  .badge-M{background:rgba(52,152,219,.2);color:#3498db}
+  .badge-S{background:rgba(46,204,113,.2);color:#2ecc71}
+  .badge-P{background:rgba(231,76,60,.2);color:#e74c3c}
+  .mt-8{margin-top:8px}.mt-12{margin-top:12px}
+  @media(max-width:600px){.header{padding:14px 16px}.tab{padding:10px 12px;font-size:.75rem}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <h1>Marketing &amp; Strategy in Financial Organizations</h1>
+    <p>Client Growth Analysis · Financial Marketing Specialist</p>
+  </div>
+  <div class="header-right">
+    <div class="score-chip">Score: <span id="total-score-chip">0</span> / 93</div>
+    <button class="theme-btn" onclick="toggleTheme()">☀ Light</button>
+  </div>
+</header>
+<nav class="tabs">
+  <div class="tab active" onclick="showTab('situation')">Situation</div>
+  <div class="tab" onclick="showTab('reading')">Reading</div>
+  <div class="tab" onclick="showTab('discussion')">Discussion</div>
+  <div class="tab" onclick="showTab('comprehension')">Comprehension</div>
+  <div class="tab" onclick="showTab('glossary')">Glossary</div>
+  <div class="tab" onclick="showTab('categories')">Categories</div>
+  <div class="tab" onclick="showTab('fib')">Fill in Blanks</div>
+  <div class="tab" onclick="showTab('writing')">Writing</div>
+  <div class="tab" onclick="showTab('speaking')">Speaking</div>
+  <div class="tab" onclick="showTab('reflect')">Reflection</div>
+  <div class="tab" onclick="showTab('progress')">Progress</div>
+</nav>
+<main class="main">
+
+<!-- SITUATION -->
+<div id="tab-situation" class="section active">
+  <div class="card">
+    <h2>📋 Professional Situation — Case: Low Client Growth</h2>
+    <div class="case-box">
+      <div class="role">Your Role: Marketing & Strategy Analyst — Financial Company</div>
+      <p>A financial company offers reliable products, but the number of clients is not increasing. Management believes the problem is not in the product itself, but in how it is presented to the market. You are asked to analyze the situation, identify the marketing and strategic weaknesses, and propose solutions to improve client growth.</p>
+    </div>
+    <h3>Your Objectives</h3>
+    <ul style="padding-left:18px;font-size:.875rem;color:var(--text2);line-height:1.8">
+      <li>Explain why good products can still fail in the market</li>
+      <li>Identify the role of marketing in financial services</li>
+      <li>Use market segmentation and positioning to propose solutions</li>
+      <li>Justify strategic decisions that support sustainable growth</li>
+      <li>Communicate professionally using marketing and strategy vocabulary</li>
+    </ul>
+  </div>
+</div>
+
+<!-- READING -->
+<div id="tab-reading" class="section">
+  <div class="card">
+    <h2>📖 Role of Marketing in Finance</h2>
+    <div class="lesson-text">
+      <p>Marketing in the financial sector is not only about promotion but also about understanding <span class="highlight">client needs</span> and market conditions. Financial organizations must analyze <span class="highlight">customer behavior</span>, identify target segments, and design products that meet specific demands. Effective marketing helps companies position their services and build long-term relationships with clients.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>📊 Market Segmentation</h2>
+    <div class="lesson-text">
+      <p>A key element of marketing is <span class="highlight">market segmentation</span>. Companies divide clients into groups based on income level, financial goals, and risk tolerance. This allows financial institutions to offer personalized products, such as loans, investment plans, or insurance services. Without segmentation, marketing becomes inefficient and resources are wasted.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🎯 Strategy and Competitive Advantage</h2>
+    <div class="lesson-text">
+      <p><span class="highlight">Strategy</span> defines long-term direction and decision-making. In finance, strategy includes market positioning, product development, and <span class="highlight">competitive advantage</span>. A company must decide how to differentiate its services from competitors — through better <span class="highlight">pricing</span>, improved <span class="highlight">service quality</span>, or innovative financial solutions.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🔗 Marketing + Strategy Connection</h2>
+    <div class="lesson-text">
+      <p>Marketing and strategy are closely connected. Marketing provides data about clients and <span class="highlight">market trends</span>, while strategy uses this information to make decisions. For example, if <span class="highlight">demand</span> for digital banking increases, a company may invest in online services based on both marketing analysis and strategic planning.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>⚠️ Risks of Weak Marketing</h2>
+    <div class="lesson-text">
+      <p>Incorrect strategy or weak marketing can create serious risks. Poor understanding of <span class="highlight">customer needs</span> may lead to low demand. Ineffective communication may reduce trust. Therefore, financial organizations must continuously evaluate their marketing activities and adjust strategies to achieve <span class="highlight">sustainable growth</span>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DISCUSSION -->
+<div id="tab-discussion" class="section">
+  <div class="card">
+    <h2>💬 Discussion Questions</h2>
+    <div id="dq-container"></div>
+    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total DQ score: </span><span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span></div>
+  </div>
+</div>
+
+<!-- COMPREHENSION -->
+<div id="tab-comprehension" class="section">
+  <div class="card">
+    <h2>🎯 Comprehension Questions</h2>
+    <div id="cq-container"></div>
+    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total CQ score: </span><span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span></div>
+  </div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="tab-glossary" class="section">
+  <div class="card">
+    <h2>📚 Glossary (15 terms) — Click to flip</h2>
+    <input class="search-bar" type="text" placeholder="Search terms..." oninput="filterGlossary(this.value)" id="gloss-search">
+    <div class="category-filters">
+      <button class="cat-btn active" onclick="filterCat('all',this)">All</button>
+      <button class="cat-btn" onclick="filterCat('M',this)"><span class="badge badge-M">M</span> Marketing &amp; Analysis</button>
+      <button class="cat-btn" onclick="filterCat('S',this)"><span class="badge badge-S">S</span> Strategy &amp; Positioning</button>
+      <button class="cat-btn" onclick="filterCat('P',this)"><span class="badge badge-P">P</span> Products &amp; Services</button>
+    </div>
+    <div class="glossary-grid" id="glossary-grid"></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div id="tab-categories" class="section">
+  <div class="card">
+    <h2>🗂 Category Match</h2>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px">Assign each term: <b style="color:#3498db">M</b>=Marketing &amp; Analysis · <b style="color:#2ecc71">S</b>=Strategy &amp; Positioning · <b style="color:#e74c3c">P</b>=Products &amp; Services</p>
+    <div class="match-grid" id="match-grid"></div>
+    <button class="check-btn" onclick="checkCategories()">Check Answers</button>
+    <div class="feedback" id="cat-feedback"></div>
+    <div class="mt-8" style="font-size:.8rem;color:var(--text3)">Score: <span id="cat-score" style="color:var(--gold);font-weight:700">0</span> / 15</div>
+  </div>
+</div>
+
+<!-- FIB -->
+<div id="tab-fib" class="section">
+  <div class="card">
+    <h2>✏️ Fill in the Blanks</h2>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:16px">Complete each sentence with the correct term from the glossary.</p>
+    <div id="fib-container"></div>
+    <button class="check-btn" onclick="checkFIB()">Check All Blanks</button>
+    <div class="feedback" id="fib-feedback"></div>
+    <div class="mt-8" style="font-size:.8rem;color:var(--text3)">Score: <span id="fib-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+  </div>
+</div>
+
+<!-- WRITING -->
+<div id="tab-writing" class="section">
+  <div class="card">
+    <h2>✍️ Writing Task 1 — Analytical Report</h2>
+    <div class="case-box">
+      <div class="role">Situation</div>
+      <p>A bank has good financial products, low client demand, and a weak marketing strategy. Write an analytical paragraph (5–6 sentences) identifying the main problem, what the company should improve, and what strategic decision should be made. Use at least 5 glossary terms.</p>
+    </div>
+    <div class="criteria-list">
+      <div class="criterion"><div class="cnum">1</div>Identifies the main problem clearly</div>
+      <div class="criterion"><div class="cnum">2</div>Proposes specific improvements (marketing / segmentation)</div>
+      <div class="criterion"><div class="cnum">3</div>States a strategic decision</div>
+      <div class="criterion"><div class="cnum">4</div>Uses at least 5 glossary terms</div>
+    </div>
+    <textarea id="writing1-input" placeholder="Write your analysis here..." rows="6" oninput="saveWriting('writing1')"></textarea>
+    <button class="check-btn" onclick="checkWriting(1)">Evaluate</button>
+    <div class="feedback" id="writing1-feedback"></div>
+    <div class="writing-score-row">
+      <span class="writing-score-label">Task 1 score:</span>
+      <span class="writing-score-val" id="writing1-score">0</span>
+      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+    </div>
+  </div>
+  <div class="card">
+    <h2>✍️ Writing Task 2 — Critical Thinking</h2>
+    <div class="case-box">
+      <div class="role">Statement</div>
+      <p><em>"A good product does not need marketing."</em><br>Do you agree or disagree? State your position, give 2 arguments for your view, and provide 1 counterargument. Use at least 4 glossary terms.</p>
+    </div>
+    <div class="criteria-list">
+      <div class="criterion"><div class="cnum">1</div>Clear position (agree / disagree)</div>
+      <div class="criterion"><div class="cnum">2</div>2 supporting arguments with reasoning</div>
+      <div class="criterion"><div class="cnum">3</div>1 counterargument acknowledged</div>
+      <div class="criterion"><div class="cnum">4</div>At least 4 glossary terms used</div>
+      <div class="criterion"><div class="cnum">5</div>Logical structure and professional tone</div>
+    </div>
+    <textarea id="writing2-input" placeholder="Write your critical response here..." rows="7" oninput="saveWriting('writing2')"></textarea>
+    <button class="check-btn" onclick="checkWriting(2)">Evaluate</button>
+    <div class="feedback" id="writing2-feedback"></div>
+    <div class="writing-score-row">
+      <span class="writing-score-label">Task 2 score:</span>
+      <span class="writing-score-val" id="writing2-score">0</span>
+      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+    </div>
+  </div>
+</div>
+
+<!-- SPEAKING -->
+<div id="tab-speaking" class="section">
+  <div class="card">
+    <h2>🎤 Speaking Task</h2>
+    <div class="case-box">
+      <div class="role">Topic</div>
+      <p><b>Marketing and Strategy in Financial Organizations</b></p>
+    </div>
+    <div class="speaking-plan">
+      <h4>Speaking Plan</h4>
+      <ol>
+        <li>Role of marketing in financial services</li>
+        <li>Role of strategy and competitive advantage</li>
+        <li>How market segmentation works</li>
+        <li>Risks of weak marketing</li>
+        <li>Business results of strong marketing + strategy</li>
+      </ol>
+    </div>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:8px">Use these terms — click to mark as used:</p>
+    <div class="chips-wrap" id="speaking-chips"></div>
+    <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Target: 8–10 glossary terms · 2 cause-effect ideas · 1.5–2 min</div>
+    <div class="timer-wrap">
+      <svg class="timer-svg" width="110" height="110" viewBox="0 0 110 110">
+        <circle class="timer-bg" cx="55" cy="55" r="45"/>
+        <circle class="timer-ring" id="timer-ring" cx="55" cy="55" r="45"/>
+        <text class="timer-text" id="timer-text" x="55" y="55">1:30</text>
+        <text class="timer-label" x="55" y="74" fill="var(--text3)" font-size="8" text-anchor="middle">min 1:30 · max 2:00</text>
+      </svg>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" onclick="startTimer()">▶ Start</button>
+      <button class="timer-btn stop" onclick="stopTimer()">■ Stop</button>
+      <button class="timer-btn stop" onclick="resetTimer()">↺ Reset</button>
+    </div>
+    <div style="margin-top:16px">
+      <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Self-score your speaking (0–8):</div>
+      <input type="range" min="0" max="8" value="0" id="speaking-range" oninput="updateSpeakingScore(this.value)" style="width:100%;accent-color:var(--gold)">
+      <div style="text-align:center;font-size:1rem;font-weight:700;color:var(--gold);margin-top:4px"><span id="speaking-val">0</span> / 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- REFLECTION -->
+<div id="tab-reflect" class="section">
+  <div class="card">
+    <h2>🪞 Self-Reflection</h2>
+    <div id="reflect-container"></div>
+    <div class="mt-12" style="font-size:.8rem;color:var(--text3)">Reflection score: <span id="reflect-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div id="tab-progress" class="section">
+  <div class="progress-section">
+    <h2>📊 Your Progress</h2>
+    <div class="progress-row"><label>Discussion (DQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-dq" style="width:0%"></div></div><span id="prog-dq-val">0/15</span></div>
+    <div class="progress-row"><label>Comprehension (CQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-cq" style="width:0%"></div></div><span id="prog-cq-val">0/15</span></div>
+    <div class="progress-row"><label>Categories</label><div class="progress-bar"><div class="progress-fill" id="prog-cat" style="width:0%"></div></div><span id="prog-cat-val">0/15</span></div>
+    <div class="progress-row"><label>Fill in Blanks</label><div class="progress-bar"><div class="progress-fill" id="prog-fib" style="width:0%"></div></div><span id="prog-fib-val">0/12</span></div>
+    <div class="progress-row"><label>Writing</label><div class="progress-bar"><div class="progress-fill" id="prog-writ" style="width:0%"></div></div><span id="prog-writ-val">0/16</span></div>
+    <div class="progress-row"><label>Speaking</label><div class="progress-bar"><div class="progress-fill" id="prog-spk" style="width:0%"></div></div><span id="prog-spk-val">0/8</span></div>
+    <div class="progress-row"><label>Self-Reflection</label><div class="progress-bar"><div class="progress-fill" id="prog-ref" style="width:0%"></div></div><span id="prog-ref-val">0/12</span></div>
+    <div class="total-score"><div class="big" id="total-big">0</div><div class="sub">out of 93 points total</div></div>
+    <button class="check-btn" style="margin-top:14px;width:100%" onclick="resetAll()">↺ Reset All Progress</button>
+  </div>
+</div>
+
+</main>
+<script>
+const LS='mktg_';
+function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch{return null}}
+function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch{}}
+
+const glossary=[
+  {term:'marketing',ru:'маркетинг — продвижение и понимание потребностей клиентов',cat:'M'},
+  {term:'target market',ru:'целевой рынок — группа клиентов, на которую направлен продукт',cat:'M'},
+  {term:'market segmentation',ru:'сегментация рынка — деление клиентов на группы по признакам',cat:'M'},
+  {term:'customer needs',ru:'потребности клиентов',cat:'M'},
+  {term:'market trends',ru:'рыночные тенденции — изменения и направления рынка',cat:'M'},
+  {term:'client behavior',ru:'поведение клиентов — действия и решения потребителей',cat:'M'},
+  {term:'demand',ru:'спрос — желание и способность клиентов покупать',cat:'M'},
+  {term:'strategy',ru:'стратегия — долгосрочный план действий компании',cat:'S'},
+  {term:'positioning',ru:'позиционирование — место продукта в восприятии клиентов',cat:'S'},
+  {term:'competitive advantage',ru:'конкурентное преимущество — уникальное превосходство над конкурентами',cat:'S'},
+  {term:'decision-making',ru:'принятие решений',cat:'S'},
+  {term:'sustainable growth',ru:'устойчивый рост — долгосрочное развитие без рисков',cat:'S'},
+  {term:'financial product',ru:'финансовый продукт — услуга или инструмент (кредит, вклад, страховка)',cat:'P'},
+  {term:'pricing',ru:'ценообразование — политика установления цен',cat:'P'},
+  {term:'service quality',ru:'качество обслуживания',cat:'P'},
+];
+
+const dqs=[
+  {q:'Why can a good financial product fail in the market?',kw:['marketing','positioning','segmentation','communication','demand','client','customer','awareness','trust']},
+  {q:'What role does marketing play in financial services?',kw:['client needs','customer behavior','target','segment','promote','position','relationship','demand','product']},
+  {q:'What strategic decisions can improve client growth?',kw:['segmentation','positioning','pricing','service quality','competitive','strategy','marketing','target','decision']},
+];
+
+const cqs=[
+  {q:'According to the text, what does market segmentation allow financial institutions to do?',kw:['personalized','products','loans','investment','insurance','groups','income','goals','risk tolerance']},
+  {q:'How are marketing and strategy connected according to the text?',kw:['marketing','data','clients','trends','strategy','decisions','digital banking','analysis','planning']},
+  {q:'What risks can incorrect strategy or weak marketing create for a financial company?',kw:['low demand','reduce trust','client needs','ineffective','communication','risks','resources','wasted','sustainable']},
+];
+
+const fibs=[
+  {before:'',blank:'Market segmentation',after:' helps identify customer groups and allows companies to offer personalized financial products.',hint:'сегментация рынка',accept:['market segmentation','segmentation']},
+  {before:'',blank:'Strategy',after:' defines long-term direction and guides all major decision-making in a financial organization.',hint:'стратегия',accept:['strategy']},
+  {before:'',blank:'Pricing',after:' is one key factor that influences client decisions and helps companies gain a competitive advantage.',hint:'ценообразование',accept:['pricing']},
+  {before:'',blank:'Market trends',after:' show changes in the market and provide the data that strategy uses to make forward-looking decisions.',hint:'рыночные тенденции',accept:['market trends','trends']},
+];
+
+const reflections=[
+  'I understand the role of marketing in financial services and can explain it professionally.',
+  'I can explain how strategy and market segmentation support sustainable growth.',
+  'I can confidently use at least 8 glossary terms in speaking and writing tasks.',
+];
+
+let scores=lsGet('scores')||{dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:0};
+function saveScores(){lsSet('scores',scores)}
+
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  updateProgress();
+}
+function toggleTheme(){
+  document.body.classList.toggle('light-mode');
+  document.querySelector('.theme-btn').textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀ Light';
+  lsSet('theme',document.body.classList.contains('light-mode')?'light':'dark');
+}
+function scoreKeywords(text,kw,max){
+  const t=text.toLowerCase();
+  const hits=kw.filter(k=>t.includes(k.toLowerCase())).length;
+  return Math.min(max,Math.round((hits/Math.max(kw.length,1))*max));
+}
+
+function renderDQ(){
+  const c=document.getElementById('dq-container');c.innerHTML='';
+  dqs.forEach((d,i)=>{
+    const saved=lsGet('dq'+i)||'';
+    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${d.q}</div><textarea id="dq-ta-${i}" placeholder="Your answer..." oninput="lsSet('dq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkDQ(${i})">Check</button><div class="feedback" id="dq-fb-${i}"></div></div>`;
+  });
+}
+function checkDQ(i){
+  const txt=document.getElementById('dq-ta-'+i).value;
+  const sc=scoreKeywords(txt,dqs[i].kw,5);
+  scores.dq[i]=sc;saveScores();updateTotal();
+  const fb=document.getElementById('dq-fb-'+i);
+  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
+  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Excellent!':sc>=2?'Good attempt. Add more specific terms.':'Try using: '+dqs[i].kw.slice(0,4).join(', ')+'.');
+  document.getElementById('dq-total').textContent=scores.dq.reduce((a,b)=>a+b,0);
+}
+
+function renderCQ(){
+  const c=document.getElementById('cq-container');c.innerHTML='';
+  cqs.forEach((q,i)=>{
+    const saved=lsGet('cq'+i)||'';
+    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${q.q}</div><textarea id="cq-ta-${i}" placeholder="Your answer..." oninput="lsSet('cq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkCQ(${i})">Check</button><div class="feedback" id="cq-fb-${i}"></div></div>`;
+  });
+}
+function checkCQ(i){
+  const txt=document.getElementById('cq-ta-'+i).value;
+  const sc=scoreKeywords(txt,cqs[i].kw,5);
+  scores.cq[i]=sc;saveScores();updateTotal();
+  const fb=document.getElementById('cq-fb-'+i);
+  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
+  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Correct!':sc>=2?'Partially correct. Add more detail.':'Review the text and use: '+cqs[i].kw.slice(0,4).join(', ')+'.');
+  document.getElementById('cq-total').textContent=scores.cq.reduce((a,b)=>a+b,0);
+}
+
+let activeCat='all';
+function renderGlossary(){
+  const grid=document.getElementById('glossary-grid');
+  const q=(document.getElementById('gloss-search')||{value:''}).value.toLowerCase();
+  const filtered=glossary.filter(g=>(activeCat==='all'||g.cat===activeCat)&&(!q||g.term.toLowerCase().includes(q)||g.ru.toLowerCase().includes(q)));
+  grid.innerHTML=filtered.map(g=>`<div class="flip-card cat-${g.cat}" onclick="flipCard(this)"><div class="flip-inner"><div class="flip-front"><span class="term">${g.term}</span><span class="cat-tag">${g.cat==='M'?'Marketing & Analysis':g.cat==='S'?'Strategy & Positioning':'Products & Services'}</span><span class="card-count">tap to see translation</span></div><div class="flip-back"><button class="speak-btn" onclick="event.stopPropagation();speak('${g.term}')">🔊</button><div class="ru">${g.ru}</div></div></div></div>`).join('');
+}
+function flipCard(el){el.classList.toggle('flipped')}
+function filterGlossary(){renderGlossary()}
+function filterCat(cat,btn){activeCat=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGlossary()}
+function speak(word){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=0.85;window.speechSynthesis.cancel();window.speechSynthesis.speak(u)}
+
+function renderCategories(){
+  const grid=document.getElementById('match-grid');
+  const shuffled=[...glossary].sort(()=>Math.random()-.5);
+  const saved=lsGet('catAnswers')||{};
+  grid.innerHTML=shuffled.map((g,i)=>`<div class="match-item"><span class="match-term">${g.term}</span><div style="display:flex;align-items:center;gap:8px"><select class="match-select" id="ms-${i}" data-correct="${g.cat}" onchange="saveCatAnswer(${i},this.value)"><option value="">— select —</option><option value="M" ${saved[i]==='M'?'selected':''}>M — Marketing &amp; Analysis</option><option value="S" ${saved[i]==='S'?'selected':''}>S — Strategy &amp; Positioning</option><option value="P" ${saved[i]==='P'?'selected':''}>P — Products &amp; Services</option></select><span class="match-result" id="mr-${i}"></span></div></div>`).join('');
+}
+function saveCatAnswer(i,v){const s=lsGet('catAnswers')||{};s[i]=v;lsSet('catAnswers',s)}
+function checkCategories(){
+  let correct=0;
+  document.querySelectorAll('.match-select').forEach((s,i)=>{
+    const r=document.getElementById('mr-'+i);
+    if(s.value===s.dataset.correct){r.textContent='✓';r.style.background='rgba(46,204,113,.2)';r.style.color='#2ecc71';correct++}
+    else if(s.value){r.textContent='✗';r.style.background='rgba(231,76,60,.2)';r.style.color='#e74c3c'}
+  });
+  const sc=Math.round((correct/glossary.length)*15);
+  scores.cat=sc;saveScores();updateTotal();
+  const fb=document.getElementById('cat-feedback');
+  fb.className='feedback show '+(sc>=12?'good':sc>=8?'ok':'poor');
+  fb.innerHTML=`${correct}/${glossary.length} correct — Score: <strong>${sc}/15</strong>`;
+  document.getElementById('cat-score').textContent=sc;
+}
+
+function renderFIB(){
+  const c=document.getElementById('fib-container');
+  const saved=lsGet('fibAnswers')||{};
+  c.innerHTML=fibs.map((f,i)=>`<div class="fib-sentence"><b>→</b> <input class="blank-input" id="fib-${i}" placeholder="${f.hint}" value="${saved[i]||''}" oninput="saveFIB(${i},this.value)">${f.after}</div>`).join('');
+}
+function saveFIB(i,v){const s=lsGet('fibAnswers')||{};s[i]=v;lsSet('fibAnswers',s)}
+function checkFIB(){
+  let correct=0;
+  fibs.forEach((f,i)=>{
+    const inp=document.getElementById('fib-'+i);
+    const val=(inp.value||'').trim().toLowerCase();
+    const ok=f.accept.some(a=>val===a.toLowerCase()||val.includes(a.toLowerCase()));
+    inp.className='blank-input '+(ok?'correct':'wrong');
+    if(ok)correct++;
+  });
+  const sc=correct*3;
+  scores.fib=sc;saveScores();updateTotal();
+  const fb=document.getElementById('fib-feedback');
+  fb.className='feedback show '+(correct===fibs.length?'good':correct>=2?'ok':'poor');
+  fb.innerHTML=`${correct}/${fibs.length} correct — Score: <strong>${sc}/12</strong>`;
+  document.getElementById('fib-score').textContent=sc;
+}
+
+function saveWriting(id){lsSet(id,document.getElementById(id+'-input').value)}
+function checkWriting(n){
+  const txt=(document.getElementById('writing'+n+'-input').value||'').toLowerCase();
+  const kw=glossary.map(g=>g.term.toLowerCase());
+  const usedKw=kw.filter(k=>txt.includes(k));
+  let sc=0;
+  if(n===1){
+    if(usedKw.length>=5)sc+=3;else if(usedKw.length>=3)sc+=2;else if(usedKw.length>=1)sc+=1;
+    const problemWords=['problem','weak','demand','marketing','improve','strategy','segment'].filter(w=>txt.includes(w));
+    if(problemWords.length>=3)sc+=3;else if(problemWords.length>=2)sc+=2;else sc+=1;
+    if(txt.length>200)sc+=2;else if(txt.length>100)sc+=1;
+    sc=Math.min(8,sc);
+    const fb=document.getElementById('writing1-feedback');
+    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
+    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms used: ${usedKw.length}/5 required`;
+  }else{
+    if(usedKw.length>=4)sc+=2;else if(usedKw.length>=2)sc+=1;
+    const hasPosition=(txt.includes('agree')||txt.includes('disagree')||txt.includes('believe')||txt.includes('think'));
+    if(hasPosition)sc+=2;
+    const hasCounter=(txt.includes('however')||txt.includes('although')||txt.includes('on the other hand')||txt.includes('counter'));
+    if(hasCounter)sc+=2;
+    if(txt.length>200)sc+=2;else if(txt.length>100)sc+=1;
+    sc=Math.min(8,sc);
+    const fb=document.getElementById('writing2-feedback');
+    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
+    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms: ${usedKw.length}/4 required`;
+  }
+  scores['writing'+n]=sc;saveScores();updateTotal();
+  document.getElementById('writing'+n+'-score').textContent=sc;
+}
+
+function renderChips(){
+  const chips=['marketing','market segmentation','customer needs','strategy','competitive advantage','positioning','market trends','demand','pricing','service quality'];
+  const used=lsGet('chips')||[];
+  document.getElementById('speaking-chips').innerHTML=chips.map(c=>`<span class="chip ${used.includes(c)?'used':''}" onclick="toggleChip(this,'${c}')">${c}</span>`).join('');
+}
+function toggleChip(el,term){
+  el.classList.toggle('used');
+  const used=lsGet('chips')||[];
+  const idx=used.indexOf(term);
+  if(idx>-1)used.splice(idx,1);else used.push(term);
+  lsSet('chips',used);
+}
+
+let timerInterval=null,timerSeconds=90,timerRunning=false;
+function updateTimerDisplay(){
+  const m=Math.floor(timerSeconds/60),s=timerSeconds%60;
+  document.getElementById('timer-text').textContent=m+':'+(s<10?'0':'')+s;
+  const elapsed=90-timerSeconds;
+  const pct=Math.max(0,Math.min(1,elapsed/120));
+  const ring=document.getElementById('timer-ring');
+  ring.style.strokeDashoffset=283*(1-pct);
+  ring.style.stroke=timerSeconds<=0?'#e74c3c':timerSeconds<=30?'#2ecc71':'var(--gold)';
+}
+function startTimer(){if(timerRunning)return;timerRunning=true;timerInterval=setInterval(()=>{timerSeconds--;updateTimerDisplay();if(timerSeconds<=0){clearInterval(timerInterval);timerRunning=false}},1000)}
+function stopTimer(){clearInterval(timerInterval);timerRunning=false}
+function resetTimer(){stopTimer();timerSeconds=90;updateTimerDisplay();document.getElementById('timer-ring').style.stroke='var(--gold)'}
+function updateSpeakingScore(v){document.getElementById('speaking-val').textContent=v;scores.speaking=parseInt(v);saveScores();updateTotal()}
+
+function renderReflect(){
+  const c=document.getElementById('reflect-container');
+  const saved=lsGet('reflect')||{};
+  c.innerHTML=reflections.map((r,i)=>`<div class="reflect-item"><div class="r-label">${r}</div><div class="star-row">${[1,2,3,4].map(n=>`<span class="star ${(saved['s'+i]||0)>=n?'lit':''}" onclick="setStar(${i},${n})">⭐</span>`).join('')}</div><textarea class="r-note" placeholder="Notes..." oninput="saveReflectNote(${i},this.value)">${saved['n'+i]||''}</textarea></div>`).join('');
+}
+function setStar(i,v){
+  const saved=lsGet('reflect')||{};saved['s'+i]=v;lsSet('reflect',saved);
+  scores.reflect=Math.min(12,[0,1,2].reduce((a,j)=>{const s=lsGet('reflect')||{};return a+(s['s'+j]||0)},0));
+  saveScores();updateTotal();document.getElementById('reflect-score').textContent=scores.reflect;renderReflect();
+}
+function saveReflectNote(i,v){const s=lsGet('reflect')||{};s['n'+i]=v;lsSet('reflect',s)}
+
+function updateTotal(){
+  const t=scores.dq.reduce((a,b)=>a+b,0)+scores.cq.reduce((a,b)=>a+b,0)+scores.cat+scores.fib+(scores.writing1||0)+(scores.writing2||0)+scores.speaking+scores.reflect;
+  document.getElementById('total-score-chip').textContent=t;
+  document.getElementById('total-big').textContent=t;
+  return t;
+}
+function updateProgress(){
+  const dq=scores.dq.reduce((a,b)=>a+b,0),cq=scores.cq.reduce((a,b)=>a+b,0),writ=(scores.writing1||0)+(scores.writing2||0);
+  [{id:'dq',val:dq,max:15},{id:'cq',val:cq,max:15},{id:'cat',val:scores.cat,max:15},{id:'fib',val:scores.fib,max:12},{id:'writ',val:writ,max:16},{id:'spk',val:scores.speaking,max:8},{id:'ref',val:scores.reflect,max:12}].forEach(it=>{
+    const el=document.getElementById('prog-'+it.id);if(el)el.style.width=(it.val/it.max*100)+'%';
+    const vl=document.getElementById('prog-'+it.id+'-val');if(vl)vl.textContent=it.val+'/'+it.max;
+  });
+  updateTotal();
+}
+function resetAll(){if(!confirm('Reset all progress?'))return;['scores','catAnswers','fibAnswers','chips','reflect','writing1','writing2'].forEach(k=>localStorage.removeItem(LS+k));[0,1,2].forEach(i=>{localStorage.removeItem(LS+'dq'+i);localStorage.removeItem(LS+'cq'+i)});scores={dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:0};location.reload()}
+
+(function init(){
+  if(lsGet('theme')==='light')document.body.classList.add('light-mode');
+  renderDQ();renderCQ();renderGlossary();renderCategories();renderFIB();renderChips();renderReflect();
+  [0,1,2].forEach(i=>{
+    const dt=document.getElementById('dq-ta-'+i);if(dt){const v=lsGet('dq'+i);if(v)dt.value=v}
+    const ct=document.getElementById('cq-ta-'+i);if(ct){const v=lsGet('cq'+i);if(v)ct.value=v}
+  });
+  const w1=document.getElementById('writing1-input');if(w1){const v=lsGet('writing1');if(v)w1.value=v}
+  const w2=document.getElementById('writing2-input');if(w2){const v=lsGet('writing2');if(v)w2.value=v}
+  const spk=document.getElementById('speaking-range');if(spk&&scores.speaking){spk.value=scores.speaking;document.getElementById('speaking-val').textContent=scores.speaking}
+  updateTimerDisplay();updateTotal();
+})();
+</script>
+</body>
+</html>

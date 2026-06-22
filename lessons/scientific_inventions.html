@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific & Technological Progress</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0A1628;--navy2:#0d1e38;--navy3:#112244;
+    --gold:#C9A84C;--gold2:#e8c96a;
+    --text:#e8eaf0;--text2:#b0b8cc;--text3:#7a8299;
+    --green:#2ecc71;--red:#e74c3c;--blue:#3498db;
+    --card:#13233d;--card2:#1a2e50;--border:#1e3560;
+    --radius:12px;--shadow:0 4px 20px rgba(0,0,0,0.4);
+  }
+  body.light-mode{--navy:#f0f4ff;--navy2:#e8eeff;--navy3:#dde6ff;--text:#1a2244;--text2:#3a4466;--text3:#6a7499;--card:#ffffff;--card2:#f5f8ff;--border:#c8d4f0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+  .header{background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 100%);border-bottom:2px solid var(--gold);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .header-left h1{font-size:1.25rem;font-weight:700;color:var(--gold)}
+  .header-left p{font-size:.8rem;color:var(--text2);margin-top:2px}
+  .header-right{display:flex;align-items:center;gap:10px}
+  .score-chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.85rem;font-weight:600;color:var(--gold)}
+  .theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text2);cursor:pointer;font-size:.8rem;transition:.2s}
+  .theme-btn:hover{border-color:var(--gold);color:var(--gold)}
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--navy2);overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab{padding:12px 18px;font-size:.8rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;letter-spacing:.3px;text-transform:uppercase}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+  .main{max-width:900px;margin:0 auto;padding:24px 16px}
+  .section{display:none}
+  .section.active{display:block}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .card h2{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:14px}
+  .card h3{font-size:.9rem;font-weight:600;color:var(--text2);margin:12px 0 8px}
+  .lesson-text p{font-size:.9rem;line-height:1.75;color:var(--text2);margin-bottom:12px}
+  .highlight{color:var(--gold2);font-weight:600}
+  .stat-pill{display:inline-block;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:6px;padding:1px 7px;font-size:.75rem;font-weight:700;color:var(--gold2);margin:0 2px}
+  .case-box{background:var(--navy3);border-left:3px solid var(--gold);border-radius:8px;padding:16px;margin-bottom:16px}
+  .case-box .role{font-size:.75rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .case-box p{font-size:.875rem;color:var(--text2);line-height:1.6}
+  .question-block{margin-bottom:20px}
+  .question-block .q-label{font-size:.8rem;font-weight:700;color:var(--gold2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+  .question-block .q-text{font-size:.9rem;color:var(--text);margin-bottom:10px;line-height:1.5}
+  textarea{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.875rem;line-height:1.5;resize:vertical;min-height:80px;font-family:inherit;transition:.2s}
+  textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+  .check-btn{background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:8px 18px;font-size:.8rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
+  .check-btn:hover{background:var(--gold2)}
+  .feedback{margin-top:8px;padding:10px 14px;border-radius:8px;font-size:.82rem;line-height:1.5;display:none}
+  .feedback.show{display:block}
+  .feedback.good{background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);color:#7effc8}
+  .feedback.ok{background:rgba(243,156,18,.12);border:1px solid rgba(243,156,18,.3);color:#f5c842}
+  .feedback.poor{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);color:#ff9090}
+  .search-bar{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:.875rem;margin-bottom:16px;font-family:inherit}
+  .search-bar:focus{outline:none;border-color:var(--gold)}
+  .category-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .cat-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s}
+  .cat-btn:hover,.cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
+  .glossary-grid{display:grid;gap:10px}
+  .flip-card{height:110px;perspective:1000px;cursor:pointer}
+  .flip-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s;-webkit-transform-style:preserve-3d;-webkit-transition:-webkit-transform .5s}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+  .flip-front,.flip-back{position:absolute;width:100%;height:100%;border-radius:var(--radius);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;border:1px solid var(--border)}
+  .flip-front{background:var(--card2)}
+  .flip-back{background:var(--navy3);transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+  .flip-front .term{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:4px}
+  .flip-front .cat-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  .cat-T .cat-tag{color:#3498db}
+  .cat-F .cat-tag{color:#e74c3c}
+  .cat-M .cat-tag{color:#2ecc71}
+  .flip-back .ru{font-size:.82rem;color:var(--text2);line-height:1.5}
+  .speak-btn{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:.9rem;padding:4px;transition:.2s}
+  .speak-btn:hover{color:var(--gold)}
+  .card-count{font-size:.75rem;color:var(--text3);margin-top:4px}
+  .match-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px}
+  .match-item{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .match-term{font-size:.875rem;font-weight:600;color:var(--text)}
+  .match-select{background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text);font-size:.8rem;cursor:pointer;font-family:inherit}
+  .match-select:focus{outline:none;border-color:var(--gold)}
+  .match-result{display:inline-block;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:.7rem;font-weight:700}
+  .fib-sentence{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px;font-size:.875rem;line-height:1.7;color:var(--text2)}
+  .fib-sentence b{color:var(--gold)}
+  .blank-input{background:transparent;border:none;border-bottom:2px solid var(--gold);padding:2px 8px;color:var(--text);font-size:.875rem;font-family:inherit;min-width:160px;text-align:center;outline:none;transition:.2s}
+  .blank-input:focus{border-bottom-color:var(--gold2)}
+  .blank-input.correct{border-bottom-color:var(--green);color:var(--green)}
+  .blank-input.wrong{border-bottom-color:var(--red);color:var(--red)}
+  .criteria-list{display:grid;gap:6px;margin:10px 0}
+  .criterion{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--text2)}
+  .criterion .cnum{font-size:.9rem;width:22px;height:22px;border-radius:50%;background:var(--navy3);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);flex-shrink:0}
+  .writing-score-row{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .writing-score-label{font-size:.8rem;color:var(--text3)}
+  .writing-score-val{font-size:1.1rem;font-weight:700;color:var(--gold)}
+  .timer-wrap{display:flex;flex-direction:column;align-items:center;margin:16px 0}
+  .timer-svg{transform:rotate(-90deg)}
+  .timer-bg{fill:none;stroke:var(--border);stroke-width:8}
+  .timer-ring{fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .5s linear,stroke .3s;stroke-dasharray:283;stroke-dashoffset:0}
+  .timer-text{font-size:1.5rem;font-weight:700;color:var(--text);text-anchor:middle;dominant-baseline:central}
+  .timer-controls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+  .timer-btn{padding:9px 20px;border-radius:8px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s}
+  .timer-btn.start{background:var(--gold);color:var(--navy)}
+  .timer-btn.start:hover{background:var(--gold2)}
+  .timer-btn.stop{background:var(--card2);border:1px solid var(--border);color:var(--text)}
+  .timer-btn.stop:hover{border-color:var(--red);color:var(--red)}
+  .chips-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .chip{background:var(--navy3);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:.8rem;color:var(--text2);cursor:pointer;transition:.2s}
+  .chip:hover,.chip.used{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold)}
+  .speaking-plan{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:12px 0}
+  .speaking-plan h4{font-size:.8rem;font-weight:700;color:var(--gold);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
+  .speaking-plan ol{padding-left:18px}
+  .speaking-plan li{font-size:.82rem;color:var(--text2);margin-bottom:5px;line-height:1.4}
+  .reflect-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+  .reflect-item .r-label{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.4}
+  .star-row{display:flex;gap:8px}
+  .star{font-size:1.4rem;cursor:pointer;filter:grayscale(1);transition:.2s}
+  .star:hover,.star.lit{filter:grayscale(0)}
+  .r-note{width:100%;margin-top:8px;background:var(--navy2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:.8rem;font-family:inherit;resize:none;min-height:50px}
+  .r-note:focus{outline:none;border-color:var(--gold)}
+  .progress-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+  .progress-section h2{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:16px}
+  .progress-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .progress-row label{font-size:.8rem;color:var(--text2);width:130px;flex-shrink:0}
+  .progress-bar{flex:1;height:8px;background:var(--navy2);border-radius:4px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px;transition:width .5s}
+  .progress-row span{font-size:.8rem;color:var(--gold);width:40px;text-align:right}
+  .total-score{text-align:center;padding:16px;background:var(--navy2);border-radius:10px;margin-top:8px}
+  .total-score .big{font-size:2rem;font-weight:800;color:var(--gold)}
+  .total-score .sub{font-size:.8rem;color:var(--text3);margin-top:2px}
+  .badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:800}
+  .badge-T{background:rgba(52,152,219,.2);color:#3498db}
+  .badge-F{background:rgba(231,76,60,.2);color:#e74c3c}
+  .badge-M{background:rgba(46,204,113,.2);color:#2ecc71}
+  .mt-8{margin-top:8px}.mt-12{margin-top:12px}
+  @media(max-width:600px){.header{padding:14px 16px}.tab{padding:10px 12px;font-size:.75rem}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <h1>Scientific &amp; Technological Progress</h1>
+    <p>World-Shaking Discoveries, Innovators &amp; Industry Exhibitions · Finance Analyst</p>
+  </div>
+  <div class="header-right">
+    <div class="score-chip">Score: <span id="total-score-chip">0</span> / 93</div>
+    <button class="theme-btn" onclick="toggleTheme()">☀ Light</button>
+  </div>
+</header>
+<nav class="tabs">
+  <div class="tab active" onclick="showTab('situation')">Situation</div>
+  <div class="tab" onclick="showTab('reading')">Reading</div>
+  <div class="tab" onclick="showTab('discussion')">Discussion</div>
+  <div class="tab" onclick="showTab('comprehension')">Comprehension</div>
+  <div class="tab" onclick="showTab('glossary')">Glossary</div>
+  <div class="tab" onclick="showTab('categories')">Categories</div>
+  <div class="tab" onclick="showTab('fib')">Cause &amp; Effect</div>
+  <div class="tab" onclick="showTab('writing')">Writing</div>
+  <div class="tab" onclick="showTab('speaking')">Speaking</div>
+  <div class="tab" onclick="showTab('reflect')">Reflection</div>
+  <div class="tab" onclick="showTab('progress')">Progress</div>
+</nav>
+<main class="main">
+
+<!-- SITUATION -->
+<div id="tab-situation" class="section active">
+  <div class="card">
+    <h2>📋 Professional Situation</h2>
+    <div class="case-box">
+      <div class="role">Your Role: Financial Analyst — Investment Research Department</div>
+      <p>Your team tracks emerging technologies to identify investment opportunities. You must analyze how scientific progress drives economic change, evaluate the financial potential of specific innovations, and present findings professionally — including risks and growth potential for each technology.</p>
+    </div>
+    <h3>Pre-Reading: Think Like a Finance Specialist</h3>
+    <ul style="padding-left:18px;font-size:.875rem;color:var(--text2);line-height:1.8">
+      <li>Can technological progress change financial markets? How?</li>
+      <li>Why do investors follow scientific innovations?</li>
+      <li>What information about technology is most important for finance professionals?</li>
+    </ul>
+  </div>
+</div>
+
+<!-- READING -->
+<div id="tab-reading" class="section">
+  <div class="card">
+    <h2>📖 Scientific Progress and Economic Change</h2>
+    <div class="lesson-text">
+      <p>Scientific and technological progress <span class="highlight">propels</span> economic change, transforming industries and <span class="highlight">unlocking vast investment opportunities</span> worth trillions of dollars. <span class="highlight">Groundbreaking</span> inventions and modern innovations <span class="highlight">boost national output</span>, <span class="highlight">disrupt established markets</span>, and draw huge sums from investors <span class="highlight">seeking high returns</span>. Finance professionals analyze their profitability, risks, and growth potential to seize these trends.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>💡 Landmark Historical Inventions</h2>
+    <div class="lesson-text">
+      <p>Landmark discoveries have reshaped the world. Thomas Edison's incandescent light bulb in 1879 transformed energy use, creating the electric power sector now <span class="highlight">valued at</span> over <span class="stat-pill">$6 trillion</span> globally. Alexander Graham Bell's telephone in 1876 launched telecommunications, now a <span class="stat-pill">$1.7 trillion</span> industry. These inventions show how protecting ideas through patents generates massive value for shareholders.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🚀 Modern Innovations — Key Examples</h2>
+    <div class="lesson-text">
+      <p>The CRISPR-Cas9 gene-editing tool (2012) allows <span class="highlight">precise</span> changes to DNA, <span class="highlight">fueling</span> a <span class="stat-pill">$100B</span> biotechnology market expected to reach <span class="stat-pill">$500B by 2030</span>. Elon Musk's SpaceX reusable rockets (2015) <span class="highlight">cut</span> launch costs by 90%, <span class="highlight">sparking</span> a <span class="stat-pill">$447B</span> space economy backed by <span class="stat-pill">$10B</span> in <span class="highlight">private funds</span>. AI models from OpenAI <span class="highlight">enhance</span> financial services like automated trading and <span class="highlight">fraud detection</span>, improving bank efficiency by 40%.</p>
+      <p>Tim Berners-Lee's World Wide Web (1989) opened access to information, supporting a <span class="stat-pill">$5T</span> online commerce sector. Katalin Karikó and Drew Weissman's mRNA vaccines for COVID-19 (2020) caused pharmaceutical shares to rise <span class="stat-pill">300%</span>, underscoring biotechnology's <span class="highlight">appeal</span> for <span class="highlight">high-risk, high-reward investments</span>.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🏛 Industry Exhibitions as Financial Platforms</h2>
+    <div class="lesson-text">
+      <p>Industry exhibitions and trade fairs act as global platforms for <span class="highlight">unveiling</span> innovations, <span class="highlight">forging</span> partnerships, and <span class="highlight">closing deals</span>. The Consumer Electronics Show (CES) in Las Vegas generates <span class="stat-pill">$6B</span> in transactions yearly. Hannover Messe focuses on industrial automation, <span class="highlight">facilitating</span> <span class="stat-pill">€10B</span> in <span class="highlight">business-to-business contracts</span>. Money20/20 targets fintech innovations like blockchain payments, attracting <span class="highlight">venture capital</span> and enabling <span class="highlight">mergers</span> valued at billions. These events provide finance experts with <span class="highlight">previews of market trends</span>, <span class="highlight">licensing opportunities</span>, and <span class="highlight">initial public offering</span> candidates, often <span class="highlight">yielding immediate stock impacts</span>.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>📊 Financial Conclusion</h2>
+    <div class="lesson-text">
+      <p>Technological progress requires sharp financial analysis: assess idea protections, predict adoption rates, and manage innovation risks for long-term gains.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DISCUSSION -->
+<div id="tab-discussion" class="section">
+  <div class="card">
+    <h2>💬 Discussion Questions</h2>
+    <div id="dq-container"></div>
+    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total DQ score: </span><span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span></div>
+  </div>
+</div>
+
+<!-- COMPREHENSION -->
+<div id="tab-comprehension" class="section">
+  <div class="card">
+    <h2>🎯 Comprehension Questions</h2>
+    <div id="cq-container"></div>
+    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total CQ score: </span><span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span></div>
+  </div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="tab-glossary" class="section">
+  <div class="card">
+    <h2>📚 Glossary (43 terms) — Click to flip</h2>
+    <input class="search-bar" type="text" placeholder="Search terms..." oninput="filterGlossary()" id="gloss-search">
+    <div class="category-filters">
+      <button class="cat-btn active" onclick="filterCat('all',this)">All</button>
+      <button class="cat-btn" onclick="filterCat('T',this)"><span class="badge badge-T">T</span> Innovation &amp; Technology</button>
+      <button class="cat-btn" onclick="filterCat('F',this)"><span class="badge badge-F">F</span> Investment &amp; Finance</button>
+      <button class="cat-btn" onclick="filterCat('M',this)"><span class="badge badge-M">M</span> Market &amp; Business</button>
+    </div>
+    <div class="glossary-grid" id="glossary-grid"></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div id="tab-categories" class="section">
+  <div class="card">
+    <h2>🗂 Category Match (15 key terms)</h2>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px">Assign each term: <b style="color:#3498db">T</b>=Innovation &amp; Technology · <b style="color:#e74c3c">F</b>=Investment &amp; Finance · <b style="color:#2ecc71">M</b>=Market &amp; Business</p>
+    <div class="match-grid" id="match-grid"></div>
+    <button class="check-btn" onclick="checkCategories()">Check Answers</button>
+    <div class="feedback" id="cat-feedback"></div>
+    <div class="mt-8" style="font-size:.8rem;color:var(--text3)">Score: <span id="cat-score" style="color:var(--gold);font-weight:700">0</span> / 15</div>
+  </div>
+</div>
+
+<!-- FIB -->
+<div id="tab-fib" class="section">
+  <div class="card">
+    <h2>🔗 Cause &amp; Effect — Fill in the Blanks</h2>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:16px">Complete each cause-effect chain with the correct glossary term.</p>
+    <div id="fib-container"></div>
+    <button class="check-btn" onclick="checkFIB()">Check All Blanks</button>
+    <div class="feedback" id="fib-feedback"></div>
+    <div class="mt-8" style="font-size:.8rem;color:var(--text3)">Score: <span id="fib-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+  </div>
+</div>
+
+<!-- WRITING -->
+<div id="tab-writing" class="section">
+  <div class="card">
+    <h2>✍️ Writing Task 1 — Investment Evaluation</h2>
+    <div class="case-box">
+      <div class="role">Task</div>
+      <p>Choose ONE innovation from the text (AI, SpaceX, CRISPR, or fintech exhibitions). Evaluate it as an investment opportunity: Why does it attract investors? Is it high-risk or low-risk? What financial indicators should be analyzed? Write 5–6 sentences using at least 5 glossary terms.</p>
+    </div>
+    <div class="criteria-list">
+      <div class="criterion"><div class="cnum">1</div>Identifies a specific innovation with financial data from the text</div>
+      <div class="criterion"><div class="cnum">2</div>Explains investment appeal clearly</div>
+      <div class="criterion"><div class="cnum">3</div>Addresses risk level (high-risk / low-risk)</div>
+      <div class="criterion"><div class="cnum">4</div>Uses at least 5 glossary terms</div>
+    </div>
+    <textarea id="writing1-input" placeholder="Write your investment evaluation here..." rows="6" oninput="saveWriting('writing1')"></textarea>
+    <button class="check-btn" onclick="checkWriting(1)">Evaluate</button>
+    <div class="feedback" id="writing1-feedback"></div>
+    <div class="writing-score-row">
+      <span class="writing-score-label">Task 1 score:</span>
+      <span class="writing-score-val" id="writing1-score">0</span>
+      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+    </div>
+  </div>
+  <div class="card">
+    <h2>✍️ Writing Task 2 — Structured Retelling</h2>
+    <div class="case-box">
+      <div class="role">Task</div>
+      <p>Write a short professional retelling of the text (5–6 sentences). Follow this structure: (1) how scientific progress propels economic change, (2) how innovations unlock investment opportunities, (3) the role of industry exhibitions. Use at least 8 glossary terms. Do NOT copy sentences from the text.</p>
+    </div>
+    <div class="criteria-list">
+      <div class="criterion"><div class="cnum">1</div>Covers all 3 structural points</div>
+      <div class="criterion"><div class="cnum">2</div>Uses at least 8 glossary terms</div>
+      <div class="criterion"><div class="cnum">3</div>Does not copy sentences directly from the text</div>
+      <div class="criterion"><div class="cnum">4</div>Professional financial language and logical flow</div>
+      <div class="criterion"><div class="cnum">5</div>Minimum 5 sentences</div>
+    </div>
+    <textarea id="writing2-input" placeholder="Write your structured retelling here..." rows="7" oninput="saveWriting('writing2')"></textarea>
+    <button class="check-btn" onclick="checkWriting(2)">Evaluate</button>
+    <div class="feedback" id="writing2-feedback"></div>
+    <div class="writing-score-row">
+      <span class="writing-score-label">Task 2 score:</span>
+      <span class="writing-score-val" id="writing2-score">0</span>
+      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+    </div>
+  </div>
+</div>
+
+<!-- SPEAKING -->
+<div id="tab-speaking" class="section">
+  <div class="card">
+    <h2>🎤 Speaking Task — Structured Retelling</h2>
+    <div class="case-box">
+      <div class="role">Topic</div>
+      <p><b>Scientific and Technological Progress as a Driver of Financial Opportunity</b></p>
+    </div>
+    <div class="speaking-plan">
+      <h4>Speaking Plan (Mandatory Structure)</h4>
+      <ol>
+        <li>How scientific progress propels economic change</li>
+        <li>Groundbreaking innovations and investment opportunities</li>
+        <li>Modern examples: AI, SpaceX, CRISPR, mRNA</li>
+        <li>Role of industry exhibitions (CES, Hannover, Money20/20)</li>
+        <li>How finance professionals analyze innovation risks</li>
+      </ol>
+    </div>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:8px">Use at least 12 terms — click to mark as used:</p>
+    <div class="chips-wrap" id="speaking-chips"></div>
+    <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Target: min 12 glossary words · 2 cause-effect ideas · 1.5–2 min</div>
+    <div class="timer-wrap">
+      <svg class="timer-svg" width="110" height="110" viewBox="0 0 110 110">
+        <circle class="timer-bg" cx="55" cy="55" r="45"/>
+        <circle class="timer-ring" id="timer-ring" cx="55" cy="55" r="45"/>
+        <text class="timer-text" id="timer-text" x="55" y="55">1:30</text>
+        <text class="timer-label" x="55" y="74" fill="var(--text3)" font-size="8" text-anchor="middle">min 1:30 · max 2:00</text>
+      </svg>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" onclick="startTimer()">▶ Start</button>
+      <button class="timer-btn stop" onclick="stopTimer()">■ Stop</button>
+      <button class="timer-btn stop" onclick="resetTimer()">↺ Reset</button>
+    </div>
+    <div style="margin-top:16px">
+      <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Self-score your speaking (0–8):</div>
+      <input type="range" min="0" max="8" value="0" id="speaking-range" oninput="updateSpeakingScore(this.value)" style="width:100%;accent-color:var(--gold)">
+      <div style="text-align:center;font-size:1rem;font-weight:700;color:var(--gold);margin-top:4px"><span id="speaking-val">0</span> / 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- REFLECTION -->
+<div id="tab-reflect" class="section">
+  <div class="card">
+    <h2>🪞 Self-Reflection</h2>
+    <div id="reflect-container"></div>
+    <div class="mt-12" style="font-size:.8rem;color:var(--text3)">Reflection score: <span id="reflect-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div id="tab-progress" class="section">
+  <div class="progress-section">
+    <h2>📊 Your Progress</h2>
+    <div class="progress-row"><label>Discussion (DQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-dq" style="width:0%"></div></div><span id="prog-dq-val">0/15</span></div>
+    <div class="progress-row"><label>Comprehension (CQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-cq" style="width:0%"></div></div><span id="prog-cq-val">0/15</span></div>
+    <div class="progress-row"><label>Categories</label><div class="progress-bar"><div class="progress-fill" id="prog-cat" style="width:0%"></div></div><span id="prog-cat-val">0/15</span></div>
+    <div class="progress-row"><label>Cause &amp; Effect</label><div class="progress-bar"><div class="progress-fill" id="prog-fib" style="width:0%"></div></div><span id="prog-fib-val">0/12</span></div>
+    <div class="progress-row"><label>Writing</label><div class="progress-bar"><div class="progress-fill" id="prog-writ" style="width:0%"></div></div><span id="prog-writ-val">0/16</span></div>
+    <div class="progress-row"><label>Speaking</label><div class="progress-bar"><div class="progress-fill" id="prog-spk" style="width:0%"></div></div><span id="prog-spk-val">0/8</span></div>
+    <div class="progress-row"><label>Self-Reflection</label><div class="progress-bar"><div class="progress-fill" id="prog-ref" style="width:0%"></div></div><span id="prog-ref-val">0/12</span></div>
+    <div class="total-score"><div class="big" id="total-big">0</div><div class="sub">out of 93 points total</div></div>
+    <button class="check-btn" style="margin-top:14px;width:100%" onclick="resetAll()">↺ Reset All Progress</button>
+  </div>
+</div>
+
+</main>
+<script>
+const LS='sci_';
+function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch{return null}}
+function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch{}}
+
+const glossary=[
+  {term:'propel',ru:'стимулировать, двигать вперёд',cat:'T'},
+  {term:'groundbreaking',ru:'революционный, новаторский',cat:'T'},
+  {term:'boost',ru:'стимулировать, повышать',cat:'T'},
+  {term:'disrupt',ru:'разрушать устоявшиеся рынки, нарушать привычный порядок',cat:'T'},
+  {term:'precise',ru:'точный',cat:'T'},
+  {term:'fueling',ru:'стимулируя, подпитывая (рост)',cat:'T'},
+  {term:'cut',ru:'сокращать (затраты)',cat:'T'},
+  {term:'spark',ru:'вызывать, стимулировать (развитие)',cat:'T'},
+  {term:'reusable rockets',ru:'многоразовые ракеты',cat:'T'},
+  {term:'enhance',ru:'улучшать, повышать (качество)',cat:'T'},
+  {term:'momentum',ru:'импульс, динамика (развития)',cat:'T'},
+  {term:'quantum computing',ru:'квантовые вычисления',cat:'T'},
+  {term:'messenger RNA vaccines',ru:'мРНК-вакцины',cat:'T'},
+  {term:'electric vehicle',ru:'электромобиль',cat:'T'},
+  {term:'vast investment opportunities',ru:'огромные инвестиционные возможности',cat:'F'},
+  {term:'high returns',ru:'высокая доходность',cat:'F'},
+  {term:'seeking',ru:'стремящиеся, ищущие (высокую доходность)',cat:'F'},
+  {term:'valued at',ru:'оценивается в (сумму)',cat:'F'},
+  {term:'high-risk, high-reward investments',ru:'высокорисковые, высокодоходные инвестиции',cat:'F'},
+  {term:'private funds',ru:'частные фонды',cat:'F'},
+  {term:'venture capital',ru:'венчурный капитал',cat:'F'},
+  {term:'mergers',ru:'слияния (компаний)',cat:'F'},
+  {term:'appeal',ru:'привлекательность (для инвесторов)',cat:'F'},
+  {term:'underscoring',ru:'подчёркивая, демонстрируя',cat:'F'},
+  {term:'initial public offering candidates',ru:'кандидаты на первичное публичное размещение (IPO)',cat:'F'},
+  {term:'national output',ru:'национальный выпуск, ВВП',cat:'F'},
+  {term:'reshape',ru:'преобразовывать (рынки, отрасли)',cat:'M'},
+  {term:'launch',ru:'запускать (продукт, отрасль)',cat:'M'},
+  {term:'fraud detection',ru:'обнаружение мошенничества',cat:'M'},
+  {term:'established markets',ru:'сложившиеся, устоявшиеся рынки',cat:'M'},
+  {term:'unveiling',ru:'представление, демонстрация (инноваций)',cat:'M'},
+  {term:'forging',ru:'установление (партнёрства)',cat:'M'},
+  {term:'closing deals',ru:'заключение сделок',cat:'M'},
+  {term:'facilitating',ru:'способствуя, содействуя',cat:'M'},
+  {term:'business-to-business contracts',ru:'контракты между бизнесами (B2B)',cat:'M'},
+  {term:'sustainable manufacturing solutions',ru:'устойчивые производственные решения',cat:'M'},
+  {term:'tech giants',ru:'технологические гиганты',cat:'M'},
+  {term:'supply chain investments',ru:'инвестиции в цепочки поставок',cat:'M'},
+  {term:'previews of market trends',ru:'предварительный обзор рыночных трендов',cat:'M'},
+  {term:'licensing opportunities',ru:'возможности лицензирования',cat:'M'},
+  {term:'yielding immediate stock impacts',ru:'оказывающие немедленное влияние на акции',cat:'M'},
+  {term:'unlock',ru:'открывать (возможности)',cat:'T'},
+  {term:'incandescent light bulb',ru:'лампа накаливания',cat:'T'},
+];
+
+// 15 terms for categories exercise
+const catTerms=['propel','groundbreaking','disrupt','fueling','reusable rockets','vast investment opportunities','high returns','venture capital','high-risk, high-reward investments','initial public offering candidates','unveiling','forging','closing deals','facilitating','fraud detection'];
+
+const dqs=[
+  {q:'Can technological progress change financial markets? How?',kw:['disrupt','investment','opportunities','markets','boost','returns','innovation','industries','transform']},
+  {q:'Why do investors follow scientific innovations?',kw:['returns','opportunities','growth','appeal','high-risk','reward','patents','value','profit']},
+  {q:'What information about technology is most important for finance professionals?',kw:['risk','growth','profitability','potential','adoption','market','returns','analysis','indicators']},
+];
+
+const cqs=[
+  {q:'According to the text, how do scientific inventions like Edison\'s light bulb and Bell\'s telephone demonstrate financial value?',kw:['trillion','valued at','shareholders','patents','value','electric power','telecommunications','protect']},
+  {q:'What financial role do industry exhibitions like CES and Money20/20 play according to the text?',kw:['transactions','venture capital','mergers','partnerships','deals','market trends','licensing','IPO','stock']},
+  {q:'How do modern AI tools create financial value for banks according to the text?',kw:['automated trading','fraud detection','efficiency','40 percent','financial services','enhance','bank']},
+];
+
+const fibs=[
+  {before:'Scientific progress ',blank:'propels',after:' economic change by transforming industries and unlocking vast investment opportunities.',hint:'стимулировать',accept:['propels','propel']},
+  {before:'Groundbreaking technology disrupts ',blank:'established markets',after:', forcing financial analysts to identify new investment opportunities.',hint:'устоявшиеся рынки',accept:['established markets','established']},
+  {before:'Industry exhibitions unveil innovations and help finance experts forge partnerships and find ',blank:'initial public offering',after:' candidates.',hint:'первичное публичное размещение',accept:['initial public offering','ipo','initial public offering candidates']},
+  {before:'',blank:'Venture capital',after:' supports innovative startups, often yielding immediate stock impacts when new technologies are announced.',hint:'венчурный капитал',accept:['venture capital']},
+];
+
+const reflections=[
+  'I can explain how scientific progress creates financial opportunities using specific examples from the text.',
+  'I can analyze investment appeal and risks of a specific technology using financial vocabulary.',
+  'I can confidently use at least 12 glossary terms in a structured speaking retelling.',
+];
+
+let scores=lsGet('scores')||{dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:0};
+function saveScores(){lsSet('scores',scores)}
+
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  updateProgress();
+}
+function toggleTheme(){
+  document.body.classList.toggle('light-mode');
+  document.querySelector('.theme-btn').textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀ Light';
+  lsSet('theme',document.body.classList.contains('light-mode')?'light':'dark');
+}
+function scoreKeywords(text,kw,max){
+  const t=text.toLowerCase();
+  const hits=kw.filter(k=>t.includes(k.toLowerCase())).length;
+  return Math.min(max,Math.round((hits/Math.max(kw.length,1))*max));
+}
+
+function renderDQ(){
+  const c=document.getElementById('dq-container');c.innerHTML='';
+  dqs.forEach((d,i)=>{
+    const saved=lsGet('dq'+i)||'';
+    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${d.q}</div><textarea id="dq-ta-${i}" placeholder="Your answer..." oninput="lsSet('dq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkDQ(${i})">Check</button><div class="feedback" id="dq-fb-${i}"></div></div>`;
+  });
+}
+function checkDQ(i){
+  const txt=document.getElementById('dq-ta-'+i).value;
+  const sc=scoreKeywords(txt,dqs[i].kw,5);
+  scores.dq[i]=sc;saveScores();updateTotal();
+  const fb=document.getElementById('dq-fb-'+i);
+  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
+  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Excellent!':sc>=2?'Good. Add more financial vocabulary.':'Try using: '+dqs[i].kw.slice(0,4).join(', ')+'.');
+  document.getElementById('dq-total').textContent=scores.dq.reduce((a,b)=>a+b,0);
+}
+
+function renderCQ(){
+  const c=document.getElementById('cq-container');c.innerHTML='';
+  cqs.forEach((q,i)=>{
+    const saved=lsGet('cq'+i)||'';
+    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${q.q}</div><textarea id="cq-ta-${i}" placeholder="Your answer..." oninput="lsSet('cq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkCQ(${i})">Check</button><div class="feedback" id="cq-fb-${i}"></div></div>`;
+  });
+}
+function checkCQ(i){
+  const txt=document.getElementById('cq-ta-'+i).value;
+  const sc=scoreKeywords(txt,cqs[i].kw,5);
+  scores.cq[i]=sc;saveScores();updateTotal();
+  const fb=document.getElementById('cq-fb-'+i);
+  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
+  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Correct!':sc>=2?'Partially correct.':'Review the reading section.');
+  document.getElementById('cq-total').textContent=scores.cq.reduce((a,b)=>a+b,0);
+}
+
+let activeCat='all';
+function renderGlossary(){
+  const grid=document.getElementById('glossary-grid');
+  const q=(document.getElementById('gloss-search')||{value:''}).value.toLowerCase();
+  const filtered=glossary.filter(g=>(activeCat==='all'||g.cat===activeCat)&&(!q||g.term.toLowerCase().includes(q)||g.ru.toLowerCase().includes(q)));
+  grid.innerHTML=filtered.map(g=>`<div class="flip-card cat-${g.cat}" onclick="flipCard(this)"><div class="flip-inner"><div class="flip-front"><span class="term">${g.term}</span><span class="cat-tag">${g.cat==='T'?'Innovation & Technology':g.cat==='F'?'Investment & Finance':'Market & Business'}</span><span class="card-count">tap to see translation</span></div><div class="flip-back"><button class="speak-btn" onclick="event.stopPropagation();speak('${g.term.replace(/'/g,"\\'")}')">🔊</button><div class="ru">${g.ru}</div></div></div></div>`).join('');
+}
+function flipCard(el){el.classList.toggle('flipped')}
+function filterGlossary(){renderGlossary()}
+function filterCat(cat,btn){activeCat=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGlossary()}
+function speak(word){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=0.85;window.speechSynthesis.cancel();window.speechSynthesis.speak(u)}
+
+function renderCategories(){
+  const grid=document.getElementById('match-grid');
+  const shuffled=[...catTerms].sort(()=>Math.random()-.5);
+  const termMap={};glossary.forEach(g=>termMap[g.term]=g.cat);
+  const saved=lsGet('catAnswers')||{};
+  grid.innerHTML=shuffled.map((term,i)=>`<div class="match-item"><span class="match-term">${term}</span><div style="display:flex;align-items:center;gap:8px"><select class="match-select" id="ms-${i}" data-correct="${termMap[term]}" onchange="saveCatAnswer(${i},this.value)"><option value="">— select —</option><option value="T" ${saved[i]==='T'?'selected':''}>T — Innovation &amp; Technology</option><option value="F" ${saved[i]==='F'?'selected':''}>F — Investment &amp; Finance</option><option value="M" ${saved[i]==='M'?'selected':''}>M — Market &amp; Business</option></select><span class="match-result" id="mr-${i}"></span></div></div>`).join('');
+}
+function saveCatAnswer(i,v){const s=lsGet('catAnswers')||{};s[i]=v;lsSet('catAnswers',s)}
+function checkCategories(){
+  let correct=0;
+  document.querySelectorAll('.match-select').forEach((s,i)=>{
+    const r=document.getElementById('mr-'+i);
+    if(s.value===s.dataset.correct){r.textContent='✓';r.style.background='rgba(46,204,113,.2)';r.style.color='#2ecc71';correct++}
+    else if(s.value){r.textContent='✗';r.style.background='rgba(231,76,60,.2)';r.style.color='#e74c3c'}
+  });
+  const sc=Math.round((correct/catTerms.length)*15);
+  scores.cat=sc;saveScores();updateTotal();
+  const fb=document.getElementById('cat-feedback');
+  fb.className='feedback show '+(sc>=12?'good':sc>=8?'ok':'poor');
+  fb.innerHTML=`${correct}/${catTerms.length} correct — Score: <strong>${sc}/15</strong>`;
+  document.getElementById('cat-score').textContent=sc;
+}
+
+function renderFIB(){
+  const c=document.getElementById('fib-container');
+  const saved=lsGet('fibAnswers')||{};
+  c.innerHTML=fibs.map((f,i)=>`<div class="fib-sentence"><b>→</b> ${f.before}<input class="blank-input" id="fib-${i}" placeholder="${f.hint}" value="${saved[i]||''}" oninput="saveFIB(${i},this.value)">${f.after}</div>`).join('');
+}
+function saveFIB(i,v){const s=lsGet('fibAnswers')||{};s[i]=v;lsSet('fibAnswers',s)}
+function checkFIB(){
+  let correct=0;
+  fibs.forEach((f,i)=>{
+    const inp=document.getElementById('fib-'+i);
+    const val=(inp.value||'').trim().toLowerCase();
+    const ok=f.accept.some(a=>val===a.toLowerCase()||val.includes(a.toLowerCase()));
+    inp.className='blank-input '+(ok?'correct':'wrong');
+    if(ok)correct++;
+  });
+  const sc=correct*3;
+  scores.fib=sc;saveScores();updateTotal();
+  const fb=document.getElementById('fib-feedback');
+  fb.className='feedback show '+(correct===fibs.length?'good':correct>=2?'ok':'poor');
+  fb.innerHTML=`${correct}/${fibs.length} correct — Score: <strong>${sc}/12</strong>`;
+  document.getElementById('fib-score').textContent=sc;
+}
+
+function saveWriting(id){lsSet(id,document.getElementById(id+'-input').value)}
+function checkWriting(n){
+  const txt=(document.getElementById('writing'+n+'-input').value||'').toLowerCase();
+  const kw=glossary.map(g=>g.term.toLowerCase());
+  const usedKw=kw.filter(k=>txt.includes(k));
+  let sc=0;
+  if(n===1){
+    if(usedKw.length>=5)sc+=3;else if(usedKw.length>=3)sc+=2;else if(usedKw.length>=1)sc+=1;
+    const examples=['ai','spacex','crispr','mrna','fintech','money20','ces','openai','gene'].filter(w=>txt.includes(w));
+    if(examples.length>=1)sc+=2;
+    const riskWords=['risk','high-risk','reward','appeal','returns','growth'].filter(w=>txt.includes(w));
+    if(riskWords.length>=2)sc+=2;
+    if(txt.length>200)sc+=1;
+    sc=Math.min(8,sc);
+    const fb=document.getElementById('writing1-feedback');
+    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
+    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms used: ${usedKw.length}/5 required`;
+  }else{
+    if(usedKw.length>=8)sc+=4;else if(usedKw.length>=5)sc+=3;else if(usedKw.length>=3)sc+=2;else sc+=1;
+    const structure=['progress','innovation','exhibition','exhibition','market','opportunity','invest'].filter(w=>txt.includes(w));
+    if(structure.length>=3)sc+=2;
+    if(txt.length>250)sc+=2;else if(txt.length>150)sc+=1;
+    sc=Math.min(8,sc);
+    const fb=document.getElementById('writing2-feedback');
+    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
+    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms: ${usedKw.length}/8 required`;
+  }
+  scores['writing'+n]=sc;saveScores();updateTotal();
+  document.getElementById('writing'+n+'-score').textContent=sc;
+}
+
+function renderChips(){
+  const chips=['propel','groundbreaking','disrupt','vast investment opportunities','high returns','venture capital','high-risk, high-reward investments','unveiling','forging','closing deals','facilitating','mergers','initial public offering candidates','fraud detection','reusable rockets'];
+  const used=lsGet('chips')||[];
+  document.getElementById('speaking-chips').innerHTML=chips.map(c=>`<span class="chip ${used.includes(c)?'used':''}" onclick="toggleChip(this,'${c}')">${c}</span>`).join('');
+}
+function toggleChip(el,term){
+  el.classList.toggle('used');
+  const used=lsGet('chips')||[];
+  const idx=used.indexOf(term);
+  if(idx>-1)used.splice(idx,1);else used.push(term);
+  lsSet('chips',used);
+}
+
+let timerInterval=null,timerSeconds=90,timerRunning=false;
+function updateTimerDisplay(){
+  const m=Math.floor(timerSeconds/60),s=timerSeconds%60;
+  document.getElementById('timer-text').textContent=m+':'+(s<10?'0':'')+s;
+  const elapsed=90-timerSeconds;
+  const pct=Math.max(0,Math.min(1,elapsed/120));
+  const ring=document.getElementById('timer-ring');
+  ring.style.strokeDashoffset=283*(1-pct);
+  ring.style.stroke=timerSeconds<=0?'#e74c3c':timerSeconds<=30?'#2ecc71':'var(--gold)';
+}
+function startTimer(){if(timerRunning)return;timerRunning=true;timerInterval=setInterval(()=>{timerSeconds--;updateTimerDisplay();if(timerSeconds<=0){clearInterval(timerInterval);timerRunning=false}},1000)}
+function stopTimer(){clearInterval(timerInterval);timerRunning=false}
+function resetTimer(){stopTimer();timerSeconds=90;updateTimerDisplay();document.getElementById('timer-ring').style.stroke='var(--gold)'}
+function updateSpeakingScore(v){document.getElementById('speaking-val').textContent=v;scores.speaking=parseInt(v);saveScores();updateTotal()}
+
+function renderReflect(){
+  const c=document.getElementById('reflect-container');
+  const saved=lsGet('reflect')||{};
+  c.innerHTML=reflections.map((r,i)=>`<div class="reflect-item"><div class="r-label">${r}</div><div class="star-row">${[1,2,3,4].map(n=>`<span class="star ${(saved['s'+i]||0)>=n?'lit':''}" onclick="setStar(${i},${n})">⭐</span>`).join('')}</div><textarea class="r-note" placeholder="Notes..." oninput="saveReflectNote(${i},this.value)">${saved['n'+i]||''}</textarea></div>`).join('');
+}
+function setStar(i,v){
+  const saved=lsGet('reflect')||{};saved['s'+i]=v;lsSet('reflect',saved);
+  scores.reflect=Math.min(12,[0,1,2].reduce((a,j)=>{const s=lsGet('reflect')||{};return a+(s['s'+j]||0)},0));
+  saveScores();updateTotal();document.getElementById('reflect-score').textContent=scores.reflect;renderReflect();
+}
+function saveReflectNote(i,v){const s=lsGet('reflect')||{};s['n'+i]=v;lsSet('reflect',s)}
+
+function updateTotal(){
+  const t=scores.dq.reduce((a,b)=>a+b,0)+scores.cq.reduce((a,b)=>a+b,0)+scores.cat+scores.fib+(scores.writing1||0)+(scores.writing2||0)+scores.speaking+scores.reflect;
+  document.getElementById('total-score-chip').textContent=t;
+  document.getElementById('total-big').textContent=t;
+  return t;
+}
+function updateProgress(){
+  const dq=scores.dq.reduce((a,b)=>a+b,0),cq=scores.cq.reduce((a,b)=>a+b,0),writ=(scores.writing1||0)+(scores.writing2||0);
+  [{id:'dq',val:dq,max:15},{id:'cq',val:cq,max:15},{id:'cat',val:scores.cat,max:15},{id:'fib',val:scores.fib,max:12},{id:'writ',val:writ,max:16},{id:'spk',val:scores.speaking,max:8},{id:'ref',val:scores.reflect,max:12}].forEach(it=>{
+    const el=document.getElementById('prog-'+it.id);if(el)el.style.width=(it.val/it.max*100)+'%';
+    const vl=document.getElementById('prog-'+it.id+'-val');if(vl)vl.textContent=it.val+'/'+it.max;
+  });
+  updateTotal();
+}
+function resetAll(){if(!confirm('Reset all progress?'))return;['scores','catAnswers','fibAnswers','chips','reflect','writing1','writing2'].forEach(k=>localStorage.removeItem(LS+k));[0,1,2].forEach(i=>{localStorage.removeItem(LS+'dq'+i);localStorage.removeItem(LS+'cq'+i)});scores={dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:0};location.reload()}
+
+(function init(){
+  if(lsGet('theme')==='light')document.body.classList.add('light-mode');
+  renderDQ();renderCQ();renderGlossary();renderCategories();renderFIB();renderChips();renderReflect();
+  [0,1,2].forEach(i=>{
+    const dt=document.getElementById('dq-ta-'+i);if(dt){const v=lsGet('dq'+i);if(v)dt.value=v}
+    const ct=document.getElementById('cq-ta-'+i);if(ct){const v=lsGet('cq'+i);if(v)ct.value=v}
+  });
+  const w1=document.getElementById('writing1-input');if(w1){const v=lsGet('writing1');if(v)w1.value=v}
+  const w2=document.getElementById('writing2-input');if(w2){const v=lsGet('writing2');if(v)w2.value=v}
+  const spk=document.getElementById('speaking-range');if(spk&&scores.speaking){spk.value=scores.speaking;document.getElementById('speaking-val').textContent=scores.speaking}
+  updateTimerDisplay();updateTotal();
+})();
+</script>
+</body>
+</html>
