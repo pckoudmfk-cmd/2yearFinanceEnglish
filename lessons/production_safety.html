@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Standards & Workplace Safety</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0A1628;--navy2:#0d1e38;--navy3:#112244;
+    --gold:#C9A84C;--gold2:#e8c96a;--gold3:#f5e6b0;
+    --text:#e8eaf0;--text2:#b0b8cc;--text3:#7a8299;
+    --green:#2ecc71;--red:#e74c3c;--blue:#3498db;--purple:#9b59b6;
+    --card:#13233d;--card2:#1a2e50;--border:#1e3560;
+    --radius:12px;--shadow:0 4px 20px rgba(0,0,0,0.4);
+  }
+  body.light-mode{
+    --navy:#f0f4ff;--navy2:#e8eeff;--navy3:#dde6ff;
+    --text:#1a2244;--text2:#3a4466;--text3:#6a7499;
+    --card:#ffffff;--card2:#f5f8ff;--border:#c8d4f0;
+  }
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+  /* HEADER */
+  .header{background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 100%);border-bottom:2px solid var(--gold);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .header-left h1{font-size:1.25rem;font-weight:700;color:var(--gold)}
+  .header-left p{font-size:.8rem;color:var(--text2);margin-top:2px}
+  .header-right{display:flex;align-items:center;gap:10px}
+  .score-chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.85rem;font-weight:600;color:var(--gold)}
+  .theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text2);cursor:pointer;font-size:.8rem;transition:.2s}
+  .theme-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* TABS */
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--navy2);overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab{padding:12px 18px;font-size:.8rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;letter-spacing:.3px;text-transform:uppercase}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+  /* MAIN */
+  .main{max-width:900px;margin:0 auto;padding:24px 16px}
+  .section{display:none}
+  .section.active{display:block}
+
+  /* CARDS */
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .card h2{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .card h3{font-size:.9rem;font-weight:600;color:var(--text2);margin:12px 0 8px}
+
+  /* LESSON TEXT */
+  .lesson-text p{font-size:.9rem;line-height:1.75;color:var(--text2);margin-bottom:12px}
+  .lesson-text p:last-child{margin-bottom:0}
+  .highlight{color:var(--gold2);font-weight:600}
+
+  /* CASE BOX */
+  .case-box{background:var(--navy3);border-left:3px solid var(--gold);border-radius:8px;padding:16px;margin-bottom:16px}
+  .case-box .role{font-size:.75rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .case-box p{font-size:.875rem;color:var(--text2);line-height:1.6}
+
+  .case-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}
+  .case-table th{background:var(--navy3);color:var(--gold);padding:8px 12px;text-align:left;font-weight:600;border:1px solid var(--border)}
+  .case-table td{padding:8px 12px;border:1px solid var(--border);color:var(--text2);vertical-align:top}
+  .case-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
+  /* QUESTIONS */
+  .question-block{margin-bottom:20px}
+  .question-block .q-label{font-size:.8rem;font-weight:700;color:var(--gold2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+  .question-block .q-text{font-size:.9rem;color:var(--text);margin-bottom:10px;line-height:1.5}
+  textarea{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.875rem;line-height:1.5;resize:vertical;min-height:80px;font-family:inherit;transition:.2s}
+  textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+  .check-btn{background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:8px 18px;font-size:.8rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s;-webkit-tap-highlight-color:transparent}
+  .check-btn:hover{background:var(--gold2)}
+  .feedback{margin-top:8px;padding:10px 14px;border-radius:8px;font-size:.82rem;line-height:1.5;display:none}
+  .feedback.show{display:block}
+  .feedback.good{background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);color:#7effc8}
+  .feedback.ok{background:rgba(243,156,18,.12);border:1px solid rgba(243,156,18,.3);color:#f5c842}
+  .feedback.poor{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);color:#ff9090}
+
+  /* SCORE BADGE */
+  .score-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:700;margin-left:8px}
+  .score-badge.s5{background:rgba(46,204,113,.2);color:#7effc8}
+  .score-badge.s3{background:rgba(243,156,18,.2);color:#f5c842}
+  .score-badge.s0{background:rgba(231,76,60,.2);color:#ff9090}
+
+  /* GLOSSARY */
+  .search-bar{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:.875rem;margin-bottom:16px;font-family:inherit}
+  .search-bar:focus{outline:none;border-color:var(--gold)}
+  .category-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .cat-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s}
+  .cat-btn:hover,.cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
+  .glossary-grid{display:grid;gap:10px}
+  .flip-card{height:110px;perspective:1000px;cursor:pointer}
+  .flip-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s;-webkit-transform-style:preserve-3d;-webkit-transition:-webkit-transform .5s}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+  .flip-front,.flip-back{position:absolute;width:100%;height:100%;border-radius:var(--radius);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;border:1px solid var(--border)}
+  .flip-front{background:var(--card2)}
+  .flip-back{background:var(--navy3);transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+  .flip-front .term{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:4px}
+  .flip-front .cat-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  .cat-C .cat-tag{color:#3498db}
+  .cat-F .cat-tag{color:#e74c3c}
+  .cat-S .cat-tag{color:#2ecc71}
+  .flip-back .ru{font-size:.85rem;color:var(--text2);line-height:1.5}
+  .speak-btn{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:.9rem;padding:4px;transition:.2s}
+  .speak-btn:hover{color:var(--gold)}
+  .card-count{font-size:.75rem;color:var(--text3);margin-top:4px}
+
+  /* CATEGORIES MATCH */
+  .match-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px}
+  .match-item{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .match-term{font-size:.875rem;font-weight:600;color:var(--text)}
+  .match-select{background:var(--navy3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text);font-size:.8rem;cursor:pointer;font-family:inherit}
+  .match-select:focus{outline:none;border-color:var(--gold)}
+  .match-result{display:inline-block;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:.7rem;font-weight:700}
+
+  /* FIB */
+  .fib-sentence{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px;font-size:.875rem;line-height:1.7;color:var(--text2)}
+  .fib-sentence b{color:var(--gold)}
+  .blank-input{background:transparent;border:none;border-bottom:2px solid var(--gold);padding:2px 8px;color:var(--text);font-size:.875rem;font-family:inherit;min-width:140px;text-align:center;outline:none;transition:.2s}
+  .blank-input:focus{border-bottom-color:var(--gold2)}
+  .blank-input.correct{border-bottom-color:var(--green);color:var(--green)}
+  .blank-input.wrong{border-bottom-color:var(--red);color:var(--red)}
+
+  /* WRITING */
+  .criteria-list{display:grid;gap:6px;margin:10px 0}
+  .criterion{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--text2)}
+  .criterion .cnum{font-size:.9rem;width:22px;height:22px;border-radius:50%;background:var(--navy3);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);flex-shrink:0}
+  .writing-score-row{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .writing-score-label{font-size:.8rem;color:var(--text3)}
+  .writing-score-val{font-size:1.1rem;font-weight:700;color:var(--gold)}
+
+  /* SPEAKING */
+  .timer-wrap{display:flex;flex-direction:column;align-items:center;margin:16px 0}
+  .timer-svg{transform:rotate(-90deg)}
+  .timer-bg{fill:none;stroke:var(--border);stroke-width:8}
+  .timer-ring{fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .5s linear,stroke .3s;stroke-dasharray:283;stroke-dashoffset:0}
+  .timer-text{font-size:1.5rem;font-weight:700;color:var(--text);text-anchor:middle;dominant-baseline:central}
+  .timer-label{font-size:.75rem;color:var(--text3);margin-top:4px;text-anchor:middle}
+  .timer-controls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+  .timer-btn{padding:9px 20px;border-radius:8px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s}
+  .timer-btn.start{background:var(--gold);color:var(--navy)}
+  .timer-btn.start:hover{background:var(--gold2)}
+  .timer-btn.stop{background:var(--card2);border:1px solid var(--border);color:var(--text)}
+  .timer-btn.stop:hover{border-color:var(--red);color:var(--red)}
+  .chips-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .chip{background:var(--navy3);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:.8rem;color:var(--text2);cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent}
+  .chip:hover,.chip.used{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold)}
+  .speaking-plan{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:12px 0}
+  .speaking-plan h4{font-size:.8rem;font-weight:700;color:var(--gold);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
+  .speaking-plan ol{padding-left:18px}
+  .speaking-plan li{font-size:.82rem;color:var(--text2);margin-bottom:5px;line-height:1.4}
+
+  /* SELF REFLECT */
+  .reflect-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+  .reflect-item .r-label{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.4}
+  .star-row{display:flex;gap:8px}
+  .star{font-size:1.4rem;cursor:pointer;filter:grayscale(1);transition:.2s;-webkit-tap-highlight-color:transparent}
+  .star:hover,.star.lit{filter:grayscale(0)}
+  .r-note{width:100%;margin-top:8px;background:var(--navy2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:.8rem;font-family:inherit;resize:none;min-height:50px}
+  .r-note:focus{outline:none;border-color:var(--gold)}
+
+  /* PROGRESS */
+  .progress-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+  .progress-section h2{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:16px}
+  .progress-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .progress-row label{font-size:.8rem;color:var(--text2);width:130px;flex-shrink:0}
+  .progress-bar{flex:1;height:8px;background:var(--navy2);border-radius:4px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px;transition:width .5s}
+  .progress-row span{font-size:.8rem;color:var(--gold);width:40px;text-align:right}
+  .total-score{text-align:center;padding:16px;background:var(--navy2);border-radius:10px;margin-top:8px}
+  .total-score .big{font-size:2rem;font-weight:800;color:var(--gold)}
+  .total-score .sub{font-size:.8rem;color:var(--text3);margin-top:2px}
+
+  /* UTIL */
+  .badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:800}
+  .badge-C{background:rgba(52,152,219,.2);color:#3498db}
+  .badge-F{background:rgba(231,76,60,.2);color:#e74c3c}
+  .badge-S{background:rgba(46,204,113,.2);color:#2ecc71}
+  .hidden{display:none}
+  .mt-8{margin-top:8px}
+  .mt-12{margin-top:12px}
+  @media(max-width:600px){.header{padding:14px 16px}.tab{padding:10px 12px;font-size:.75rem}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <h1>Production Standards & Workplace Safety</h1>
+    <p>Identifying Problems &amp; Proposing Solutions · Financial Analyst Role</p>
+  </div>
+  <div class="header-right">
+    <div class="score-chip">Score: <span id="total-score-chip">0</span> / 93</div>
+    <button class="theme-btn" onclick="toggleTheme()">☀ Light</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tab active" onclick="showTab('situation')">Situation</div>
+  <div class="tab" onclick="showTab('reading')">Reading</div>
+  <div class="tab" onclick="showTab('discussion')">Discussion</div>
+  <div class="tab" onclick="showTab('comprehension')">Comprehension</div>
+  <div class="tab" onclick="showTab('glossary')">Glossary</div>
+  <div class="tab" onclick="showTab('categories')">Categories</div>
+  <div class="tab" onclick="showTab('fib')">Cause &amp; Effect</div>
+  <div class="tab" onclick="showTab('writing')">Writing</div>
+  <div class="tab" onclick="showTab('speaking')">Speaking</div>
+  <div class="tab" onclick="showTab('reflect')">Reflection</div>
+  <div class="tab" onclick="showTab('progress')">Progress</div>
+</nav>
+
+<main class="main">
+
+<!-- SITUATION -->
+<div id="tab-situation" class="section active">
+  <div class="card">
+    <h2>📋 Professional Situation</h2>
+    <div class="case-box">
+      <div class="role">Your Role: Financial Analyst — Manufacturing Company</div>
+      <p>During an internal financial audit, you discover that one department does not comply with safety standards. Management asks whether it is financially justified to invest in workplace safety improvements. You must analyze the risks, calculate potential losses, and present a data-driven recommendation.</p>
+    </div>
+    <h3>Case Study Data</h3>
+    <table class="case-table">
+      <tr><th>Factory Situation</th><th>Estimated Financial Impact</th></tr>
+      <tr><td>No protective helmets</td><td>Possible fine: $100,000</td></tr>
+      <tr><td>Outdated machinery</td><td>Insurance premium increase: +15%</td></tr>
+      <tr><td>Blocked emergency exits</td><td>Production downtime: 2 weeks</td></tr>
+      <tr><td>Poor ventilation</td><td>Estimated safety upgrade cost: $60,000</td></tr>
+    </table>
+    <h3>Your Objectives</h3>
+    <ul style="padding-left:18px;font-size:.875rem;color:var(--text2);line-height:1.8">
+      <li>Analyze safety violations from a financial perspective</li>
+      <li>Calculate possible financial losses</li>
+      <li>Justify investment in safety measures using cost-benefit logic</li>
+      <li>Explain risks and propose cost-effective solutions</li>
+      <li>Communicate professionally using finance vocabulary</li>
+    </ul>
+  </div>
+</div>
+
+<!-- READING -->
+<div id="tab-reading" class="section">
+  <div class="card">
+    <h2>📖 Standards and Financial Stability</h2>
+    <div class="lesson-text">
+      <p>Production standards are not only technical requirements but also <span class="highlight">financial protection tools</span>. Compliance with safety and quality regulations reduces operational risks and protects the company from unexpected costs. International standards help businesses maintain <span class="highlight">investor confidence</span>, secure contracts, and avoid legal penalties. For financial managers, standards are part of risk management strategy.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>💸 Cost of Non-Compliance</h2>
+    <div class="lesson-text">
+      <p>Failure to meet safety requirements leads to direct and indirect <span class="highlight">financial losses</span>. Direct costs include medical compensation, equipment damage, fines, and legal expenses. Indirect costs involve production delays, <span class="highlight">reputational damage</span>, reduced employee productivity, and loss of clients. In some cases, one serious accident can reduce annual profit significantly.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>⚠️ Workplace Violations as Financial Risk</h2>
+    <div class="lesson-text">
+      <p>If protective equipment is missing, ventilation systems are outdated, or emergency exits are blocked, the company faces high <span class="highlight">operational risk</span>. Insurance premiums may increase, regulators may impose <span class="highlight">sanctions</span>, and investors may reconsider their partnerships. Financial departments must evaluate the probability and impact of such risks through structured <span class="highlight">risk assessment</span>.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>📊 Investment Decision</h2>
+    <div class="lesson-text">
+      <p>Investing in workplace safety requires <span class="highlight">capital allocation</span>. However, <span class="highlight">preventive investment</span> is often cheaper than crisis management. Financial analysis should compare: the cost of safety improvements, potential financial losses, and long-term productivity gains. Strategic decision-making requires balancing short-term expenses with <span class="highlight">long-term stability</span>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DISCUSSION -->
+<div id="tab-discussion" class="section">
+  <div class="card">
+    <h2>💬 Discussion Questions</h2>
+    <div id="dq-container"></div>
+    <div class="mt-12">
+      <span style="font-size:.8rem;color:var(--text3)">Total DQ score: </span>
+      <span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span>
+    </div>
+  </div>
+</div>
+
+<!-- COMPREHENSION -->
+<div id="tab-comprehension" class="section">
+  <div class="card">
+    <h2>🎯 Comprehension Questions</h2>
+    <div id="cq-container"></div>
+    <div class="mt-12">
+      <span style="font-size:.8rem;color:var(--text3)">Total CQ score: </span>
+      <span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span>
+    </div>
+  </div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="tab-glossary" class="section">
+  <div class="card">
+    <h2>📚 Glossary (17 terms) — Click card to flip</h2>
+    <input class="search-bar" type="text" placeholder="Search terms..." oninput="filterGlossary(this.value)" id="gloss-search">
+    <div class="category-filters">
+      <button class="cat-btn active" onclick="filterCat('all',this)">All</button>
+      <button class="cat-btn" onclick="filterCat('C',this)"><span class="badge badge-C">C</span> Compliance &amp; Risk</button>
+      <button class="cat-btn" onclick="filterCat('F',this)"><span class="badge badge-F">F</span> Financial Impact</button>
+      <button class="cat-btn" onclick="filterCat('S',this)"><span class="badge badge-S">S</span> Strategy &amp; Investment</button>
+    </div>
+    <div class="glossary-grid" id="glossary-grid"></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div id="tab-categories" class="section">
+  <div class="card">
+    <h2>🗂 Category Match</h2>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px">Assign each term to its category: <b style="color:#3498db">C</b>=Compliance &amp; Risk · <b style="color:#e74c3c">F</b>=Financial Impact · <b style="color:#2ecc71">S</b>=Strategy &amp; Investment</p>
+    <div class="match-grid" id="match-grid"></div>
+    <button class="check-btn" onclick="checkCategories()">Check Answers</button>
+    <div class="feedback" id="cat-feedback"></div>
+    <div class="mt-8" style="font-size:.8rem;color:var(--text3)">Score: <span id="cat-score" style="color:var(--gold);font-weight:700">0</span> / 15</div>
+  </div>
+</div>
+
+<!-- FIB -->
+<div id="tab-fib" class="section">
+  <div class="card">
+    <h2>🔗 Cause &amp; Effect — Fill in the Blanks</h2>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:16px">Complete each cause-effect chain with the correct financial term from the glossary.</p>
+    <div id="fib-container"></div>
+    <button class="check-btn" onclick="checkFIB()">Check All Blanks</button>
+    <div class="feedback" id="fib-feedback"></div>
+    <div class="mt-8" style="font-size:.8rem;color:var(--text3)">Score: <span id="fib-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+  </div>
+</div>
+
+<!-- WRITING -->
+<div id="tab-writing" class="section">
+  <div class="card">
+    <h2>✍️ Writing Task 1 — Risk Analysis</h2>
+    <div class="case-box">
+      <div class="role">Situation</div>
+      <p>You are preparing a report for management. Using the case study data, identify at least 3 financial risks and explain the potential consequences of ignoring them.</p>
+    </div>
+    <div class="criteria-list">
+      <div class="criterion"><div class="cnum">1</div>Identifies at least 3 distinct financial risks</div>
+      <div class="criterion"><div class="cnum">2</div>Uses at least 4 glossary terms correctly</div>
+      <div class="criterion"><div class="cnum">3</div>Connects violations to financial consequences</div>
+      <div class="criterion"><div class="cnum">4</div>Clear, professional sentence structure</div>
+    </div>
+    <textarea id="writing1-input" placeholder="Write your risk analysis report here..." rows="6" oninput="saveWriting('writing1')"></textarea>
+    <button class="check-btn" onclick="checkWriting(1)">Evaluate</button>
+    <div class="feedback" id="writing1-feedback"></div>
+    <div class="writing-score-row">
+      <span class="writing-score-label">Task 1 score:</span>
+      <span class="writing-score-val" id="writing1-score">0</span>
+      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>✍️ Writing Task 2 — Investment Justification</h2>
+    <div class="case-box">
+      <div class="role">Task</div>
+      <p>Is it financially reasonable to invest $60,000 in safety improvements? Write a structured argument using cost-benefit logic. Include at least 6 glossary terms and 2 cause-effect structures (e.g., "because", "therefore", "as a result", "this leads to").</p>
+    </div>
+    <div class="criteria-list">
+      <div class="criterion"><div class="cnum">1</div>Takes a clear position (yes/no with justification)</div>
+      <div class="criterion"><div class="cnum">2</div>Uses cost-benefit analysis framework</div>
+      <div class="criterion"><div class="cnum">3</div>Includes at least 6 glossary terms</div>
+      <div class="criterion"><div class="cnum">4</div>Uses 2+ cause-effect connectors</div>
+      <div class="criterion"><div class="cnum">5</div>Professional tone and logical structure</div>
+    </div>
+    <textarea id="writing2-input" placeholder="Write your financial justification here..." rows="7" oninput="saveWriting('writing2')"></textarea>
+    <button class="check-btn" onclick="checkWriting(2)">Evaluate</button>
+    <div class="feedback" id="writing2-feedback"></div>
+    <div class="writing-score-row">
+      <span class="writing-score-label">Task 2 score:</span>
+      <span class="writing-score-val" id="writing2-score">0</span>
+      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+    </div>
+  </div>
+</div>
+
+<!-- SPEAKING -->
+<div id="tab-speaking" class="section">
+  <div class="card">
+    <h2>🎤 Speaking Task</h2>
+    <div class="case-box">
+      <div class="role">Topic</div>
+      <p><b>Why Workplace Safety Is a Financial Strategy, Not Just a Technical Requirement</b></p>
+    </div>
+    <div class="speaking-plan">
+      <h4>Speaking Plan</h4>
+      <ol>
+        <li>Financial costs of non-compliance (direct &amp; indirect)</li>
+        <li>How safety violations increase operational risk</li>
+        <li>Why preventive investment is more cost-effective</li>
+        <li>Long-term financial stability and investor confidence</li>
+      </ol>
+    </div>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:8px">Use these terms in your monologue — click to mark as used:</p>
+    <div class="chips-wrap" id="speaking-chips"></div>
+    <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Target: min 9 glossary words · 2 cause-effect links · 1.5 min</div>
+    <div class="timer-wrap">
+      <svg class="timer-svg" width="110" height="110" viewBox="0 0 110 110">
+        <circle class="timer-bg" cx="55" cy="55" r="45"/>
+        <circle class="timer-ring" id="timer-ring" cx="55" cy="55" r="45"/>
+        <text class="timer-text" id="timer-text" x="55" y="55">1:30</text>
+        <text class="timer-label" x="55" y="74" fill="var(--text3)" font-size="8" text-anchor="middle">min 1:30 · max 2:00</text>
+      </svg>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn start" id="timer-start-btn" onclick="startTimer()">▶ Start</button>
+      <button class="timer-btn stop" onclick="stopTimer()">■ Stop</button>
+      <button class="timer-btn stop" onclick="resetTimer()">↺ Reset</button>
+    </div>
+    <div style="margin-top:16px">
+      <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Self-score your speaking (0–8):</div>
+      <input type="range" min="0" max="8" value="0" id="speaking-range" oninput="updateSpeakingScore(this.value)" style="width:100%;accent-color:var(--gold)">
+      <div style="text-align:center;font-size:1rem;font-weight:700;color:var(--gold);margin-top:4px"><span id="speaking-val">0</span> / 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- REFLECTION -->
+<div id="tab-reflect" class="section">
+  <div class="card">
+    <h2>🪞 Self-Reflection</h2>
+    <div id="reflect-container"></div>
+    <div class="mt-12" style="font-size:.8rem;color:var(--text3)">Reflection score: <span id="reflect-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div id="tab-progress" class="section">
+  <div class="progress-section">
+    <h2>📊 Your Progress</h2>
+    <div class="progress-row"><label>Discussion (DQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-dq" style="width:0%"></div></div><span id="prog-dq-val">0/15</span></div>
+    <div class="progress-row"><label>Comprehension (CQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-cq" style="width:0%"></div></div><span id="prog-cq-val">0/15</span></div>
+    <div class="progress-row"><label>Categories</label><div class="progress-bar"><div class="progress-fill" id="prog-cat" style="width:0%"></div></div><span id="prog-cat-val">0/15</span></div>
+    <div class="progress-row"><label>Cause &amp; Effect</label><div class="progress-bar"><div class="progress-fill" id="prog-fib" style="width:0%"></div></div><span id="prog-fib-val">0/12</span></div>
+    <div class="progress-row"><label>Writing</label><div class="progress-bar"><div class="progress-fill" id="prog-writ" style="width:0%"></div></div><span id="prog-writ-val">0/16</span></div>
+    <div class="progress-row"><label>Speaking</label><div class="progress-bar"><div class="progress-fill" id="prog-spk" style="width:0%"></div></div><span id="prog-spk-val">0/8</span></div>
+    <div class="progress-row"><label>Self-Reflection</label><div class="progress-bar"><div class="progress-fill" id="prog-ref" style="width:0%"></div></div><span id="prog-ref-val">0/12</span></div>
+    <div class="total-score">
+      <div class="big" id="total-big">0</div>
+      <div class="sub">out of 93 points total</div>
+    </div>
+    <button class="check-btn" style="margin-top:14px;width:100%" onclick="resetAll()">↺ Reset All Progress</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+const LS = 'prod_';
+function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch{return null}}
+function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch{}}
+
+// GLOSSARY DATA
+const glossary = [
+  {term:'compliance',ru:'соблюдение требований / следование нормам',cat:'C'},
+  {term:'operational risk',ru:'операционный риск — риск потерь из-за внутренних сбоев',cat:'C'},
+  {term:'legal penalty',ru:'правовая мера, мера наказания (штраф)',cat:'C'},
+  {term:'sanctions',ru:'санкции — официальные меры наказания',cat:'C'},
+  {term:'regulatory authority',ru:'органы технадзора, регулятор',cat:'C'},
+  {term:'financial loss',ru:'финансовые потери',cat:'F'},
+  {term:'compensation',ru:'компенсация — выплата пострадавшим',cat:'F'},
+  {term:'indirect costs',ru:'косвенные затраты (простои, репутация)',cat:'F'},
+  {term:'insurance premium',ru:'страховая премия — сумма страхового взноса',cat:'F'},
+  {term:'reputational damage',ru:'репутационный ущерб',cat:'F'},
+  {term:'productivity',ru:'производительность труда',cat:'F'},
+  {term:'investor confidence',ru:'доверие инвесторов',cat:'S'},
+  {term:'capital allocation',ru:'распределение капитала',cat:'S'},
+  {term:'preventive investment',ru:'превентивные инвестиции — вложения для снижения будущих рисков',cat:'S'},
+  {term:'crisis management',ru:'антикризисное управление',cat:'S'},
+  {term:'cost-benefit analysis',ru:'анализ затрат и выгод / экономического эффекта',cat:'S'},
+  {term:'long-term stability',ru:'долгосрочная стабильность',cat:'S'},
+];
+
+// DISCUSSION QUESTIONS
+const dqs = [
+  {q:'How can safety problems affect company profits?',kw:['direct','indirect','compensation','fines','production','reputational','productivity','delay']},
+  {q:'Why might management delay safety investments?',kw:['short-term','capital','cash flow','preventive','crisis','expense','strategic','cost']},
+  {q:'What is the relationship between production standards and investor confidence?',kw:['standards','investor','confidence','contracts','penalties','risk','stability','compliance']},
+];
+
+// COMPREHENSION QUESTIONS
+const cqs = [
+  {q:'What are the direct costs of non-compliance mentioned in the text?',kw:['medical compensation','equipment damage','fines','legal expenses','compensation','equipment','legal']},
+  {q:'According to the text, what three factors should financial analysis compare when evaluating safety investments?',kw:['cost of safety','potential financial losses','long-term productivity','improvements','losses','productivity','gains']},
+  {q:'How can safety violations affect a company\'s relationship with investors and insurance providers?',kw:['insurance premiums','increase','sanctions','investors','reconsider','partnerships','operational risk','regulators']},
+];
+
+// FIB DATA
+const fibs = [
+  {before:'Lack of ',blank:'compliance',after:' with safety regulations exposes the company to legal penalties and regulatory sanctions.',hint:'соблюдение требований',accept:['compliance']},
+  {before:'A safety accident generates direct ',blank:'compensation',after:' costs for injured workers and may significantly reduce annual profit.',hint:'компенсация',accept:['compensation']},
+  {before:'Reputational damage leads to loss of clients and undermines ',blank:'investor confidence',after:', making it harder to secure future contracts.',hint:'доверие инвесторов',accept:['investor confidence','investor']},
+  {before:'',blank:'Preventive investment',after:' in safety measures reduces operational risk and supports the company\'s long-term stability.',hint:'превентивные инвестиции',accept:['preventive investment','preventive','preventative investment']},
+];
+
+// REFLECT
+const reflections = [
+  'I can explain how safety violations create financial risks (direct and indirect costs).',
+  'I can justify an investment decision using cost-benefit analysis and glossary vocabulary.',
+  'I can confidently use at least 9 glossary terms in speaking and writing tasks.',
+];
+
+let scores = lsGet('scores') || {dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:[0,0,0]};
+
+function saveScores(){lsSet('scores',scores)}
+
+// TABS
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  updateProgress();
+}
+
+// THEME
+function toggleTheme(){
+  document.body.classList.toggle('light-mode');
+  const btn=document.querySelector('.theme-btn');
+  btn.textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀ Light';
+  lsSet('theme',document.body.classList.contains('light-mode')?'light':'dark');
+}
+
+// KEYWORD SCORING
+function scoreKeywords(text,kw,max){
+  const t=text.toLowerCase();
+  let hits=kw.filter(k=>t.includes(k.toLowerCase())).length;
+  return Math.min(max,Math.round((hits/Math.max(kw.length,1))*max));
+}
+
+// RENDER DQ
+function renderDQ(){
+  const c=document.getElementById('dq-container');
+  c.innerHTML='';
+  dqs.forEach((d,i)=>{
+    const saved=lsGet('dq'+i)||'';
+    c.innerHTML+=`
+    <div class="question-block">
+      <div class="q-label">Question ${i+1}</div>
+      <div class="q-text">${d.q}</div>
+      <textarea id="dq-ta-${i}" placeholder="Your answer..." oninput="lsSet('dq${i}',this.value)">${saved}</textarea>
+      <button class="check-btn" onclick="checkDQ(${i})">Check</button>
+      <div class="feedback" id="dq-fb-${i}"></div>
+    </div>`;
+  });
+}
+function checkDQ(i){
+  const txt=document.getElementById('dq-ta-'+i).value;
+  const sc=scoreKeywords(txt,dqs[i].kw,5);
+  scores.dq[i]=sc; saveScores(); updateTotal();
+  const fb=document.getElementById('dq-fb-'+i);
+  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
+  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Excellent! Strong use of key vocabulary.':sc>=2?'Good attempt. Try adding more specific financial terms.':'Add more detail using terms like: '+dqs[i].kw.slice(0,4).join(', ')+'.');
+  document.getElementById('dq-total').textContent=scores.dq.reduce((a,b)=>a+b,0);
+}
+
+// RENDER CQ
+function renderCQ(){
+  const c=document.getElementById('cq-container');
+  c.innerHTML='';
+  cqs.forEach((q,i)=>{
+    const saved=lsGet('cq'+i)||'';
+    c.innerHTML+=`
+    <div class="question-block">
+      <div class="q-label">Question ${i+1}</div>
+      <div class="q-text">${q.q}</div>
+      <textarea id="cq-ta-${i}" placeholder="Your answer..." oninput="lsSet('cq${i}',this.value)">${saved}</textarea>
+      <button class="check-btn" onclick="checkCQ(${i})">Check</button>
+      <div class="feedback" id="cq-fb-${i}"></div>
+    </div>`;
+  });
+}
+function checkCQ(i){
+  const txt=document.getElementById('cq-ta-'+i).value;
+  const sc=scoreKeywords(txt,cqs[i].kw,5);
+  scores.cq[i]=sc; saveScores(); updateTotal();
+  const fb=document.getElementById('cq-fb-'+i);
+  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
+  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Correct — well referenced!':sc>=2?'Partially correct. Add more specific terms.':'Review the reading section and look for: '+cqs[i].kw.slice(0,4).join(', ')+'.');
+  document.getElementById('cq-total').textContent=scores.cq.reduce((a,b)=>a+b,0);
+}
+
+// GLOSSARY
+let activeCat='all';
+function renderGlossary(){
+  const grid=document.getElementById('glossary-grid');
+  const q=(document.getElementById('gloss-search')||{value:''}).value.toLowerCase();
+  const filtered=glossary.filter(g=>{
+    const matchCat=activeCat==='all'||g.cat===activeCat;
+    const matchQ=!q||g.term.toLowerCase().includes(q)||g.ru.toLowerCase().includes(q);
+    return matchCat&&matchQ;
+  });
+  grid.innerHTML=filtered.map((g,i)=>`
+    <div class="flip-card cat-${g.cat}" id="fc-${g.term.replace(/\s/g,'_')}" onclick="flipCard(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <span class="term">${g.term}</span>
+          <span class="cat-tag">${g.cat==='C'?'Compliance & Risk':g.cat==='F'?'Financial Impact':'Strategy & Investment'}</span>
+          <span class="card-count">tap to see translation</span>
+        </div>
+        <div class="flip-back">
+          <button class="speak-btn" onclick="event.stopPropagation();speak('${g.term}')">🔊</button>
+          <div class="ru">${g.ru}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function flipCard(el){el.classList.toggle('flipped')}
+function filterGlossary(v){renderGlossary()}
+function filterCat(cat,btn){
+  activeCat=cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGlossary();
+}
+function speak(word){
+  if(!window.speechSynthesis)return;
+  const u=new SpeechSynthesisUtterance(word);
+  u.lang='en-US'; u.rate=0.85;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+// CATEGORIES MATCH
+function renderCategories(){
+  const grid=document.getElementById('match-grid');
+  const shuffled=[...glossary].sort(()=>Math.random()-.5);
+  const saved=lsGet('catAnswers')||{};
+  grid.innerHTML=shuffled.map((g,i)=>`
+    <div class="match-item" id="mi-${i}">
+      <span class="match-term">${g.term}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <select class="match-select" id="ms-${i}" data-correct="${g.cat}" onchange="saveCatAnswer(${i},this.value)">
+          <option value="">— select —</option>
+          <option value="C" ${saved[i]==='C'?'selected':''}>C — Compliance &amp; Risk</option>
+          <option value="F" ${saved[i]==='F'?'selected':''}>F — Financial Impact</option>
+          <option value="S" ${saved[i]==='S'?'selected':''}>S — Strategy &amp; Investment</option>
+        </select>
+        <span class="match-result" id="mr-${i}"></span>
+      </div>
+    </div>`).join('');
+}
+function saveCatAnswer(i,v){const s=lsGet('catAnswers')||{};s[i]=v;lsSet('catAnswers',s)}
+function checkCategories(){
+  let correct=0;
+  document.querySelectorAll('.match-select').forEach((s,i)=>{
+    const r=document.getElementById('mr-'+i);
+    if(s.value===s.dataset.correct){r.textContent='✓';r.style.background='rgba(46,204,113,.2)';r.style.color='#2ecc71';correct++}
+    else if(s.value){r.textContent='✗';r.style.background='rgba(231,76,60,.2)';r.style.color='#e74c3c'}
+  });
+  const sc=Math.round((correct/glossary.length)*15);
+  scores.cat=sc; saveScores(); updateTotal();
+  const fb=document.getElementById('cat-feedback');
+  fb.className='feedback show '+(sc>=12?'good':sc>=8?'ok':'poor');
+  fb.innerHTML=`${correct}/${glossary.length} correct — Score: <strong>${sc}/15</strong>`;
+  document.getElementById('cat-score').textContent=sc;
+}
+
+// FIB
+function renderFIB(){
+  const c=document.getElementById('fib-container');
+  const saved=lsGet('fibAnswers')||{};
+  c.innerHTML=fibs.map((f,i)=>`
+    <div class="fib-sentence">
+      <b>→</b> ${f.before}<input class="blank-input" id="fib-${i}" placeholder="${f.hint}" value="${saved[i]||''}" oninput="saveFIB(${i},this.value)">${f.after}
+    </div>`).join('');
+}
+function saveFIB(i,v){const s=lsGet('fibAnswers')||{};s[i]=v;lsSet('fibAnswers',s)}
+function checkFIB(){
+  let correct=0;
+  fibs.forEach((f,i)=>{
+    const inp=document.getElementById('fib-'+i);
+    const val=(inp.value||'').trim().toLowerCase();
+    const ok=f.accept.some(a=>val===a.toLowerCase()||val.includes(a.toLowerCase()));
+    inp.className='blank-input '+(ok?'correct':'wrong');
+    if(ok)correct++;
+  });
+  const sc=correct*3;
+  scores.fib=sc; saveScores(); updateTotal();
+  const fb=document.getElementById('fib-feedback');
+  fb.className='feedback show '+(correct===fibs.length?'good':correct>=2?'ok':'poor');
+  fb.innerHTML=`${correct}/${fibs.length} correct — Score: <strong>${sc}/12</strong>`;
+  document.getElementById('fib-score').textContent=sc;
+}
+
+// WRITING
+function saveWriting(id){lsSet(id,document.getElementById(id+'-input').value)}
+function checkWriting(n){
+  const txt=(document.getElementById('writing'+n+'-input').value||'').toLowerCase();
+  const kw=glossary.map(g=>g.term.toLowerCase());
+  const usedKw=kw.filter(k=>txt.includes(k));
+  const causeEffect=['because','therefore','as a result','this leads to','consequently','due to','thus','this causes','as a consequence'].filter(c=>txt.includes(c));
+  let sc=0;
+  if(n===1){
+    if(usedKw.length>=4)sc+=3;else if(usedKw.length>=2)sc+=2;else if(usedKw.length>=1)sc+=1;
+    const risks=['fine','insurance','downtime','compensation','penalty','sanction','loss','damage','risk'].filter(r=>txt.includes(r));
+    if(risks.length>=3)sc+=3;else if(risks.length>=2)sc+=2;else if(risks.length>=1)sc+=1;
+    if(txt.length>200)sc+=2;else if(txt.length>100)sc+=1;
+    sc=Math.min(8,sc);
+    const fb=document.getElementById('writing1-feedback');
+    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
+    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms used: ${usedKw.length} · Financial risks identified: ${risks.length}`;
+  }else{
+    if(usedKw.length>=6)sc+=3;else if(usedKw.length>=4)sc+=2;else if(usedKw.length>=2)sc+=1;
+    if(causeEffect.length>=2)sc+=2;else if(causeEffect.length>=1)sc+=1;
+    const hasPosition=(txt.includes('yes')||txt.includes('justified')||txt.includes('recommend')||txt.includes('reasonable'));
+    if(hasPosition)sc+=2;
+    if(txt.length>300)sc+=1;
+    sc=Math.min(8,sc);
+    const fb=document.getElementById('writing2-feedback');
+    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
+    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms: ${usedKw.length}/6 required · Cause-effect connectors: ${causeEffect.length}/2 required`;
+  }
+  scores['writing'+n]=sc; saveScores(); updateTotal();
+  document.getElementById('writing'+n+'-score').textContent=sc;
+}
+
+// SPEAKING CHIPS
+function renderChips(){
+  const chips=['compliance','operational risk','financial loss','preventive investment','cost-benefit analysis','investor confidence','capital allocation','risk assessment','long-term stability','sanctions','reputational damage'];
+  const used=lsGet('chips')||[];
+  document.getElementById('speaking-chips').innerHTML=chips.map(c=>`<span class="chip ${used.includes(c)?'used':''}" onclick="toggleChip(this,'${c}')">${c}</span>`).join('');
+}
+function toggleChip(el,term){
+  el.classList.toggle('used');
+  const used=lsGet('chips')||[];
+  const idx=used.indexOf(term);
+  if(idx>-1)used.splice(idx,1);else used.push(term);
+  lsSet('chips',used);
+}
+
+// TIMER
+let timerInterval=null,timerSeconds=90,timerRunning=false;
+const MIN_S=90,MAX_S=120,FULL=283;
+function updateTimerDisplay(){
+  const m=Math.floor(timerSeconds/60);
+  const s=timerSeconds%60;
+  document.getElementById('timer-text').textContent=m+':'+(s<10?'0':'')+s;
+  const elapsed=90-timerSeconds;
+  const pct=Math.max(0,Math.min(1,elapsed/MAX_S));
+  const ring=document.getElementById('timer-ring');
+  ring.style.strokeDashoffset=FULL*(1-pct);
+  if(timerSeconds<=0){ring.style.stroke='#e74c3c'}
+  else if(timerSeconds<=MAX_S-MIN_S){ring.style.stroke='#2ecc71'}
+  else{ring.style.stroke='var(--gold)'}
+}
+function startTimer(){
+  if(timerRunning)return;
+  timerRunning=true;
+  timerInterval=setInterval(()=>{
+    timerSeconds--;
+    updateTimerDisplay();
+    if(timerSeconds<=0){clearInterval(timerInterval);timerRunning=false}
+  },1000);
+}
+function stopTimer(){clearInterval(timerInterval);timerRunning=false}
+function resetTimer(){stopTimer();timerSeconds=90;updateTimerDisplay();document.getElementById('timer-ring').style.stroke='var(--gold)'}
+
+// SPEAKING SCORE
+function updateSpeakingScore(v){
+  document.getElementById('speaking-val').textContent=v;
+  scores.speaking=parseInt(v); saveScores(); updateTotal();
+}
+
+// REFLECTION
+function renderReflect(){
+  const c=document.getElementById('reflect-container');
+  const saved=lsGet('reflect')||{};
+  c.innerHTML=reflections.map((r,i)=>`
+    <div class="reflect-item">
+      <div class="r-label">${r}</div>
+      <div class="star-row">
+        ${[1,2,3,4].map(n=>`<span class="star ${(saved['s'+i]||0)>=n?'lit':''}" onclick="setStar(${i},${n})">⭐</span>`).join('')}
+      </div>
+      <textarea class="r-note" placeholder="Notes..." oninput="saveReflectNote(${i},this.value)">${saved['n'+i]||''}</textarea>
+    </div>`).join('');
+}
+function setStar(i,v){
+  const saved=lsGet('reflect')||{};
+  saved['s'+i]=v; lsSet('reflect',saved);
+  const total=([0,1,2].reduce((a,j)=>{const s=lsGet('reflect')||{};return a+(s['s'+j]||0)},0));
+  scores.reflect=Math.round(total/1);
+  // Recompute: max stars per item=4, 3 items=12 total
+  scores.reflect=Math.min(12,[0,1,2].reduce((a,j)=>{const s=lsGet('reflect')||{};return a+(s['s'+j]||0)},0));
+  saveScores(); updateTotal();
+  document.getElementById('reflect-score').textContent=scores.reflect;
+  renderReflect();
+}
+function saveReflectNote(i,v){const s=lsGet('reflect')||{};s['n'+i]=v;lsSet('reflect',s)}
+
+// PROGRESS
+function updateTotal(){
+  const t=scores.dq.reduce((a,b)=>a+b,0)+scores.cq.reduce((a,b)=>a+b,0)+scores.cat+scores.fib+(scores.writing1||0)+(scores.writing2||0)+scores.speaking+scores.reflect;
+  document.getElementById('total-score-chip').textContent=t;
+  document.getElementById('total-big').textContent=t;
+  return t;
+}
+function updateProgress(){
+  const dq=scores.dq.reduce((a,b)=>a+b,0);
+  const cq=scores.cq.reduce((a,b)=>a+b,0);
+  const writ=(scores.writing1||0)+(scores.writing2||0);
+  const items=[
+    {id:'dq',val:dq,max:15},{id:'cq',val:cq,max:15},
+    {id:'cat',val:scores.cat,max:15},{id:'fib',val:scores.fib,max:12},
+    {id:'writ',val:writ,max:16},{id:'spk',val:scores.speaking,max:8},
+    {id:'ref',val:scores.reflect,max:12}
+  ];
+  items.forEach(it=>{
+    const pct=(it.val/it.max)*100;
+    const el=document.getElementById('prog-'+it.id);
+    if(el)el.style.width=pct+'%';
+    const vl=document.getElementById('prog-'+it.id+'-val');
+    if(vl)vl.textContent=it.val+'/'+it.max;
+  });
+  updateTotal();
+}
+
+function resetAll(){
+  if(!confirm('Reset all progress for this lesson?'))return;
+  ['scores','catAnswers','fibAnswers','chips','reflect','writing1','writing2'].forEach(k=>localStorage.removeItem(LS+k));
+  [0,1,2].forEach(i=>{localStorage.removeItem(LS+'dq'+i);localStorage.removeItem(LS+'cq'+i)});
+  scores={dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:[0,0,0]};
+  location.reload();
+}
+
+// INIT
+(function init(){
+  if(lsGet('theme')==='light')document.body.classList.add('light-mode');
+  renderDQ(); renderCQ(); renderGlossary(); renderCategories(); renderFIB(); renderChips(); renderReflect();
+  // restore textarea values
+  [0,1,2].forEach(i=>{
+    const dta=document.getElementById('dq-ta-'+i);
+    if(dta){const v=lsGet('dq'+i);if(v)dta.value=v}
+    const cta=document.getElementById('cq-ta-'+i);
+    if(cta){const v=lsGet('cq'+i);if(v)cta.value=v}
+  });
+  const w1=document.getElementById('writing1-input');if(w1){const v=lsGet('writing1');if(v)w1.value=v}
+  const w2=document.getElementById('writing2-input');if(w2){const v=lsGet('writing2');if(v)w2.value=v}
+  const spk=document.getElementById('speaking-range');
+  if(spk&&scores.speaking){spk.value=scores.speaking;document.getElementById('speaking-val').textContent=scores.speaking}
+  updateTimerDisplay();
+  updateTotal();
+})();
+</script>
+</body>
+</html>
