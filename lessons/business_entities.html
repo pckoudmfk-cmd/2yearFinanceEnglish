@@ -7,32 +7,29 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --navy: #0A1628; --gold: #C9A84C; --gold-light: #e8c96a; --white: #FFFFFF;
+    --navy: #0A1628; --navy2: #0d1e38; --gold: #C9A84C; --gold-light: #e8c96a; --white: #FFFFFF;
     --light-gray: #F5F5F5; --mid-gray: #8892A4; --bg: #F5F5F5; --card-bg: #FFFFFF;
-    --text: #0A1628; --text-secondary: #8892A4; --border: #e0e4ec;
-    --sidebar-bg: #0A1628; --sidebar-text: #FFFFFF; --input-bg: #FFFFFF;
+    --text: #0A1628; --text2: #b0b8cc; --text3: #7a8299; --text-secondary: #8892A4; --border: #e0e4ec;
+    --input-bg: #FFFFFF;
     --shadow: 0 2px 16px rgba(10,22,40,0.10); --shadow-lg: 0 8px 32px rgba(10,22,40,0.16);
     --radius: 12px; --transition: 0.22s cubic-bezier(.4,0,.2,1);
   }
-  .dark-mode { --bg: #0A1628; --card-bg: #1a2a42; --text: #FFFFFF; --text-secondary: #8892A4; --border: #2a3a52; --sidebar-bg: #06101e; --input-bg: #1a2a42; --shadow: 0 2px 16px rgba(0,0,0,0.3); --shadow-lg: 0 8px 32px rgba(0,0,0,0.4); }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 100vh; display: -webkit-flex; display: flex; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); }
-  #progress-bar-wrap { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--border); z-index: 9999; }
-  #progress-bar-fill { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); -webkit-transition: width 0.5s ease; transition: width 0.5s ease; border-radius: 0 2px 2px 0; }
-  #progress-label { position: fixed; top: 8px; right: 70px; font-size: 11px; font-weight: 600; color: var(--gold); z-index: 9999; letter-spacing: 0.5px; }
-  #sidebar { width: 250px; min-height: 100vh; background: var(--sidebar-bg); position: fixed; left: 0; top: 0; bottom: 0; z-index: 1000; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-transition: -webkit-transform var(--transition); transition: transform var(--transition); overflow-y: auto; padding-bottom: 24px; }
-  #sidebar-logo { padding: 28px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px; }
-  #sidebar-logo .logo-title { color: var(--gold); font-size: 15px; font-weight: 700; letter-spacing: 0.3px; line-height: 1.3; }
-  #sidebar-logo .logo-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
-  #sidebar nav a { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 10px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 500; padding: 10px 24px; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); cursor: pointer; }
-  #sidebar nav a:hover, #sidebar nav a.active { background: rgba(201,168,76,0.13); color: var(--gold); }
-  #sidebar nav a .nav-num { width: 20px; height: 20px; border-radius: 50%; background: rgba(201,168,76,0.18); color: var(--gold); font-size: 10px; font-weight: 700; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
-  #sidebar nav a.done .nav-num { background: var(--gold); color: var(--navy); }
-  #hamburger { display: none; position: fixed; top: 12px; left: 12px; z-index: 1100; background: var(--navy); border: none; border-radius: 8px; padding: 8px; cursor: pointer; -webkit-flex-direction: column; flex-direction: column; gap: 4px; }
-  #hamburger span { display: block; width: 20px; height: 2px; background: var(--gold); border-radius: 2px; -webkit-transition: var(--transition); transition: var(--transition); }
-  #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
-  #dark-toggle { position: fixed; top: 10px; right: 16px; z-index: 9999; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; -webkit-transition: var(--transition); transition: var(--transition); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 5px; box-shadow: var(--shadow); }
-  #main-content { margin-left: 250px; -webkit-flex: 1; flex: 1; padding: 40px 48px 60px; max-width: 1100px; }
-  .section { margin-bottom: 64px; scroll-margin-top: 32px; }
+  .dark-mode { --bg: #0A1628; --navy2: #0d1e38; --card-bg: #1a2a42; --text: #e8eaf0; --text-secondary: #8892A4; --border: #2a3a52; --input-bg: #1a2a42; --shadow: 0 2px 16px rgba(0,0,0,0.3); --shadow-lg: 0 8px 32px rgba(0,0,0,0.4); }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 100vh; -webkit-transition: background var(--transition), color var(--transition); transition: background var(--transition), color var(--transition); }
+  .header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%); border-bottom: 2px solid var(--gold); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .header-left h1 { font-size: 1.25rem; font-weight: 700; color: var(--gold); }
+  .header-left p { font-size: .8rem; color: var(--text-secondary); margin-top: 2px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .score-chip { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: .85rem; font-weight: 600; color: var(--gold); }
+  .theme-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; color: var(--text-secondary); cursor: pointer; font-size: .8rem; transition: .2s; font-family: inherit; }
+  .theme-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--navy2);overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab{padding:12px 18px;font-size:.8rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;letter-spacing:.3px;text-transform:uppercase}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+  .section{display:none}
+  .section.active{display:block}
+  #main-content { padding: 40px 48px 60px; max-width: 1100px; margin: 0 auto; }
   .section-header { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 14px; margin-bottom: 28px; }
   .section-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-size: 14px; font-weight: 800; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
   .section-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
@@ -134,42 +131,41 @@
   .flex { display: -webkit-flex; display: flex; } .flex-center { -webkit-align-items: center; align-items: center; }
   .gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
   .text-gold { color: var(--gold); } .text-sm { font-size: 13px; } .text-xs { font-size: 11px; color: var(--mid-gray); } .fw-600 { font-weight: 600; }
-  @media print { #sidebar, #hamburger, #dark-toggle, #progress-bar-wrap, #progress-label, #confetti-container, #excellent-banner, .btn, .timer-wrap { display: none !important; } #main-content { margin-left: 0 !important; padding: 20px !important; } body { background: white !important; color: black !important; } .card { box-shadow: none !important; border: 1px solid #ddd !important; } }
-  @media (max-width: 900px) { #main-content { margin-left: 0; padding: 20px 20px 48px; } #hamburger { display: -webkit-flex; display: flex; } #sidebar { -webkit-transform: translateX(-100%); transform: translateX(-100%); } #sidebar.open { -webkit-transform: none; transform: none; } #sidebar-overlay.show { display: block; } .flashcard-wrap { width: calc(50% - 8px); } .final-check-item { width: 100%; } #progress-label { right: 60px; } }
+  @media print { #dark-toggle, #confetti-container, #excellent-banner, .btn, .timer-wrap { display: none !important; } #main-content { padding: 20px !important; } body { background: white !important; color: black !important; } .card { box-shadow: none !important; border: 1px solid #ddd !important; } }
+  @media (max-width: 900px) { #main-content { padding: 20px 20px 48px; } .flashcard-wrap { width: calc(50% - 8px); } .final-check-item { width: 100%; } }
   @media (max-width: 600px) { .flashcard-wrap { width: 100%; } #main-content { padding: 16px 16px 48px; } .section-title { font-size: 18px; } .final-check-item { width: 100%; } .fib-input { width: 130px; } }
 </style>
 </head>
 <body>
 
-<div id="progress-bar-wrap"><div id="progress-bar-fill" style="width:0%"></div></div>
-<div id="progress-label">0% Complete</div>
-<button id="dark-toggle" onclick="toggleDark()"><span id="dark-icon">🌙</span><span id="dark-label">Dark</span></button>
-<button id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
-<div id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-<aside id="sidebar">
-  <div id="sidebar-logo">
-    <div class="logo-title">Business Entities</div>
-    <div class="logo-sub">Educational Dashboard</div>
+<header class="header">
+  <div class="header-left">
+    <h1>Business Entities &amp; Financial Reporting</h1>
+    <p>Educational Dashboard</p>
   </div>
-  <nav>
-    <a href="#part1" onclick="smoothNav(event,'part1')" id="nav1"><span class="nav-num">1</span> Professional Situation</a>
-    <a href="#part2" onclick="smoothNav(event,'part2')" id="nav2"><span class="nav-num">2</span> Main Text</a>
-    <a href="#part3" onclick="smoothNav(event,'part3')" id="nav3"><span class="nav-num">3</span> Glossary Categories</a>
-    <a href="#part4" onclick="smoothNav(event,'part4')" id="nav4"><span class="nav-num">4</span> Glossary Cards</a>
-    <a href="#part5" onclick="smoothNav(event,'part5')" id="nav5"><span class="nav-num">5</span> Fill in Blanks</a>
-    <a href="#part6" onclick="smoothNav(event,'part6')" id="nav6"><span class="nav-num">6</span> Writing Tasks</a>
-    <a href="#part7" onclick="smoothNav(event,'part7')" id="nav7"><span class="nav-num">7</span> Speaking Plan</a>
-    <a href="#part8" onclick="smoothNav(event,'part8')" id="nav8"><span class="nav-num">8</span> Speaking Task</a>
-    <a href="#final" onclick="smoothNav(event,'final')" id="navF"><span class="nav-num">✓</span> Self-Reflection</a>
-    <a href="#score" onclick="smoothNav(event,'score')" id="navS"><span class="nav-num">★</span> My Score</a>
-  </nav>
-</aside>
+  <div class="header-right">
+    <div class="score-chip">Score: <span id="total-score-chip">0</span> / 93</div>
+    <button class="theme-btn" id="dark-toggle" onclick="toggleDark()"><span id="dark-icon">🌙</span> <span id="dark-label">Dark</span></button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tab active" onclick="showTab('part1')">Situation</div>
+  <div class="tab" onclick="showTab('part2')">Main Text</div>
+  <div class="tab" onclick="showTab('part3')">Categories</div>
+  <div class="tab" onclick="showTab('part4')">Flashcards</div>
+  <div class="tab" onclick="showTab('part5')">Fill in Blanks</div>
+  <div class="tab" onclick="showTab('part6')">Writing</div>
+  <div class="tab" onclick="showTab('part7')">Speaking Plan</div>
+  <div class="tab" onclick="showTab('part8')">Speaking Task</div>
+  <div class="tab" onclick="showTab('final')">Reflection</div>
+  <div class="tab" onclick="showTab('score')">My Score</div>
+</nav>
 
 <main id="main-content">
 
 <!-- PART 1 -->
-<section class="section" id="part1">
+<div id="tab-part1" class="section active">
   <div class="section-header">
     <div class="section-num">1</div>
     <div>
@@ -218,10 +214,10 @@
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- PART 2 -->
-<section class="section" id="part2">
+<div id="tab-part2" class="section">
   <div class="section-header">
     <div class="section-num">2</div>
     <div>
@@ -278,10 +274,10 @@
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- PART 3 -->
-<section class="section" id="part3">
+<div id="tab-part3" class="section">
   <div class="section-header">
     <div class="section-num">3</div>
     <div>
@@ -302,10 +298,10 @@
       <span id="cat-score" class="text-sm text-gold fw-600"></span>
     </div>
   </div>
-</section>
+</div>
 
 <!-- PART 4 -->
-<section class="section" id="part4">
+<div id="tab-part4" class="section">
   <div class="section-header">
     <div class="section-num">4</div>
     <div>
@@ -323,10 +319,10 @@
     <div class="flashcard-grid" id="flashcard-grid"></div>
     <div id="card-count" style="margin-top:12px;font-size:12px;color:var(--mid-gray);"></div>
   </div>
-</section>
+</div>
 
 <!-- PART 5 -->
-<section class="section" id="part5">
+<div id="tab-part5" class="section">
   <div class="section-header">
     <div class="section-num">5</div>
     <div>
@@ -342,10 +338,10 @@
       <span id="fib-score" class="text-gold fw-600" style="align-self:center;margin-left:8px;font-size:14px;"></span>
     </div>
   </div>
-</section>
+</div>
 
 <!-- PART 6 -->
-<section class="section" id="part6">
+<div id="tab-part6" class="section">
   <div class="section-header">
     <div class="section-num">6</div>
     <div>
@@ -390,10 +386,10 @@
       <div id="w-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- PART 7 -->
-<section class="section" id="part7">
+<div id="tab-part7" class="section">
   <div class="section-header">
     <div class="section-num">7</div>
     <div>
@@ -418,10 +414,10 @@
 
     <div style="margin-top:16px;" id="sp-wordcount" class="text-xs"></div>
   </div>
-</section>
+</div>
 
 <!-- PART 8 -->
-<section class="section" id="part8">
+<div id="tab-part8" class="section">
   <div class="section-header">
     <div class="section-num">8</div>
     <div>
@@ -465,10 +461,10 @@
     <div style="margin-top:12px;font-size:13px;color:var(--mid-gray);">Used: <span id="chips-used" class="text-gold fw-600">0</span> / 8 keywords</div>
     <div id="speaking-score-msg" style="margin-top:8px;font-size:13px;color:var(--gold);font-weight:600;display:none;"></div>
   </div>
-</section>
+</div>
 
 <!-- PART 9 SELF-REFLECTION -->
-<section class="section" id="final">
+<div id="tab-final" class="section">
   <div class="section-header">
     <div class="section-num">✓</div>
     <div>
@@ -480,10 +476,10 @@
     <div class="final-grid" id="reflection-grid"></div>
     <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Self-Reflection Score: <span id="reflection-score" class="text-gold">0</span> / 12</div>
   </div>
-</section>
+</div>
 
 <!-- SCORE -->
-<section class="section" id="score">
+<div id="tab-score" class="section">
   <div class="section-header">
     <div class="section-num">★</div>
     <div>
@@ -496,7 +492,7 @@
     <button class="btn btn-primary" onclick="calcScore()">📊 Calculate Score</button>
     <div id="total-score-display" style="margin-top:24px;text-align:center;"></div>
   </div>
-</section>
+</div>
 
 </main>
 
@@ -518,18 +514,13 @@ function toggleDark() {
 }
 if (loadItem(PREFIX+'dark') === '1') { document.body.classList.add('dark-mode'); document.getElementById('dark-icon').textContent = '☀️'; document.getElementById('dark-label').textContent = 'Light'; }
 
-// Sidebar
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show'); }
-function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); }
-function smoothNav(e, id) { e.preventDefault(); closeSidebar(); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
-
-// Progress bar
-window.addEventListener('scroll', function() {
-  var h = document.documentElement.scrollHeight - window.innerHeight;
-  var p = h > 0 ? Math.round((window.scrollY / h) * 100) : 0;
-  document.getElementById('progress-bar-fill').style.width = p + '%';
-  document.getElementById('progress-label').textContent = p + '% Complete';
-});
+// Tab navigation
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
 
 // ===== GLOSSARY =====
 var glossaryTerms = [
@@ -615,7 +606,6 @@ function checkDQ(n) {
     (found.length > 0 ? 'Good use of: <em>'+found.slice(0,3).join(', ')+'</em>. ' : 'No key terms found. ')+
     '<br><span style="color:var(--mid-gray);font-size:12px;">Tip: '+c.tip+'</span>';
   saveItem(PREFIX+'dq'+n+'score', score);
-  updateProgress();
 }
 
 function showModelDQ(n) {
@@ -657,7 +647,6 @@ function checkCQ(n) {
   fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
     (found.length > 0 ? 'Keywords found: <em>'+found.join(', ')+'</em>.' : 'Key terms not detected.');
   saveItem(PREFIX+'cq'+n+'score', score);
-  updateProgress();
 }
 
 function showModelCQ(n) {
@@ -747,7 +736,6 @@ function updateCatScore() {
   var score = Math.round((correct / total) * 15);
   document.getElementById('cat-score').textContent = correct + '/' + total + ' correct — ' + score + '/15 pts';
   saveItem(PREFIX+'catScore', score);
-  updateProgress();
 }
 
 function resetCategories() {
@@ -832,7 +820,6 @@ function checkAllFIB() {
   var pts = score * 2;
   document.getElementById('fib-score').textContent = score + '/6 correct — ' + pts + '/12 pts';
   saveItem(PREFIX+'fibScore', pts);
-  updateProgress();
 }
 
 function resetFIB() {
@@ -909,7 +896,6 @@ function checkWriting(n) {
   fb.style.border = '1px solid ' + color;
   fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/'+maxScore+'</strong><br>' + details.join('<br>');
   saveItem(PREFIX+'w'+n+'score', score);
-  updateProgress();
 }
 
 function showModelWriting(n) {
@@ -1034,7 +1020,6 @@ function updateChipScore() {
     document.getElementById('speaking-score-msg').style.display = 'block';
     document.getElementById('speaking-score-msg').textContent = '★ ' + score + '/8 pts — Great vocabulary use!';
   }
-  updateProgress();
 }
 
 // ===== SELF-REFLECTION =====
@@ -1080,7 +1065,6 @@ function updateReflectionScore() {
   var score = Math.round((checked / reflectionItems.length) * 12);
   document.getElementById('reflection-score').textContent = score;
   saveItem(PREFIX+'reflScore', score);
-  updateProgress();
 }
 
 // ===== SCORE =====
@@ -1120,11 +1104,10 @@ function calcScore() {
     '<div style="font-size:48px;font-weight:800;color:var(--gold);">' + total + '<span style="font-size:24px;color:var(--text-secondary);">/' + maxTotal + '</span></div>' +
     '<div style="font-size:20px;font-weight:700;margin-top:4px;">' + pct + '% — ' + grade + '</div>';
 
+  document.getElementById('total-score-chip').textContent = total;
   saveItem(PREFIX+'totalScore', total);
   if (pct >= 80) { showConfetti(); showBanner(grade); }
 }
-
-function updateProgress() {}
 
 // ===== CONFETTI =====
 function showConfetti() {
@@ -1159,22 +1142,6 @@ renderReflection();
 ['dq1','dq2','dq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; } });
 ['cq1','cq2','cq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; } });
 ['w1','w2'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; updateWordCount(id, 'wc'+id.slice(1), 'wb'+id.slice(1)); } });
-
-// Active nav highlighting
-var navSections = ['part1','part2','part3','part4','part5','part6','part7','part8','final','score'];
-var navIds = ['nav1','nav2','nav3','nav4','nav5','nav6','nav7','nav8','navF','navS'];
-window.addEventListener('scroll', function() {
-  var scrollY = window.scrollY + 80;
-  navSections.forEach(function(id, i) {
-    var el = document.getElementById(id);
-    if (el) {
-      var top = el.offsetTop;
-      var bot = top + el.offsetHeight;
-      var navEl = document.getElementById(navIds[i]);
-      if (navEl) navEl.classList.toggle('active', scrollY >= top && scrollY < bot);
-    }
-  });
-});
 </script>
 </body>
 </html>
