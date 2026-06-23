@@ -3,518 +3,457 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mind Map — Marketing & Strategy in Financial Organizations</title>
+<title>Marketing & Strategy — Mind Map</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --navy:#0A1628;--navy2:#0d1e38;--navy3:#112244;
-    --gold:#C9A84C;--gold2:#e8c96a;
-    --text:#e8eaf0;--text2:#b0b8cc;--text3:#7a8299;
-    --card:#13233d;--border:#1e3560;
-    --radius:12px;
-  }
-  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow:hidden}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:#0A1628;color:#e8eaf0;min-height:100vh;overflow:hidden}
 
-  /* HEADER */
-  .header{background:linear-gradient(135deg,var(--navy3),var(--navy2));border-bottom:2px solid var(--gold);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:relative;z-index:10}
-  .header h1{font-size:1rem;font-weight:700;color:var(--gold)}
-  .header p{font-size:.75rem;color:var(--text2);margin-top:2px}
-  .header-right{display:flex;gap:8px}
-  .hbtn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text2);cursor:pointer;font-size:.78rem;transition:.2s}
-  .hbtn:hover{border-color:var(--gold);color:var(--gold)}
-  .hbtn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid #1e3560;
+  padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+header h1{font-size:.9rem;font-weight:700;color:#e8eaf0;flex:1;min-width:140px}
+header h1 span{color:#C9A84C}
+.legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.leg{display:flex;align-items:center;gap:5px;font-size:.68rem;color:#b0b8cc}
+.leg-dot{width:9px;height:9px;border-radius:50%}
+.btns{display:flex;gap:6px}
+.hbtn{background:none;border:1px solid #1e3560;border-radius:8px;padding:5px 11px;color:#b0b8cc;font-size:.72rem;cursor:pointer;transition:.2s;font-family:inherit}
+.hbtn:hover{border-color:#C9A84C;color:#C9A84C}
 
-  /* CANVAS AREA */
-  #canvas-wrap{position:fixed;top:0;left:0;width:100vw;height:100vh;overflow:hidden;cursor:grab}
-  #canvas-wrap.grabbing{cursor:grabbing}
-  #canvas{position:absolute;transform-origin:0 0}
+#canvas{position:fixed;top:52px;left:0;right:0;bottom:0;cursor:grab;user-select:none;touch-action:none}
+#canvas:active{cursor:grabbing}
+svg#lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 
-  /* SVG LINES */
-  #svg-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.node{
+  position:absolute;
+  border-radius:12px;padding:8px 15px;
+  font-size:.75rem;font-weight:600;line-height:1.3;
+  text-align:center;cursor:pointer;
+  border:2px solid transparent;
+  transition:box-shadow .15s,opacity .2s;
+  max-width:155px;white-space:normal;
+  box-shadow:0 2px 12px rgba(0,0,0,.4);
+}
+.node:hover{box-shadow:0 4px 22px rgba(0,0,0,.65)}
 
-  /* NODES */
-  .node{position:absolute;transform:translate(-50%,-50%);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:filter .2s}
-  .node:hover{filter:brightness(1.15)}
-  .node-inner{border-radius:var(--radius);padding:10px 16px;text-align:center;user-select:none;position:relative;transition:transform .2s,box-shadow .2s}
-  .node:hover .node-inner{transform:scale(1.04)}
-  .node.root .node-inner{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0A1628;font-size:.95rem;font-weight:800;padding:14px 22px;border-radius:16px;box-shadow:0 0 0 4px rgba(201,168,76,.25),0 8px 32px rgba(201,168,76,.3)}
-  .node.l1 .node-inner{font-size:.8rem;font-weight:700;border:2px solid;border-radius:10px;padding:9px 15px;box-shadow:0 4px 16px rgba(0,0,0,.4)}
-  .node.l2 .node-inner{font-size:.75rem;font-weight:600;border:1.5px solid;border-radius:8px;padding:7px 12px;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-  .node.l3 .node-inner{font-size:.72rem;font-weight:500;border:1px solid;border-radius:6px;padding:5px 10px;box-shadow:0 1px 6px rgba(0,0,0,.25)}
+.node.root{
+  background:linear-gradient(135deg,#C9A84C,#e8c96a);
+  color:#0A1628;font-size:.88rem;font-weight:800;
+  border-color:#f5e6b0;padding:13px 20px;border-radius:16px;
+  box-shadow:0 0 28px rgba(201,168,76,.4);max-width:190px;
+}
+.node.cause{background:#1a3352;border-color:#3b82f6;color:#93c5fd}
+.node.effect{background:#0f2e22;border-color:#10b981;color:#6ee7b7}
+.node.risk{background:#371212;border-color:#ef4444;color:#fca5a5}
+.node.outcome{background:#2a1e0a;border-color:#f59e0b;color:#fcd34d}
+.node.process{background:#271740;border-color:#8b5cf6;color:#c4b5fd}
 
-  /* BRANCH COLORS */
-  .b0 .node-inner{background:#0f2040;border-color:#3498db;color:#7dd3fc}
-  .b1 .node-inner{background:#0f2a1a;border-color:#2ecc71;color:#86efac}
-  .b2 .node-inner{background:#2a1020;border-color:#e74c3c;color:#fca5a5}
-  .b3 .node-inner{background:#1a1a0a;border-color:#f59e0b;color:#fde68a}
-  .b4 .node-inner{background:#1a0a2a;border-color:#a855f7;color:#d8b4fe}
+.node .dot{
+  position:absolute;right:-9px;top:50%;transform:translateY(-50%);
+  width:15px;height:15px;border-radius:50%;
+  background:#0A1628;border:2px solid currentColor;
+  font-size:10px;display:flex;align-items:center;justify-content:center;
+  font-weight:700;
+}
 
-  /* EXPAND INDICATOR */
-  .expand-dot{position:absolute;bottom:-6px;right:-6px;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;transition:.2s}
-  .b0 .expand-dot{background:#3498db;color:#fff}
-  .b1 .expand-dot{background:#2ecc71;color:#fff}
-  .b2 .expand-dot{background:#e74c3c;color:#fff}
-  .b3 .expand-dot{background:#f59e0b;color:#fff}
-  .b4 .expand-dot{background:#a855f7;color:#fff}
-  .node.collapsed .expand-dot::after{content:'+'}
-  .node.expanded .expand-dot::after{content:'−'}
-  .node.leaf .expand-dot{display:none}
+.edge-label{
+  position:absolute;transform:translate(-50%,-50%);
+  font-size:.6rem;color:#7a8299;
+  background:rgba(10,22,40,.88);padding:2px 6px;border-radius:6px;
+  pointer-events:none;white-space:nowrap;border:1px solid #1e3560;
+}
 
-  /* POPUP */
-  #popup{position:fixed;z-index:1000;max-width:320px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none;pointer-events:all}
-  #popup.show{display:block;animation:popIn .18s ease}
-  @keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-  #popup .p-title{font-size:.9rem;font-weight:800;margin-bottom:8px}
-  #popup .p-type{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;opacity:.7}
-  #popup .p-body{font-size:.82rem;color:var(--text2);line-height:1.65}
-  #popup .p-link{font-size:.75rem;color:var(--gold);margin-top:10px;cursor:pointer;display:inline-block}
-  #popup .p-link:hover{text-decoration:underline}
-  #popup .p-close{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:1rem;line-height:1}
-  #popup .p-close:hover{color:var(--text)}
+#popup{
+  position:fixed;z-index:200;
+  background:#13233d;border:1px solid #1e3560;border-radius:14px;
+  padding:16px 18px;max-width:290px;
+  box-shadow:0 8px 40px rgba(0,0,0,.7);display:none;
+}
+#popup.show{display:block;animation:popIn .16s ease}
+@keyframes popIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+#popup h3{font-size:.85rem;font-weight:700;color:#e8eaf0;margin-bottom:5px}
+#popup .type-tag{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:7px;display:inline-block;margin-bottom:8px}
+#popup p{font-size:.78rem;color:#b0b8cc;line-height:1.6}
+#popup .rel{font-size:.73rem;color:#C9A84C;margin-top:8px;padding-top:7px;border-top:1px solid #1e3560;font-style:italic}
+#popup-close{position:absolute;top:9px;right:11px;background:none;border:none;color:#7a8299;font-size:.95rem;cursor:pointer}
+#popup-close:hover{color:#e8eaf0}
 
-  /* LEGEND */
-  #legend{position:fixed;bottom:20px;left:20px;background:rgba(13,30,56,.9);border:1px solid var(--border);border-radius:10px;padding:12px 16px;z-index:10;backdrop-filter:blur(8px)}
-  #legend h4{font-size:.7rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
-  .leg-item{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--text2);margin-bottom:5px}
-  .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-
-  /* CONTROLS */
-  #zoom-controls{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:6px;z-index:10}
-  .zoom-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:rgba(13,30,56,.9);color:var(--text);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;backdrop-filter:blur(8px)}
-  .zoom-btn:hover{border-color:var(--gold);color:var(--gold)}
-
-  /* HINT */
-  #hint{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:6px 16px;font-size:.75rem;color:var(--gold2);z-index:10;pointer-events:none;transition:opacity .5s}
-  #hint.hide{opacity:0}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div>
-    <h1>Marketing &amp; Strategy in Financial Organizations</h1>
-    <p>Interactive Mind Map — click nodes to explore, drag to pan, scroll to zoom</p>
+<header>
+  <h1>Marketing &amp; Strategy in Finance — <span>Narrative Mind Map</span></h1>
+  <div class="legend">
+    <span class="leg"><span class="leg-dot" style="background:#3b82f6"></span>Cause</span>
+    <span class="leg"><span class="leg-dot" style="background:#8b5cf6"></span>Process</span>
+    <span class="leg"><span class="leg-dot" style="background:#10b981"></span>Effect</span>
+    <span class="leg"><span class="leg-dot" style="background:#f59e0b"></span>Outcome</span>
+    <span class="leg"><span class="leg-dot" style="background:#ef4444"></span>Risk</span>
   </div>
-  <div class="header-right">
+  <div class="btns">
     <button class="hbtn" onclick="expandAll()">Expand All</button>
     <button class="hbtn" onclick="collapseAll()">Collapse All</button>
     <button class="hbtn" onclick="resetView()">Reset View</button>
-    <button class="hbtn" onclick="window.history.back()">← Back</button>
   </div>
-</div>
+</header>
 
-<div id="canvas-wrap">
-  <div id="canvas">
-    <svg id="svg-layer"></svg>
-  </div>
+<div id="canvas">
+  <svg id="lines"></svg>
 </div>
 
 <div id="popup">
-  <button class="p-close" onclick="closePopup()">✕</button>
-  <div class="p-type" id="p-type"></div>
-  <div class="p-title" id="p-title"></div>
-  <div class="p-body" id="p-body"></div>
-  <span class="p-link" id="p-link" onclick="expandFromPopup()"></span>
+  <button id="popup-close" onclick="closePopup()">✕</button>
+  <h3 id="popup-title"></h3>
+  <span class="type-tag" id="popup-tag"></span>
+  <p id="popup-body"></p>
+  <div class="rel" id="popup-rel"></div>
 </div>
-
-<div id="legend">
-  <h4>Branches</h4>
-  <div class="leg-item"><div class="leg-dot" style="background:#3498db"></div>Role of Marketing</div>
-  <div class="leg-item"><div class="leg-dot" style="background:#2ecc71"></div>Strategy</div>
-  <div class="leg-item"><div class="leg-dot" style="background:#e74c3c"></div>Market Analysis</div>
-  <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div>Financial Products</div>
-  <div class="leg-item"><div class="leg-dot" style="background:#a855f7"></div>Risks & Growth</div>
-</div>
-
-<div id="zoom-controls">
-  <button class="zoom-btn" onclick="zoom(1.2)">+</button>
-  <button class="zoom-btn" onclick="zoom(0.83)">−</button>
-</div>
-
-<div id="hint">💡 Click any node to learn more</div>
 
 <script>
-// ─── MIND MAP DATA ───────────────────────────────────────────────────────────
-const tree = {
-  id:'root', label:'Marketing &\nStrategy\nin Finance', level:'root', branch:-1,
-  info:{type:'Topic',body:'Marketing and strategy are the twin engines of growth for financial organizations. Marketing reveals what clients need; strategy decides how to act on that knowledge. Together they drive sustainable growth, competitive advantage, and long-term client relationships.'},
-  children:[
-    {
-      id:'b0', label:'Role of\nMarketing', level:'l1', branch:0,
-      info:{type:'Core Concept',body:'Marketing in finance is not just promotion — it is the systematic process of understanding client needs, studying behavior, and designing products that meet specific demands. It helps companies position their services and build lasting client relationships.'},
-      children:[
-        {
-          id:'b0a', label:'Understanding\nClient Needs', level:'l2', branch:0,
-          info:{type:'Key Activity',body:'Financial organizations must analyze what clients want: security, returns, flexibility, or convenience. Without understanding needs, even excellent products fail in the market.'},
-          children:[
-            {id:'b0a1',label:'customer needs',level:'l3',branch:0,info:{type:'Glossary Term',body:'The specific requirements, desires, and problems that clients want a financial product or service to address. Identifying these drives the entire marketing process.'}},
-            {id:'b0a2',label:'client behavior',level:'l3',branch:0,info:{type:'Glossary Term',body:'The patterns of how clients research, choose, and use financial products. Analyzing behavior reveals what influences their decisions — price, trust, convenience, or social proof.'}},
-          ]
-        },
-        {
-          id:'b0b', label:'Market\nSegmentation', level:'l2', branch:0,
-          info:{type:'Key Concept',body:'Companies divide the market into groups by income level, financial goals, and risk tolerance. This allows them to offer tailored products — loans for some, investments for others — making marketing far more efficient.'},
-          children:[
-            {id:'b0b1',label:'market\nsegmentation',level:'l3',branch:0,info:{type:'Glossary Term',body:'Dividing a broad market into distinct subsets of clients who have common needs or priorities. Each segment can then be targeted with a customized offer.'}},
-            {id:'b0b2',label:'target market',level:'l3',branch:0,info:{type:'Glossary Term',body:'The specific segment of clients a company decides to focus its marketing efforts on. Choosing the right target market prevents wasted resources and maximizes conversion.'}},
-          ]
-        },
-        {
-          id:'b0c', label:'Market\nTrends', level:'l2', branch:0,
-          info:{type:'Key Concept',body:'Marketing must track how the market is changing — for example, rising demand for digital banking or ESG investments. These trends inform strategic decisions about product development and investment.'},
-          children:[
-            {id:'b0c1',label:'market trends',level:'l3',branch:0,info:{type:'Glossary Term',body:'Observable shifts in client preferences, technology adoption, regulations, or economic conditions that affect demand for financial products. Finance professionals use trends to anticipate market moves.'}},
-            {id:'b0c2',label:'demand',level:'l3',branch:0,info:{type:'Glossary Term',body:'The level of desire and ability among clients to purchase a financial product or service. Demand is shaped by price, quality, awareness, and market conditions.'}},
-          ]
-        },
-      ]
-    },
-    {
-      id:'b1', label:'Strategy', level:'l1', branch:1,
-      info:{type:'Core Concept',body:'Strategy defines the long-term direction of a financial organization. It answers: Where do we compete? How do we win? What makes us different? Strategy uses marketing data to make high-stakes decisions about products, pricing, and positioning.'},
-      children:[
-        {
-          id:'b1a', label:'Competitive\nAdvantage', level:'l2', branch:1,
-          info:{type:'Key Concept',body:'A company must decide what makes it better than competitors: lower pricing, superior service quality, innovative products, or trusted brand. Without differentiation, clients have no reason to choose you.'},
-          children:[
-            {id:'b1a1',label:'competitive\nadvantage',level:'l3',branch:1,info:{type:'Glossary Term',body:'A unique strength that allows a company to outperform competitors. In finance this might be better rates, faster service, deeper expertise, or a more trusted reputation.'}},
-            {id:'b1a2',label:'positioning',level:'l3',branch:1,info:{type:'Glossary Term',body:'How a company wants clients to perceive its products relative to competitors. Effective positioning occupies a clear, desirable, and distinct place in the client\'s mind.'}},
-          ]
-        },
-        {
-          id:'b1b', label:'Decision-\nMaking', level:'l2', branch:1,
-          info:{type:'Key Concept',body:'Strategic decision-making uses marketing data to choose the company\'s direction — which products to develop, which markets to enter, how to allocate resources. Poor decisions can lead to low demand, wasted investment, or loss of clients.'},
-          children:[
-            {id:'b1b1',label:'decision-\nmaking',level:'l3',branch:1,info:{type:'Glossary Term',body:'The process of selecting among strategic options based on analysis of market data, risk, and organizational goals. Good decision-making balances short-term results with long-term stability.'}},
-            {id:'b1b2',label:'strategy',level:'l3',branch:1,info:{type:'Glossary Term',body:'A long-term plan that defines how a financial organization will achieve its goals. It covers market positioning, product development, resource allocation, and competitive differentiation.'}},
-          ]
-        },
-        {
-          id:'b1c', label:'Sustainable\nGrowth', level:'l2', branch:1,
-          info:{type:'Key Concept',body:'The ultimate goal of strategy is not short-term profit but sustainable growth — expanding the client base, increasing revenue, and maintaining competitive advantage over the long term without taking excessive risks.'},
-          children:[
-            {id:'b1c1',label:'sustainable\ngrowth',level:'l3',branch:1,info:{type:'Glossary Term',body:'Consistent, long-term expansion of a company\'s client base, revenue, and market share in a way that does not create unmanageable risk or compromise financial stability.'}},
-          ]
-        },
-      ]
-    },
-    {
-      id:'b2', label:'Market\nAnalysis', level:'l1', branch:2,
-      info:{type:'Core Concept',body:'Market analysis is the intelligence work of financial organizations — studying the environment to find opportunities and threats. It links marketing observation to strategic action, answering: What is happening in the market, and what should we do about it?'},
-      children:[
-        {
-          id:'b2a', label:'Marketing ↔\nStrategy Link', level:'l2', branch:2,
-          info:{type:'Key Relationship',body:'Marketing provides the data: what clients want, what competitors offer, how trends are shifting. Strategy uses this data to make decisions. For example, if digital banking demand grows, strategy may decide to invest in online infrastructure.'},
-          children:[
-            {id:'b2a1',label:'marketing',level:'l3',branch:2,info:{type:'Glossary Term',body:'The organizational function responsible for understanding the market, communicating value to clients, and generating demand for the company\'s financial products and services.'}},
-          ]
-        },
-        {
-          id:'b2b', label:'Segmentation\n→ Efficiency', level:'l2', branch:2,
-          info:{type:'Cause & Effect',body:'Without segmentation → marketing becomes generic → resources are wasted → low conversion. With segmentation → targeted messages → higher relevance → better ROI. This is why segmentation is called the foundation of marketing efficiency.'},
-          children:[
-            {id:'b2b1',label:'Without\nsegmentation',level:'l3',branch:2,info:{type:'Consequence',body:'When all clients receive the same message, most of it is irrelevant to them. Resources are wasted, clients feel misunderstood, and conversion rates drop. This is the core risk of mass, undifferentiated marketing.'}},
-            {id:'b2b2',label:'With\nsegmentation',level:'l3',branch:2,info:{type:'Benefit',body:'Targeted marketing speaks directly to client needs, increases relevance, improves trust, and maximizes conversion. It is the reason modern financial organizations invest heavily in client data analysis.'}},
-          ]
-        },
-      ]
-    },
-    {
-      id:'b3', label:'Financial\nProducts', level:'l1', branch:3,
-      info:{type:'Core Concept',body:'Financial products are what the company sells — loans, investment plans, insurance, savings accounts. Their success depends entirely on how well they are designed to meet client needs, how they are priced, and how well their quality matches client expectations.'},
-      children:[
-        {
-          id:'b3a', label:'Product\nDesign', level:'l2', branch:3,
-          info:{type:'Key Activity',body:'Financial products must be designed around client needs identified through market segmentation. A product that solves a real problem at the right price point will succeed; one that ignores client needs will not, regardless of how technically sound it is.'},
-          children:[
-            {id:'b3a1',label:'financial\nproduct',level:'l3',branch:3,info:{type:'Glossary Term',body:'A service or instrument offered by a financial institution to clients — such as loans, savings accounts, investment portfolios, or insurance policies. Each product targets a specific client need.'}},
-            {id:'b3a2',label:'pricing',level:'l3',branch:3,info:{type:'Glossary Term',body:'The strategy for setting the price of a financial product. Pricing must balance profitability for the company with affordability and perceived value for the client. It is a key lever in competitive differentiation.'}},
-          ]
-        },
-        {
-          id:'b3b', label:'Service\nQuality', level:'l2', branch:3,
-          info:{type:'Key Factor',body:'In financial services, product quality and service quality are often inseparable. Clients judge a bank not just by its interest rates but by how quickly problems are resolved, how clear the communication is, and how trustworthy the institution feels.'},
-          children:[
-            {id:'b3b1',label:'service\nquality',level:'l3',branch:3,info:{type:'Glossary Term',body:'The degree to which a financial institution\'s service meets or exceeds client expectations in terms of reliability, responsiveness, empathy, and professionalism. High quality builds loyalty and referrals.'}},
-          ]
-        },
-      ]
-    },
-    {
-      id:'b4', label:'Risks &\nGrowth', level:'l1', branch:4,
-      info:{type:'Core Concept',body:'Weak marketing and poor strategy are not just missed opportunities — they create concrete financial risks. Low demand, eroded trust, and inefficient resource use all reduce profitability. Avoiding these risks requires continuous evaluation and adjustment.'},
-      children:[
-        {
-          id:'b4a', label:'Risks of\nWeak Marketing', level:'l2', branch:4,
-          info:{type:'Risk Analysis',body:'Poor understanding of client needs → wrong products → low demand. Ineffective communication → reduced trust → client churn. Incorrect positioning → wrong clients attracted → high cost per acquisition. Each failure has a direct financial cost.'},
-          children:[
-            {id:'b4a1',label:'Low demand',level:'l3',branch:4,info:{type:'Risk',body:'When a financial product fails to meet client needs or is communicated poorly, clients do not buy it. Low demand means wasted development costs, underutilized resources, and missed revenue targets.'}},
-            {id:'b4a2',label:'Reduced trust',level:'l3',branch:4,info:{type:'Risk',body:'Ineffective marketing communication — unclear messages, broken promises, or poor customer experience — erodes client trust. In financial services, trust is the foundation of every client relationship.'}},
-          ]
-        },
-        {
-          id:'b4b', label:'Path to\nGrowth', level:'l2', branch:4,
-          info:{type:'Solution',body:'The path to sustainable growth: understand client needs → segment the market → position products clearly → execute strategy → measure results → adjust. This cycle, repeated continuously, is how financial organizations grow.'},
-          children:[
-            {id:'b4b1',label:'Continuous\nevaluation',level:'l3',branch:4,info:{type:'Practice',body:'Financial organizations must constantly measure marketing effectiveness: conversion rates, client satisfaction, retention, and ROI. This data feeds back into strategy, enabling better decisions in the next cycle.'}},
-            {id:'b4b2',label:'sustainable\ngrowth',level:'l3',branch:4,info:{type:'Outcome',body:'The result of effective marketing + sound strategy: growing client base, rising revenue, strong brand, and resilient competitive position. Sustainable growth is the measure of success for any financial organization.'}},
-          ]
-        },
-      ]
-    },
-  ]
-};
+/* ─────────────────────────────────────────────────────────────────────────
+   NARRATIVE STRUCTURE — Marketing & Strategy lesson
+   The map follows the logical flow of the text, not a taxonomy.
+   Arrows show cause → effect → outcome; separate risk chain shows failure path.
 
-// ─── LAYOUT ──────────────────────────────────────────────────────────────────
-const CX = 700, CY = 500;
-const L1_R = 260, L2_R = 480, L3_R = 660;
+   Coordinate system: centre of story = root at (700, 420)
+   Chain 1 (left-up):  Market Understanding → Segmentation → Personalization → Efficiency
+   Chain 2 (right-up): Competitive Analysis → Differentiation → Advantage → Direction
+   Chain 3 (bottom):   Marketing Data → Strategy Uses Data → Good Decisions → Growth
+   Chain 4 (left-down): Weak Marketing → Poor Understanding → Low Demand → Revenue Loss
+───────────────────────────────────────────────────────────────────────── */
+const nodes = [
+  // ROOT
+  {id:'root', x:700, y:420, type:'root', label:'Marketing &\nStrategy\nin Finance',
+   info:{title:'Marketing & Strategy in Finance',tag:'Central Theme',tagC:'#C9A84C',tagBg:'rgba(201,168,76,.15)',
+    body:'The central idea of the lesson: financial organizations must combine marketing (understanding clients and markets) with strategy (long-term direction) to achieve competitive advantage and sustainable growth.',
+    rel:null}},
 
-const branchAngles = [-100, -40, 20, 80, 140]; // degrees for 5 branches
+  // ── CHAIN 1: Market Understanding (left-up arc) ──────────────────────
+  {id:'c1a', x:360, y:195, type:'cause', parent:'root', edge:'starts with',
+   label:'Understand\nClient Needs',
+   info:{title:'Understand Client Needs',tag:'Cause',tagC:'#93c5fd',tagBg:'rgba(59,130,246,.18)',
+    body:'Marketing in finance begins with deep analysis of customer behavior, income levels, financial goals, and risk tolerance. This is the foundational input — without it, all subsequent decisions are guesswork.',
+    rel:'→ makes Market Segmentation possible'}},
 
-function deg(d){ return d * Math.PI / 180 }
+  {id:'c1b', x:155, y:105, type:'process', parent:'c1a', edge:'requires',
+   label:'Analyze\nCustomer\nBehavior',
+   info:{title:'Analyze Customer Behavior',tag:'Process',tagC:'#c4b5fd',tagBg:'rgba(139,92,246,.18)',
+    body:'Studying how clients choose products, respond to pricing, and switch providers. Methods include surveys, transaction data analysis, and focus groups. This data is the raw material of segmentation.',
+    rel:'→ feeds into Segmentation'}},
 
-function layoutNodes(node, angle, radius){
-  const x = CX + Math.cos(deg(angle)) * radius;
-  const y = CY + Math.sin(deg(angle)) * radius;
-  node.x = x; node.y = y;
+  {id:'c1c', x:360, y:55, type:'effect', parent:'c1a', edge:'leads to',
+   label:'Market\nSegmentation',
+   info:{title:'Market Segmentation',tag:'Effect',tagC:'#6ee7b7',tagBg:'rgba(16,185,129,.18)',
+    body:'Dividing clients into groups by income, financial goals, and risk tolerance. A bank might segment into: retail savers, small business owners, high-net-worth investors. Each group needs a different offer.',
+    rel:'→ enables Personalized Products'}},
+
+  {id:'c1d', x:155, y:-35, type:'effect', parent:'c1c', edge:'enables',
+   label:'Personalized\nFinancial\nProducts',
+   info:{title:'Personalized Financial Products',tag:'Effect',tagC:'#6ee7b7',tagBg:'rgba(16,185,129,.18)',
+    body:'Segmentation allows designing specific offerings for each group: index funds for passive investors, FX hedging tools for exporters, microloans for entrepreneurs. Generic products serve no one optimally.',
+    rel:'→ achieves Efficient Resource Allocation'}},
+
+  {id:'c1e', x:360, y:-95, type:'outcome', parent:'c1d', edge:'achieves',
+   label:'Efficient\nResource\nAllocation',
+   info:{title:'Efficient Resource Allocation',tag:'Outcome',tagC:'#fcd34d',tagBg:'rgba(245,158,11,.18)',
+    body:'Without segmentation, marketing budgets are wasted broadcasting to the wrong audience. With it, every dollar targets high-probability clients — cost per acquisition falls, conversion rates rise, profitability improves.',
+    rel:'→ directly contributes to Sustainable Growth'}},
+
+  // ── CHAIN 2: Competitive Strategy (right-up arc) ─────────────────────
+  {id:'c2a', x:1040, y:195, type:'cause', parent:'root', edge:'requires',
+   label:'Competitive\nAnalysis',
+   info:{title:'Competitive Analysis',tag:'Cause',tagC:'#93c5fd',tagBg:'rgba(59,130,246,.18)',
+    body:'Financial firms must continuously monitor how competitors price products, attract clients, and position their services. Without this intelligence, a firm cannot differentiate — it simply copies or falls behind.',
+    rel:'→ informs Differentiation Strategy'}},
+
+  {id:'c2b', x:1245, y:105, type:'process', parent:'c2a', edge:'informs',
+   label:'Differentiation\nStrategy\n(Price/Quality/\nInnovation)',
+   info:{title:'Differentiation Strategy',tag:'Process',tagC:'#c4b5fd',tagBg:'rgba(139,92,246,.18)',
+    body:'A firm must choose HOW to stand out: lower fees, better digital UX, faster loan approval, or exclusive investment research. Competing only on price is a race to the bottom — differentiation is the exit.',
+    rel:'→ builds Competitive Advantage'}},
+
+  {id:'c2c', x:1040, y:55, type:'effect', parent:'c2b', edge:'builds',
+   label:'Competitive\nAdvantage',
+   info:{title:'Competitive Advantage',tag:'Effect',tagC:'#6ee7b7',tagBg:'rgba(16,185,129,.18)',
+    body:'A durable edge — through brand trust, proprietary products, or superior service — that competitors cannot easily replicate. This is the engine of long-term market leadership in financial services.',
+    rel:'→ enables Long-term Strategic Direction'}},
+
+  {id:'c2d', x:1245, y:-35, type:'outcome', parent:'c2c', edge:'enables',
+   label:'Long-term\nStrategic\nDirection',
+   info:{title:'Long-term Strategic Direction',tag:'Outcome',tagC:'#fcd34d',tagBg:'rgba(245,158,11,.18)',
+    body:'Strategy defines multi-year goals: enter new markets, launch new products, expand to new geographies. Competitive advantage makes this direction viable — without it, strategic plans are aspirations without foundation.',
+    rel:'→ loops back into center: defines the firm\'s next marketing goals'}},
+
+  // ── CHAIN 3: Marketing ↔ Strategy feedback loop (bottom) ─────────────
+  {id:'c3a', x:700, y:680, type:'cause', parent:'root', edge:'feeds',
+   label:'Marketing\nProvides\nMarket Data',
+   info:{title:'Marketing Provides Market Data',tag:'Cause',tagC:'#93c5fd',tagBg:'rgba(59,130,246,.18)',
+    body:'Marketing research generates continuous intelligence: which segments are growing, which products have unmet demand, what competitors are doing. For example, data showing rising demand for digital banking services.',
+    rel:'→ Strategy uses this to allocate investment'}},
+
+  {id:'c3b', x:500, y:820, type:'process', parent:'c3a', edge:'enables',
+   label:'Strategy\nAllocates\nInvestment',
+   info:{title:'Strategy Allocates Investment Based on Data',tag:'Process',tagC:'#c4b5fd',tagBg:'rgba(139,92,246,.18)',
+    body:'If marketing shows digital banking demand rising 40%, strategy allocates capital to build the platform. Marketing and strategy are inseparable: marketing without strategy produces no action; strategy without marketing is guesswork.',
+    rel:'→ produces Informed Investment Decisions'}},
+
+  {id:'c3c', x:700, y:920, type:'effect', parent:'c3b', edge:'produces',
+   label:'Informed\nInvestment\nDecisions',
+   info:{title:'Informed Investment Decisions',tag:'Effect',tagC:'#6ee7b7',tagBg:'rgba(16,185,129,.18)',
+    body:'Capital is deployed where both market demand (confirmed by marketing) and strategic fit (confirmed by analysis) align. This reduces wasted investment and improves return on allocated capital.',
+    rel:'→ leads to Sustainable Growth'}},
+
+  {id:'c3d', x:900, y:820, type:'outcome', parent:'c3c', edge:'leads to',
+   label:'Sustainable\nGrowth',
+   info:{title:'Sustainable Growth',tag:'Outcome',tagC:'#fcd34d',tagBg:'rgba(245,158,11,.18)',
+    body:'The ultimate outcome of aligned marketing and strategy: revenue growth that persists because it is built on real client needs, genuine competitive differentiation, and sound capital allocation — not short-term promotions.',
+    rel:'Integrates all three positive chains: Understanding + Competition + Data'}},
+
+  // ── CHAIN 4: Risk / Failure path (left-down) ─────────────────────────
+  {id:'r1', x:410, y:620, type:'risk', parent:'root', edge:'without strategy →',
+   label:'Weak\nMarketing',
+   info:{title:'Weak Marketing',tag:'Risk',tagC:'#fca5a5',tagBg:'rgba(239,68,68,.18)',
+    body:'When a financial firm neglects marketing, it loses sight of evolving client needs and competitor moves. Products become generic, communications lose relevance, and the firm drifts from its market.',
+    rel:'→ causes Poor Client Understanding'}},
+
+  {id:'r2', x:230, y:740, type:'risk', parent:'r1', edge:'causes',
+   label:'Poor\nClient\nUnderstanding',
+   info:{title:'Poor Client Understanding',tag:'Risk',tagC:'#fca5a5',tagBg:'rgba(239,68,68,.18)',
+    body:'Without research, products are designed for imagined customers rather than real ones. A bank might launch a premium investment product aimed at the wrong income segment — resulting in near-zero uptake.',
+    rel:'→ leads to Low Demand & Reduced Trust'}},
+
+  {id:'r3', x:410, y:860, type:'risk', parent:'r2', edge:'leads to',
+   label:'Low Demand\n& Reduced\nClient Trust',
+   info:{title:'Low Demand & Reduced Client Trust',tag:'Risk',tagC:'#fca5a5',tagBg:'rgba(239,68,68,.18)',
+    body:'Products that miss client needs generate weak sales. Ineffective or irrelevant communications erode brand trust. Clients defect to competitors who communicate value more clearly and design products that match their needs.',
+    rel:'→ results in Revenue Loss & Market Share Decline'}},
+
+  {id:'r4', x:230, y:980, type:'risk', parent:'r3', edge:'results in',
+   label:'Revenue Loss &\nMarket Share ↓',
+   info:{title:'Revenue Loss & Market Share Decline',tag:'Risk',tagC:'#fca5a5',tagBg:'rgba(239,68,68,.18)',
+    body:'The financial consequence of ignoring marketing: falling revenues, shrinking client base, and loss of market position to better-positioned rivals. This is the direct cost of the absent marketing-strategy link.',
+    rel:'Contrast: firms with strong marketing achieve Sustainable Growth (Chain 3)'}},
+];
+
+/* ── SETUP ────────────────────────────────────────────────────────────── */
+const byId = {};
+nodes.forEach(n => byId[n.id] = n);
+
+const expanded = new Set(['root','c1a','c2a','c3a','r1']);
+
+function children(id){ return nodes.filter(n => n.parent === id); }
+
+function isVisible(n){
+  if(!n) return false;
+  if(n.id === 'root') return true;
+  if(!n.parent) return false;
+  return expanded.has(n.parent) && isAncestorVisible(n.parent);
+}
+function isAncestorVisible(id){
+  if(id === 'root') return true;
+  const n = byId[id];
+  if(!n || !n.parent) return true;
+  return expanded.has(n.parent) && isAncestorVisible(n.parent);
 }
 
-function assignPositions(){
-  tree.x = CX; tree.y = CY;
-  tree.children.forEach((b, bi) => {
-    const angle = branchAngles[bi];
-    b.x = CX + Math.cos(deg(angle)) * L1_R;
-    b.y = CY + Math.sin(deg(angle)) * L1_R;
-    if(b.children){
-      b.children.forEach((c, ci) => {
-        const spread = b.children.length === 1 ? 0 : (ci - (b.children.length-1)/2) * 28;
-        const cAngle = angle + spread;
-        c.x = CX + Math.cos(deg(cAngle)) * L2_R;
-        c.y = CY + Math.sin(deg(cAngle)) * L2_R;
-        if(c.children){
-          c.children.forEach((d, di) => {
-            const dspread = c.children.length === 1 ? 0 : (di - (c.children.length-1)/2) * 22;
-            const dAngle = cAngle + dspread;
-            d.x = CX + Math.cos(deg(dAngle)) * L3_R;
-            d.y = CY + Math.sin(deg(dAngle)) * L3_R;
-          });
-        }
-      });
-    }
-  });
-}
+/* ── PAN / ZOOM ───────────────────────────────────────────────────────── */
+let ox=0, oy=0, scale=1, dragging=false, dx=0, dy=0;
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
-const expanded = new Set(['root','b0','b1','b2','b3','b4']);
-let activePopupNode = null;
-
-function isVisible(node){
-  if(node.id === 'root') return true;
-  if(node.level === 'l1') return true;
-  if(node.level === 'l2') return expanded.has(node.parentId);
-  if(node.level === 'l3') return expanded.has(node.parentId) && expanded.has(node.grandId);
-  return false;
-}
-
-// ─── RENDER ──────────────────────────────────────────────────────────────────
 const canvas = document.getElementById('canvas');
-const svg = document.getElementById('svg-layer');
-const nodeEls = new Map();
-const lineEls = new Map();
 
-function flatNodes(node, arr=[], parentId=null, grandId=null){
-  node.parentId = parentId;
-  node.grandId = grandId;
-  arr.push(node);
-  if(node.children) node.children.forEach(c => flatNodes(c, arr, node.id, parentId));
-  return arr;
-}
+canvas.addEventListener('mousedown', e => {
+  if(e.target.closest('.node')||e.target.closest('#popup')) return;
+  dragging=true; dx=e.clientX-ox; dy=e.clientY-oy;
+});
+window.addEventListener('mousemove', e => {
+  if(!dragging) return;
+  ox=e.clientX-dx; oy=e.clientY-dy; reflow();
+});
+window.addEventListener('mouseup', () => dragging=false);
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  scale = Math.min(2.5, Math.max(0.22, scale * (e.deltaY<0?1.1:0.91)));
+  reflow();
+},{passive:false});
 
-const allNodes = flatNodes(tree);
-
-function createNodeEl(node){
-  const el = document.createElement('div');
-  el.className = `node ${node.level} b${node.branch >= 0 ? node.branch : ''} ${node.children ? 'collapsed' : 'leaf'}`;
-  el.id = 'n-' + node.id;
-  el.style.left = node.x + 'px';
-  el.style.top = node.y + 'px';
-  const inner = document.createElement('div');
-  inner.className = 'node-inner';
-  inner.innerHTML = node.label.replace(/\n/g,'<br>');
-  if(node.children){
-    const dot = document.createElement('div');
-    dot.className = 'expand-dot';
-    inner.appendChild(dot);
+let lastDist=0;
+canvas.addEventListener('touchstart', e=>{
+  if(e.touches.length===1){dragging=true;dx=e.touches[0].clientX-ox;dy=e.touches[0].clientY-oy;}
+  if(e.touches.length===2) lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+},{passive:true});
+canvas.addEventListener('touchmove', e=>{
+  if(e.touches.length===1&&dragging){ox=e.touches[0].clientX-dx;oy=e.touches[0].clientY-dy;reflow();}
+  if(e.touches.length===2){
+    const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    scale=Math.min(2.5,Math.max(0.22,scale*(d/lastDist)));lastDist=d;reflow();
   }
-  el.appendChild(inner);
-  el.addEventListener('click', e => { e.stopPropagation(); onNodeClick(node, el); });
-  canvas.appendChild(el);
-  nodeEls.set(node.id, el);
-  return el;
-}
+},{passive:true});
+canvas.addEventListener('touchend',()=>dragging=false,{passive:true});
 
-function createLine(fromNode, toNode, branch){
-  const colors = ['#3498db','#2ecc71','#e74c3c','#f59e0b','#a855f7'];
-  const line = document.createElementNS('http://www.w3.org/2000/svg','path');
-  line.setAttribute('stroke', colors[branch] || '#C9A84C');
-  line.setAttribute('stroke-width','2');
-  line.setAttribute('fill','none');
-  line.setAttribute('stroke-opacity','0.6');
-  line.id = `line-${fromNode.id}-${toNode.id}`;
-  svg.appendChild(line);
-  lineEls.set(line.id, {line, from:fromNode, to:toNode});
-  return line;
-}
+/* ── NODE ELEMENTS ────────────────────────────────────────────────────── */
+const nodeEls={}, labelEls={};
 
-function updateLine(from, to, line){
-  const mx = (from.x + to.x) / 2;
-  const my = (from.y + to.y) / 2;
-  line.setAttribute('d', `M${from.x},${from.y} Q${mx},${from.y} ${to.x},${to.y}`);
-}
-
-function buildGraph(){
-  assignPositions();
-  allNodes.forEach(node => createNodeEl(node));
-  // create lines
-  function addLines(node){
-    if(node.children) node.children.forEach(child => {
-      const branch = child.branch >= 0 ? child.branch : 0;
-      createLine(node, child, branch);
-      addLines(child);
+function buildNodes(){
+  nodes.forEach(n=>{
+    if(nodeEls[n.id]) return;
+    const el=document.createElement('div');
+    el.className=`node ${n.type}`;
+    el.style.position='absolute';
+    el.style.zIndex='10';
+    el.innerHTML=n.label.replace(/\n/g,'<br>');
+    const kids=children(n.id);
+    if(kids.length){
+      const dot=document.createElement('span');
+      dot.className='dot';
+      dot.id='dot-'+n.id;
+      dot.textContent=expanded.has(n.id)?'−':'+';
+      el.appendChild(dot);
+    }
+    el.addEventListener('click',e=>{
+      e.stopPropagation();
+      if(children(n.id).length) toggle(n.id);
+      showPopup(n);
     });
-  }
-  addLines(tree);
-  render();
+    canvas.appendChild(el);
+    nodeEls[n.id]=el;
+  });
 }
 
-function render(){
-  allNodes.forEach(node => {
-    const el = nodeEls.get(node.id);
+function reflow(){
+  nodes.forEach(n=>{
+    const el=nodeEls[n.id];
     if(!el) return;
-    const vis = isVisible(node);
-    el.style.display = vis ? 'block' : 'none';
-    el.style.opacity = vis ? '1' : '0';
-    if(node.children){
-      el.classList.toggle('expanded', expanded.has(node.id));
-      el.classList.toggle('collapsed', !expanded.has(node.id));
+    const vis=isVisible(n);
+    el.classList.toggle('hidden',!vis);
+    if(vis){
+      el.style.left=(n.x*scale+ox)+'px';
+      el.style.top=(n.y*scale+oy)+'px';
+      el.style.transform=`translate(-50%,-50%) scale(${scale})`;
+      el.style.transformOrigin='center center';
     }
   });
-  lineEls.forEach(({line, from, to}) => {
-    const fromVis = isVisible(from);
-    const toVis = isVisible(to);
-    if(fromVis && toVis){
-      line.style.display = 'block';
-      updateLine(from, to, line);
-    } else {
-      line.style.display = 'none';
-    }
+  drawLines();
+  drawLabels();
+}
+
+/* ── SVG LINES ────────────────────────────────────────────────────────── */
+const TYPE_COLOR={cause:'#3b82f6',effect:'#10b981',outcome:'#f59e0b',risk:'#ef4444',process:'#8b5cf6',root:'#C9A84C'};
+
+function drawLines(){
+  const svg=document.getElementById('lines');
+  svg.innerHTML='';
+  // defs: arrowhead markers
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+  Object.values(TYPE_COLOR).forEach(c=>{
+    const mid=c.replace('#','');
+    if(svg.querySelector('#arr-'+mid)) return;
+    const m=document.createElementNS('http://www.w3.org/2000/svg','marker');
+    m.setAttribute('id','arr-'+mid);
+    m.setAttribute('markerWidth','7');m.setAttribute('markerHeight','7');
+    m.setAttribute('refX','5');m.setAttribute('refY','3');m.setAttribute('orient','auto');
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M0,0 L0,6 L7,3 z');p.setAttribute('fill',c);
+    m.appendChild(p);defs.appendChild(m);
+  });
+  svg.appendChild(defs);
+
+  nodes.forEach(n=>{
+    if(!n.parent||!isVisible(n)) return;
+    const par=byId[n.parent];
+    if(!isVisible(par)) return;
+    const px=par.x*scale+ox, py=par.y*scale+oy;
+    const cx=n.x*scale+ox,   cy=n.y*scale+oy;
+    const color=TYPE_COLOR[n.type]||'#7a8299';
+    const mid=color.replace('#','');
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    const mx=(px+cx)/2, my=(py+cy)/2;
+    path.setAttribute('d',`M${px},${py} Q${mx},${my} ${cx},${cy}`);
+    path.setAttribute('stroke',color);
+    path.setAttribute('stroke-width', Math.max(1, 1.6*scale));
+    path.setAttribute('fill','none');
+    path.setAttribute('opacity','0.65');
+    path.setAttribute('marker-end',`url(#arr-${mid})`);
+    svg.appendChild(path);
   });
 }
 
-// ─── INTERACTIONS ────────────────────────────────────────────────────────────
-function onNodeClick(node, el){
-  // toggle expand
-  if(node.children){
-    if(expanded.has(node.id)) expanded.delete(node.id);
-    else expanded.add(node.id);
-    render();
-  }
-  // show popup
-  showPopup(node, el);
+function drawLabels(){
+  Object.values(labelEls).forEach(el=>el.remove());
+  Object.keys(labelEls).forEach(k=>delete labelEls[k]);
+  nodes.forEach(n=>{
+    if(!n.parent||!n.edge||!isVisible(n)) return;
+    const par=byId[n.parent];
+    if(!isVisible(par)) return;
+    const px=par.x*scale+ox, py=par.y*scale+oy;
+    const cx=n.x*scale+ox,   cy=n.y*scale+oy;
+    const el=document.createElement('div');
+    el.className='edge-label';
+    el.textContent=n.edge;
+    el.style.left=((px+cx)/2)+'px';
+    el.style.top=((py+cy)/2-12)+'px';
+    el.style.fontSize=(0.6*Math.max(0.55,Math.min(1,scale)))+'rem';
+    canvas.appendChild(el);
+    labelEls[n.id]=el;
+  });
 }
 
-function showPopup(node, el){
-  activePopupNode = node;
-  document.getElementById('p-type').textContent = node.info.type;
-  document.getElementById('p-title').textContent = node.label.replace(/\n/g,' ');
-  document.getElementById('p-body').textContent = node.info.body;
-  const plink = document.getElementById('p-link');
-  if(node.children){
-    plink.textContent = expanded.has(node.id) ? '▼ Collapse this branch' : '▶ Expand this branch';
-    plink.style.display = 'inline';
-  } else {
-    plink.style.display = 'none';
-  }
-  const popup = document.getElementById('popup');
-  popup.classList.add('show');
-  // position popup near node but within viewport
-  const rect = el.getBoundingClientRect();
-  let px = rect.right + 12;
-  let py = rect.top;
-  if(px + 340 > window.innerWidth) px = rect.left - 340;
-  if(py + 200 > window.innerHeight) py = window.innerHeight - 220;
-  if(py < 70) py = 70;
-  popup.style.left = px + 'px';
-  popup.style.top = py + 'px';
-  // color title by branch
-  const colors = ['#7dd3fc','#86efac','#fca5a5','#fde68a','#d8b4fe','#e8c96a'];
-  document.getElementById('p-title').style.color = node.branch >= 0 ? colors[node.branch] : '#e8c96a';
+/* ── TOGGLE ───────────────────────────────────────────────────────────── */
+function toggle(id){
+  expanded.has(id)?expanded.delete(id):expanded.add(id);
+  const dot=document.getElementById('dot-'+id);
+  if(dot) dot.textContent=expanded.has(id)?'−':'+';
+  reflow();
 }
 
-function expandFromPopup(){
-  if(!activePopupNode || !activePopupNode.children) return;
-  if(expanded.has(activePopupNode.id)) expanded.delete(activePopupNode.id);
-  else expanded.add(activePopupNode.id);
-  render();
-  document.getElementById('p-link').textContent = expanded.has(activePopupNode.id) ? '▼ Collapse this branch' : '▶ Expand this branch';
+/* ── POPUP ────────────────────────────────────────────────────────────── */
+function showPopup(n){
+  const pop=document.getElementById('popup');
+  document.getElementById('popup-title').textContent=n.info.title;
+  const tag=document.getElementById('popup-tag');
+  tag.textContent=n.info.tag; tag.style.color=n.info.tagC; tag.style.background=n.info.tagBg;
+  document.getElementById('popup-body').textContent=n.info.body;
+  const rel=document.getElementById('popup-rel');
+  if(n.info.rel){rel.textContent=n.info.rel;rel.style.display='block';}
+  else rel.style.display='none';
+  pop.style.display='block';
+  const vw=window.innerWidth,vh=window.innerHeight;
+  const nx=n.x*scale+ox, ny=n.y*scale+oy;
+  const pw=pop.offsetWidth||290, ph=pop.offsetHeight||170;
+  let lx=nx+28, ly=ny-18;
+  if(lx+pw>vw-10) lx=nx-pw-28;
+  if(ly+ph>vh-10) ly=vh-ph-10;
+  if(ly<55) ly=55;
+  pop.style.left=lx+'px'; pop.style.top=ly+'px';
+  pop.classList.add('show');
 }
+function closePopup(){ document.getElementById('popup').classList.remove('show'); }
+canvas.addEventListener('click',e=>{ if(!e.target.closest('#popup')&&!e.target.closest('.node')) closePopup(); });
 
-function closePopup(){ document.getElementById('popup').classList.remove('show'); activePopupNode = null; }
-
-document.getElementById('canvas-wrap').addEventListener('click', closePopup);
-
+/* ── CONTROLS ─────────────────────────────────────────────────────────── */
 function expandAll(){
-  allNodes.forEach(n => { if(n.children) expanded.add(n.id); });
-  render();
+  nodes.forEach(n=>{expanded.add(n.id);const d=document.getElementById('dot-'+n.id);if(d)d.textContent='−';});
+  reflow();
 }
 function collapseAll(){
-  allNodes.forEach(n => { if(n.id !== 'root' && n.level !== 'l1') expanded.delete(n.id); });
-  render();
+  expanded.clear();expanded.add('root');
+  nodes.forEach(n=>{const d=document.getElementById('dot-'+n.id);if(d)d.textContent='+';});
+  reflow();
 }
-
-// ─── PAN & ZOOM ──────────────────────────────────────────────────────────────
-let scale = 0.85, tx = 0, ty = 60;
-let dragging = false, lastX = 0, lastY = 0;
-
-function applyTransform(){
-  canvas.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
-}
-
-function zoom(factor, cx, cy){
-  const wrap = document.getElementById('canvas-wrap');
-  cx = cx ?? wrap.clientWidth / 2;
-  cy = cy ?? wrap.clientHeight / 2;
-  const newScale = Math.max(0.3, Math.min(2, scale * factor));
-  tx = cx - (cx - tx) * (newScale / scale);
-  ty = cy - (cy - ty) * (newScale / scale);
-  scale = newScale;
-  applyTransform();
-}
-
 function resetView(){
-  const wrap = document.getElementById('canvas-wrap');
-  scale = 0.85;
-  tx = wrap.clientWidth/2 - CX * scale;
-  ty = wrap.clientHeight/2 - CY * scale;
-  applyTransform();
+  scale=0.82;
+  const vw=window.innerWidth,vh=window.innerHeight;
+  ox=vw/2-700*scale; oy=vh/2-420*scale;
+  reflow();
 }
 
-const wrap = document.getElementById('canvas-wrap');
-wrap.addEventListener('mousedown', e => { if(e.button !== 0) return; dragging = true; lastX=e.clientX; lastY=e.clientY; wrap.classList.add('grabbing'); });
-window.addEventListener('mousemove', e => { if(!dragging) return; tx += e.clientX-lastX; ty += e.clientY-lastY; lastX=e.clientX; lastY=e.clientY; applyTransform(); });
-window.addEventListener('mouseup', () => { dragging=false; wrap.classList.remove('grabbing'); });
-wrap.addEventListener('wheel', e => { e.preventDefault(); zoom(e.deltaY < 0 ? 1.1 : 0.91, e.clientX, e.clientY); }, {passive:false});
-
-// touch
-let lastDist = 0;
-wrap.addEventListener('touchstart', e => { if(e.touches.length===1){dragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY} if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)} });
-wrap.addEventListener('touchmove', e => { e.preventDefault(); if(e.touches.length===1&&dragging){tx+=e.touches[0].clientX-lastX;ty+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;applyTransform()} if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);zoom(d/lastDist);lastDist=d} },{passive:false});
-wrap.addEventListener('touchend', () => { dragging=false; });
-
-// ─── INIT ────────────────────────────────────────────────────────────────────
-buildGraph();
+window.addEventListener('resize',reflow);
+buildNodes();
 resetView();
-setTimeout(() => document.getElementById('hint').classList.add('hide'), 3000);
 </script>
 </body>
 </html>
