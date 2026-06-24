@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marketing and Strategy in Financial Organizations — Mind Map</title>
+<title>Production Standards and Workplace Safety — Mind Map</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#b55a7a;overflow:hidden;height:100vh;width:100vw}
-header{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(140,50,80,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.2);padding:9px 18px;display:flex;align-items:center;gap:12px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#5a7060;overflow:hidden;height:100vh;width:100vw}
+header{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(50,75,50,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.2);padding:9px 18px;display:flex;align-items:center;gap:12px}
 header h1{font-size:.88rem;font-weight:700;color:#fff3ee;flex:1}
 .btn{background:none;border:1px solid rgba(255,255,255,.35);border-radius:7px;padding:4px 11px;font-size:.72rem;color:#ffe0d0;cursor:pointer;font-family:inherit}
 .btn:hover{background:rgba(255,255,255,.15)}
@@ -31,7 +31,7 @@ svg#svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:non
 </head>
 <body>
 <header>
-  <h1>Marketing and Strategy in Financial Organizations — Mind Map</h1>
+  <h1>Production Standards and Workplace Safety — Mind Map</h1>
   <button class="btn" onclick="expandAll()">Expand All</button>
   <button class="btn" onclick="collapseAll()">Collapse All</button>
   <button class="btn" onclick="resetView()">Reset</button>
@@ -39,48 +39,53 @@ svg#svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:non
 <div id="wrap"><svg id="svg"></svg></div>
 <div id="popup"><button id="pcl" onclick="closeP()">✕</button><h3 id="pt"></h3><p id="pb"></p></div>
 <script>
-const T={id:'root',label:'Marketing and\nStrategy',info:'Marketing in financial organizations is not about promotions — it is about understanding client needs, building long-term relationships, and aligning financial products with market demand to achieve sustainable growth.',children:[
-{id:'A',label:'Role of\nMarketing',info:'Marketing connects financial products to the clients who need them. In banks and financial firms, it shapes product design, pricing, distribution, and client communication.',children:[
-{id:'A1',label:'Understand\nClient Needs',info:'Financial marketing starts with research: identifying what clients value — security, returns, convenience — and designing products around those needs.'},
-{id:'A2',label:'Build\nRelationships',info:'Long-term client retention is more valuable than one-time transactions. Marketing nurtures trust through consistent communication and service quality.'},
-{id:'A3',label:'Drive\nRevenue',info:'Effective marketing increases product uptake, cross-selling opportunities, and market share — directly impacting the income statement.'},
-]},
-{id:'B',label:'Market\nSegmentation',info:'Segmentation divides a broad market into distinct groups with similar needs, allowing the firm to target products and messages more precisely and efficiently.',children:[
-{id:'B1',label:'Demographic',info:'Segmenting by age, income, occupation, or wealth level. Example: retirement products for clients over 55 with high savings.'},
-{id:'B2',label:'Behavioral',info:'Segmenting by transaction patterns, product usage, or loyalty. High-frequency traders vs. long-term savers require different offers.'},
-{id:'B3',label:'Geographic',info:'Regional economic conditions differ — interest rate sensitivity, currency risk, and product preferences vary by location and economic context.'},
-{id:'B4',label:'Psychographic',info:'Segmenting by values, risk tolerance, and financial goals. Risk-averse clients need capital protection; growth-oriented clients need equity exposure.'},
-]},
-{id:'C',label:'Strategy and\nCompetitive Advantage',info:'A marketing strategy defines how a firm positions itself versus competitors — on price, quality, specialization, or client experience — to win and retain clients.',children:[
-{id:'C1',label:'Positioning',info:'Defining how the brand is perceived relative to competitors. A bank may position as the lowest-cost provider or the most trusted advisor.',children:[
-{id:'C1a',label:'Price\nLeadership',info:'Competing on lower fees or better interest rates. Requires operational efficiency and scale to sustain margins.'},
-{id:'C1b',label:'Differentiation',info:'Competing on unique features: superior technology, exclusive products, or expert advisory services clients cannot get elsewhere.'},
-]},
-{id:'C2',label:'Competitive\nIntelligence',info:'Monitoring competitors\' pricing, product launches, and market positioning allows timely strategic responses and helps identify market gaps.',children:[
-{id:'C2a',label:'Benchmark\nAnalysis',info:'Comparing own products and pricing against market leaders to identify where the firm is over- or under-performing.'},
-{id:'C2b',label:'Market\nGaps',info:'Identifying underserved segments or needs — a gap in SME lending, digital payments, or ESG investment products — and designing targeted offers.'},
-]},
-]},
-{id:'D',label:'Marketing\nand Strategy Link',info:'Marketing is not separate from corporate strategy — it is the mechanism that translates strategic goals (market share, growth, client acquisition) into customer-facing actions.',children:[
-{id:'D1',label:'Strategic\nAlignment',info:'Marketing plans must reflect corporate priorities: entering a new market, launching a digital channel, or repositioning after a merger.'},
-{id:'D2',label:'Budget\nAllocation',info:'Marketing spend is a financial decision — ROI must be measured. Customer acquisition cost and lifetime value determine where to invest.'},
-{id:'D3',label:'KPIs and\nMeasurement',info:'Strategy requires measurable outcomes: market share growth, net promoter score, conversion rates, and cost per acquisition track marketing effectiveness.'},
-]},
-{id:'E',label:'Risks of\nWeak Marketing',info:'Poor marketing leads to declining market share, misaligned products, weak brand equity, and ultimately lower revenue and profitability.',children:[
-{id:'E1',label:'Product\nMismatch',info:'Launching financial products without market research leads to low uptake — wasted development costs and missed revenue targets.'},
-{id:'E2',label:'Reputational\nDamage',info:'Inconsistent or misleading communication erodes client trust — especially damaging in financial services where trust is the core asset.'},
-{id:'E3',label:'Lost\nMarket Share',info:'Without proactive marketing, competitors capture clients and segments that the firm could have served — a permanent structural loss.'},
-]},
+const T = {id:'root',label:'Production\nStandards &\nWorkplace Safety',info:'Workplace safety compliance is not just a legal obligation — it is a financial strategy. Companies that invest in prevention avoid far greater costs from accidents, sanctions, and reputational damage.',children:[
+  {id:'A',label:'Financial Impact\nof Standards',info:'Following safety standards creates measurable financial value: it reduces operational risk, builds investor confidence, ensures regulatory compliance, and provides financial protection tools.',children:[
+    {id:'A1',label:'Financial\nProtection Tools',info:'Insurance policies, safety bonds, and liability reserves are financial instruments that protect the company\'s balance sheet from unexpected safety-related losses.'},
+    {id:'A2',label:'Operational Risk\nReduction',info:'Each prevented accident eliminates its associated direct costs (medical, legal, equipment) AND its indirect costs (downtime, retraining, reputational damage).'},
+    {id:'A3',label:'Investor\nConfidence',info:'ESG-conscious investors assess safety records as a proxy for management quality. Poor safety records increase perceived governance risk and raise the cost of capital.'},
+    {id:'A4',label:'Regulatory\nCompliance',info:'Meeting safety standards avoids regulatory fines, operating license suspensions, and mandatory corrective investments that disrupt production and cash flows.'},
+  ]},
+  {id:'B',label:'Costs of\nNon-Compliance',info:'Safety violations generate two categories of costs: direct (immediately measurable) and indirect (less visible but often larger over time).',children:[
+    {id:'B1',label:'Direct Costs',info:'Immediately quantifiable financial losses resulting from a safety incident.',children:[
+      {id:'B1a',label:'Medical\nCompensation',info:'Treatment costs, disability payments, and rehabilitation expenses for injured workers. Can reach millions in serious industrial accidents.'},
+      {id:'B1b',label:'Equipment\nDamage',info:'Repair or replacement costs for machinery, facilities, and inventory damaged in accidents. May disrupt production for weeks or months.'},
+      {id:'B1c',label:'Legal\nPenalties',info:'Court-ordered compensation to injured parties and their families, plus legal defense costs — which may exceed the original fine many times over.'},
+      {id:'B1d',label:'Regulatory\nFines',info:'Sanctions imposed by labor inspectorates and safety regulators. In Russia, fines can reach 100,000–200,000 rubles per violation per incident.'},
+    ]},
+    {id:'B2',label:'Indirect Costs',info:'Less visible but often larger than direct costs, these accumulate over time and damage long-term financial performance.',children:[
+      {id:'B2a',label:'Reputational\nDamage',info:'Media coverage of accidents reduces brand value, makes it harder to attract talent, and gives competitors an advantage in tender and procurement processes.'},
+      {id:'B2b',label:'Production\nDelays',info:'Post-accident investigations and facility closures by regulators halt production, destroying revenue during the shutdown period.'},
+      {id:'B2c',label:'Reduced\nProductivity',info:'Workers in unsafe environments exhibit higher absenteeism, lower morale, and reduced output even before any accident occurs — a permanent drag on margins.'},
+      {id:'B2d',label:'Loss of\nClients',info:'B2B clients increasingly require safety certification audits. A poor safety record disqualifies companies from government contracts and major corporate supply chains.'},
+    ]},
+  ]},
+  {id:'C',label:'Financial\nRisks',info:'Beyond immediate costs, safety violations create four categories of ongoing financial risk that affect the company\'s risk profile and credit rating.',children:[
+    {id:'C1',label:'Sanctions',info:'Regulatory authorities may suspend operating licenses, mandate facility upgrades, or require compensatory investments — all of which consume capital and management attention.'},
+    {id:'C2',label:'Increased\nInsurance\nPremiums',info:'Insurers reprice coverage after accidents, sometimes increasing premiums by 15–30% or withdrawing coverage entirely, forcing the company to self-insure.'},
+    {id:'C3',label:'Capital Allocation\nChallenges',info:'Companies with poor safety records face higher borrowing costs as lenders incorporate operational risk into credit pricing — a direct cost on every loan.'},
+    {id:'C4',label:'Crisis\nManagement\nCosts',info:'PR firms, crisis consultants, legal counsel, and management time diverted to managing reputational fallout represent significant unbudgeted expenditures.'},
+  ]},
+  {id:'D',label:'Investment\nStrategy',info:'The financially rational response to safety risk is preventive investment — which generates measurable returns by avoiding far larger reactive costs.',children:[
+    {id:'D1',label:'Cost-Benefit\nAnalysis',info:'Comparing the cost of preventive investment against the probability-weighted cost of accidents. Example: $60,000 equipment upgrade vs. $170,000+ expected accident cost.'},
+    {id:'D2',label:'Preventive\nInvestment',info:'Proactive spending on safety equipment, training, facility upgrades, and monitoring systems that reduces accident probability and severity.'},
+    {id:'D3',label:'Long-term\nStability',info:'Companies with strong safety cultures experience lower insurance costs, better credit terms, and more stable operations — compounding advantages over time.'},
+    {id:'D4',label:'Strategic\nDecision-Making',info:'Safety investment decisions should be made using the same capital allocation framework as any other investment: NPV, IRR, and risk-adjusted return analysis.'},
+  ]},
+  {id:'E',label:'Workplace\nViolations',info:'Common safety violations that create financial and legal exposure for companies across manufacturing, construction, and chemical industries.',children:[
+    {id:'E1',label:'Lack of PPE',info:'Failure to provide personal protective equipment (gloves, helmets, respirators) is the most frequently cited violation and the easiest and cheapest to prevent.'},
+    {id:'E2',label:'Outdated\nMachinery',info:'Using equipment beyond its certified service life increases accident probability and voids insurance coverage — creating uninsured liability exposure.'},
+    {id:'E3',label:'Blocked\nEmergency Exits',info:'Obstructed fire exits violate fire safety codes and create catastrophic liability in the event of a fire or explosion requiring rapid evacuation.'},
+    {id:'E4',label:'Poor\nVentilation',info:'Inadequate air circulation in chemical, painting, or welding environments causes occupational disease, creating long-tail medical liability claims years after exposure.'},
+  ]},
 ]};
 
 const open=new Set(['root']);
 (T.children||[]).forEach(c=>open.add(c.id));
+
 const ELS={},INFO={};
-
 function totalLeaves(n){if(!(n.children&&n.children.length))return 1;return n.children.reduce((a,c)=>a+totalLeaves(c),0);}
-
 const ROW=44,COLW=220,ROOT_X=90;
-
 function layout(node,x,y0){
   const vis=node.children||[];
   const exp=vis.length>0&&open.has(node.id);
@@ -88,7 +93,6 @@ function layout(node,x,y0){
   INFO[node.id]={x,y:y0+nl*ROW/2,node};
   if(exp){let ky=y0;vis.forEach(c=>{const cl=totalLeaves(c)*ROW;layout(c,x+COLW,ky);ky+=cl;});}
 }
-
 function buildDOM(){
   const wrap=document.getElementById('wrap');
   function walk(node,d){
@@ -108,15 +112,12 @@ function buildDOM(){
   }
   walk(T,0);
 }
-
 function isVis(id){
   if(id==='root')return true;
   function w(n){for(const c of n.children||[]){if(c.id===id)return open.has(n.id);const r=w(c);if(r!==undefined)return r&&open.has(n.id);}}
   return !!w(T);
 }
-
 let ox=0,oy=0,sc=1,drag=false,dx=0,dy=0;
-
 function reflow(){
   const wh=document.getElementById('wrap').clientHeight;
   const tot=totalLeaves(T)*ROW;
@@ -130,7 +131,6 @@ function reflow(){
   });
   drawLines();
 }
-
 function drawLines(){
   const svg=document.getElementById('svg');svg.innerHTML='';
   function walk(node){
@@ -151,7 +151,6 @@ function drawLines(){
   }
   walk(T);
 }
-
 const wrap=document.getElementById('wrap');
 wrap.addEventListener('mousedown',e=>{if(e.target.closest('.node'))return;drag=true;dx=e.clientX-ox;dy=e.clientY-oy;});
 window.addEventListener('mousemove',e=>{if(!drag)return;ox=e.clientX-dx;oy=e.clientY-dy;reflow();});
@@ -161,12 +160,10 @@ let ld=0;
 wrap.addEventListener('touchstart',e=>{if(e.touches.length===1){drag=true;dx=e.touches[0].clientX-ox;dy=e.touches[0].clientY-oy;}if(e.touches.length===2)ld=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);},{passive:true});
 wrap.addEventListener('touchmove',e=>{if(e.touches.length===1&&drag){ox=e.touches[0].clientX-dx;oy=e.touches[0].clientY-dy;reflow();}if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);sc=Math.min(2.5,Math.max(.2,sc*(d/ld)));ld=d;reflow();}},{passive:true});
 wrap.addEventListener('touchend',()=>drag=false,{passive:true});
-
 function toggle(id){open.has(id)?open.delete(id):open.add(id);reflow();}
 function expandAll(){function w(n){open.add(n.id);(n.children||[]).forEach(w);}w(T);reflow();}
 function collapseAll(){open.clear();open.add('root');reflow();}
 function resetView(){sc=1;const wh=window.innerHeight-42;const tot=totalLeaves(T)*ROW;ox=40;oy=(wh-tot)/2;reflow();}
-
 function showP(node,el){
   const pop=document.getElementById('popup');
   document.getElementById('pt').textContent=node.label.replace(/\n/g,' ');
@@ -180,7 +177,6 @@ function showP(node,el){
 }
 function closeP(){document.getElementById('popup').classList.remove('show');}
 wrap.addEventListener('click',e=>{if(!e.target.closest('.node')&&!e.target.closest('#popup'))closeP();});
-
 window.addEventListener('resize',reflow);
 buildDOM();
 resetView();

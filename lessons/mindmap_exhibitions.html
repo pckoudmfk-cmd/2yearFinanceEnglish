@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marketing and Strategy in Financial Organizations — Mind Map</title>
+<title>Industry Exhibitions in Finance — Mind Map</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#b55a7a;overflow:hidden;height:100vh;width:100vw}
-header{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(140,50,80,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.2);padding:9px 18px;display:flex;align-items:center;gap:12px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#4a7c6f;overflow:hidden;height:100vh;width:100vw}
+header{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(40,90,75,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.2);padding:9px 18px;display:flex;align-items:center;gap:12px}
 header h1{font-size:.88rem;font-weight:700;color:#fff3ee;flex:1}
 .btn{background:none;border:1px solid rgba(255,255,255,.35);border-radius:7px;padding:4px 11px;font-size:.72rem;color:#ffe0d0;cursor:pointer;font-family:inherit}
 .btn:hover{background:rgba(255,255,255,.15)}
@@ -31,7 +31,7 @@ svg#svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:non
 </head>
 <body>
 <header>
-  <h1>Marketing and Strategy in Financial Organizations — Mind Map</h1>
+  <h1>Industry Exhibitions in Finance — Mind Map</h1>
   <button class="btn" onclick="expandAll()">Expand All</button>
   <button class="btn" onclick="collapseAll()">Collapse All</button>
   <button class="btn" onclick="resetView()">Reset</button>
@@ -39,48 +39,58 @@ svg#svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:non
 <div id="wrap"><svg id="svg"></svg></div>
 <div id="popup"><button id="pcl" onclick="closeP()">✕</button><h3 id="pt"></h3><p id="pb"></p></div>
 <script>
-const T={id:'root',label:'Marketing and\nStrategy',info:'Marketing in financial organizations is not about promotions — it is about understanding client needs, building long-term relationships, and aligning financial products with market demand to achieve sustainable growth.',children:[
-{id:'A',label:'Role of\nMarketing',info:'Marketing connects financial products to the clients who need them. In banks and financial firms, it shapes product design, pricing, distribution, and client communication.',children:[
-{id:'A1',label:'Understand\nClient Needs',info:'Financial marketing starts with research: identifying what clients value — security, returns, convenience — and designing products around those needs.'},
-{id:'A2',label:'Build\nRelationships',info:'Long-term client retention is more valuable than one-time transactions. Marketing nurtures trust through consistent communication and service quality.'},
-{id:'A3',label:'Drive\nRevenue',info:'Effective marketing increases product uptake, cross-selling opportunities, and market share — directly impacting the income statement.'},
-]},
-{id:'B',label:'Market\nSegmentation',info:'Segmentation divides a broad market into distinct groups with similar needs, allowing the firm to target products and messages more precisely and efficiently.',children:[
-{id:'B1',label:'Demographic',info:'Segmenting by age, income, occupation, or wealth level. Example: retirement products for clients over 55 with high savings.'},
-{id:'B2',label:'Behavioral',info:'Segmenting by transaction patterns, product usage, or loyalty. High-frequency traders vs. long-term savers require different offers.'},
-{id:'B3',label:'Geographic',info:'Regional economic conditions differ — interest rate sensitivity, currency risk, and product preferences vary by location and economic context.'},
-{id:'B4',label:'Psychographic',info:'Segmenting by values, risk tolerance, and financial goals. Risk-averse clients need capital protection; growth-oriented clients need equity exposure.'},
-]},
-{id:'C',label:'Strategy and\nCompetitive Advantage',info:'A marketing strategy defines how a firm positions itself versus competitors — on price, quality, specialization, or client experience — to win and retain clients.',children:[
-{id:'C1',label:'Positioning',info:'Defining how the brand is perceived relative to competitors. A bank may position as the lowest-cost provider or the most trusted advisor.',children:[
-{id:'C1a',label:'Price\nLeadership',info:'Competing on lower fees or better interest rates. Requires operational efficiency and scale to sustain margins.'},
-{id:'C1b',label:'Differentiation',info:'Competing on unique features: superior technology, exclusive products, or expert advisory services clients cannot get elsewhere.'},
-]},
-{id:'C2',label:'Competitive\nIntelligence',info:'Monitoring competitors\' pricing, product launches, and market positioning allows timely strategic responses and helps identify market gaps.',children:[
-{id:'C2a',label:'Benchmark\nAnalysis',info:'Comparing own products and pricing against market leaders to identify where the firm is over- or under-performing.'},
-{id:'C2b',label:'Market\nGaps',info:'Identifying underserved segments or needs — a gap in SME lending, digital payments, or ESG investment products — and designing targeted offers.'},
-]},
-]},
-{id:'D',label:'Marketing\nand Strategy Link',info:'Marketing is not separate from corporate strategy — it is the mechanism that translates strategic goals (market share, growth, client acquisition) into customer-facing actions.',children:[
-{id:'D1',label:'Strategic\nAlignment',info:'Marketing plans must reflect corporate priorities: entering a new market, launching a digital channel, or repositioning after a merger.'},
-{id:'D2',label:'Budget\nAllocation',info:'Marketing spend is a financial decision — ROI must be measured. Customer acquisition cost and lifetime value determine where to invest.'},
-{id:'D3',label:'KPIs and\nMeasurement',info:'Strategy requires measurable outcomes: market share growth, net promoter score, conversion rates, and cost per acquisition track marketing effectiveness.'},
-]},
-{id:'E',label:'Risks of\nWeak Marketing',info:'Poor marketing leads to declining market share, misaligned products, weak brand equity, and ultimately lower revenue and profitability.',children:[
-{id:'E1',label:'Product\nMismatch',info:'Launching financial products without market research leads to low uptake — wasted development costs and missed revenue targets.'},
-{id:'E2',label:'Reputational\nDamage',info:'Inconsistent or misleading communication erodes client trust — especially damaging in financial services where trust is the core asset.'},
-{id:'E3',label:'Lost\nMarket Share',info:'Without proactive marketing, competitors capture clients and segments that the firm could have served — a permanent structural loss.'},
-]},
+const T = {id:'root',label:'Industry\nExhibitions\nin Finance',info:'Financial exhibitions and trade fairs are strategic tools for professionals — not just events. They provide intelligence, networking, deal-making, and market positioning opportunities.',children:[
+  {id:'A',label:'Strategic\nPurposes',info:'Exhibitions serve four strategic functions beyond showcasing products: gathering market intelligence, developing professional skills, supporting strategic planning, and generating actionable insights.',children:[
+    {id:'A1',label:'Strategic\nIntelligence',info:'Observing competitor products, pricing, and positioning at exhibitions builds a competitive intelligence base impossible to acquire from reports alone.'},
+    {id:'A2',label:'Professional\nDevelopment',info:'Conferences and panel discussions at exhibitions expose professionals to emerging trends, regulatory shifts, and expert analysis that sharpen their market judgment.'},
+    {id:'A3',label:'Strategic\nPlanning',info:'Exhibition data informs long-term decisions: which markets to enter, which technologies to invest in, and which partnerships to pursue.'},
+    {id:'A4',label:'Actionable\nInsight',info:'Intelligence gathered at exhibitions must translate into concrete decisions — new product features, revised pricing, adjusted market entry timelines.'},
+  ]},
+  {id:'B',label:'Types of\nExhibitions',info:'Financial exhibitions fall into three categories based on scope and focus: global events for worldwide trends, regional events for local execution, and specialized forums for niche expertise.',children:[
+    {id:'B1',label:'Global\n(e.g., Money20/20)',info:'Global exhibitions like Money20/20 attract thousands of fintech leaders and showcase disruptive technologies, digital assets, AI-driven finance, and global benchmarking data.',children:[
+      {id:'B1a',label:'Disruptive\nTechnologies',info:'Blockchain, AI trading systems, and embedded finance platforms that fundamentally reshape how financial services are delivered.'},
+      {id:'B1b',label:'Digital Assets',info:'Cryptocurrency infrastructure, tokenization of real-world assets, and central bank digital currency (CBDC) developments showcased for institutional investors.'},
+      {id:'B1c',label:'AI-driven Finance',info:'Algorithmic underwriting, automated fraud detection, and AI-powered portfolio management tools presented by leading vendors.'},
+      {id:'B1d',label:'Global\nBenchmarking',info:'Comparing firm performance, product features, and technology stacks against global peers to identify competitive gaps.'},
+    ]},
+    {id:'B2',label:'Regional\n(e.g., FinCore)',info:'Regional exhibitions focus on practical implementation within local regulatory and market contexts, covering market adaptation and regional partnership development.',children:[
+      {id:'B2a',label:'Practical\nImplementation',info:'Local adaptations of global technologies — how to implement digital payments or open banking within a specific national regulatory framework.'},
+      {id:'B2b',label:'Market\nAdaptation',info:'Adjusting product features, pricing models, and distribution channels to fit regional consumer behavior and competitive dynamics.'},
+      {id:'B2c',label:'Local Regulatory\nContext',info:'Understanding national compliance requirements that differ from international standards — tax treatment, data sovereignty, consumer protection rules.'},
+      {id:'B2d',label:'Regional\nPartnerships',info:'Building relationships with local banks, fintech startups, payment processors, and regulators who become distribution or compliance partners.'},
+    ]},
+    {id:'B3',label:'Specialized\nForums',info:'Niche forums focus on specific domains like RegTech and ESG Finance, providing expert-level knowledge and sustainable investment frameworks.',children:[
+      {id:'B3a',label:'RegTech &\nCompliance',info:'Technology solutions for regulatory reporting, KYC/AML automation, and compliance monitoring — increasingly mandatory for licensed financial institutions.'},
+      {id:'B3b',label:'ESG Finance',info:'Environmental, Social, and Governance investment frameworks, green bond standards, and impact measurement methodologies shaping institutional portfolios.'},
+      {id:'B3c',label:'Expert-level\nKnowledge',info:'Deep technical sessions on valuation models, risk frameworks, and derivative structures that require advanced financial expertise.'},
+      {id:'B3d',label:'Sustainable\nInvestment',info:'Long-term capital allocation strategies that integrate climate risk, social impact, and governance quality into portfolio construction.'},
+    ]},
+  ]},
+  {id:'C',label:'Professional\nApplication',info:'Turning exhibition attendance into professional value requires three phases: preparation before, structured analysis during, and follow-up to capture outcomes.',children:[
+    {id:'C1',label:'Preparation',info:'Effective exhibition attendance starts before the event: setting measurable goals and conducting market research to know what questions to answer.',children:[
+      {id:'C1a',label:'Goal Setting',info:'Defining what you want to achieve: identify three competitive threats, find one partnership candidate, gather pricing data on five products.'},
+      {id:'C1b',label:'Market Research',info:'Pre-exhibition research on exhibitors, speakers, and agenda topics ensures time is spent on highest-priority contacts and sessions.'},
+    ]},
+    {id:'C2',label:'Analysis',info:'During and after the exhibition, professionals analyze competitive landscapes, identify emerging economic trends, and refine risk management approaches.',children:[
+      {id:'C2a',label:'Competitive\nLandscapes',info:'Mapping competitor product features, pricing tiers, target segments, and technology investments based on observed exhibition presence.'},
+      {id:'C2b',label:'Emerging\nEconomic Trends',info:'Identifying macroeconomic and sector-specific shifts — such as rising institutional interest in tokenized assets — that will affect investment decisions.'},
+      {id:'C2c',label:'Risk\nManagement',info:'Updating risk frameworks based on newly observed regulatory changes, technology failures reported by peers, or geopolitical risk discussions.'},
+    ]},
+    {id:'C3',label:'Outcomes',info:'Exhibition intelligence translates into three strategic outcomes: refined investment strategies, improved long-term valuation models, and clearer strategic direction.',children:[
+      {id:'C3a',label:'Investment\nStrategies',info:'Revising asset allocation, sector weights, or geographic exposure based on intelligence gathered about where institutional capital is flowing.'},
+      {id:'C3b',label:'Long-term\nValuation',info:'Updating discounted cash flow models and comparable company analyses to reflect new technology adoption rates or regulatory costs observed at exhibitions.'},
+      {id:'C3c',label:'Strategic\nDirection',info:'Informing board-level decisions about market entry, M&A targets, technology investment, or product line extensions based on exhibition intelligence.'},
+    ]},
+  ]},
 ]};
 
 const open=new Set(['root']);
+// auto-open L1: add all direct children of root
 (T.children||[]).forEach(c=>open.add(c.id));
+
 const ELS={},INFO={};
-
 function totalLeaves(n){if(!(n.children&&n.children.length))return 1;return n.children.reduce((a,c)=>a+totalLeaves(c),0);}
-
 const ROW=44,COLW=220,ROOT_X=90;
-
 function layout(node,x,y0){
   const vis=node.children||[];
   const exp=vis.length>0&&open.has(node.id);
@@ -88,7 +98,6 @@ function layout(node,x,y0){
   INFO[node.id]={x,y:y0+nl*ROW/2,node};
   if(exp){let ky=y0;vis.forEach(c=>{const cl=totalLeaves(c)*ROW;layout(c,x+COLW,ky);ky+=cl;});}
 }
-
 function buildDOM(){
   const wrap=document.getElementById('wrap');
   function walk(node,d){
@@ -108,15 +117,12 @@ function buildDOM(){
   }
   walk(T,0);
 }
-
 function isVis(id){
   if(id==='root')return true;
   function w(n){for(const c of n.children||[]){if(c.id===id)return open.has(n.id);const r=w(c);if(r!==undefined)return r&&open.has(n.id);}}
   return !!w(T);
 }
-
 let ox=0,oy=0,sc=1,drag=false,dx=0,dy=0;
-
 function reflow(){
   const wh=document.getElementById('wrap').clientHeight;
   const tot=totalLeaves(T)*ROW;
@@ -130,7 +136,6 @@ function reflow(){
   });
   drawLines();
 }
-
 function drawLines(){
   const svg=document.getElementById('svg');svg.innerHTML='';
   function walk(node){
@@ -151,7 +156,6 @@ function drawLines(){
   }
   walk(T);
 }
-
 const wrap=document.getElementById('wrap');
 wrap.addEventListener('mousedown',e=>{if(e.target.closest('.node'))return;drag=true;dx=e.clientX-ox;dy=e.clientY-oy;});
 window.addEventListener('mousemove',e=>{if(!drag)return;ox=e.clientX-dx;oy=e.clientY-dy;reflow();});
@@ -161,12 +165,10 @@ let ld=0;
 wrap.addEventListener('touchstart',e=>{if(e.touches.length===1){drag=true;dx=e.touches[0].clientX-ox;dy=e.touches[0].clientY-oy;}if(e.touches.length===2)ld=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);},{passive:true});
 wrap.addEventListener('touchmove',e=>{if(e.touches.length===1&&drag){ox=e.touches[0].clientX-dx;oy=e.touches[0].clientY-dy;reflow();}if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);sc=Math.min(2.5,Math.max(.2,sc*(d/ld)));ld=d;reflow();}},{passive:true});
 wrap.addEventListener('touchend',()=>drag=false,{passive:true});
-
 function toggle(id){open.has(id)?open.delete(id):open.add(id);reflow();}
 function expandAll(){function w(n){open.add(n.id);(n.children||[]).forEach(w);}w(T);reflow();}
 function collapseAll(){open.clear();open.add('root');reflow();}
 function resetView(){sc=1;const wh=window.innerHeight-42;const tot=totalLeaves(T)*ROW;ox=40;oy=(wh-tot)/2;reflow();}
-
 function showP(node,el){
   const pop=document.getElementById('popup');
   document.getElementById('pt').textContent=node.label.replace(/\n/g,' ');
@@ -180,7 +182,6 @@ function showP(node,el){
 }
 function closeP(){document.getElementById('popup').classList.remove('show');}
 wrap.addEventListener('click',e=>{if(!e.target.closest('.node')&&!e.target.closest('#popup'))closeP();});
-
 window.addEventListener('resize',reflow);
 buildDOM();
 resetView();
