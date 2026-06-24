@@ -3,515 +3,193 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mind Map — Finance and Financial Reporting</title>
+<title>Finance and Financial Reporting — Mind Map</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --navy:#0A1628;--navy2:#0d1e38;--navy3:#112244;
-    --gold:#C9A84C;--gold2:#e8c96a;
-    --text:#e8eaf0;--text2:#b0b8cc;--text3:#7a8299;
-    --card:#13233d;--border:#1e3560;
-    --radius:12px;
-  }
-  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow:hidden}
-
-  /* HEADER */
-  .header{background:linear-gradient(135deg,var(--navy3),var(--navy2));border-bottom:2px solid var(--gold);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:relative;z-index:10}
-  .header h1{font-size:1rem;font-weight:700;color:var(--gold)}
-  .header p{font-size:.75rem;color:var(--text2);margin-top:2px}
-  .header-right{display:flex;gap:8px}
-  .hbtn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text2);cursor:pointer;font-size:.78rem;transition:.2s}
-  .hbtn:hover{border-color:var(--gold);color:var(--gold)}
-  .hbtn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
-
-  /* CANVAS AREA */
-  #canvas-wrap{position:fixed;top:0;left:0;width:100vw;height:100vh;overflow:hidden;cursor:grab}
-  #canvas-wrap.grabbing{cursor:grabbing}
-  #canvas{position:absolute;transform-origin:0 0}
-
-  /* SVG LINES */
-  #svg-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-
-  /* NODES */
-  .node{position:absolute;transform:translate(-50%,-50%);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:filter .2s}
-  .node:hover{filter:brightness(1.15)}
-  .node-inner{border-radius:var(--radius);padding:10px 16px;text-align:center;user-select:none;position:relative;transition:transform .2s,box-shadow .2s}
-  .node:hover .node-inner{transform:scale(1.04)}
-  .node.root .node-inner{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0A1628;font-size:.95rem;font-weight:800;padding:14px 22px;border-radius:16px;box-shadow:0 0 0 4px rgba(201,168,76,.25),0 8px 32px rgba(201,168,76,.3)}
-  .node.l1 .node-inner{font-size:.8rem;font-weight:700;border:2px solid;border-radius:10px;padding:9px 15px;box-shadow:0 4px 16px rgba(0,0,0,.4)}
-  .node.l2 .node-inner{font-size:.75rem;font-weight:600;border:1.5px solid;border-radius:8px;padding:7px 12px;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-  .node.l3 .node-inner{font-size:.72rem;font-weight:500;border:1px solid;border-radius:6px;padding:5px 10px;box-shadow:0 1px 6px rgba(0,0,0,.25)}
-
-  /* BRANCH COLORS */
-  .b0 .node-inner{background:#0f2040;border-color:#3b82f6;color:#7dd3fc}
-  .b1 .node-inner{background:#0f2a1a;border-color:#10b981;color:#6ee7b7}
-  .b2 .node-inner{background:#2a1010;border-color:#ef4444;color:#fca5a5}
-  .b3 .node-inner{background:#1a1500;border-color:#f59e0b;color:#fde68a}
-  .b4 .node-inner{background:#1a0a2a;border-color:#8b5cf6;color:#d8b4fe}
-
-  /* EXPAND INDICATOR */
-  .expand-dot{position:absolute;bottom:-6px;right:-6px;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;transition:.2s}
-  .b0 .expand-dot{background:#3b82f6;color:#fff}
-  .b1 .expand-dot{background:#10b981;color:#fff}
-  .b2 .expand-dot{background:#ef4444;color:#fff}
-  .b3 .expand-dot{background:#f59e0b;color:#fff}
-  .b4 .expand-dot{background:#8b5cf6;color:#fff}
-  .node.collapsed .expand-dot::after{content:'+'}
-  .node.expanded .expand-dot::after{content:'−'}
-  .node.leaf .expand-dot{display:none}
-
-  /* POPUP */
-  #popup{position:fixed;z-index:1000;max-width:320px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none;pointer-events:all}
-  #popup.show{display:block;animation:popIn .18s ease}
-  @keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-  #popup .p-title{font-size:.9rem;font-weight:800;margin-bottom:8px}
-  #popup .p-type{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;opacity:.7}
-  #popup .p-body{font-size:.82rem;color:var(--text2);line-height:1.65}
-  #popup .p-link{font-size:.75rem;color:var(--gold);margin-top:10px;cursor:pointer;display:inline-block}
-  #popup .p-link:hover{text-decoration:underline}
-  #popup .p-close{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:1rem;line-height:1}
-  #popup .p-close:hover{color:var(--text)}
-
-  /* LEGEND */
-  #legend{position:fixed;bottom:20px;left:20px;background:rgba(13,30,56,.9);border:1px solid var(--border);border-radius:10px;padding:12px 16px;z-index:10;backdrop-filter:blur(8px)}
-  #legend h4{font-size:.7rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
-  .leg-item{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--text2);margin-bottom:5px}
-  .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-
-  /* CONTROLS */
-  #zoom-controls{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:6px;z-index:10}
-  .zoom-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:rgba(13,30,56,.9);color:var(--text);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;backdrop-filter:blur(8px)}
-  .zoom-btn:hover{border-color:var(--gold);color:var(--gold)}
-
-  /* HINT */
-  #hint{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:6px 16px;font-size:.75rem;color:var(--gold2);z-index:10;pointer-events:none;transition:opacity .5s}
-  #hint.hide{opacity:0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#c1714f;overflow:hidden;height:100vh;width:100vw}
+header{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(160,80,40,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.2);padding:9px 18px;display:flex;align-items:center;gap:12px}
+header h1{font-size:.88rem;font-weight:700;color:#fff3ee;flex:1}
+.btn{background:none;border:1px solid rgba(255,255,255,.35);border-radius:7px;padding:4px 11px;font-size:.72rem;color:#ffe0d0;cursor:pointer;font-family:inherit}
+.btn:hover{background:rgba(255,255,255,.15)}
+#wrap{position:fixed;top:42px;left:0;right:0;bottom:0;overflow:hidden;cursor:grab}
+#wrap:active{cursor:grabbing}
+svg#svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.node{position:absolute;border-radius:10px;padding:6px 13px;font-size:.72rem;font-weight:500;color:#1a1a2e;text-align:center;cursor:pointer;border:1.5px solid transparent;line-height:1.35;white-space:normal;max-width:165px;transition:filter .12s}
+.node:hover{filter:brightness(.93)}
+.node.root{background:#dce3f5;border-color:#aab8e0;font-weight:700;font-size:.78rem;color:#0d1b3e}
+.node.l1{background:#c8ddf5;border-color:#8aaed8}
+.node.l2{background:#d4eaf8;border-color:#9ac0e0}
+.node.l3{background:#c0edd8;border-color:#7acaaa;border-radius:20px}
+.node .arr{position:absolute;right:-9px;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:50%;background:#fff;border:1.5px solid #aab8e0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#5a7090;font-weight:700;pointer-events:none}
+#popup{position:fixed;z-index:100;background:#1a2a42;border:1px solid #2a4060;border-radius:12px;padding:14px 16px;max-width:270px;box-shadow:0 6px 30px rgba(0,0,0,.5);display:none}
+#popup.show{display:block;animation:pi .14s ease}
+@keyframes pi{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+#popup h3{font-size:.82rem;font-weight:700;color:#e8eaf0;margin-bottom:6px}
+#popup p{font-size:.75rem;color:#9ab0cc;line-height:1.6}
+#pcl{position:absolute;top:8px;right:10px;background:none;border:none;color:#6a88a8;font-size:.85rem;cursor:pointer}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <div>
-    <h1>Finance and Financial Reporting — Mind Map</h1>
-    <p>Financial Reporting · Interactive Mind Map — click nodes to explore, drag to pan, scroll to zoom</p>
-  </div>
-  <div class="header-right">
-    <button class="hbtn" onclick="expandAll()">Expand All</button>
-    <button class="hbtn" onclick="collapseAll()">Collapse All</button>
-    <button class="hbtn" onclick="resetView()">Reset View</button>
-    <button class="hbtn" onclick="window.history.back()">← Back</button>
-  </div>
-</div>
-
-<div id="canvas-wrap">
-  <div id="canvas">
-    <svg id="svg-layer"></svg>
-  </div>
-</div>
-
-<div id="popup">
-  <button class="p-close" onclick="closePopup()">✕</button>
-  <div class="p-type" id="p-type"></div>
-  <div class="p-title" id="p-title"></div>
-  <div class="p-body" id="p-body"></div>
-  <span class="p-link" id="p-link" onclick="expandFromPopup()"></span>
-</div>
-
-<div id="legend">
-  <h4>Branches</h4>
-  <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div>Role of Financial Reporting</div>
-  <div class="leg-item"><div class="leg-dot" style="background:#10b981"></div>Main Financial Statements</div>
-  <div class="leg-item"><div class="leg-dot" style="background:#ef4444"></div>Importance of Financial Analysis</div>
-  <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div>Accuracy and Transparency</div>
-  <div class="leg-item"><div class="leg-dot" style="background:#8b5cf6"></div>Strategic Decision-Making</div>
-</div>
-
-<div id="zoom-controls">
-  <button class="zoom-btn" onclick="zoom(1.2)">+</button>
-  <button class="zoom-btn" onclick="zoom(0.83)">−</button>
-</div>
-
-<div id="hint">💡 Click any node to learn more</div>
-
+<header>
+  <h1>Finance and Financial Reporting — Mind Map</h1>
+  <button class="btn" onclick="expandAll()">Expand All</button>
+  <button class="btn" onclick="collapseAll()">Collapse All</button>
+  <button class="btn" onclick="resetView()">Reset</button>
+</header>
+<div id="wrap"><svg id="svg"></svg></div>
+<div id="popup"><button id="pcl" onclick="closeP()">✕</button><h3 id="pt"></h3><p id="pb"></p></div>
 <script>
-// ─── MIND MAP DATA ───────────────────────────────────────────────────────────
-const tree = {
-  id:'root', label:'Finance &\nFinancial\nReporting', level:'root', branch:-1,
-  info:{type:'Topic',body:'Financial reporting is the process of disclosing financial information about a company\'s performance and position. It forms the foundation of informed management, strategic planning, and stakeholder trust in any organization.'},
-  children:[
-    {
-      id:'b0', label:'Role of\nFinancial\nReporting', level:'l1', branch:0,
-      info:{type:'Core Concept',body:'Financial reporting serves as the primary tool for communicating a company\'s economic activity. It allows managers, investors, and creditors to evaluate performance, assess stability, and make informed decisions based on accurate financial data.'},
-      children:[
-        {
-          id:'b0a', label:'Evaluate\nOperations', level:'l2', branch:0,
-          info:{type:'Key Function',body:'Financial reporting helps managers assess how efficiently the company uses its resources and whether operations are generating expected results.'},
-          children:[]
-        },
-        {
-          id:'b0b', label:'Assess\nStability', level:'l2', branch:0,
-          info:{type:'Key Function',body:'Reporting reveals the company\'s financial structure — whether it can meet obligations, maintain solvency, and withstand economic shocks.'},
-          children:[]
-        },
-        {
-          id:'b0c', label:'Informed\nDecision-Making', level:'l2', branch:0,
-          info:{type:'Key Function',body:'Accurate reports allow managers to plan budgets, control costs, and develop long-term strategies based on real data.'},
-          children:[]
-        },
-      ]
-    },
-    {
-      id:'b1', label:'Main Financial\nStatements', level:'l1', branch:1,
-      info:{type:'Core Concept',body:'The three main financial statements — Income Statement, Balance Sheet, and Cash Flow Statement — together provide a complete picture of a company\'s profitability, financial position, and liquidity. Each serves a distinct analytical purpose.'},
-      children:[
-        {
-          id:'b1a', label:'Income\nStatement', level:'l2', branch:1,
-          info:{type:'Financial Statement',body:'Tracks revenue, expenses, and profit to determine if a company is truly profitable over a specific period.'},
-          children:[
-            {id:'b1a1',label:'Revenue',level:'l3',branch:1,info:{type:'Key Term',body:'Total income generated from the sale of goods or services before any expenses are deducted.'}},
-            {id:'b1a2',label:'Expenses',level:'l3',branch:1,info:{type:'Key Term',body:'Costs incurred in running the business, including salaries, rent, materials, and other operating costs.'}},
-            {id:'b1a3',label:'Profit',level:'l3',branch:1,info:{type:'Key Term',body:'The amount remaining after all expenses are subtracted from revenue. Indicates the company\'s bottom-line performance.'}},
-          ]
-        },
-        {
-          id:'b1b', label:'Balance\nSheet', level:'l2', branch:1,
-          info:{type:'Financial Statement',body:'Presents a snapshot of assets, liabilities, and equity at a specific date, reflecting the company\'s underlying financial structure.'},
-          children:[
-            {id:'b1b1',label:'Assets',level:'l3',branch:1,info:{type:'Key Term',body:'Resources owned by the company that have economic value — cash, inventory, property, equipment.'}},
-            {id:'b1b2',label:'Liabilities',level:'l3',branch:1,info:{type:'Key Term',body:'Obligations the company owes to creditors — loans, accounts payable, and other debts.'}},
-            {id:'b1b3',label:'Equity',level:'l3',branch:1,info:{type:'Key Term',body:'The owners\' residual interest in the company after all liabilities are subtracted from assets. Also called net worth.'}},
-          ]
-        },
-        {
-          id:'b1c', label:'Cash Flow\nStatement', level:'l2', branch:1,
-          info:{type:'Financial Statement',body:'Explains the movement of money in and out of the business, ensuring the company has enough liquidity to operate.'},
-          children:[
-            {id:'b1c1',label:'Liquidity',level:'l3',branch:1,info:{type:'Key Term',body:'The ability to meet short-term financial obligations using available cash or assets that can quickly be converted to cash.'}},
-            {id:'b1c2',label:'Money\nMovement',level:'l3',branch:1,info:{type:'Key Term',body:'The flow of cash through three activities: operating (day-to-day), investing (assets), and financing (loans/dividends).'}},
-          ]
-        },
-      ]
-    },
-    {
-      id:'b2', label:'Importance of\nFinancial\nAnalysis', level:'l1', branch:2,
-      info:{type:'Core Concept',body:'Financial analysis transforms raw data from statements into actionable insights. It enables managers to identify inefficiencies, benchmark performance, and detect risks before they escalate into serious problems.'},
-      children:[
-        {
-          id:'b2a', label:'Identify\nInefficiencies', level:'l2', branch:2,
-          info:{type:'Key Activity',body:'Analysis highlights areas where costs are higher than expected or resources are underutilized, enabling corrective action.'},
-          children:[]
-        },
-        {
-          id:'b2b', label:'Analyze\nPerformance', level:'l2', branch:2,
-          info:{type:'Key Activity',body:'Comparing current results to prior periods or industry benchmarks to understand whether the company is improving.'},
-          children:[]
-        },
-        {
-          id:'b2c', label:'Evaluate\nRisks', level:'l2', branch:2,
-          info:{type:'Key Activity',body:'Financial data reveals exposure to credit risk, market volatility, or liquidity shortfalls before they become critical.'},
-          children:[]
-        },
-      ]
-    },
-    {
-      id:'b3', label:'Accuracy &\nTransparency', level:'l1', branch:3,
-      info:{type:'Core Concept',body:'The integrity of financial reporting depends on adherence to accounting standards, the reliability of the data presented, and a commitment to transparency. These principles protect all stakeholders from misleading information.'},
-      children:[
-        {
-          id:'b3a', label:'Follow Accounting\nStandards', level:'l2', branch:3,
-          info:{type:'Key Principle',body:'Companies must adhere to IFRS or GAAP rules to ensure financial data is consistent, comparable, and reliable.'},
-          children:[]
-        },
-        {
-          id:'b3b', label:'Provide\nReliable Data', level:'l2', branch:3,
-          info:{type:'Key Principle',body:'Reliable reporting means the numbers reflect economic reality without manipulation or omission of material facts.'},
-          children:[]
-        },
-        {
-          id:'b3c', label:'Build\nFinancial Trust', level:'l2', branch:3,
-          info:{type:'Key Principle',body:'Transparent reporting builds confidence among investors, banks, and partners, reducing the cost of capital.'},
-          children:[]
-        },
-        {
-          id:'b3d', label:'Avoid Misleading\nUsers', level:'l2', branch:3,
-          info:{type:'Key Principle',body:'Incomplete or inaccurate reports can lead stakeholders to wrong conclusions, causing poor investment or lending decisions.'},
-          children:[]
-        },
-      ]
-    },
-    {
-      id:'b4', label:'Strategic\nDecision-Making', level:'l1', branch:4,
-      info:{type:'Core Concept',body:'Financial reports are not just historical records — they are the foundation of forward-looking strategy. Budgeting, cost control, expansion plans, and investment decisions all rely on the insights derived from accurate financial reporting.'},
-      children:[
-        {
-          id:'b4a', label:'Plan\nBudgets', level:'l2', branch:4,
-          info:{type:'Strategic Use',body:'Financial reports provide the baseline for allocating resources, setting revenue targets, and controlling departmental spending.'},
-          children:[]
-        },
-        {
-          id:'b4b', label:'Control\nCosts', level:'l2', branch:4,
-          info:{type:'Strategic Use',body:'Managers use detailed expense analysis to cut waste, renegotiate contracts, and improve operating efficiency.'},
-          children:[]
-        },
-        {
-          id:'b4c', label:'Develop\nStrategies', level:'l2', branch:4,
-          info:{type:'Strategic Use',body:'Long-term strategic plans — expansion, product launches, market entry — are grounded in financial projections from past reports.'},
-          children:[]
-        },
-        {
-          id:'b4d', label:'Assess Expected\nReturns', level:'l2', branch:4,
-          info:{type:'Strategic Use',body:'Before investing, managers evaluate projected cash flows and profitability ratios to determine whether returns justify the risk.'},
-          children:[]
-        },
-      ]
-    },
-  ]
-};
+const T={id:'root',label:'Finance and\nFinancial Reporting',info:'Financial reporting provides information about a company\'s financial position and performance. It is the foundation for informed business decisions by managers, investors, and partners.',children:[
+{id:'A',label:'Role of Financial\nReporting',info:'Financial reporting serves three core purposes: evaluating how efficiently the company operates, assessing its long-term stability, and enabling informed strategic decisions.',children:[
+{id:'A1',label:'Evaluate Operations',info:'Reports reveal whether the company uses its resources efficiently — comparing actual results against targets and prior periods.'},
+{id:'A2',label:'Assess Stability',info:'Financial statements show whether the company can meet its obligations and withstand economic shocks — key for lenders and investors assessing credit risk.'},
+{id:'A3',label:'Informed\nDecision-Making',info:'Accurate reporting allows managers to plan budgets, control costs, set targets, and develop long-term growth strategies based on real data.'},
+]},
+{id:'B',label:'Main Financial\nStatements',info:'Three documents form the core of financial reporting: the Income Statement (profitability), Balance Sheet (financial structure), and Cash Flow Statement (liquidity).',children:[
+{id:'B1',label:'Income Statement',info:'Tracks revenue, expenses, and profit over a period. High revenue does not always mean high profit — expenses matter equally.',children:[
+{id:'B1a',label:'Revenue',info:'Total income from selling goods or services before any costs are deducted. The "top line" of the income statement.'},
+{id:'B1b',label:'Expenses',info:'All costs of running the business: salaries, rent, raw materials, depreciation, interest payments.'},
+{id:'B1c',label:'Profit',info:'Revenue minus expenses. The "bottom line." Can be gross, operating, or net profit depending on which expenses are included.'},
+]},
+{id:'B2',label:'Balance Sheet',info:'A snapshot at a specific date: what the company owns (assets), owes (liabilities), and the owners\' stake (equity). Assets = Liabilities + Equity.',children:[
+{id:'B2a',label:'Assets',info:'Resources the company owns: cash, inventory, equipment, property, receivables. Divided into current and non-current.'},
+{id:'B2b',label:'Liabilities',info:'Obligations owed to creditors: bank loans, accounts payable, bonds. Divided into current (due within a year) and long-term.'},
+{id:'B2c',label:'Equity',info:'The owners\' residual claim after all liabilities are paid. Includes share capital, retained earnings, and reserves.'},
+]},
+{id:'B3',label:'Cash Flow\nStatement',info:'Explains how cash actually moves in and out. A company can be profitable on paper but cash-poor in reality — this statement reveals that gap.',children:[
+{id:'B3a',label:'Liquidity',info:'The ability to meet short-term obligations using available cash. Low liquidity can bankrupt even a profitable company.'},
+{id:'B3b',label:'Money Movement',info:'Cash flows across three channels: Operating (day-to-day), Investing (assets), Financing (loans/dividends).'},
+]},
+]},
+{id:'C',label:'Importance of\nFinancial Analysis',info:'Analysis interprets what the numbers mean. High revenue with high expenses signals a problem. Analysis identifies risks before they become crises.',children:[
+{id:'C1',label:'Identify\nInefficiencies',info:'Analysis reveals where costs exceed benchmarks or resources are underutilized — allowing management to act before small problems become large losses.'},
+{id:'C2',label:'Analyze\nPerformance',info:'Comparing results to prior periods, budgets, or industry peers using ratio analysis (ROE, ROA, current ratio) and trend analysis.'},
+{id:'C3',label:'Evaluate Risks',info:'Financial data exposes credit risk, liquidity risk, and market risk (interest rate or FX exposure) before they become critical.'},
+]},
+{id:'D',label:'Accuracy and\nTransparency',info:'Reliable reporting requires following strict accounting standards (IFRS or GAAP) to ensure data is consistent, comparable, and free from manipulation.',children:[
+{id:'D1',label:'Follow Accounting\nStandards',info:'IFRS and GAAP provide the rules for how items are recognized, measured, and disclosed — enabling cross-company comparisons.'},
+{id:'D2',label:'Provide Reliable\nData',info:'Data must reflect economic reality without omitting material facts. Auditors verify this annually on behalf of shareholders.'},
+{id:'D3',label:'Build Financial\nTrust',info:'Transparent reporting builds confidence among investors, banks, and partners — lowering the company\'s cost of capital.'},
+{id:'D4',label:'Avoid Misleading\nUsers',info:'Incomplete or inaccurate reports lead stakeholders to wrong conclusions: investors overpay, banks overlend, managers misallocate.'},
+]},
+{id:'E',label:'Strategic\nDecision-Making',info:'Financial reports are the foundation of strategy. Managers use them to allocate capital, set priorities, and evaluate whether strategies are generating expected returns.',children:[
+{id:'E1',label:'Plan Budgets',info:'Historical financial data provides the baseline for setting revenue targets, allocating departmental budgets, and projecting cash needs.'},
+{id:'E2',label:'Control Costs',info:'Variance analysis — comparing actual costs to budget — identifies overspending early, enabling corrective action.'},
+{id:'E3',label:'Develop\nStrategies',info:'Long-term plans (market entry, expansion) are grounded in financial projections derived from past performance and current position.'},
+{id:'E4',label:'Assess Expected\nReturns',info:'Before investing, managers use NPV, IRR, and payback period — all based on financial report data — to determine if return justifies risk.'},
+]},
+]};
 
-// ─── LAYOUT ──────────────────────────────────────────────────────────────────
-const CX = 700, CY = 500;
-const L1_R = 260, L2_R = 480, L3_R = 660;
+const open=new Set(['root','A','B','C','D','E']);
+const ELS={},INFO={};
 
-const branchAngles = [-100, -40, 20, 80, 140]; // degrees for 5 branches
+function totalLeaves(n){if(!(n.children&&n.children.length))return 1;return n.children.reduce((a,c)=>a+totalLeaves(c),0);}
 
-function deg(d){ return d * Math.PI / 180 }
+const ROW=44,COLW=220,ROOT_X=90;
 
-function assignPositions(){
-  tree.x = CX; tree.y = CY;
-  tree.children.forEach((b, bi) => {
-    const angle = branchAngles[bi];
-    b.x = CX + Math.cos(deg(angle)) * L1_R;
-    b.y = CY + Math.sin(deg(angle)) * L1_R;
-    if(b.children){
-      b.children.forEach((c, ci) => {
-        const spread = b.children.length === 1 ? 0 : (ci - (b.children.length-1)/2) * 28;
-        const cAngle = angle + spread;
-        c.x = CX + Math.cos(deg(cAngle)) * L2_R;
-        c.y = CY + Math.sin(deg(cAngle)) * L2_R;
-        if(c.children){
-          c.children.forEach((d, di) => {
-            const dspread = c.children.length === 1 ? 0 : (di - (c.children.length-1)/2) * 22;
-            const dAngle = cAngle + dspread;
-            d.x = CX + Math.cos(deg(dAngle)) * L3_R;
-            d.y = CY + Math.sin(deg(dAngle)) * L3_R;
-          });
-        }
-      });
+function layout(node,x,y0){
+  const vis=node.children||[];
+  const exp=vis.length>0&&open.has(node.id);
+  const nl=exp?vis.reduce((a,c)=>a+totalLeaves(c),0):1;
+  INFO[node.id]={x,y:y0+nl*ROW/2,node};
+  if(exp){let ky=y0;vis.forEach(c=>{const cl=totalLeaves(c)*ROW;layout(c,x+COLW,ky);ky+=cl;});}
+}
+
+function buildDOM(){
+  const wrap=document.getElementById('wrap');
+  function walk(node,d){
+    if(!ELS[node.id]){
+      const el=document.createElement('div');
+      el.className='node '+(d===0?'root':d===1?'l1':d===2?'l2':'l3');
+      el.id='n_'+node.id;
+      el.innerHTML=node.label.replace(/\n/g,'<br>');
+      if((node.children||[]).length){
+        const a=document.createElement('span');
+        a.className='arr';a.id='arr_'+node.id;a.textContent=open.has(node.id)?'‹':'›';el.appendChild(a);
+      }
+      el.addEventListener('click',e=>{e.stopPropagation();if((node.children||[]).length)toggle(node.id);showP(node,el);});
+      wrap.appendChild(el);ELS[node.id]=el;
     }
-  });
-}
-
-// ─── STATE ───────────────────────────────────────────────────────────────────
-const expanded = new Set(['root','b0','b1','b2','b3','b4']);
-let activePopupNode = null;
-
-function isVisible(node){
-  if(node.id === 'root') return true;
-  if(node.level === 'l1') return true;
-  if(node.level === 'l2') return expanded.has(node.parentId);
-  if(node.level === 'l3') return expanded.has(node.parentId) && expanded.has(node.grandId);
-  return false;
-}
-
-// ─── RENDER ──────────────────────────────────────────────────────────────────
-const canvas = document.getElementById('canvas');
-const svg = document.getElementById('svg-layer');
-const nodeEls = new Map();
-const lineEls = new Map();
-
-function flatNodes(node, arr=[], parentId=null, grandId=null){
-  node.parentId = parentId;
-  node.grandId = grandId;
-  arr.push(node);
-  if(node.children) node.children.forEach(c => flatNodes(c, arr, node.id, parentId));
-  return arr;
-}
-
-const allNodes = flatNodes(tree);
-
-function createNodeEl(node){
-  const el = document.createElement('div');
-  const hasChildren = node.children && node.children.length > 0;
-  el.className = `node ${node.level} b${node.branch >= 0 ? node.branch : ''} ${hasChildren ? 'collapsed' : 'leaf'}`;
-  el.id = 'n-' + node.id;
-  el.style.left = node.x + 'px';
-  el.style.top = node.y + 'px';
-  const inner = document.createElement('div');
-  inner.className = 'node-inner';
-  inner.innerHTML = node.label.replace(/\n/g,'<br>');
-  if(hasChildren){
-    const dot = document.createElement('div');
-    dot.className = 'expand-dot';
-    inner.appendChild(dot);
+    (node.children||[]).forEach(c=>walk(c,d+1));
   }
-  el.appendChild(inner);
-  el.addEventListener('click', e => { e.stopPropagation(); onNodeClick(node, el); });
-  canvas.appendChild(el);
-  nodeEls.set(node.id, el);
-  return el;
+  walk(T,0);
 }
 
-function createLine(fromNode, toNode, branch){
-  const colors = ['#3b82f6','#10b981','#ef4444','#f59e0b','#8b5cf6'];
-  const line = document.createElementNS('http://www.w3.org/2000/svg','path');
-  line.setAttribute('stroke', colors[branch] || '#C9A84C');
-  line.setAttribute('stroke-width','2');
-  line.setAttribute('fill','none');
-  line.setAttribute('stroke-opacity','0.6');
-  line.id = `line-${fromNode.id}-${toNode.id}`;
-  svg.appendChild(line);
-  lineEls.set(line.id, {line, from:fromNode, to:toNode});
-  return line;
+function isVis(id){
+  if(id==='root')return true;
+  function w(n){for(const c of n.children||[]){if(c.id===id)return open.has(n.id);const r=w(c);if(r!==undefined)return r&&open.has(n.id);}}
+  return !!w(T);
 }
 
-function updateLine(from, to, line){
-  const mx = (from.x + to.x) / 2;
-  line.setAttribute('d', `M${from.x},${from.y} Q${mx},${from.y} ${to.x},${to.y}`);
+let ox=0,oy=0,sc=1,drag=false,dx=0,dy=0;
+
+function reflow(){
+  const wh=document.getElementById('wrap').clientHeight;
+  const tot=totalLeaves(T)*ROW;
+  layout(T,ROOT_X,(wh-tot)/2);
+  Object.entries(INFO).forEach(([id,{x,y}])=>{
+    const el=ELS[id];if(!el)return;
+    const vis=isVis(id);el.style.display=vis?'block':'none';if(!vis)return;
+    el.style.left=(x*sc+ox)+'px';el.style.top=(y*sc+oy)+'px';
+    el.style.transform=`translate(0,-50%) scale(${sc})`;el.style.transformOrigin='left center';
+    const a=document.getElementById('arr_'+id);if(a)a.textContent=open.has(id)?'‹':'›';
+  });
+  drawLines();
 }
 
-function buildGraph(){
-  assignPositions();
-  allNodes.forEach(node => createNodeEl(node));
-  function addLines(node){
-    if(node.children) node.children.forEach(child => {
-      const branch = child.branch >= 0 ? child.branch : 0;
-      createLine(node, child, branch);
-      addLines(child);
+function drawLines(){
+  const svg=document.getElementById('svg');svg.innerHTML='';
+  function walk(node){
+    if(!isVis(node.id))return;
+    const pi=INFO[node.id];if(!pi)return;
+    const el=ELS[node.id];
+    const nw=(el?el.offsetWidth:160)*sc;
+    const px=pi.x*sc+ox+nw,py=pi.y*sc+oy;
+    (node.children||[]).forEach(child=>{
+      if(!isVis(child.id))return;
+      const ci=INFO[child.id];if(!ci)return;
+      const cx=ci.x*sc+ox,cy=ci.y*sc+oy,mx=(px+cx)/2;
+      const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d',`M${px},${py} C${mx},${py} ${mx},${cy} ${cx},${cy}`);
+      p.setAttribute('stroke','rgba(180,210,240,.75)');p.setAttribute('stroke-width',Math.max(1,1.3*sc));p.setAttribute('fill','none');
+      svg.appendChild(p);walk(child);
     });
   }
-  addLines(tree);
-  render();
+  walk(T);
 }
 
-function render(){
-  allNodes.forEach(node => {
-    const el = nodeEls.get(node.id);
-    if(!el) return;
-    const vis = isVisible(node);
-    el.style.display = vis ? 'block' : 'none';
-    el.style.opacity = vis ? '1' : '0';
-    const hasChildren = node.children && node.children.length > 0;
-    if(hasChildren){
-      el.classList.toggle('expanded', expanded.has(node.id));
-      el.classList.toggle('collapsed', !expanded.has(node.id));
-    }
-  });
-  lineEls.forEach(({line, from, to}) => {
-    const fromVis = isVisible(from);
-    const toVis = isVisible(to);
-    if(fromVis && toVis){
-      line.style.display = 'block';
-      updateLine(from, to, line);
-    } else {
-      line.style.display = 'none';
-    }
-  });
+const wrap=document.getElementById('wrap');
+wrap.addEventListener('mousedown',e=>{if(e.target.closest('.node'))return;drag=true;dx=e.clientX-ox;dy=e.clientY-oy;});
+window.addEventListener('mousemove',e=>{if(!drag)return;ox=e.clientX-dx;oy=e.clientY-dy;reflow();});
+window.addEventListener('mouseup',()=>drag=false);
+wrap.addEventListener('wheel',e=>{e.preventDefault();sc=Math.min(2.5,Math.max(.2,sc*(e.deltaY<0?1.1:.91)));reflow();},{passive:false});
+let ld=0;
+wrap.addEventListener('touchstart',e=>{if(e.touches.length===1){drag=true;dx=e.touches[0].clientX-ox;dy=e.touches[0].clientY-oy;}if(e.touches.length===2)ld=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);},{passive:true});
+wrap.addEventListener('touchmove',e=>{if(e.touches.length===1&&drag){ox=e.touches[0].clientX-dx;oy=e.touches[0].clientY-dy;reflow();}if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);sc=Math.min(2.5,Math.max(.2,sc*(d/ld)));ld=d;reflow();}},{passive:true});
+wrap.addEventListener('touchend',()=>drag=false,{passive:true});
+
+function toggle(id){open.has(id)?open.delete(id):open.add(id);reflow();}
+function expandAll(){function w(n){open.add(n.id);(n.children||[]).forEach(w);}w(T);reflow();}
+function collapseAll(){open.clear();open.add('root');reflow();}
+function resetView(){sc=1;const wh=window.innerHeight-42;const tot=totalLeaves(T)*ROW;ox=40;oy=(wh-tot)/2;reflow();}
+
+function showP(node,el){
+  const pop=document.getElementById('popup');
+  document.getElementById('pt').textContent=node.label.replace(/\n/g,' ');
+  document.getElementById('pb').textContent=node.info||'';
+  pop.style.display='block';
+  const vw=window.innerWidth,vh=window.innerHeight,r=el.getBoundingClientRect();
+  let lx=r.right+12,ly=r.top;
+  const pw=pop.offsetWidth||270,ph=pop.offsetHeight||120;
+  if(lx+pw>vw-8)lx=r.left-pw-12;if(ly+ph>vh-8)ly=vh-ph-8;if(ly<50)ly=50;
+  pop.style.left=lx+'px';pop.style.top=ly+'px';pop.classList.add('show');
 }
+function closeP(){document.getElementById('popup').classList.remove('show');}
+wrap.addEventListener('click',e=>{if(!e.target.closest('.node')&&!e.target.closest('#popup'))closeP();});
 
-// ─── INTERACTIONS ────────────────────────────────────────────────────────────
-function onNodeClick(node, el){
-  const hasChildren = node.children && node.children.length > 0;
-  if(hasChildren){
-    if(expanded.has(node.id)) expanded.delete(node.id);
-    else expanded.add(node.id);
-    render();
-  }
-  showPopup(node, el);
-}
-
-function showPopup(node, el){
-  activePopupNode = node;
-  document.getElementById('p-type').textContent = node.info.type;
-  document.getElementById('p-title').textContent = node.label.replace(/\n/g,' ');
-  document.getElementById('p-body').textContent = node.info.body;
-  const plink = document.getElementById('p-link');
-  const hasChildren = node.children && node.children.length > 0;
-  if(hasChildren){
-    plink.textContent = expanded.has(node.id) ? '▼ Collapse this branch' : '▶ Expand this branch';
-    plink.style.display = 'inline';
-  } else {
-    plink.style.display = 'none';
-  }
-  const popup = document.getElementById('popup');
-  popup.classList.add('show');
-  const rect = el.getBoundingClientRect();
-  let px = rect.right + 12;
-  let py = rect.top;
-  if(px + 340 > window.innerWidth) px = rect.left - 340;
-  if(py + 200 > window.innerHeight) py = window.innerHeight - 220;
-  if(py < 70) py = 70;
-  popup.style.left = px + 'px';
-  popup.style.top = py + 'px';
-  const colors = ['#7dd3fc','#6ee7b7','#fca5a5','#fde68a','#d8b4fe','#e8c96a'];
-  document.getElementById('p-title').style.color = node.branch >= 0 ? colors[node.branch] : '#e8c96a';
-}
-
-function expandFromPopup(){
-  if(!activePopupNode) return;
-  const hasChildren = activePopupNode.children && activePopupNode.children.length > 0;
-  if(!hasChildren) return;
-  if(expanded.has(activePopupNode.id)) expanded.delete(activePopupNode.id);
-  else expanded.add(activePopupNode.id);
-  render();
-  document.getElementById('p-link').textContent = expanded.has(activePopupNode.id) ? '▼ Collapse this branch' : '▶ Expand this branch';
-}
-
-function closePopup(){ document.getElementById('popup').classList.remove('show'); activePopupNode = null; }
-
-document.getElementById('canvas-wrap').addEventListener('click', closePopup);
-
-function expandAll(){
-  allNodes.forEach(n => { if(n.children && n.children.length > 0) expanded.add(n.id); });
-  render();
-}
-function collapseAll(){
-  allNodes.forEach(n => { if(n.id !== 'root' && n.level !== 'l1') expanded.delete(n.id); });
-  render();
-}
-
-// ─── PAN & ZOOM ──────────────────────────────────────────────────────────────
-let scale = 0.85, tx = 0, ty = 60;
-let dragging = false, lastX = 0, lastY = 0;
-
-function applyTransform(){
-  canvas.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
-}
-
-function zoom(factor, cx, cy){
-  const wrap = document.getElementById('canvas-wrap');
-  cx = cx ?? wrap.clientWidth / 2;
-  cy = cy ?? wrap.clientHeight / 2;
-  const newScale = Math.max(0.3, Math.min(2, scale * factor));
-  tx = cx - (cx - tx) * (newScale / scale);
-  ty = cy - (cy - ty) * (newScale / scale);
-  scale = newScale;
-  applyTransform();
-}
-
-function resetView(){
-  const wrap = document.getElementById('canvas-wrap');
-  scale = 0.85;
-  tx = wrap.clientWidth/2 - CX * scale;
-  ty = wrap.clientHeight/2 - CY * scale;
-  applyTransform();
-}
-
-const wrap = document.getElementById('canvas-wrap');
-wrap.addEventListener('mousedown', e => { if(e.button !== 0) return; dragging = true; lastX=e.clientX; lastY=e.clientY; wrap.classList.add('grabbing'); });
-window.addEventListener('mousemove', e => { if(!dragging) return; tx += e.clientX-lastX; ty += e.clientY-lastY; lastX=e.clientX; lastY=e.clientY; applyTransform(); });
-window.addEventListener('mouseup', () => { dragging=false; wrap.classList.remove('grabbing'); });
-wrap.addEventListener('wheel', e => { e.preventDefault(); zoom(e.deltaY < 0 ? 1.1 : 0.91, e.clientX, e.clientY); }, {passive:false});
-
-// touch
-let lastDist = 0;
-wrap.addEventListener('touchstart', e => { if(e.touches.length===1){dragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY} if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)} });
-wrap.addEventListener('touchmove', e => { e.preventDefault(); if(e.touches.length===1&&dragging){tx+=e.touches[0].clientX-lastX;ty+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;applyTransform()} if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);zoom(d/lastDist);lastDist=d} },{passive:false});
-wrap.addEventListener('touchend', () => { dragging=false; });
-
-// ─── INIT ────────────────────────────────────────────────────────────────────
-buildGraph();
+window.addEventListener('resize',reflow);
+buildDOM();
 resetView();
-setTimeout(() => document.getElementById('hint').classList.add('hide'), 3000);
 </script>
 </body>
 </html>
