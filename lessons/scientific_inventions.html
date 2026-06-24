@@ -157,6 +157,7 @@
   <div class="tab" onclick="showTab('speaking')">Speaking</div>
   <div class="tab" onclick="showTab('reflect')">Reflection</div>
   <div class="tab" onclick="showTab('progress')">Progress</div>
+  <div class="tab" onclick="showTab('infographics')">🖼 Infographics</div>
   <div class="tab" onclick="window.open('mindmap_scientific_inventions.html','_blank')">🧠 Mind Map</div>
 </nav>
 <main class="main">
@@ -685,5 +686,11 @@ function resetAll(){if(!confirm('Reset all progress?'))return;['scores','catAnsw
   updateTimerDisplay();updateTotal();
 })();
 </script>
+<div id="tab-infographics" class="section">
+  <div style="max-width:960px;margin:0 auto;padding:24px 16px">
+    <h2 style="font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:16px">🖼 Infographics</h2>
+    <img src="images/scientific_inventions_infographic.webp" alt="The Economics of Innovation" style="width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.4)">
+  </div>
+</div>
 </body>
 </html>
