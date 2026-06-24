@@ -201,7 +201,7 @@
         <div class="dq-q">What are the main strengths of the Russian education system that make it competitive internationally?</div>
         <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts... (min. 20 words)" oninput="saveItem('edu_dq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✓ Check Answer</button>
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
         </div>
         <div id="dq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -211,7 +211,7 @@
         <div class="dq-q">What are the key challenges facing the Russian education system, particularly in rural regions?</div>
         <textarea class="dq-textarea" id="dq2" placeholder="Name at least 2 specific challenges..." oninput="saveItem('edu_dq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✓ Check Answer</button>
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
         </div>
         <div id="dq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -221,7 +221,7 @@
         <div class="dq-q">How are ongoing reforms addressing the need for digital literacy and critical thinking in Russian schools?</div>
         <textarea class="dq-textarea" id="dq3" placeholder="Describe specific initiatives or approaches..." oninput="saveItem('edu_dq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✓ Check Answer</button>
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
         </div>
         <div id="dq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -261,7 +261,7 @@
         <div class="dq-q">What examination marks the end of secondary education in Russia, and what is its main purpose?</div>
         <textarea class="dq-textarea" id="cq1" placeholder="Name the exam and explain its role..." oninput="saveItem('edu_cq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✓ Check</button>
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(1)">📋 Model</button>
         </div>
         <div id="cq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -271,7 +271,7 @@
         <div class="dq-q">According to the text, what teaching practice has been criticised, and what does it limit?</div>
         <textarea class="dq-textarea" id="cq2" placeholder="Identify the practice and explain the criticism..." oninput="saveItem('edu_cq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✓ Check</button>
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(2)">📋 Model</button>
         </div>
         <div id="cq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -281,7 +281,7 @@
         <div class="dq-q">What are two specific goals of Russia's ongoing education reforms mentioned in the text?</div>
         <textarea class="dq-textarea" id="cq3" placeholder="List two goals with supporting detail..." oninput="saveItem('edu_cq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✓ Check</button>
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(3)">📋 Model</button>
         </div>
         <div id="cq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -361,7 +361,7 @@
   <div class="card">
     <div id="fib-container"></div>
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
-      <button class="btn btn-primary" onclick="checkAllFIB()">✓ Check All</button>
+      <button class="btn btn-primary" onclick="checkAllFIB()">✔ Check All</button>
       <button class="btn btn-outline" onclick="resetFIB()">↺ Reset</button>
       <span id="fib-score" class="text-gold fw-600" style="align-self:center;margin-left:8px;font-size:14px;"></span>
     </div>
@@ -394,7 +394,7 @@
         <span class="vocab-badge" id="wb1"></span>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✓ Evaluate</button>
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✔ Check</button>
         <button class="btn btn-outline btn-sm" onclick="showModelWriting(1)">📋 Model Answer</button>
       </div>
       <div id="w-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -410,7 +410,7 @@
         <span class="vocab-badge" id="wb2"></span>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✓ Evaluate</button>
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✔ Check</button>
         <button class="btn btn-outline btn-sm" onclick="showModelWriting(2)">📋 Model Answer</button>
       </div>
       <div id="w-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>

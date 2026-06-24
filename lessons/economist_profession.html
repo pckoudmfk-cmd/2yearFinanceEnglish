@@ -201,7 +201,7 @@
         <div class="dq-q">Why can this candidate be rejected? What specific skills are missing, and what risks could appear if the company hires this specialist anyway?</div>
         <textarea class="dq-textarea" id="dq1" placeholder="Give 2–3 arguments and predict consequences... (min. 25 words)" oninput="saveItem('econ_dq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✓ Check Answer</button>
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
         </div>
         <div id="dq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -211,7 +211,7 @@
         <div class="dq-q">How does incorrect financial analysis create financial risks for a company? Give a specific example.</div>
         <textarea class="dq-textarea" id="dq2" placeholder="Describe the cause-effect chain... (min. 20 words)" oninput="saveItem('econ_dq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✓ Check Answer</button>
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
         </div>
         <div id="dq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -221,7 +221,7 @@
         <div class="dq-q">"Professional knowledge is more important than communication skills in finance." Do you agree or disagree? Give 2 arguments and 1 counterargument.</div>
         <textarea class="dq-textarea" id="dq3" placeholder="State your position clearly, then give arguments... (min. 30 words)" oninput="saveItem('econ_dq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✓ Check Answer</button>
+          <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
         </div>
         <div id="dq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -259,7 +259,7 @@
         <div class="dq-q">What are the three main tasks of an economist mentioned in the first paragraph?</div>
         <textarea class="dq-textarea" id="cq1" placeholder="Name all three and briefly describe each..." oninput="saveItem('econ_cq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✓ Check</button>
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(1)">📋 Model</button>
         </div>
         <div id="cq-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -269,7 +269,7 @@
         <div class="dq-q">According to the text, what can cause a decrease in profit? What should an economist do in response?</div>
         <textarea class="dq-textarea" id="cq2" placeholder="Identify causes and the economist's response..." oninput="saveItem('econ_cq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✓ Check</button>
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(2)">📋 Model</button>
         </div>
         <div id="cq-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -279,7 +279,7 @@
         <div class="dq-q">Why is English described as important for finance professionals? Give two specific reasons from the text.</div>
         <textarea class="dq-textarea" id="cq3" placeholder="Give two distinct reasons from the text..." oninput="saveItem('econ_cq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✓ Check</button>
+          <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(3)">📋 Model</button>
         </div>
         <div id="cq-fb3" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -354,7 +354,7 @@
     <p class="text-sm mb-16" style="color:var(--text3);">These sentences describe cause-and-effect relationships in finance. Complete the missing word.</p>
     <div id="fib-container"></div>
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
-      <button class="btn btn-primary" onclick="checkAllFIB()">✓ Check All</button>
+      <button class="btn btn-primary" onclick="checkAllFIB()">✔ Check All</button>
       <button class="btn btn-outline" onclick="resetFIB()">↺ Reset</button>
       <span id="fib-score" class="text-gold fw-600" style="align-self:center;margin-left:8px;font-size:14px;"></span>
     </div>
@@ -385,7 +385,7 @@
         <span class="vocab-badge" id="wb1"></span>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✓ Evaluate</button>
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✔ Check</button>
         <button class="btn btn-outline btn-sm" onclick="showModelWriting(1)">📋 Model Answer</button>
       </div>
       <div id="w-fb1" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
@@ -401,7 +401,7 @@
         <span class="vocab-badge" id="wb2"></span>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✓ Evaluate</button>
+        <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✔ Check</button>
         <button class="btn btn-outline btn-sm" onclick="showModelWriting(2)">📋 Model Answer</button>
       </div>
       <div id="w-fb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>

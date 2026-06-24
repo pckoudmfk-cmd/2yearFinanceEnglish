@@ -52,13 +52,17 @@
   .q-text{font-size:.9rem;color:var(--text);margin-bottom:10px;line-height:1.5}
   textarea{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.875rem;line-height:1.5;resize:vertical;min-height:80px;font-family:inherit;transition:.2s}
   textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
-  .check-btn{background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:8px 18px;font-size:.8rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
-  .check-btn:hover{background:var(--gold2)}
+  .check-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);border:none;border-radius:8px;padding:8px 18px;font-size:.8rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s;box-shadow:0 2px 8px rgba(201,168,76,.3)}
+  .check-btn:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(201,168,76,.4)}
   .feedback{margin-top:8px;padding:10px 14px;border-radius:8px;font-size:.82rem;line-height:1.5;display:none}
   .feedback.show{display:block}
   .feedback.good{background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);color:#7effc8}
   .feedback.ok{background:rgba(243,156,18,.12);border:1px solid rgba(243,156,18,.3);color:#f5c842}
   .feedback.poor{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);color:#ff9090}
+
+  body.light-mode .feedback.good{color:#1a7a4a;background:rgba(46,160,67,.12);border-color:rgba(46,160,67,.4)}
+  body.light-mode .feedback.ok{color:#7a5800;background:rgba(180,130,10,.12);border-color:rgba(180,130,10,.4)}
+  body.light-mode .feedback.poor{color:#9b1515;background:rgba(210,30,30,.08);border-color:rgba(210,30,30,.3)}
   .search-bar{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:.875rem;margin-bottom:16px;font-family:inherit}
   .search-bar:focus{outline:none;border-color:var(--gold)}
   .flip-card{height:110px;perspective:1000px;cursor:pointer}
