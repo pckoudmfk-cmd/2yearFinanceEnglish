@@ -1155,82 +1155,11 @@ renderReflection();
 ['w1','w2'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; updateWordCount(id, 'wc'+id.slice(1), 'wb'+id.slice(1)); } });
 
 </script>
-<!-- INFOGRAPHICS SECTION -->
-<style>
-.ig-be-wrap{max-width:960px;margin:0 auto;padding:24px 16px}
-.ig-be-title{font-size:1.2rem;font-weight:800;color:var(--text);text-align:center;margin-bottom:24px;line-height:1.3}
-.ig-be-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-@media(max-width:760px){.ig-be-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.ig-be-grid{grid-template-columns:1fr}}
-.ig-be-card{border-radius:10px;padding:16px;border:1.5px solid}
-.ig-be-card.s1{background:rgba(155,89,182,.08);border-color:rgba(155,89,182,.4)}
-.ig-be-card.s2{background:rgba(52,152,219,.08);border-color:rgba(52,152,219,.4)}
-.ig-be-card.s3{background:rgba(46,204,113,.08);border-color:rgba(46,204,113,.4)}
-.ig-be-card.s4{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.4)}
-.ig-be-card-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
-.s1 .ig-be-card-label{color:#c87aff}
-.s2 .ig-be-card-label{color:#7fc8ff}
-.s3 .ig-be-card-label{color:#5effa0}
-.s4 .ig-be-card-label{color:var(--gold)}
-.ig-be-card-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.3}
-.ig-be-card p{font-size:.78rem;color:var(--text2);line-height:1.5;margin-bottom:8px}
-.ig-be-detail{background:rgba(255,255,255,.05);border-radius:6px;padding:8px 10px;margin-top:6px}
-.ig-be-detail p{font-size:.75rem;color:var(--text3);margin:0}
-.ig-be-detail strong{color:var(--text2)}
-/* Summary table */
-.ig-be-table-title{font-size:.88rem;font-weight:700;color:var(--gold);text-align:center;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
-.ig-be-table{width:100%;border-collapse:collapse;font-size:.8rem}
-.ig-be-table th{background:rgba(201,168,76,.15);color:var(--gold);padding:9px 12px;text-align:left;font-weight:700;border:1px solid var(--border)}
-.ig-be-table td{padding:9px 12px;border:1px solid var(--border);color:var(--text2);vertical-align:middle}
-.ig-be-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
-.risk-high{color:#ff7060;font-weight:700}
-.risk-med{color:#f5c842;font-weight:700}
-.risk-low{color:#5effa0;font-weight:700}
-</style>
 <div id="tab-infographics" class="section">
-<div id="main-content" class="ig-be-wrap">
-  <div class="ig-be-title">Choosing the Right Path: A Step-by-Step Guide to Business Entities</div>
-
-  <div class="ig-be-grid">
-    <div class="ig-be-card s1">
-      <div class="ig-be-card-label">Section 1 · Starting Point</div>
-      <div class="ig-be-card-title">Evaluate Four Critical Pillars</div>
-      <p>Before choosing a structure, assess legal responsibility, taxation methods, financial risks, and future growth opportunities.</p>
-      <div class="ig-be-detail"><p><strong>Key question:</strong> Unlimited vs. limited liability — are personal assets at risk for business debts?</p></div>
-    </div>
-
-    <div class="ig-be-card s2">
-      <div class="ig-be-card-label">Section 2 · Step 1</div>
-      <div class="ig-be-card-title">Sole Proprietorship — Simple Entry, High Personal Risk</div>
-      <p>Easiest entity to establish with minimal regulatory procedures, ideal for the absolute beginning of a venture.</p>
-      <div class="ig-be-detail"><p><strong>Risk:</strong> Full control but <strong>unlimited liability</strong> — no legal separation between personal and business assets.</p></div>
-    </div>
-
-    <div class="ig-be-card s3">
-      <div class="ig-be-card-label">Section 3 · Step 2</div>
-      <div class="ig-be-card-title">LLC — Balancing Risk and Control</div>
-      <p>The "middle ground" preferred by SMEs for effective risk management and financial planning.</p>
-      <div class="ig-be-detail"><p><strong>Advantage:</strong> Shield of limited liability + operational flexibility. Owners not personally responsible for company debts.</p></div>
-    </div>
-
-    <div class="ig-be-card s4">
-      <div class="ig-be-card-label">Section 4 · Step 3</div>
-      <div class="ig-be-card-title">Corporation — Scaling for International Growth</div>
-      <p>Complex, separate legal entities designed for large-scale operations and long-term strategies.</p>
-      <div class="ig-be-detail"><p><strong>Trade-off:</strong> Raises massive capital via stocks, but faces high regulation, admin costs &amp; double taxation.</p></div>
-    </div>
+  <div style="max-width:960px;margin:0 auto;padding:24px 16px">
+    <h2 style="font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:16px">🖼 Infographics</h2>
+    <img src="images/business_entities_infographic.webp" alt="Choosing the Right Path: A Step-by-Step Guide to Business Entities" style="width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.4)">
   </div>
-
-  <div class="ig-be-table-title">Summary Comparison</div>
-  <div style="overflow-x:auto">
-  <table class="ig-be-table">
-    <tr><th>Business Type</th><th>Risk Level</th><th>Primary Advantage</th><th>Primary Disadvantage</th></tr>
-    <tr><td>Sole Proprietorship</td><td><span class="risk-high">High</span></td><td>Easy to establish; full control</td><td>Unlimited personal liability</td></tr>
-    <tr><td>LLC</td><td><span class="risk-med">Medium / Low</span></td><td>Limited liability; management flexibility</td><td>More complex than sole proprietorship</td></tr>
-    <tr><td>Corporation</td><td><span class="risk-low">Low (to owners)</span></td><td>Capital access; share issuance</td><td>High admin costs; double taxation</td></tr>
-  </table>
-  </div>
-</div>
 </div>
 </body>
 </html>
