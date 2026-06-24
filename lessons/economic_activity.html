@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economic Activity — Educational Dashboard</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0A1628;--navy2:#0d1e38;--navy3:#112244;
+    --gold:#C9A84C;--gold2:#e8c96a;--gold3:#f5e6b0;
+    --text:#e8eaf0;--text2:#b0b8cc;--text3:#7a8299;
+    --card:#13233d;--card2:#1a2e50;--border:#1e3560;
+    --green:#2ecc71;--red:#e74c3c;--blue:#3498db;
+    --input-bg:#1a2e50;
+    --radius:12px;--shadow:0 4px 20px rgba(0,0,0,.4);
+    --transition:0.22s cubic-bezier(.4,0,.2,1);
+  }
+  body.light-mode{
+    --navy:#f0f4ff;--navy2:#e8eeff;--navy3:#dde6ff;
+    --text:#1a2244;--text2:#3a4466;--text3:#6a7499;
+    --card:#ffffff;--card2:#f5f8ff;--border:#c8d4f0;
+    --input-bg:#ffffff;
+    --shadow:0 2px 16px rgba(10,22,40,.10);
+  }
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+  .header{background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 100%);border-bottom:2px solid var(--gold);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .header-left h1{font-size:1.25rem;font-weight:700;color:var(--gold)}
+  .header-left p{font-size:.8rem;color:var(--text2);margin-top:2px}
+  .header-right{display:flex;align-items:center;gap:10px}
+  .score-chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.85rem;font-weight:600;color:var(--gold)}
+  .theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text2);cursor:pointer;font-size:.8rem;transition:.2s;font-family:inherit}
+  .theme-btn:hover{border-color:var(--gold);color:var(--gold)}
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--navy2);overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab{padding:12px 18px;font-size:.8rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;letter-spacing:.3px;text-transform:uppercase}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+  body.light-mode .tab{color:#3a4466}
+  body.light-mode .tab.active{color:#0A1628;border-bottom-color:#C9A84C}
+  body.light-mode .tab:hover{color:#0A1628}
+  .main{max-width:900px;margin:0 auto;padding:24px 16px}
+  .section{display:none}
+  .section.active{display:block}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .card h2{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .card h3{font-size:.9rem;font-weight:600;color:var(--text2);margin:12px 0 8px}
+  .lesson-text p{font-size:.9rem;line-height:1.75;color:var(--text2);margin-bottom:12px}
+  .highlight{color:var(--gold2);font-weight:600}
+  .case-box{background:var(--navy3);border-left:3px solid var(--gold);border-radius:8px;padding:16px;margin-bottom:16px}
+  .case-box .role{font-size:.75rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .case-box p{font-size:.875rem;color:var(--text2);line-height:1.6}
+  .question-block{margin-bottom:20px}
+  .question-block .q-label{font-size:.8rem;font-weight:700;color:var(--gold2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+  .question-block .q-text{font-size:.9rem;color:var(--text);margin-bottom:10px;line-height:1.5}
+  textarea{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.875rem;line-height:1.5;resize:vertical;min-height:80px;font-family:inherit;transition:.2s}
+  textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15)}
+  .check-btn{background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:8px 18px;font-size:.8rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
+  .check-btn:hover{background:var(--gold2)}
+  .feedback{margin-top:8px;padding:10px 14px;border-radius:8px;font-size:.82rem;line-height:1.5;display:none}
+  .feedback.show{display:block}
+  .feedback.good{background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);color:#7effc8}
+  .feedback.ok{background:rgba(243,156,18,.12);border:1px solid rgba(243,156,18,.3);color:#f5c842}
+  .feedback.poor{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);color:#ff9090}
+  .search-bar{width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:.875rem;margin-bottom:16px;font-family:inherit}
+  .search-bar:focus{outline:none;border-color:var(--gold)}
+  .glossary-grid{display:grid;gap:10px}
+  .flip-card{height:110px;perspective:1000px;cursor:pointer}
+  .flip-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+  .flip-front,.flip-back{position:absolute;width:100%;height:100%;border-radius:var(--radius);backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;border:1px solid var(--border)}
+  .flip-front{background:var(--card2)}
+  .flip-back{background:var(--navy3);transform:rotateY(180deg)}
+  .flip-front .term{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:4px}
+  .flip-front .cat-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  .cat-G .cat-tag{color:#3498db}
+  .cat-R .cat-tag{color:#e74c3c}
+  .cat-C .cat-tag{color:#2ecc71}
+  .cat-P .cat-tag{color:#e67e22}
+  .flip-back .ru{font-size:.82rem;color:var(--text2);line-height:1.5}
+  .card-count{font-size:.75rem;color:var(--text3);margin-top:4px}
+  .fib-sentence{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px;font-size:.875rem;line-height:1.7;color:var(--text2)}
+  .blank-input{background:transparent;border:none;border-bottom:2px solid var(--gold);padding:2px 8px;color:var(--text);font-size:.875rem;font-family:inherit;min-width:140px;text-align:center;outline:none;transition:.2s}
+  .blank-input:focus{border-bottom-color:var(--gold2)}
+  .blank-input.correct{border-bottom-color:var(--green);color:var(--green)}
+  .blank-input.wrong{border-bottom-color:var(--red);color:var(--red)}
+  .speaking-card{background:var(--navy3);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px}
+  .speaking-card .sp-label{font-size:.75rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+  .speaking-card p{font-size:.875rem;color:var(--text2);line-height:1.6}
+  .score-section{text-align:center;padding:32px 16px}
+  .score-big{font-size:3rem;font-weight:800;color:var(--gold)}
+  .score-label{font-size:.9rem;color:var(--text3);margin-top:4px}
+  .progress-bar{background:var(--navy2);border-radius:8px;height:10px;margin:20px 0 8px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:8px;transition:.6s}
+  @media(max-width:600px){.header{padding:14px 16px}.tab{padding:10px 12px;font-size:.75rem}.main{padding:16px 12px}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <h1>📊 Economic Activity: Goods, Services & Resources</h1>
+    <p>Unit 1 · Year 2 · Finance English</p>
+  </div>
+  <div class="header-right">
+    <div class="score-chip">Score: <span id="total-score">0</span>/93</div>
+    <a href="../index.html" class="theme-btn" style="text-decoration:none">🏠 Главное меню</a>
+    <button class="theme-btn" onclick="toggleTheme()">☀️ Light</button>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="showTab('reading')">📖 Reading</div>
+  <div class="tab" onclick="showTab('structure')">🏗 Text Structure</div>
+  <div class="tab" onclick="showTab('glossary')">📚 Glossary</div>
+  <div class="tab" onclick="showTab('flashcards')">🃏 Flashcards</div>
+  <div class="tab" onclick="showTab('fill')">✏️ Fill in Blanks</div>
+  <div class="tab" onclick="showTab('writing')">✍️ Writing</div>
+  <div class="tab" onclick="showTab('speaking')">🎤 Speaking</div>
+  <div class="tab" onclick="showTab('reflection')">🌟 Self-Reflection</div>
+  <div class="tab" onclick="showTab('infographics')">🖼 Infographics</div>
+  <div class="tab" onclick="window.open('mindmap_economic_activity.html','_blank')">🧠 Mind Map</div>
+  <div class="tab" onclick="showTab('score')">🏆 My Score</div>
+</div>
+
+<div class="main">
+
+<!-- READING -->
+<div id="tab-reading" class="section active">
+  <div class="card">
+    <h2>💡 Problem Case — Think Before You Read</h2>
+    <div class="case-box">
+      <div class="role">Situation</div>
+      <p>You are a junior economics lecturer preparing your first class. You need to explain three things to your students: what goods and services are, why people play different roles in the economy, and why there is never enough of everything people want.</p>
+    </div>
+    <div class="card h3" style="background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
+      <p style="font-size:.875rem;color:var(--text2);line-height:1.6;margin-bottom:0">🤔 <strong style="color:var(--gold2)">Discuss with a partner:</strong> Can you name three goods and three services from your daily life? What is the difference between them? Could a person be both consumer and producer at the same time?</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📖 Economic Activity</h2>
+    <div class="lesson-text">
+      <p>Your grandparents probably never attended a class called economics. Yet, they had to think about how to meet their needs for goods and services. Today's world is more complex. A knowledge of <span class="highlight">economics</span> — the study of how people and countries use their resources to produce, distribute, and consume goods and services — is important to everyone now.</p>
+      <p>Even before people start school, they make two very important economic discoveries. They find that there are lots of things in the world they want. They also find that they cannot have them all. There is a big gap between what they want and what they can have.</p>
+      <p>Gradually, young people settle into two major economic roles: <span class="highlight">consumer</span> and <span class="highlight">producer</span>. In the role of consumer, a person buys goods and services for personal use, not for resale. <span class="highlight">Consumer goods</span> are products — such as food, clothing, and cars — that satisfy people's economic needs or wants.</p>
+      <p>Some consumer goods, such as food, do not last a long time — these are called <span class="highlight">perishable goods</span>: goods which cannot be stored for any length of time without going bad. Other goods, such as furniture, cars or computers, last longer — these are <span class="highlight">durable goods</span>. <span class="highlight">Services</span> are actions, such as haircutting, cleaning or teaching. Services are used up at the time they are provided.</p>
+      <p>A <span class="highlight">producer</span> makes the goods or provides the services that consumers use. In order to produce something, a person must first have the right <span class="highlight">resources</span> — the materials from which goods and services are made. There are three kinds: <span class="highlight">human</span> (people), <span class="highlight">natural</span> (raw materials), and <span class="highlight">capital resources</span> (money or property). If any of these resources is missing, production will stop.</p>
+      <p>No economy has an unlimited supply of resources. In other words, there is a <span class="highlight">scarcity</span> of resources. Scarcity is the situation that exists when demand for a good, service, or resource is greater than supply. Human wants tend to be unlimited, but resources are limited.</p>
+      <p>Economies are engaged in three <span class="highlight">sectors of activity</span>: extraction of raw materials (<span class="highlight">primary</span>), manufacturing (<span class="highlight">secondary</span>), and services (<span class="highlight">tertiary</span>). Every group of people must solve basic economic problems: <em>What will be produced? How will it be produced? Who will get it? How much for now and how much for the future?</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎧 Listen to the Text</h2>
+    <p style="font-size:.82rem;color:var(--text3);margin-bottom:14px">Audio recording of the lesson text</p>
+    <audio controls style="width:100%;border-radius:10px;outline:none;accent-color:var(--gold)">
+      <source src="audio/economic_activity.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+</div>
+
+<!-- TEXT STRUCTURE -->
+<div id="tab-structure" class="section">
+  <div class="card">
+    <h2>🏗 Task 1 — Match Paragraphs to Functions</h2>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Match each paragraph (1–5) to its correct function (A–E).</p>
+    <div style="background:var(--navy2);border-radius:8px;padding:14px;margin-bottom:16px;font-size:.85rem;color:var(--text2);line-height:1.8">
+      <strong style="color:var(--gold2)">A.</strong> What goods and services are, and the two economic roles people play<br>
+      <strong style="color:var(--gold2)">B.</strong> The fundamental economic problem: unlimited wants and limited resources (scarcity)<br>
+      <strong style="color:var(--gold2)">C.</strong> How the economy is divided into sectors and the four basic economic questions<br>
+      <strong style="color:var(--gold2)">D.</strong> The types of goods: consumer goods, perishable goods, and how long they last<br>
+      <strong style="color:var(--gold2)">E.</strong> What resources are and why all three types are needed for production
+    </div>
+    <div id="match-answers" style="display:grid;gap:10px">
+      <div id="match-key" style="display:none">A,D,E,B,C</div>
+    </div>
+    <script>
+    (function(){
+      const labels=['Paragraph 1','Paragraph 2','Paragraph 3','Paragraph 4','Paragraph 5'];
+      const correct=['A','D','E','B','C'];
+      const container=document.getElementById('match-answers');
+      labels.forEach((lbl,i)=>{
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:center;gap:12px;background:var(--navy3);border-radius:8px;padding:10px 14px';
+        row.innerHTML=`<span style="font-size:.875rem;color:var(--text2);flex:1">${lbl}</span>
+          <select id="ms${i}" style="background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text);font-size:.8rem;cursor:pointer;font-family:inherit">
+            <option value="">—</option>
+            ${['A','B','C','D','E'].map(o=>`<option>${o}</option>`).join('')}
+          </select>
+          <span id="mr${i}" style="width:20px;text-align:center"></span>`;
+        container.appendChild(row);
+      });
+      const btn=document.createElement('button');
+      btn.className='check-btn';btn.textContent='Check Answers';btn.style.marginTop='12px';
+      btn.onclick=()=>{
+        let pts=0;
+        correct.forEach((c,i)=>{
+          const sel=document.getElementById(`ms${i}`);
+          const mrk=document.getElementById(`mr${i}`);
+          if(sel.value===c){mrk.textContent='✅';pts++;}
+          else{mrk.textContent='❌';}
+        });
+        addScore('structure1',pts*3);
+        btn.textContent=`${pts}/5 correct`;
+      };
+      container.appendChild(btn);
+    })();
+    </script>
+  </div>
+
+  <div class="card">
+    <h2>🏗 Task 2 — Build the Logical Chain</h2>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:14px">Fill in the three missing steps in the economic chain.</p>
+    <div style="background:var(--navy2);border-radius:8px;padding:14px;margin-bottom:12px;font-size:.85rem;color:var(--text2);line-height:1.8">
+      📌 A country identifies its human, natural, and capital resources
+    </div>
+    <div class="question-block" id="chain-q">
+      <div class="q-label">Step 2</div>
+      <textarea id="chain1" rows="2" placeholder="What happens next..."></textarea>
+      <div class="q-label" style="margin-top:10px">Step 3</div>
+      <textarea id="chain2" rows="2" placeholder="Continue the chain..."></textarea>
+      <div class="q-label" style="margin-top:10px">Step 4</div>
+      <textarea id="chain3" rows="2" placeholder="Final step before delivery..."></textarea>
+    </div>
+    <div style="background:var(--navy2);border-radius:8px;padding:14px;margin-top:12px;font-size:.85rem;color:var(--text2)">
+      🏁 Goods and services reach consumers, and basic economic questions are answered
+    </div>
+    <button class="check-btn" onclick="checkChain()">Save & Score</button>
+    <div id="chain-fb" class="feedback"></div>
+    <script>
+    function checkChain(){
+      const vals=[document.getElementById('chain1').value,document.getElementById('chain2').value,document.getElementById('chain3').value];
+      const filled=vals.filter(v=>v.trim().length>20).length;
+      addScore('structure2',filled*2);
+      const fb=document.getElementById('chain-fb');
+      fb.className='feedback show '+(filled===3?'good':filled>=1?'ok':'poor');
+      fb.textContent=filled===3?'All steps completed! +6 pts':filled>0?`${filled} step(s) saved. +${filled*2} pts`:'Please write at least 20 characters per step.';
+    }
+    </script>
+  </div>
+
+  <div class="card">
+    <h2>🏗 Task 3 — Cause & Effect</h2>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:14px">Complete each cause-and-effect chain using information from the text.</p>
+    <div id="ce-container"></div>
+    <button class="check-btn" onclick="checkCE()">Check & Score</button>
+    <div id="ce-fb" class="feedback"></div>
+    <script>
+    (function(){
+      const items=[
+        'A country does not have enough capital resources →',
+        'A consumer buys food for personal use →',
+        'Demand for a good is greater than supply →'
+      ];
+      const container=document.getElementById('ce-container');
+      items.forEach((q,i)=>{
+        const div=document.createElement('div');
+        div.className='question-block';
+        div.innerHTML=`<div class="q-text" style="color:var(--gold2)">${q}</div>
+          <textarea id="ce${i}" rows="2" placeholder="Write the effect..."></textarea>`;
+        container.appendChild(div);
+      });
+    })();
+    function checkCE(){
+      const vals=[0,1,2].map(i=>document.getElementById(`ce${i}`).value.trim().length);
+      const pts=vals.filter(v=>v>15).length*3;
+      addScore('structure3',pts);
+      const fb=document.getElementById('ce-fb');
+      fb.className='feedback show '+(pts>=9?'good':pts>=3?'ok':'poor');
+      fb.textContent=pts>=9?'All effects completed! +9 pts':`${pts/3} effect(s) saved. +${pts} pts`;
+    }
+    </script>
+  </div>
+</div>
+
+<!-- GLOSSARY -->
+<div id="tab-glossary" class="section">
+  <div class="card">
+    <h2>📚 Professional Glossary</h2>
+    <input class="search-bar" id="gloss-search" placeholder="🔍 Search terms..." oninput="filterGloss()">
+    <div id="gloss-table"></div>
+    <script>
+    const GLOSSARY=[
+      {en:'economics',ru:'экономика',cat:'C',def:'The study of how people and countries use resources to produce, distribute, and consume goods and services.'},
+      {en:'goods',ru:'товары',cat:'G',def:'Physical products that satisfy people\'s economic needs or wants (e.g. food, clothing, cars).'},
+      {en:'consumer goods',ru:'потребительские товары',cat:'G',def:'Goods bought for personal use, not for resale.'},
+      {en:'perishable goods',ru:'скоропортящиеся товары',cat:'G',def:'Goods that cannot be stored for a long time without going bad (e.g. most foodstuffs).'},
+      {en:'durable goods',ru:'товары длительного пользования',cat:'G',def:'Goods that last a long time before being used up (e.g. cars, computers, furniture).'},
+      {en:'services',ru:'услуги',cat:'G',def:'Actions provided to others (e.g. haircutting, teaching, cleaning). Used up at the time they are provided.'},
+      {en:'consumer',ru:'потребитель',cat:'R',def:'A person who buys goods and services for personal use, not for resale.'},
+      {en:'producer',ru:'производитель',cat:'R',def:'A person or company that makes goods or provides services that consumers use.'},
+      {en:'resources',ru:'ресурсы',cat:'C',def:'The materials from which goods and services are made: human, natural, and capital resources.'},
+      {en:'scarcity',ru:'дефицит / нехватка',cat:'C',def:'The situation when demand for a good, service, or resource is greater than supply.'},
+      {en:'supply',ru:'предложение',cat:'C',def:'The quantity of a good or resource available in an economy.'},
+      {en:'demand',ru:'спрос',cat:'C',def:'The desire and ability of consumers to buy a good or service.'},
+      {en:'income',ru:'доход',cat:'C',def:'Money earned by a person or organisation from work or other sources.'},
+      {en:'needs',ru:'потребности',cat:'C',def:'The basic things people must have to survive and function (e.g. food, shelter).'},
+      {en:'wants',ru:'желания',cat:'C',def:'Things people desire but do not strictly need to survive.'},
+      {en:'allocate',ru:'распределять',cat:'P',def:'To divide and assign available resources among different uses or groups.'},
+    ];
+    function renderGloss(list){
+      const t=document.getElementById('gloss-table');
+      t.innerHTML='';
+      list.forEach(g=>{
+        const row=document.createElement('div');
+        row.style.cssText='display:grid;grid-template-columns:160px 1fr;gap:0;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden';
+        row.innerHTML=`<div style="background:var(--card2);padding:12px 14px;display:flex;flex-direction:column;gap:4px">
+          <span class="cat-${g.cat} cat-tag" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px">${{G:'Goods',R:'People',C:'Concept',P:'Action'}[g.cat]}</span>
+          <span style="font-size:.9rem;font-weight:700;color:var(--text)">${g.en}</span>
+          <span style="font-size:.78rem;color:var(--gold2)">${g.ru}</span>
+        </div>
+        <div style="padding:12px 14px;font-size:.82rem;color:var(--text2);line-height:1.55">${g.def}</div>`;
+        t.appendChild(row);
+      });
+    }
+    renderGloss(GLOSSARY);
+    function filterGloss(){
+      const q=document.getElementById('gloss-search').value.toLowerCase();
+      renderGloss(GLOSSARY.filter(g=>g.en.includes(q)||g.ru.includes(q)||g.def.toLowerCase().includes(q)));
+    }
+    </script>
+  </div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="tab-flashcards" class="section">
+  <div class="card">
+    <h2>🃏 Vocabulary Flashcards</h2>
+    <p style="font-size:.82rem;color:var(--text3);margin-bottom:16px">Click a card to flip and see the Russian translation and definition.</p>
+    <div id="fc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px"></div>
+    <script>
+    const FC=[
+      {en:'economics',ru:'экономика',cat:'C'},
+      {en:'goods',ru:'товары',cat:'G'},
+      {en:'services',ru:'услуги',cat:'G'},
+      {en:'consumer',ru:'потребитель',cat:'R'},
+      {en:'producer',ru:'производитель',cat:'R'},
+      {en:'perishable',ru:'скоропортящийся',cat:'G'},
+      {en:'durable',ru:'долговечный',cat:'G'},
+      {en:'resources',ru:'ресурсы',cat:'C'},
+      {en:'scarcity',ru:'дефицит',cat:'C'},
+      {en:'supply',ru:'предложение',cat:'C'},
+      {en:'demand',ru:'спрос',cat:'C'},
+      {en:'allocate',ru:'распределять',cat:'P'},
+      {en:'income',ru:'доход',cat:'C'},
+      {en:'needs',ru:'потребности',cat:'C'},
+      {en:'wants',ru:'желания',cat:'C'},
+      {en:'capital',ru:'капитал',cat:'C'},
+    ];
+    const catNames={G:'Goods',R:'People',C:'Concept',P:'Action'};
+    const grid=document.getElementById('fc-grid');
+    FC.forEach(f=>{
+      const wrap=document.createElement('div');
+      wrap.className='flip-card';
+      wrap.innerHTML=`<div class="flip-inner">
+        <div class="flip-front cat-${f.cat}">
+          <span class="cat-tag">${catNames[f.cat]}</span>
+          <span class="term">${f.en}</span>
+          <span class="card-count">tap to flip</span>
+        </div>
+        <div class="flip-back">
+          <span class="ru">${f.ru}</span>
+        </div>
+      </div>`;
+      wrap.onclick=()=>{wrap.classList.toggle('flipped');addScore('fc_'+f.en,1);};
+      grid.appendChild(wrap);
+    });
+    </script>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>📝 Vocabulary Categorisation</h2>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:14px">Put the terms into the correct columns.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div>
+        <div style="font-size:.8rem;font-weight:700;color:#3498db;text-transform:uppercase;margin-bottom:8px">A. Goods & Products</div>
+        <textarea id="cat-a" rows="5" placeholder="List terms here..."></textarea>
+      </div>
+      <div>
+        <div style="font-size:.8rem;font-weight:700;color:#e74c3c;text-transform:uppercase;margin-bottom:8px">B. People & Roles</div>
+        <textarea id="cat-b" rows="5" placeholder="List terms here..."></textarea>
+      </div>
+      <div>
+        <div style="font-size:.8rem;font-weight:700;color:#2ecc71;text-transform:uppercase;margin-bottom:8px">C. Concepts & Quantities</div>
+        <textarea id="cat-c" rows="5" placeholder="List terms here..."></textarea>
+      </div>
+    </div>
+    <button class="check-btn" onclick="checkCats()">Save</button>
+    <div id="cat-fb" class="feedback"></div>
+    <script>
+    function checkCats(){
+      const a=document.getElementById('cat-a').value.trim();
+      const b=document.getElementById('cat-b').value.trim();
+      const c=document.getElementById('cat-c').value.trim();
+      const filled=[a,b,c].filter(v=>v.length>5).length;
+      addScore('cats',filled*2);
+      const fb=document.getElementById('cat-fb');
+      fb.className='feedback show '+(filled===3?'good':'ok');
+      fb.textContent=`${filled} column(s) completed. +${filled*2} pts`;
+    }
+    </script>
+  </div>
+</div>
+
+<!-- FILL IN BLANKS -->
+<div id="tab-fill" class="section">
+  <div class="card">
+    <h2>✏️ Fill in the Blanks</h2>
+    <p style="font-size:.82rem;color:var(--text3);margin-bottom:16px">Complete each sentence with the correct term from the glossary.</p>
+    <div id="fib-container"></div>
+    <button class="check-btn" onclick="checkFIB()">Check Answers</button>
+    <div id="fib-score" class="feedback"></div>
+    <script>
+    const FIBS=[
+      {pre:'The study of how people use resources to produce and distribute goods is called',blank:'economics',post:'.'},
+      {pre:'A person who buys food for their family is acting as a',blank:'consumer',post:'.'},
+      {pre:'Food and milk are examples of',blank:'perishable goods',post:'because they go bad quickly.'},
+      {pre:'When demand for a resource is greater than supply, we call this situation',blank:'scarcity',post:'.'},
+      {pre:'Manufacturing belongs to the',blank:'secondary',post:'sector of economic activity.'},
+      {pre:'Human, natural, and capital are the three types of',blank:'resources',post:'needed for production.'},
+      {pre:'Actions such as haircutting and teaching are called',blank:'services',post:'.'},
+      {pre:'To divide available resources among different uses means to',blank:'allocate',post:'them.'},
+    ];
+    const cont=document.getElementById('fib-container');
+    FIBS.forEach((f,i)=>{
+      const div=document.createElement('div');
+      div.className='fib-sentence';
+      div.innerHTML=`<span>${f.pre} </span><input class="blank-input" id="fib${i}" data-ans="${f.blank}" placeholder="..."> <span>${f.post}</span>`;
+      cont.appendChild(div);
+    });
+    function checkFIB(){
+      let pts=0;
+      FIBS.forEach((f,i)=>{
+        const inp=document.getElementById(`fib${i}`);
+        const ok=inp.value.trim().toLowerCase()===f.blank.toLowerCase();
+        inp.classList.toggle('correct',ok);
+        inp.classList.toggle('wrong',!ok&&inp.value.trim()!=='');
+        if(ok)pts++;
+      });
+      addScore('fib',pts*3);
+      const fb=document.getElementById('fib-score');
+      fb.className='feedback show '+(pts>=6?'good':pts>=3?'ok':'poor');
+      fb.textContent=`${pts}/${FIBS.length} correct. +${pts*3} pts`;
+    }
+    </script>
+  </div>
+</div>
+
+<!-- WRITING -->
+<div id="tab-writing" class="section">
+  <div class="card">
+    <h2>✍️ Writing Tasks</h2>
+
+    <div class="question-block">
+      <div class="q-label">Task 1 — Concept Differentiation</div>
+      <div class="q-text">Explain the difference between <strong>perishable goods</strong> and <strong>durable goods</strong>. Give one example of each.</div>
+      <textarea id="w1" rows="4" placeholder="Write 2–3 sentences..." oninput="updateWC(1)"></textarea>
+      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc1">0</span></div>
+    </div>
+
+    <div class="question-block">
+      <div class="q-label">Task 2 — Concept Differentiation</div>
+      <div class="q-text">Explain the difference between <strong>needs</strong> and <strong>wants</strong>. Why is this distinction important in economics?</div>
+      <textarea id="w2" rows="4" placeholder="Write 2–3 sentences..." oninput="updateWC(2)"></textarea>
+      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc2">0</span></div>
+    </div>
+
+    <div class="question-block">
+      <div class="q-label">Task 3 — Extended Response</div>
+      <div class="q-text">If a country runs out of one type of resource (for example, skilled workers), what happens to the production of goods and services? Write a short paragraph (50–70 words).</div>
+      <textarea id="w3" rows="5" placeholder="Write your paragraph..." oninput="updateWC(3)"></textarea>
+      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc3">0</span></div>
+    </div>
+
+    <button class="check-btn" onclick="checkWriting()">Save Writing</button>
+    <div id="w-fb" class="feedback"></div>
+    <script>
+    function updateWC(n){
+      const val=document.getElementById('w'+n).value.trim();
+      document.getElementById('wc'+n).textContent=val?val.split(/\s+/).length:0;
+    }
+    function checkWriting(){
+      const wcs=[1,2,3].map(n=>{
+        const v=document.getElementById('w'+n).value.trim();
+        return v?v.split(/\s+/).length:0;
+      });
+      const pts=wcs.map(w=>w>=20?5:w>=10?3:0).reduce((a,b)=>a+b,0);
+      addScore('writing',pts);
+      const fb=document.getElementById('w-fb');
+      fb.className='feedback show '+(pts>=12?'good':pts>=6?'ok':'poor');
+      fb.textContent=`Writing saved. +${pts} pts (${wcs.join(' / ')} words)`;
+    }
+    </script>
+  </div>
+</div>
+
+<!-- SPEAKING -->
+<div id="tab-speaking" class="section">
+  <div class="card">
+    <h2>🎤 Speaking Plan</h2>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Prepare your answers to these discussion questions. Use vocabulary from the glossary.</p>
+
+    <div class="speaking-card">
+      <div class="sp-label">Question 1</div>
+      <p>What is the difference between a consumer and a producer? Can one person be both? Give an example from real life.</p>
+    </div>
+    <div class="speaking-card">
+      <div class="sp-label">Question 2</div>
+      <p>Why does scarcity exist in every economy? What happens when demand exceeds supply?</p>
+    </div>
+    <div class="speaking-card">
+      <div class="sp-label">Question 3</div>
+      <p>Describe the three sectors of economic activity. Give one example of a job in each sector.</p>
+    </div>
+    <div class="speaking-card">
+      <div class="sp-label">Question 4</div>
+      <p>What are the four basic economic questions every society must answer? Why might different countries answer them differently?</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎤 Speaking Task</h2>
+    <div class="question-block">
+      <div class="q-label">2-Minute Talk</div>
+      <div class="q-text">Explain the concept of <strong>scarcity</strong> to a first-year student who has never studied economics. Use at least 5 glossary terms. Write your script below, then practise aloud.</div>
+      <textarea id="sp1" rows="6" placeholder="Write your speaking script..." oninput="updateSPWC()"></textarea>
+      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="sp-wc">0</span></div>
+    </div>
+    <button class="check-btn" onclick="checkSpeaking()">Save</button>
+    <div id="sp-fb" class="feedback"></div>
+    <script>
+    function updateSPWC(){
+      const v=document.getElementById('sp1').value.trim();
+      document.getElementById('sp-wc').textContent=v?v.split(/\s+/).length:0;
+    }
+    function checkSpeaking(){
+      const v=document.getElementById('sp1').value.trim();
+      const wc=v?v.split(/\s+/).length:0;
+      const pts=wc>=60?8:wc>=30?5:wc>0?2:0;
+      addScore('speaking',pts);
+      const fb=document.getElementById('sp-fb');
+      fb.className='feedback show '+(pts>=8?'good':pts>=5?'ok':'poor');
+      fb.textContent=`Script saved (${wc} words). +${pts} pts`;
+    }
+    </script>
+  </div>
+</div>
+
+<!-- SELF-REFLECTION -->
+<div id="tab-reflection" class="section">
+  <div class="card">
+    <h2>🌟 Self-Reflection</h2>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Rate your confidence with each topic. Be honest — this helps you focus your revision.</p>
+    <div id="reflect-grid" style="display:grid;gap:12px"></div>
+    <button class="check-btn" style="margin-top:16px" onclick="saveReflection()">Save Reflection</button>
+    <div id="ref-fb" class="feedback"></div>
+    <script>
+    const TOPICS=['I can define economics and explain scarcity','I can distinguish consumer goods from services','I can name and describe the three types of resources','I can explain the three sectors of economic activity','I can answer the four basic economic questions','I know all 16 glossary terms'];
+    const grid=document.getElementById('reflect-grid');
+    TOPICS.forEach((t,i)=>{
+      const div=document.createElement('div');
+      div.style.cssText='background:var(--navy2);border-radius:8px;padding:14px';
+      div.innerHTML=`<div style="font-size:.875rem;color:var(--text2);margin-bottom:10px">${t}</div>
+        <div style="display:flex;gap:8px">
+          ${['😟 1','😐 2','🙂 3','😊 4','🌟 5'].map((l,v)=>`<label style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-size:.75rem;color:var(--text3)">
+            <input type="radio" name="r${i}" value="${v+1}" style="accent-color:var(--gold)"> ${l}</label>`).join('')}
+        </div>`;
+      grid.appendChild(div);
+    });
+    function saveReflection(){
+      let filled=0;
+      TOPICS.forEach((_,i)=>{
+        if(document.querySelector(`input[name="r${i}"]:checked`))filled++;
+      });
+      addScore('reflection',filled*2);
+      const fb=document.getElementById('ref-fb');
+      fb.className='feedback show '+(filled===TOPICS.length?'good':'ok');
+      fb.textContent=`${filled}/${TOPICS.length} topics rated. +${filled*2} pts`;
+    }
+    </script>
+  </div>
+</div>
+
+<!-- INFOGRAPHICS -->
+<div id="tab-infographics" class="section">
+  <div style="max-width:960px;margin:0 auto;padding:24px 16px">
+    <h2 style="font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:16px">🖼 Infographics</h2>
+    <img src="images/economic_activity_infographic.webp" alt="The Anatomy of an Economy" style="width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.4)">
+  </div>
+</div>
+
+<!-- SCORE -->
+<div id="tab-score" class="section">
+  <div class="card score-section">
+    <div class="score-big" id="final-score">0</div>
+    <div class="score-label">points out of 93</div>
+    <div class="progress-bar"><div class="progress-fill" id="score-bar" style="width:0%"></div></div>
+    <p style="font-size:.85rem;color:var(--text3);margin-top:8px" id="score-msg">Complete tasks to earn points!</p>
+    <button class="check-btn" style="margin-top:20px" onclick="showTab('reading')">Back to Reading</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+const PREFIX='eco_act_';
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+
+const scores={};
+function addScore(key,pts){
+  if(!scores[key]||scores[key]<pts){scores[key]=pts;updateTotal();}
+  lsSet(PREFIX+'sc_'+key,pts);
+}
+function updateTotal(){
+  const total=Object.values(scores).reduce((a,b)=>a+b,0);
+  const capped=Math.min(total,93);
+  document.getElementById('total-score').textContent=capped;
+  const fs=document.getElementById('final-score');
+  const sb=document.getElementById('score-bar');
+  const sm=document.getElementById('score-msg');
+  if(fs){fs.textContent=capped;sb.style.width=(capped/93*100)+'%';}
+  if(sm){
+    sm.textContent=capped>=80?'🌟 Excellent! Outstanding performance!':capped>=60?'👍 Good work! Keep going!':capped>=30?'📚 Good progress! Keep practising.':'Complete tasks to earn points!';
+  }
+}
+
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleTheme(){
+  document.body.classList.toggle('light-mode');
+  const btn=document.querySelector('.theme-btn:last-of-type');
+  btn.textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀️ Light';
+  lsSet(PREFIX+'theme',document.body.classList.contains('light-mode')?'light':'dark');
+}
+
+// Restore state
+(function(){
+  if(lsGet(PREFIX+'theme')==='light')document.body.classList.add('light-mode');
+  // Restore scores
+  const keys=['structure1','structure2','structure3','cats','fib','writing','speaking','reflection','fc'];
+  keys.forEach(k=>{const v=parseInt(lsGet(PREFIX+'sc_'+k));if(!isNaN(v))scores[k]=v;});
+  updateTotal();
+})();
+</script>
+</body>
+</html>
