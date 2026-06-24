@@ -165,6 +165,7 @@
   <div class="tab" onclick="showTab('part7')">Speaking Plan</div>
   <div class="tab" onclick="showTab('part8')">Speaking Task</div>
   <div class="tab" onclick="showTab('final')">Self-Reflection</div>
+  <div class="tab" onclick="showTab('infographics')">🖼 Infographics</div>
   <div class="tab" onclick="window.open('mindmap_russian_education.html','_blank')">🧠 Mind Map</div>
   <div class="tab" onclick="showTab('score')">My Score</div>
 </nav>
@@ -1129,5 +1130,11 @@ renderReflection();
 ['cq1','cq2','cq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) document.getElementById(id).value = v; });
 ['w1','w2'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; updateWordCount(id, 'wc'+id.slice(1), 'wb'+id.slice(1)); } });
 </script>
+<div id="tab-infographics" class="section">
+  <div style="max-width:960px;margin:0 auto;padding:24px 16px">
+    <h2 style="font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:16px">🖼 Infographics</h2>
+    <img src="images/russian_education_infographic.webp" alt="A Journey Through the Russian Education System" style="width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.4)">
+  </div>
+</div>
 </body>
 </html>
