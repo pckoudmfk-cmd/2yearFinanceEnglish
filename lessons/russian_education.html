@@ -71,9 +71,9 @@
   .flashcard-inner { width: 100%; height: 100%; position: relative; -webkit-transform-style: preserve-3d; transform-style: preserve-3d; -webkit-transition: -webkit-transform 0.5s cubic-bezier(.4,0,.2,1); transition: transform 0.5s cubic-bezier(.4,0,.2,1); }
   .flashcard-wrap.flipped .flashcard-inner { -webkit-transform: rotateY(180deg); transform: rotateY(180deg); }
   .flashcard-face { position: absolute; inset: 0; border-radius: var(--radius); display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; padding: 14px; text-align: center; -webkit-backface-visibility: hidden; backface-visibility: hidden; border: 1.5px solid var(--border); }
-  .flashcard-front { background: var(--card); font-size: 13px; font-weight: 600; color: var(--text); box-shadow: var(--shadow); }
-  .flashcard-back { background: linear-gradient(135deg, var(--navy), #1a2a42); -webkit-transform: rotateY(180deg); transform: rotateY(180deg); font-size: 12px; color: rgba(255,255,255,0.9); line-height: 1.5; border-color: var(--gold); }
-  .fc-hint { font-size: 10px; color: var(--mid-gray); margin-top: 6px; }
+  .flashcard-front { background: #fff; font-size: 14px; font-weight: 700; color: #1a1a2e; box-shadow: 0 2px 8px rgba(0,0,0,.08); border-color: #d0d4e8; }
+  .flashcard-back { background: #fffbf0; -webkit-transform: rotateY(180deg); transform: rotateY(180deg); font-size: 12px; color: #1a1a2e; line-height: 1.5; border-color: #d0d4e8; }
+  .fc-hint { font-size: 10px; color: #8a96b0; margin-top: 6px; }
   .fib-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; font-size: 14px; line-height: 2.2; box-shadow: var(--shadow); }
   .fib-input-wrap { display: inline-flex; align-items: center; gap: 4px; }
   .fib-input { display: inline-block; width: 200px; padding: 4px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); vertical-align: middle; }
@@ -782,7 +782,7 @@ function renderCards(filter) {
     wrap.className = 'flashcard-wrap';
     var flipped = loadItem(PREFIX+'fc_'+t.term) === '1';
     if (flipped) wrap.classList.add('flipped');
-    wrap.innerHTML = '<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div><div style="font-size:13px;font-weight:600;">' + t.term + '</div><div class="fc-hint">click to flip</div></div></div><div class="flashcard-face flashcard-back"><div><div style="font-weight:600;margin-bottom:6px;">' + t.def + '</div><div style="font-size:11px;color:rgba(201,168,76,0.8);margin-top:6px;">' + t.ru + '</div></div></div></div>';
+    wrap.innerHTML = '<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div><div style="font-size:14px;font-weight:700;color:#1a1a2e;">' + t.term + '</div><div class="fc-hint">click to flip</div></div></div><div class="flashcard-face flashcard-back"><div><div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:6px;">' + t.ru + '</div><div style="font-size:11px;color:#5a6a8a;border-top:1px solid #d0d4e8;padding-top:5px;line-height:1.5;">' + t.def + '</div></div></div></div>';
     wrap.onclick = function() { wrap.classList.toggle('flipped'); saveItem(PREFIX+'fc_'+t.term, wrap.classList.contains('flipped') ? '1' : ''); };
     grid.appendChild(wrap);
   });

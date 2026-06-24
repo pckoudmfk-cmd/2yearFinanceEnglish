@@ -376,22 +376,23 @@
     border: 1.5px solid var(--border);
   }
   .flashcard-front {
-    background: var(--card);
+    background: #fff;
     font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    box-shadow: var(--shadow);
+    font-weight: 700;
+    color: #1a1a2e;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    border-color: #d0d4e8;
   }
   .flashcard-back {
-    background: linear-gradient(135deg, var(--navy), #1a2a42);
+    background: #fffbf0;
     -webkit-transform: rotateY(180deg);
     transform: rotateY(180deg);
     font-size: 12px;
-    color: rgba(255,255,255,0.9);
+    color: #1a1a2e;
     line-height: 1.5;
-    border-color: var(--gold);
+    border-color: #d0d4e8;
   }
-  .fc-hint { font-size: 10px; color: var(--mid-gray); margin-top: 6px; }
+  .fc-hint { font-size: 10px; color: #8a96b0; margin-top: 6px; }
 
   /* ── Fill in Blanks ── */
   .fib-item {
@@ -848,7 +849,15 @@
     .discussion-questions { display: block !important; }
     body { background: white !important; color: black !important; }
     .card { box-shadow: none !important; border: 1px solid #ddd !important; }
-    .flashcard-back { -webkit-transform: none !important; transform: none !important; background: #f0f0f0 !important; color: black !important; position: static !important; }
+    .flashcard-back {
+    background: #fffbf0;
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    font-size: 12px;
+    color: #1a1a2e;
+    line-height: 1.5;
+    border-color: #d0d4e8;
+  }
     .flashcard-inner { -webkit-transform-style: flat !important; transform-style: flat !important; }
     .flashcard-wrap { height: auto !important; -webkit-perspective: none !important; perspective: none !important; }
   }
@@ -1674,7 +1683,7 @@ function buildFlashcards() {
         '<div class="flashcard-face flashcard-front">' +
           '<div style="width:100%">' +
             '<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">'+escHtml(t.term)+'</div>' +
-            '<div style="font-size:11px;color:var(--gold);font-style:italic;margin-bottom:6px;">'+escHtml(t.ru||'')+'</div>' +
+            
             '<div style="display:flex;justify-content:space-between;align-items:center;">' +
               '<span class="fc-hint">Click to flip</span>' +
               '<button class="fc-audio-btn" onclick="speakTerm(event,\''+escAttr(t.term)+'\')" title="Listen" style="background:rgba(201,168,76,0.15);border:1px solid var(--gold);color:var(--gold);border-radius:6px;padding:2px 7px;font-size:13px;cursor:pointer;line-height:1;">🔊</button>' +
@@ -1683,8 +1692,8 @@ function buildFlashcards() {
         '</div>' +
         '<div class="flashcard-face flashcard-back">' +
           '<div style="width:100%;text-align:left;">' +
-            '<div style="font-size:11px;color:rgba(255,255,255,0.9);line-height:1.5;margin-bottom:6px;">'+escHtml(t.def)+'</div>' +
-            '<div style="font-size:11px;color:var(--gold);font-style:italic;border-top:1px solid rgba(201,168,76,0.3);padding-top:5px;">'+escHtml(t.ru||'')+'</div>' +
+            '<div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:6px;">'+escHtml(t.ru||'')+' </div>' +
+            '<div style="font-size:11px;color:#5a6a8a;border-top:1px solid #d0d4e8;padding-top:5px;line-height:1.5;">'+escHtml(t.def)+'</div>' +
           '</div>' +
         '</div>' +
       '</div>';

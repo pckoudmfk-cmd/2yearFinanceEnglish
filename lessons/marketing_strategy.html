@@ -63,18 +63,18 @@
   .flip-card{height:110px;perspective:1000px;cursor:pointer}
   .flip-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s;-webkit-transform-style:preserve-3d;-webkit-transition:-webkit-transform .5s}
   .flip-card.flipped .flip-inner{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
-  .flip-front,.flip-back{position:absolute;width:100%;height:100%;border-radius:var(--radius);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;border:1px solid var(--border)}
-  .flip-front{background:var(--card2)}
-  .flip-back{background:var(--navy3);transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
-  .flip-front .term{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:4px}
+  .flip-front,.flip-back{position:absolute;width:100%;height:100%;border-radius:var(--radius);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;border:1px solid #d0d4e8}
+  .flip-front{background:#fff;border-color:#d0d4e8}
+  .flip-back{background:#fffbf0;border-color:#d0d4e8;transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+  .flip-front .term{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:4px}
   .flip-front .cat-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
   .cat-M .cat-tag{color:#3498db}
   .cat-S .cat-tag{color:#2ecc71}
   .cat-P .cat-tag{color:#e74c3c}
-  .flip-back .ru{font-size:.85rem;color:var(--text2);line-height:1.5}
+  .flip-back .ru{font-size:.95rem;font-weight:700;color:#1a1a2e;line-height:1.5}
   .speak-btn{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:.9rem;padding:4px;transition:.2s}
   .speak-btn:hover{color:var(--gold)}
-  .card-count{font-size:.75rem;color:var(--text3);margin-top:4px}
+  .card-count{font-size:.75rem;color:#6a7499;margin-top:4px}
   .match-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px}
   .match-item{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
   .match-term{font-size:.875rem;font-weight:600;color:var(--text)}
