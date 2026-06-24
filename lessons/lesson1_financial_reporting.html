@@ -7,41 +7,26 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --navy: #0A1628;
-    --gold: #C9A84C;
-    --gold-light: #e8c96a;
-    --white: #FFFFFF;
-    --light-gray: #F5F5F5;
-    --mid-gray: #8892A4;
-    --bg: #F5F5F5;
-    --card-bg: #FFFFFF;
-    --text: #0A1628;
-    --text-secondary: #8892A4;
-    --border: #e0e4ec;
-    --sidebar-bg: #0A1628;
-    --sidebar-text: #FFFFFF;
-    --input-bg: #FFFFFF;
-    --shadow: 0 2px 16px rgba(10,22,40,0.10);
-    --shadow-lg: 0 8px 32px rgba(10,22,40,0.16);
-    --radius: 12px;
-    --transition: 0.22s cubic-bezier(.4,0,.2,1);
+    :root {
+    --navy:#0A1628;--navy2:#0d1e38;--navy3:#112244;
+    --gold:#C9A84C;--gold2:#e8c96a;--gold3:#f5e6b0;
+    --text:#e8eaf0;--text2:#b0b8cc;--text3:#7a8299;
+    --card:#13233d;--card2:#1a2e50;--border:#1e3560;
+    --input-bg:#1a2e50;--sidebar-bg:#0A1628;--sidebar-text:#e8eaf0;
+    --radius:12px;--shadow:0 4px 20px rgba(0,0,0,.4);--shadow-lg:0 8px 32px rgba(0,0,0,.5);
+    --transition:0.22s cubic-bezier(.4,0,.2,1);
   }
-  .dark-mode {
-    --bg: #0A1628;
-    --card-bg: #1a2a42;
-    --text: #FFFFFF;
-    --text-secondary: #8892A4;
-    --border: #2a3a52;
-    --sidebar-bg: #06101e;
-    --input-bg: #1a2a42;
-    --shadow: 0 2px 16px rgba(0,0,0,0.3);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+  body.light-mode {
+    --navy:#f0f4ff;--navy2:#e8eeff;--navy3:#dde6ff;
+    --text:#1a2244;--text2:#3a4466;--text3:#6a7499;
+    --card:#ffffff;--card2:#f5f8ff;--border:#c8d4f0;
+    --input-bg:#ffffff;--sidebar-bg:#0A1628;--sidebar-text:#ffffff;
+    --shadow:0 2px 16px rgba(10,22,40,.10);--shadow-lg:0 8px 32px rgba(10,22,40,.16);
   }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-    background: var(--bg);
+    background: var(--navy);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
@@ -63,7 +48,7 @@
   }
   #progress-bar-fill {
     height: 4px;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
     -webkit-transition: width 0.5s ease;
     transition: width 0.5s ease;
     border-radius: 0 2px 2px 0;
@@ -90,7 +75,7 @@
     position: fixed;
     top: 10px; right: 16px;
     z-index: 9999;
-    background: var(--card-bg);
+    background: var(--card);
     border: 1.5px solid var(--border);
     border-radius: 20px;
     padding: 5px 12px;
@@ -134,7 +119,7 @@
   .section-num {
     width: 36px; height: 36px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
     color: var(--navy);
     font-size: 14px;
     font-weight: 800;
@@ -155,12 +140,12 @@
   }
   .section-subtitle {
     font-size: 13px;
-    color: var(--text-secondary);
+    color: var(--text3);
     margin-top: 2px;
   }
 
   .card {
-    background: var(--card-bg);
+    background: var(--card);
     border-radius: var(--radius);
     padding: 28px;
     box-shadow: var(--shadow);
@@ -187,7 +172,7 @@
     font-family: inherit;
   }
   .btn-primary {
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
     color: var(--navy);
     box-shadow: 0 2px 8px rgba(201,168,76,0.3);
   }
@@ -219,7 +204,7 @@
   .discussion-questions.visible { display: block; }
 
   .dq-item {
-    background: var(--card-bg);
+    background: var(--card);
     border-radius: var(--radius);
     padding: 20px 24px;
     margin-bottom: 16px;
@@ -307,9 +292,9 @@
     flex: 1;
     min-width: 220px;
   }
-  .matching-col h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 12px; }
+  .matching-col h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 12px; }
   .match-item {
-    background: var(--card-bg);
+    background: var(--card);
     border: 1.5px solid var(--border);
     border-radius: 10px;
     padding: 12px 16px;
@@ -391,7 +376,7 @@
     border: 1.5px solid var(--border);
   }
   .flashcard-front {
-    background: var(--card-bg);
+    background: var(--card);
     font-size: 13px;
     font-weight: 600;
     color: var(--text);
@@ -410,7 +395,7 @@
 
   /* ── Fill in Blanks ── */
   .fib-item {
-    background: var(--card-bg);
+    background: var(--card);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 16px 20px;
@@ -469,7 +454,7 @@
     -webkit-flex: 1;
     flex: 1;
     min-width: 130px;
-    background: var(--card-bg);
+    background: var(--card);
     border: 1.5px solid var(--border);
     border-radius: 10px;
     padding: 14px 18px;
@@ -542,7 +527,7 @@
   .word-count { font-size: 12px; color: var(--mid-gray); }
   .vocab-badge {
     display: none;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
     color: var(--navy);
     font-size: 11px;
     font-weight: 700;
@@ -566,7 +551,7 @@
     -webkit-flex: 1;
     flex: 1;
     min-width: 200px;
-    background: var(--card-bg);
+    background: var(--card);
     border-radius: var(--radius);
     padding: 20px 24px;
     border: 1px solid var(--border);
@@ -576,7 +561,7 @@
   .debate-side.for h4 { color: #38a169; }
   .debate-side.against h4 { color: #e53e3e; }
   .debate-side ul { list-style: none; }
-  .debate-side ul li { font-size: 13px; color: var(--text-secondary); padding: 6px 0; border-bottom: 1px solid var(--border); line-height: 1.5; }
+  .debate-side ul li { font-size: 13px; color: var(--text3); padding: 6px 0; border-bottom: 1px solid var(--border); line-height: 1.5; }
   .debate-side ul li:last-child { border-bottom: none; }
 
   .timer-wrap {
@@ -588,7 +573,7 @@
     align-items: center;
     gap: 16px;
     padding: 28px;
-    background: var(--card-bg);
+    background: var(--card);
     border-radius: var(--radius);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
@@ -616,7 +601,7 @@
   /* ── Part 8 Drag Drop ── */
   .drag-list { list-style: none; }
   .drag-item {
-    background: var(--card-bg);
+    background: var(--card);
     border: 1.5px solid var(--border);
     border-radius: 10px;
     padding: 14px 18px;
@@ -646,7 +631,7 @@
   .accordion-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow); }
   .accordion-header {
     padding: 18px 24px;
-    background: var(--card-bg);
+    background: var(--card);
     cursor: pointer;
     display: -webkit-flex;
     display: flex;
@@ -666,7 +651,7 @@
   .accordion-header.open { color: var(--gold); }
   .accordion-arrow { font-size: 12px; color: var(--mid-gray); -webkit-transition: -webkit-transform var(--transition); transition: transform var(--transition); }
   .accordion-header.open .accordion-arrow { -webkit-transform: rotate(180deg); transform: rotate(180deg); }
-  .accordion-body { display: none; padding: 24px; background: var(--card-bg); border-top: 1px solid var(--border); }
+  .accordion-body { display: none; padding: 24px; background: var(--card); border-top: 1px solid var(--border); }
   .accordion-body.open { display: block; -webkit-animation: slideDown 0.25s ease; animation: slideDown 0.25s ease; }
 
   /* ── Final Check ── */
@@ -680,7 +665,7 @@
   }
   .final-check-item {
     width: calc(50% - 6px);
-    background: var(--card-bg);
+    background: var(--card);
     border: 1.5px solid var(--border);
     border-radius: 10px;
     padding: 14px 18px;
@@ -712,7 +697,7 @@
     top: 50%; left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
     color: var(--navy);
     font-size: 28px;
     font-weight: 800;
@@ -781,7 +766,7 @@
     align-items: center;
     gap: 12px;
     padding: 18px;
-    background: var(--bg);
+    background: var(--navy);
     border-radius: var(--radius);
     border: 1px solid var(--border);
   }
@@ -933,7 +918,7 @@
       </div>
     </div>
     <div class="card">
-      <p class="text-sm mb-16" style="color:var(--text-secondary);">A real scenario is hidden below. Reveal it, then respond to the discussion questions.</p>
+      <p class="text-sm mb-16" style="color:var(--text3);">A real scenario is hidden below. Reveal it, then respond to the discussion questions.</p>
       <button class="btn btn-primary" id="reveal-btn" onclick="revealCase()">▶ Reveal Case Study</button>
 
       <div class="case-box" id="case-box">
@@ -1076,7 +1061,7 @@
       </div>
     </div>
     <div class="card">
-      <p class="text-sm mb-16" style="color:var(--text-secondary);">Select a paragraph label on the left, then click its matching category on the right. Correct pairs turn green.</p>
+      <p class="text-sm mb-16" style="color:var(--text3);">Select a paragraph label on the left, then click its matching category on the right. Correct pairs turn green.</p>
       <div class="matching-grid">
         <div class="matching-col">
           <h4>Paragraphs</h4>
@@ -1285,7 +1270,7 @@
       </div>
     </div>
     <div class="card">
-      <p class="text-sm mb-16" style="color:var(--text-secondary);">Drag the sentences to arrange them into a coherent paragraph about financial reporting. Click "Check Order" when ready.</p>
+      <p class="text-sm mb-16" style="color:var(--text3);">Drag the sentences to arrange them into a coherent paragraph about financial reporting. Click "Check Order" when ready.</p>
       <ul class="drag-list" id="drag-list" aria-label="Reorderable sentence list"></ul>
       <div class="mt-16 flex gap-8 flex-center" style="-webkit-flex-wrap:wrap;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="checkOrder()">✓ Check Order</button>
@@ -1318,7 +1303,7 @@
       </div>
     </div>
     <div class="card">
-      <p class="text-sm mb-16" style="color:var(--text-secondary);">Honestly reflect on each objective. Check it only when you are genuinely confident.</p>
+      <p class="text-sm mb-16" style="color:var(--text3);">Honestly reflect on each objective. Check it only when you are genuinely confident.</p>
       <div class="final-grid" id="final-grid"></div>
       <div style="text-align:center;">
         <span id="final-score" class="text-sm fw-600" style="color:var(--mid-gray);" aria-live="polite">0 / 12 completed</span>
@@ -1344,7 +1329,7 @@
           </svg>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
             <div id="score-pct" style="font-size:30px;font-weight:800;color:var(--gold);">0%</div>
-            <div style="font-size:11px;color:var(--text-secondary);">Overall</div>
+            <div style="font-size:11px;color:var(--text3);">Overall</div>
           </div>
         </div>
         <div id="score-grade" style="margin-top:12px;font-size:18px;font-weight:700;color:var(--text);">Complete tasks to see your grade</div>
@@ -1478,8 +1463,8 @@ document.addEventListener('DOMContentLoaded', function() {
 //  DARK MODE
 // ══════════════════════════════════════════════════════════
 function toggleDark() {
-  document.body.classList.toggle('dark-mode');
-  var isDark = document.body.classList.contains('dark-mode');
+  document.body.classList.toggle('light-mode');
+  var isDark = document.body.classList.contains('light-mode');
   localStorage.setItem('darkMode', isDark ? '1' : '0');
   document.getElementById('dark-icon').textContent = isDark ? '☀️' : '🌙';
   document.getElementById('dark-label').textContent = isDark ? 'Light' : 'Dark';
@@ -1600,7 +1585,7 @@ function checkDQ(n) {
       '</div>' +
     '</div>' +
     (found.length > 0 ? '<div style="color:#38a169;font-size:12px;margin-bottom:6px;">✅ Key terms used: <em>'+found.slice(0,5).join(', ')+'</em></div>' : '') +
-    (feedback.length > 0 ? '<div style="color:var(--text-secondary);">'+feedback.map(function(f){ return '<div style="margin-bottom:4px;">'+f+'</div>'; }).join('')+'</div>' : '<div style="color:#38a169;">Great answer! You covered the key ideas well.</div>');
+    (feedback.length > 0 ? '<div style="color:var(--text3);">'+feedback.map(function(f){ return '<div style="margin-bottom:4px;">'+f+'</div>'; }).join('')+'</div>' : '<div style="color:#38a169;">Great answer! You covered the key ideas well.</div>');
   if (totalScore >= 4) markProgress('dq'+n+'_done');
   updateOverallScore();
 }
@@ -1726,7 +1711,7 @@ function filterCards(q) {
 // ══════════════════════════════════════════════════════════
 function buildFIB() {
   var container = document.getElementById('fib-container');
-  var html = '<p class="text-sm mb-16" style="color:var(--text-secondary);">Complete each sentence with the correct vocabulary term. Click outside the input to check your answer. Use the Hint button for the first letter.</p>';
+  var html = '<p class="text-sm mb-16" style="color:var(--text3);">Complete each sentence with the correct vocabulary term. Click outside the input to check your answer. Use the Hint button for the first letter.</p>';
   fibData.forEach(function(item, si) {
     html += '<div class="fib-item">';
     var parts = item.sentence.split('___');
@@ -1777,7 +1762,7 @@ function showHint(si, pi) {
 // ══════════════════════════════════════════════════════════
 function buildCauseEffect() {
   var container = document.getElementById('cause-effect-container');
-  var html = '<p class="text-sm mb-16" style="color:var(--text-secondary);">Click the dashed middle box in each chain to reveal the hidden connecting idea. Reveal all 4 to progress.</p>';
+  var html = '<p class="text-sm mb-16" style="color:var(--text3);">Click the dashed middle box in each chain to reveal the hidden connecting idea. Reveal all 4 to progress.</p>';
   causeData.forEach(function(item, i) {
     html +=
       '<div class="cause-chain">' +
@@ -1889,24 +1874,24 @@ function checkWriting(n) {
       '<span style="font-size:12px;color:'+color+';">'+pct+'%</span>' +
     '</div>' +
     '<table style="width:100%;font-size:12px;border-collapse:collapse;">' +
-      '<tr style="color:var(--text-secondary);">' +
+      '<tr style="color:var(--text3);">' +
         '<td style="padding:3px 0;">📏 Length (40+ words)</td>' +
         '<td style="text-align:right;color:'+(words>=40?'#38a169':'#e53e3e')+';">'+(words>=40?'✅ '+words+' words':'❌ '+words+' words')+'</td>' +
       '</tr>' +
-      '<tr style="color:var(--text-secondary);">' +
+      '<tr style="color:var(--text3);">' +
         '<td style="padding:3px 0;">🎯 Topic coverage</td>' +
         '<td style="text-align:right;color:'+(found.length>=3?'#38a169':found.length>=1?'#C9A84C':'#e53e3e')+';">'+(found.length>=3?'✅ '+found.length+' terms':found.length+' terms')+'</td>' +
       '</tr>' +
-      '<tr style="color:var(--text-secondary);">' +
+      '<tr style="color:var(--text3);">' +
         '<td style="padding:3px 0;">📚 Glossary terms (4+)</td>' +
         '<td style="text-align:right;color:'+(vocabFound.length>=4?'#38a169':vocabFound.length>=2?'#C9A84C':'#e53e3e')+';">'+(vocabFound.length>=4?'✅':'')+''+vocabFound.length+' used</td>' +
       '</tr>' +
-      '<tr style="color:var(--text-secondary);">' +
+      '<tr style="color:var(--text3);">' +
         '<td style="padding:3px 0;">🔗 Logical connectors</td>' +
         '<td style="text-align:right;color:'+(connFound.length>=2?'#38a169':'#C9A84C')+';">'+(connFound.length>=2?'✅ '+connFound.length:connFound.length+' found')+'</td>' +
       '</tr>' +
     '</table>' +
-    (feedback.length > 0 ? '<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">'+feedback.map(function(f){ return '<div style="margin-bottom:4px;color:var(--text-secondary);">'+f+'</div>'; }).join('')+'</div>' : '<div style="margin-top:8px;color:#38a169;font-size:12px;">Excellent analytical writing!</div>');
+    (feedback.length > 0 ? '<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">'+feedback.map(function(f){ return '<div style="margin-bottom:4px;color:var(--text3);">'+f+'</div>'; }).join('')+'</div>' : '<div style="margin-top:8px;color:#38a169;font-size:12px;">Excellent analytical writing!</div>');
   updateOverallScore();
 }
 
@@ -2076,7 +2061,7 @@ var accordionDefs = [
     icon:"📈",
     subtitle:"90-second timer",
     build: function() {
-      return '<p class="text-sm mb-16" style="color:var(--text-secondary);">Prepare a 90-second pitch explaining why financial reporting quality matters to investors. Use the timer below to practice.</p>' +
+      return '<p class="text-sm mb-16" style="color:var(--text3);">Prepare a 90-second pitch explaining why financial reporting quality matters to investors. Use the timer below to practice.</p>' +
         buildMiniTimerHTML('pitch',90) +
         '<div class="mt-16"><label class="text-sm fw-600" for="acc1notes">Your notes:</label>' +
         '<textarea class="writing-ta mt-8" id="acc1notes" style="min-height:90px;" placeholder="Key points for your pitch..." oninput="localStorage.setItem(\'acc1notes\',this.value)"></textarea></div>';
@@ -2091,7 +2076,7 @@ var accordionDefs = [
     icon:"🔍",
     subtitle:"Find 4 errors in the flawed text",
     build: function() {
-      return '<p class="text-sm mb-16" style="color:var(--text-secondary);">The passage below contains 4 financial reporting errors. Identify and correct each one in the fields provided.</p>' +
+      return '<p class="text-sm mb-16" style="color:var(--text3);">The passage below contains 4 financial reporting errors. Identify and correct each one in the fields provided.</p>' +
         '<div class="flawed-text">The company\'s <u>liability statement</u> showed total <u>revenue</u> of $5 million, meaning it had more money going out than coming in. The <u>balance sheet</u> revealed that the company\'s assets exceeded its liabilities, which worried investors about solvency. The CEO declared that <u>transparency</u> was unnecessary since they were performing so poorly, and decided to hide the losses from the annual report.</div>' +
         '<label class="text-sm fw-600">Error 1 — Identify and correct:</label>' +
         '<input type="text" class="error-input mt-8" placeholder="What is wrong and what should it say?" oninput="localStorage.setItem(\'err1\',this.value)">' +
@@ -2123,7 +2108,7 @@ var accordionDefs = [
     build: function() {
       var kws = ['revenue','transparency','liquidity','balance sheet','stakeholder','credibility','compliance','audit'];
       var chips = kws.map(function(k){ return '<span class="kchip" id="kchip-'+k+'" onclick="insertKeyword(\''+escAttr(k)+'\')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\')insertKeyword(\''+escAttr(k)+'\')">'+escHtml(k)+'</span>'; }).join('');
-      return '<p class="text-sm mb-16" style="color:var(--text-secondary);">Click keyword chips to insert them into your response, or type them naturally. Used keywords will turn gold. Aim to use all 8!</p>' +
+      return '<p class="text-sm mb-16" style="color:var(--text3);">Click keyword chips to insert them into your response, or type them naturally. Used keywords will turn gold. Aim to use all 8!</p>' +
         '<div class="keyword-chips">'+chips+'</div>' +
         '<label class="text-sm fw-600" for="kw-textarea">Your spoken response (write it out):</label>' +
         '<textarea class="writing-ta mt-8" id="kw-textarea" style="min-height:120px;" placeholder="Write your response using the keywords above..." oninput="highlightKeywords(this.value)"></textarea>' +
@@ -2136,7 +2121,7 @@ var accordionDefs = [
     icon:"⚡",
     subtitle:"30s preparation + 45s speaking",
     build: function() {
-      return '<p class="text-sm mb-16" style="color:var(--text-secondary);">Use the preparation timer to organise your thoughts, then start the speaking timer to deliver your argument on the debate topic.</p>' +
+      return '<p class="text-sm mb-16" style="color:var(--text3);">Use the preparation timer to organise your thoughts, then start the speaking timer to deliver your argument on the debate topic.</p>' +
         '<div class="flex gap-12 mb-16" style="-webkit-flex-wrap:wrap;flex-wrap:wrap;">' +
           '<div style="-webkit-flex:1;flex:1;min-width:160px;text-align:center;">' +
             buildMiniTimerHTML('prep',30) +
@@ -2160,7 +2145,7 @@ var accordionDefs = [
     icon:"🎤",
     subtitle:"Check the elements and write your script",
     build: function() {
-      return '<p class="text-sm mb-16" style="color:var(--text-secondary);">Imagine you are leaving an expert voice message about financial reporting for a client. Check off each element as you plan it, then write your script below.</p>' +
+      return '<p class="text-sm mb-16" style="color:var(--text3);">Imagine you are leaving an expert voice message about financial reporting for a client. Check off each element as you plan it, then write your script below.</p>' +
         '<div class="checklist-item"><input type="checkbox" id="vm1" onchange="saveVMCheck()"> <label for="vm1">Introduction: State who you are and your area of expertise</label></div>' +
         '<div class="checklist-item"><input type="checkbox" id="vm2" onchange="saveVMCheck()"> <label for="vm2">Key Point 1: Explain the importance of financial transparency</label></div>' +
         '<div class="checklist-item"><input type="checkbox" id="vm3" onchange="saveVMCheck()"> <label for="vm3">Key Point 2: Describe one major financial statement and its purpose</label></div>' +
@@ -2474,7 +2459,7 @@ function updateOverallScore() {
   var bd = document.getElementById('score-breakdown');
   if (!bd) return;
   var html = '<div style="border-top:1px solid var(--border);padding-top:16px;">';
-  html += '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-secondary);margin-bottom:12px;">Score Breakdown</div>';
+  html += '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px;">Score Breakdown</div>';
   rows.forEach(function(r) {
     var rowPct = r.total > 0 ? Math.round(r.earned/r.total*100) : 0;
     var rowColor = rowPct >= 75 ? '#38a169' : rowPct >= 50 ? '#C9A84C' : '#e53e3e';
