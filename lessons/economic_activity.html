@@ -393,7 +393,7 @@
       const wrap=document.createElement('div');
       wrap.className='flip-card';
       wrap.innerHTML=`<div class="flip-inner">
-        <div class="flip-front"><span class="term">${f.en}</span><span class="card-count">tap to flip</span></div>
+        <div class="flip-front"><span class="term">${f.en}</span><span class="card-count">tap to flip</span><button onclick="event.stopPropagation();speakTerm('${f.en}')" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button></div>
         <div class="flip-back"><span class="ru">${f.ru}</span></div>
       </div>`;
       wrap.onclick=()=>{wrap.classList.toggle('flipped');addScore('fc_'+f.en,1);};

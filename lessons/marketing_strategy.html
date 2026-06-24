@@ -512,12 +512,18 @@ function renderGlossary(){
   const grid=document.getElementById('glossary-grid');
   const q=(document.getElementById('gloss-search')||{value:''}).value.toLowerCase();
   const filtered=glossary.filter(g=>(activeCat==='all'||g.cat===activeCat)&&(!q||g.term.toLowerCase().includes(q)||g.ru.toLowerCase().includes(q)));
-  grid.innerHTML=filtered.map(g=>`<div class="flip-card cat-${g.cat}" onclick="flipCard(this)"><div class="flip-inner"><div class="flip-front"><span class="term">${g.term}</span><span class="cat-tag">${g.cat==='M'?'Marketing & Analysis':g.cat==='S'?'Strategy & Positioning':'Products & Services'}</span><span class="card-count">tap to see translation</span></div><div class="flip-back"><button class="speak-btn" onclick="event.stopPropagation();speak('${g.term}')">🔊</button><div class="ru">${g.ru}</div></div></div></div>`).join('');
+  grid.innerHTML=filtered.map(g=>`<div class="flip-card cat-${g.cat}" onclick="flipCard(this)"><div class="flip-inner"><div class="flip-front"><span class="term">${g.term}</span><span class="cat-tag">${g.cat==='M'?'Marketing & Analysis':g.cat==='S'?'Strategy & Positioning':'Products & Services'}</span><span class="card-count">tap to see translation</span><button onclick="event.stopPropagation();speakTerm(g.term)" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button></div><div class="flip-back"><div class="ru">${g.ru}</div></div></div></div>`).join('');
 }
 function flipCard(el){el.classList.toggle('flipped')}
 function filterGlossary(){renderGlossary()}
 function filterCat(cat,btn){activeCat=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGlossary()}
-function speak(word){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=0.85;window.speechSynthesis.cancel();window.speechSynthesis.speak(u)}
+function speakTerm(term){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(term);
+  u.lang='en-US';u.rate=0.85;
+  window.speechSynthesis.speak(u);
+}
 
 function renderCategories(){
   const grid=document.getElementById('match-grid');

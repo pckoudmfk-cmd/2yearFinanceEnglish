@@ -779,7 +779,7 @@ function renderCards(filter) {
     wrap.id = 'fc-'+i;
     var flipped = loadItem(PREFIX+'fc_'+t.term) === '1';
     if (flipped) wrap.classList.add('flipped');
-    wrap.innerHTML = '<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div><div style="font-size:14px;font-weight:700;color:#1a1a2e;">' + t.term + '</div><div class="fc-hint">click to flip</div></div></div><div class="flashcard-face flashcard-back"><div><div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:6px;">' + t.ru + '</div><div style="font-size:11px;color:#5a6a8a;border-top:1px solid #d0d4e8;padding-top:5px;line-height:1.5;">' + t.def + '</div></div></div></div>';
+    wrap.innerHTML = '<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div style="width:100%"><div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px;">' + t.term + '</div><div style="display:flex;justify-content:space-between;align-items:center;"><span class="fc-hint">click to flip</span><button onclick="event.stopPropagation();speakTerm(\'' + t.term.replace(/'/g,'\\&apos;') + '\')" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;">🔊</button></div></div></div><div class="flashcard-face flashcard-back"><div><div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:6px;">' + t.ru + '</div><div style="font-size:11px;color:#5a6a8a;border-top:1px solid #d0d4e8;padding-top:5px;line-height:1.5;">' + t.def + '</div></div></div></div>';
     wrap.onclick = function() {
       wrap.classList.toggle('flipped');
       saveItem(PREFIX+'fc_'+t.term, wrap.classList.contains('flipped') ? '1' : '');
@@ -792,6 +792,13 @@ function renderCards(filter) {
 function filterCards(v) { renderCards(v); }
 function flipAll() { document.querySelectorAll('.flashcard-wrap').forEach(function(w){ w.classList.toggle('flipped'); }); }
 function resetCards() { document.getElementById('card-search').value = ''; renderCards(''); }
+function speakTerm(term){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(term);
+  u.lang='en-US';u.rate=0.85;
+  window.speechSynthesis.speak(u);
+}
 function speakSelected() {
   var sel = null;
   document.querySelectorAll('.flashcard-wrap').forEach(function(w){ if (w.classList.contains('flipped')) sel = w; });
