@@ -42,7 +42,14 @@
   .section.active{display:block}
   .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
   .card h2{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-  .lesson-text p{font-size:.9rem;line-height:1.75;color:var(--text2);margin-bottom:12px}
+  .lesson-text{counter-reset:para}
+  .lesson-text p{counter-increment:para;position:relative;padding-left:36px;font-size:.9rem;line-height:1.75;color:var(--text2);margin-bottom:12px}
+  .lesson-text p::before{content:counter(para);position:absolute;left:0;top:4px;width:23px;height:23px;border-radius:50%;background:var(--navy2);border:1px solid var(--border);color:var(--gold2);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .rule{font-size:.76rem;color:var(--text3);background:var(--navy2);border-left:3px solid var(--gold);border-radius:4px;padding:7px 12px;margin:0 0 14px;line-height:1.55}
+  .rubric-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:18px;text-align:left}
+  .rubric-table th{color:var(--text3);font-weight:600;padding:8px 6px;border-bottom:2px solid var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:.3px}
+  .rubric-table td{padding:8px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  .rubric-table td.num{text-align:right;white-space:nowrap;font-weight:700;color:var(--gold)}
   .highlight{color:var(--gold2);font-weight:600}
   .case-box{background:var(--navy3);border-left:3px solid var(--gold);border-radius:8px;padding:16px;margin-bottom:16px}
   .case-box .role{font-size:.75rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
@@ -176,18 +183,19 @@
 <div id="tab-structure" class="section">
   <div class="card">
     <h2>🏗 Task 1 — Match Paragraphs to Functions</h2>
-    <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Match each paragraph (1–5) to its correct function (A–E).</p>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:10px">Match each paragraph of the Reading text (Paragraphs 2–6) to its main function (A–E). Paragraph 1 (introduction) and Paragraph 7 (conclusion) are not included. The paragraphs are numbered in the Reading tab.</p>
+    <p class="rule">Scoring: +3 points for each correct match (5 matches, maximum 15). Only your best attempt counts.</p>
     <div style="background:var(--navy2);border-radius:8px;padding:14px;margin-bottom:16px;font-size:.85rem;color:var(--text2);line-height:1.9">
-      <strong style="color:var(--gold2)">A.</strong> What goods and services are, and the two economic roles people play<br>
+      <strong style="color:var(--gold2)">A.</strong> The first economic discoveries people make, and the two economic roles they settle into (consumer and producer)<br>
       <strong style="color:var(--gold2)">B.</strong> The fundamental economic problem: unlimited wants and limited resources (scarcity)<br>
       <strong style="color:var(--gold2)">C.</strong> How the economy is divided into sectors and the four basic economic questions<br>
-      <strong style="color:var(--gold2)">D.</strong> The types of goods: consumer goods, perishable goods, and how long they last<br>
+      <strong style="color:var(--gold2)">D.</strong> The types of consumer goods (perishable and durable) and what services are<br>
       <strong style="color:var(--gold2)">E.</strong> What resources are and why all three types are needed for production
     </div>
     <div id="match-answers"></div>
     <script>
     (function(){
-      const labels=['Paragraph 1','Paragraph 2','Paragraph 3','Paragraph 4','Paragraph 5'];
+      const labels=['Paragraph 2','Paragraph 3','Paragraph 4','Paragraph 5','Paragraph 6'];
       const correct=['A','D','E','B','C'];
       const container=document.getElementById('match-answers');
       labels.forEach((lbl,i)=>{
@@ -220,7 +228,8 @@
 
   <div class="card">
     <h2>🏗 Task 2 — Build the Logical Chain</h2>
-    <p style="font-size:.85rem;color:var(--text2);margin-bottom:14px">Fill in the three missing steps in the economic chain.</p>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:10px">Fill in the three missing steps in the economic chain.</p>
+    <p class="rule">Scoring: up to 3 points per step (maximum 9). 3 points = at least 4 words and a key term from the text; 1 point = at least 4 words but no key term; 0 = fewer than 4 words. Only your best attempt counts.</p>
     <div style="background:var(--navy2);border-radius:8px;padding:12px 14px;margin-bottom:10px;font-size:.85rem;color:var(--text2)">📌 A country identifies its human, natural, and capital resources</div>
     <div class="question-block">
       <div class="q-label">Step 2</div>
@@ -240,20 +249,21 @@
       let pts=0;
       vals.forEach((v,i)=>{
         const t=v.toLowerCase();
-        if(t.length>15&&kws[i].some(k=>t.includes(k)))pts+=3;
-        else if(t.length>15)pts+=1;
+        if(wordCount(t)>=4&&kws[i].some(k=>t.includes(k)))pts+=3;
+        else if(wordCount(t)>=4)pts+=1;
       });
       addScore('structure2',pts);
       const fb=document.getElementById('chain-fb');
       fb.className='feedback show '+(pts>=9?'good':pts>=3?'ok':'poor');
-      fb.textContent=pts>=9?'Excellent logical chain! +9 pts':pts>=3?`Good effort! +${pts} pts. Use key terms: resources, produce, distribute.`:'Write more detail. Use economic vocabulary.';
+      fb.textContent=pts>=9?'Excellent logical chain! +9 pts':pts>=3?`Good effort! +${pts} pts. Use key terms: resources, produce, distribute.`:`+${pts} pts. Write at least 4 words per step and use economic vocabulary.`;
     }
     </script>
   </div>
 
   <div class="card">
     <h2>🏗 Task 3 — Cause & Effect</h2>
-    <p style="font-size:.85rem;color:var(--text2);margin-bottom:14px">Complete each cause-and-effect chain using information from the text.</p>
+    <p style="font-size:.85rem;color:var(--text2);margin-bottom:10px">Complete each cause-and-effect chain using information from the text.</p>
+    <p class="rule">Scoring: up to 3 points per item (maximum 9). 3 points = at least 4 words and 2 or more key terms; 2 points = at least 4 words and 1 key term; 1 point = at least 4 words, no key term; 0 = fewer than 4 words. Only your best attempt counts.</p>
     <div id="ce-container"></div>
     <button class="check-btn" onclick="checkCE()">✔ Check</button>
     <div id="ce-fb" class="feedback"></div>
@@ -285,10 +295,10 @@
       items.forEach((kws,i)=>{
         const v=document.getElementById(`ce${i}`).value.toLowerCase();
         const hits=kws.filter(k=>v.includes(k));
-        const pts=v.length>15?(hits.length>=2?3:hits.length>=1?2:1):0;
+        const pts=wordCount(v)>=4?(hits.length>=2?3:hits.length>=1?2:1):0;
         total+=pts;
         const res=document.getElementById(`ce-res${i}`);
-        res.textContent=pts===3?'✅ Great — key terms used!':pts>=1?`✓ Good. Try using: ${kws.filter(k=>!v.includes(k)).slice(0,2).join(', ')}`:'Write at least one sentence.';
+        res.textContent=pts===3?'✅ Great — key terms used!':pts>=1?`✓ Good. Try using: ${kws.filter(k=>!v.includes(k)).slice(0,2).join(', ')}`:'Write at least 4 words.';
         res.style.color=pts===3?'#7effc8':pts>=1?'#f5c842':'#ff9090';
       });
       addScore('structure3',total);
@@ -362,7 +372,7 @@
 <div id="tab-flashcards" class="section">
   <div class="card">
     <h2>🃏 Vocabulary Flashcards</h2>
-    <p style="font-size:.82rem;color:var(--text3);margin-bottom:16px">Click a card to flip and see the Russian translation.</p>
+    <p style="font-size:.82rem;color:var(--text3);margin-bottom:16px">Click a card to flip and see the Russian translation. Flashcards are for practice and are not scored.</p>
     <div id="fc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px"></div>
     <script>
     const FC=[
@@ -396,7 +406,7 @@
         <div class="flip-front"><span class="term">${f.en}</span><span class="card-count">tap to flip</span><button onclick="event.stopPropagation();speakTerm('${f.en}')" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button></div>
         <div class="flip-back"><span class="ru">${f.ru}</span></div>
       </div>`;
-      wrap.onclick=()=>{wrap.classList.toggle('flipped');addScore('fc_'+f.en,1);};
+      wrap.onclick=()=>{wrap.classList.toggle('flipped');};
       grid.appendChild(wrap);
     });
     </script>
@@ -405,7 +415,8 @@
   <div class="card">
     <h2>📝 Vocabulary Categorisation</h2>
     <p style="font-size:.85rem;color:var(--text2);margin-bottom:6px">Sort the 26 glossary terms into three categories of your own choosing. Label each column.</p>
-    <p style="font-size:.78rem;color:var(--text3);margin-bottom:14px">Note: some terms may belong to more than one category.</p>
+    <p style="font-size:.78rem;color:var(--text3);margin-bottom:10px">Note: some terms may belong to more than one category. Write one term per line (or separate terms with commas) exactly as in the glossary.</p>
+    <p class="rule">Scoring (maximum 12): up to 8 points for the share of the 26 glossary terms you list (each term is counted once, so repeats do not add points); 2 points if all three categories have names, 1 point for two names; 2 points if all three columns contain at least 2 glossary terms, 1 point if two columns do. Only your best attempt counts.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
       <div>
         <input id="cat-label-a" style="background:var(--navy2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-size:.82rem;width:100%;margin-bottom:8px;font-family:inherit" placeholder="Category name A...">
@@ -424,25 +435,32 @@
     <div id="cat-fb" class="feedback"></div>
     <script>
     function checkCats(){
-      const allTerms=['economics','goods','services','consumer','producer','perishable','durable','resources','scarcity','supply','demand','allocate','income','needs','wants','distribute','consume','produce','primary','secondary','tertiary','human','natural','capital','income','wants'];
-      const a=document.getElementById('cat-a').value.toLowerCase();
-      const b=document.getElementById('cat-b').value.toLowerCase();
-      const c=document.getElementById('cat-c').value.toLowerCase();
-      const la=document.getElementById('cat-label-a').value.trim();
-      const lb=document.getElementById('cat-label-b').value.trim();
-      const lc=document.getElementById('cat-label-c').value.trim();
-      const combined=(a+' '+b+' '+c);
-      const covered=allTerms.filter(t=>combined.includes(t)).length;
-      const hasLabels=[la,lb,lc].filter(l=>l.length>2).length;
-      const cols=[a,b,c].filter(v=>v.trim().length>10).length;
-      let pts=Math.round((covered/allTerms.length)*10)+(hasLabels>=3?3:hasLabels>=2?2:0)+(cols>=3?3:cols>=2?1:0);
-      pts=Math.min(pts,16);
+      const norm=x=>x.toLowerCase().replace(/[^a-z\s-]/g,' ').replace(/\s+/g,' ').trim();
+      const terms=GLOSSARY.map(g=>norm(g.en));
+      const firstWordCount={};
+      terms.forEach(t=>{const w=t.split(' ')[0];firstWordCount[w]=(firstWordCount[w]||0)+1;});
+      const shortForm={};
+      terms.forEach(t=>{const w=t.split(' ');if(w.length>1&&firstWordCount[w[0]]===1&&!terms.includes(w[0]))shortForm[w[0]]=t;});
+      const found=new Set();
+      const perCol=['cat-a','cat-b','cat-c'].map(id=>{
+        const colFound=new Set();
+        document.getElementById(id).value.split(/[\n,;]+/).forEach(raw=>{
+          const e=norm(raw);
+          if(!e)return;
+          const hit=terms.includes(e)?e:shortForm[e];
+          if(hit){colFound.add(hit);found.add(hit);}
+        });
+        return colFound.size;
+      });
+      const names=['cat-label-a','cat-label-b','cat-label-c'].filter(id=>document.getElementById(id).value.trim().length>2).length;
+      const cols=perCol.filter(n=>n>=2).length;
+      const covered=found.size;
+      const pts=Math.min(12,Math.round(covered/terms.length*8)+(names>=3?2:names>=2?1:0)+(cols>=3?2:cols>=2?1:0));
       addScore('cats',pts);
       const fb=document.getElementById('cat-fb');
-      fb.className='feedback show '+(pts>=12?'good':pts>=6?'ok':'poor');
-      const missing=allTerms.filter(t=>!combined.includes(t)).slice(0,4);
-      fb.textContent=pts>=12?`Excellent! ${covered} terms placed across ${cols} categories. +${pts} pts`:
-        `${covered}/${allTerms.length} terms placed.${missing.length?' Missing: '+missing.join(', ')+'.':''} +${pts} pts`;
+      fb.className='feedback show '+(pts>=10?'good':pts>=5?'ok':'poor');
+      const missing=terms.filter(t=>!found.has(t)).slice(0,4);
+      fb.textContent=`${covered}/${terms.length} glossary terms placed (${Math.round(covered/terms.length*8)}/8 pts) · category names ${names}/3 (${names>=3?2:names>=2?1:0}/2 pts) · filled columns ${cols}/3 (${cols>=3?2:cols>=2?1:0}/2 pts). +${pts} pts.`+(missing.length?` Not yet listed: ${missing.join(', ')}.`:'');
     }
     </script>
   </div>
@@ -452,7 +470,8 @@
 <div id="tab-fill" class="section">
   <div class="card">
     <h2>✏️ Fill in the Blanks</h2>
-    <p style="font-size:.82rem;color:var(--text3);margin-bottom:16px">Complete each sentence with the correct term from the glossary.</p>
+    <p style="font-size:.82rem;color:var(--text3);margin-bottom:10px">Complete each sentence with the correct term from the glossary.</p>
+    <p class="rule">Scoring: +3 points for each correct blank (8 blanks, maximum 24). Spelling must be exact; capital letters do not matter. Only your best attempt counts.</p>
     <div id="fib-container"></div>
     <button class="check-btn" onclick="checkFIB()">✔ Check Answers</button>
     <div id="fib-score" class="feedback"></div>
@@ -460,7 +479,7 @@
     const FIBS=[
       {pre:'The study of how people use resources to produce and distribute goods is called',blank:'economics',post:'.'},
       {pre:'A person who buys food for their family is acting as a',blank:'consumer',post:'.'},
-      {pre:'Food and milk are examples of',blank:'perishable goods',post:'because they go bad quickly.'},
+      {pre:'Food and milk are examples of',blank:'perishable goods',alt:['perishable'],post:'because they go bad quickly.'},
       {pre:'When demand for a resource is greater than supply, we call this situation',blank:'scarcity',post:'.'},
       {pre:'Manufacturing belongs to the',blank:'secondary',post:'sector of economic activity.'},
       {pre:'Human, natural, and capital are the three types of',blank:'resources',post:'needed for production.'},
@@ -478,7 +497,8 @@
       let pts=0;
       FIBS.forEach((f,i)=>{
         const inp=document.getElementById(`fib${i}`);
-        const ok=inp.value.trim().toLowerCase()===f.blank.toLowerCase();
+        const accepted=[f.blank,...(f.alt||[])].map(a=>a.toLowerCase());
+        const ok=accepted.includes(inp.value.trim().toLowerCase());
         inp.classList.toggle('correct',ok);
         inp.classList.toggle('wrong',!ok&&inp.value.trim()!=='');
         if(ok)pts++;
@@ -496,13 +516,14 @@
 <div id="tab-writing" class="section">
   <div class="card">
     <h2>✍️ Writing Tasks</h2>
+    <p class="rule">Scoring: each task is marked on two parts. Length: full length points at the target number of words (30 words for Tasks 1–2, 50 words for Task 3), half of them at half the target, none below that; length points are given only if the answer uses at least 2 key terms. Key terms: 1 point for every 2 different key terms you use, up to 2 points. Maximum: Task 1 = 5, Task 2 = 5, Task 3 = 6 (total 16). Only your best attempt counts.</p>
 
     <div class="question-block">
       <div class="q-label">Task 1 — Concept Differentiation</div>
       <div class="q-text">Explain the difference between <strong>perishable goods</strong> and <strong>durable goods</strong>. Give one example of each.</div>
       <textarea id="w1" rows="4" placeholder="Write 2–3 sentences..." oninput="updateWC(1)"></textarea>
-      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc1">0</span></div>
-      <button class="check-btn" onclick="checkW(1,['perishable','durable','example','last','food','furniture','car','computer','bad'],5)">✔ Check</button>
+      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc1">0</span> (target 30+)</div>
+      <button class="check-btn" onclick="checkW(1,['perishable','durable','example','last','food','furniture','car','computer','bad'],5,30)">✔ Check</button>
       <div id="w-fb1" class="feedback"></div>
     </div>
 
@@ -510,8 +531,8 @@
       <div class="q-label">Task 2 — Concept Differentiation</div>
       <div class="q-text">Explain the difference between <strong>needs</strong> and <strong>wants</strong>. Why is this distinction important in economics?</div>
       <textarea id="w2" rows="4" placeholder="Write 2–3 sentences..." oninput="updateWC(2)"></textarea>
-      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc2">0</span></div>
-      <button class="check-btn" onclick="checkW(2,['need','want','survive','basic','desire','scarcity','limited','important','economics'],5)">✔ Check</button>
+      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc2">0</span> (target 30+)</div>
+      <button class="check-btn" onclick="checkW(2,['need','want','survive','basic','desire','scarcity','limited','important','economics'],5,30)">✔ Check</button>
       <div id="w-fb2" class="feedback"></div>
     </div>
 
@@ -519,8 +540,8 @@
       <div class="q-label">Task 3 — Extended Response (50–70 words)</div>
       <div class="q-text">If a country runs out of one type of resource (for example, skilled workers), what happens to the production of goods and services?</div>
       <textarea id="w3" rows="5" placeholder="Write your paragraph..." oninput="updateWC(3)"></textarea>
-      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc3">0</span></div>
-      <button class="check-btn" onclick="checkW(3,['production','stop','decline','resource','scarcity','supply','goods','services','workers','human'],6)">✔ Check</button>
+      <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc3">0</span> (target 50–70)</div>
+      <button class="check-btn" onclick="checkW(3,['production','stop','decline','resource','scarcity','supply','goods','services','workers','human'],6,50)">✔ Check</button>
       <div id="w-fb3" class="feedback"></div>
     </div>
 
@@ -529,24 +550,23 @@
       const v=document.getElementById('w'+n).value.trim();
       document.getElementById('wc'+n).textContent=v?v.split(/\s+/).length:0;
     }
-    function checkW(n,kws,maxPts){
+    function checkW(n,kws,maxPts,target){
       const v=document.getElementById('w'+n).value.toLowerCase().trim();
       const wc=v?v.split(/\s+/).length:0;
+      const lenMax=maxPts-2;
       const hits=kws.filter(k=>v.includes(k));
-      let pts=0;
-      if(wc>=30)pts=maxPts;
-      else if(wc>=15)pts=Math.round(maxPts*0.7);
-      else if(wc>=5)pts=Math.round(maxPts*0.3);
-      // bonus for keywords
-      const kwBonus=Math.min(2,Math.floor(hits.length/2));
-      pts=Math.min(maxPts,pts+kwBonus);
+      const lenPts=hits.length<2?0:wc>=target?lenMax:wc>=Math.ceil(target/2)?Math.ceil(lenMax/2):0;
+      const kwPts=Math.min(2,Math.floor(hits.length/2));
+      const pts=Math.min(maxPts,lenPts+kwPts);
       addScore('writing'+n,pts);
       const fb=document.getElementById(`w-fb${n}`);
       const missing=kws.filter(k=>!v.includes(k)).slice(0,3);
       fb.className='feedback show '+(pts>=maxPts-1?'good':pts>=Math.round(maxPts/2)?'ok':'poor');
-      fb.textContent=pts>=maxPts-1?`✅ Excellent! Key terms used: ${hits.join(', ')}. +${pts} pts`:
-        wc<15?`Write more — at least 20 words. +${pts} pts`:
-        `Good try. Try adding: ${missing.join(', ')}. +${pts} pts`;
+      let msg=`Length: ${lenPts}/${lenMax} pts (${wc} words, target ${target}). Key terms: ${kwPts}/2 pts (${hits.length} found${hits.length?': '+hits.join(', '):''}). Total +${pts}/${maxPts}.`;
+      if(hits.length<2)msg+=' Length points are given only when the answer uses at least 2 key terms.';
+      else if(lenPts<lenMax)msg+=` Write at least ${target} words for full length points.`;
+      if(kwPts<2&&missing.length)msg+=` Try adding: ${missing.join(', ')}.`;
+      fb.textContent=msg;
     }
     </script>
   </div>
@@ -577,6 +597,7 @@
 
   <div class="card">
     <h2>🎤 Speaking Task — 60 Seconds</h2>
+    <p class="rule">Scoring of the script (maximum 8): 8 points = at least 5 key terms and 50 words; 5 points = at least 3 key terms and 30 words; 2 points = at least 1 key term and 10 words; otherwise 0. The timer and the self-score slider are for your own practice and are not counted in the total. Only your best attempt counts.</p>
     <p style="font-size:.85rem;color:var(--text2);margin-bottom:14px">Explain the concept of <strong>scarcity</strong> to a first-year student. Use at least 5 glossary terms. You have <strong>60 seconds</strong>. Write your script, then practise aloud using the timer.</p>
 
     <div class="question-block">
@@ -601,7 +622,7 @@
       <button class="timer-btn stop" onclick="resetTimer()">↺ Reset</button>
     </div>
     <div style="margin-top:20px">
-      <div style="font-size:.8rem;color:var(--text3);margin-bottom:6px">Self-score your speaking (0–8):</div>
+      <div style="font-size:.8rem;color:var(--text3);margin-bottom:6px">Self-score your speaking (0–8, for your own reflection, not counted in the total):</div>
       <input type="range" min="0" max="8" value="0" id="speaking-range" oninput="updateSpeakingScore(this.value)" style="width:100%;accent-color:var(--gold)">
       <div style="text-align:center;font-size:1rem;font-weight:700;color:var(--gold);margin-top:4px"><span id="speaking-val">0</span> / 8</div>
     </div>
@@ -632,7 +653,6 @@
   }
   function updateSpeakingScore(v){
     document.getElementById('speaking-val').textContent=v;
-    addScore('speaking',parseInt(v));
   }
   function updateSPWC(){
     const v=document.getElementById('sp1').value.trim();
@@ -659,7 +679,7 @@
     <h2>🌟 Self-Reflection</h2>
     <p style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Rate your confidence with each learning outcome. Add notes on what to review.</p>
     <div id="reflect-container"></div>
-    <div style="font-size:.8rem;color:var(--text3);margin-top:8px">Reflection score: <span id="reflect-score" style="color:var(--gold);font-weight:700">0</span> / 16</div>
+    <div style="font-size:.8rem;color:var(--text3);margin-top:8px">Self-reflection is for your own revision plan and is not counted in the total score.</div>
   </div>
 </div>
 
@@ -678,6 +698,8 @@
     <div class="score-label">points out of 93</div>
     <div class="progress-bar"><div class="progress-fill" id="score-bar" style="width:0%"></div></div>
     <p style="font-size:.85rem;color:var(--text3);margin-top:8px" id="score-msg">Complete tasks to earn points!</p>
+    <p class="rule" style="text-align:left;margin-top:16px">How scoring works: every task is checked automatically by the rules below. You can press Check as many times as you like, and the best result for each task is kept. Flashcards, the timer, the speaking self-score and the self-reflection are practice only and are not scored.</p>
+    <table class="rubric-table" id="rubric-table"></table>
     <button class="check-btn" style="margin-top:20px" onclick="showTab('reading')">Back to Reading</button>
   </div>
 </div>
@@ -689,20 +711,45 @@ const PREFIX='eco_act_';
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 
+// ── Scoring ──
+// One table drives everything: the maximum per task, the total (93) and the explanation on the My Score tab.
+const RUBRIC=[
+  {key:'structure1',label:'Text Structure · Task 1 (matching)',max:15,rule:'3 points for each correct match (5 matches).'},
+  {key:'structure2',label:'Text Structure · Task 2 (logical chain)',max:9,rule:'Up to 3 points per step: 3 = at least 4 words and a key term; 1 = at least 4 words without a key term; 0 = fewer than 4 words.'},
+  {key:'structure3',label:'Text Structure · Task 3 (cause and effect)',max:9,rule:'Up to 3 points per item: 3 = at least 4 words and 2+ key terms; 2 = 1 key term; 1 = no key term; 0 = fewer than 4 words.'},
+  {key:'cats',label:'Vocabulary Categorisation',max:12,rule:'Up to 8 points for the share of the 26 glossary terms listed (each counted once), up to 2 for naming the categories, up to 2 for filling the columns (2+ terms each).'},
+  {key:'fib',label:'Fill in the Blanks',max:24,rule:'3 points for each correct blank (8 blanks).'},
+  {key:'writing1',label:'Writing · Task 1',max:5,rule:'Length (3 pts at 30 words, 2 pts at 15; only with 2+ key terms) + key terms (1 pt per 2 terms, up to 2).'},
+  {key:'writing2',label:'Writing · Task 2',max:5,rule:'Length (3 pts at 30 words, 2 pts at 15; only with 2+ key terms) + key terms (1 pt per 2 terms, up to 2).'},
+  {key:'writing3',label:'Writing · Task 3',max:6,rule:'Length (4 pts at 50 words, 2 pts at 25; only with 2+ key terms) + key terms (1 pt per 2 terms, up to 2).'},
+  {key:'script',label:'Speaking script',max:8,rule:'8 = 5+ key terms and 50 words; 5 = 3+ key terms and 30 words; 2 = 1+ key term and 10 words.'}
+];
+const MAX_TOTAL=RUBRIC.reduce((a,r)=>a+r.max,0); // 93
+const RUBRIC_VERSION='2';
 const scores={};
+function wordCount(t){const x=(t||'').trim();return x?x.split(/\s+/).length:0;}
 function addScore(key,pts){
-  if(!scores[key]||scores[key]<pts){scores[key]=pts;updateTotal();}
-  lsSet(PREFIX+'sc_'+key,pts);
+  const r=RUBRIC.find(x=>x.key===key);
+  if(!r)return; // practice-only activities are not scored
+  pts=Math.max(0,Math.min(r.max,pts));
+  if(scores[key]===undefined||scores[key]<pts){scores[key]=pts;lsSet(PREFIX+'sc_'+key,pts);updateTotal();}
 }
 function updateTotal(){
-  const total=Math.min(93,Object.values(scores).reduce((a,b)=>a+b,0));
+  const total=RUBRIC.reduce((a,r)=>a+(scores[r.key]||0),0);
   document.getElementById('total-score').textContent=total;
   const fs=document.getElementById('final-score');
   const sb=document.getElementById('score-bar');
   const sm=document.getElementById('score-msg');
   if(fs)fs.textContent=total;
-  if(sb)sb.style.width=(total/93*100)+'%';
-  if(sm)sm.textContent=total>=80?'🌟 Excellent!':total>=60?'👍 Good work!':total>=30?'📚 Keep going!':'Complete tasks to earn points!';
+  if(sb)sb.style.width=(total/MAX_TOTAL*100)+'%';
+  const pct=total/MAX_TOTAL;
+  if(sm)sm.textContent=pct>=.85?'🌟 Excellent!':pct>=.65?'👍 Good work!':pct>=.3?'📚 Keep going!':'Complete tasks to earn points!';
+  const t=document.getElementById('rubric-table');
+  if(t){
+    t.innerHTML='<tr><th>Task</th><th>How it is scored</th><th style="text-align:right">Your score</th></tr>'+
+      RUBRIC.map(r=>`<tr><td>${r.label}</td><td>${r.rule}</td><td class="num">${scores[r.key]||0} / ${r.max}</td></tr>`).join('')+
+      `<tr><td><strong>Total</strong></td><td></td><td class="num">${total} / ${MAX_TOTAL}</td></tr>`;
+  }
 }
 
 function showTab(id){
@@ -741,10 +788,6 @@ function setStar(i,v){
   const saved=JSON.parse(lsGet(PREFIX+'reflect')||'{}');
   saved['s'+i]=v;
   lsSet(PREFIX+'reflect',JSON.stringify(saved));
-  const total=REFLECTIONS.reduce((_,__,j)=>{const s=JSON.parse(lsGet(PREFIX+'reflect')||'{}');return _+(s['s'+j]||0);},0);
-  scores.reflect=Math.min(16,total);
-  updateTotal();
-  document.getElementById('reflect-score').textContent=scores.reflect;
   renderReflect();
 }
 function saveReflectNote(i,v){
@@ -756,8 +799,13 @@ function saveReflectNote(i,v){
 // ── Init ──
 (function(){
   if(lsGet(PREFIX+'theme')==='light')document.body.classList.add('light-mode');
-  const keys=['structure1','structure2','structure3','cats','fib','writing1','writing2','writing3','speaking','script','reflect'];
-  keys.forEach(k=>{const v=parseInt(lsGet(PREFIX+'sc_'+k));if(!isNaN(v))scores[k]=v;});
+  // Scores saved under the old, inconsistent rules are discarded once, so that all results follow the table above.
+  if(lsGet(PREFIX+'rubric')!==RUBRIC_VERSION){
+    const old=['structure1','structure2','structure3','cats','fib','writing1','writing2','writing3','speaking','script','reflect'].concat(FC.map(f=>'fc_'+f.en));
+    try{old.forEach(k=>localStorage.removeItem(PREFIX+'sc_'+k));}catch(e){}
+    lsSet(PREFIX+'rubric',RUBRIC_VERSION);
+  }
+  RUBRIC.forEach(r=>{const v=parseInt(lsGet(PREFIX+'sc_'+r.key));if(!isNaN(v))scores[r.key]=Math.max(0,Math.min(r.max,v));});
   updateTotal();
   renderReflect();
 })();
