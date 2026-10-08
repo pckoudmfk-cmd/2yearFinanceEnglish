@@ -55,6 +55,12 @@
   .discussion-questions.visible { display: block; }
   .dq-item { background: var(--card); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; border: 1px solid var(--border); -webkit-animation: slideIn 0.4s ease backwards; animation: slideIn 0.4s ease backwards; box-shadow: var(--shadow); }
   .dq-num { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .rule{font-size:12px;color:var(--text3);background:var(--navy2);border-left:3px solid var(--gold);border-radius:4px;padding:7px 12px;margin:0 0 12px;line-height:1.55}
+  .practice-note{font-size:12px;color:var(--text3);background:var(--navy2);border-left:3px solid var(--text3);border-radius:4px;padding:7px 12px;margin:0 0 14px;line-height:1.55}
+  .rubric-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:18px;text-align:left}
+  .rubric-table th{color:var(--text3);font-weight:600;padding:8px 6px;border-bottom:2px solid var(--gold);font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+  .rubric-table td{padding:8px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  .rubric-table td.num{text-align:right;white-space:nowrap;font-weight:700;color:var(--gold)}
   .dq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
   .dq-textarea { width: 100%; min-height: 80px; resize: vertical; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: inherit; background: var(--input-bg); color: var(--text); outline: none; -webkit-transition: border-color var(--transition); transition: border-color var(--transition); }
   .dq-textarea:focus { border-color: var(--gold); }
@@ -200,7 +206,8 @@
       <div class="dq-item">
         <div class="dq-num">Question 1</div>
         <div class="dq-q">What are the key financial advantages and disadvantages of a sole proprietorship compared to an LLC?</div>
-        <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts... (min. 20 words)" oninput="saveItem('biz_dq1',this.value)"></textarea>
+        <div id="rule-dq1"></div>
+        <textarea class="dq-textarea" id="dq1" placeholder="Write full sentences... (min. 20 words)" oninput="saveItem('biz_dq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
@@ -210,7 +217,8 @@
       <div class="dq-item">
         <div class="dq-num">Question 2</div>
         <div class="dq-q">Why would a fast-growing technology company choose to incorporate as a corporation despite the risk of double taxation?</div>
-        <textarea class="dq-textarea" id="dq2" placeholder="Mention at least 2 specific reasons..." oninput="saveItem('biz_dq2',this.value)"></textarea>
+        <div id="rule-dq2"></div>
+        <textarea class="dq-textarea" id="dq2" placeholder="Mention at least 2 specific reasons in full sentences..." oninput="saveItem('biz_dq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
@@ -220,7 +228,8 @@
       <div class="dq-item">
         <div class="dq-num">Question 3</div>
         <div class="dq-q">How does accurate financial reporting benefit both a company and its external stakeholders?</div>
-        <textarea class="dq-textarea" id="dq3" placeholder="Give 2-3 specific benefits..." oninput="saveItem('biz_dq3',this.value)"></textarea>
+        <div id="rule-dq3"></div>
+        <textarea class="dq-textarea" id="dq3" placeholder="Give 2-3 specific benefits in full sentences..." oninput="saveItem('biz_dq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
@@ -260,7 +269,8 @@
       <div class="dq-item">
         <div class="dq-num">Question A</div>
         <div class="dq-q">What is the main financial risk of operating as a sole proprietorship?</div>
-        <textarea class="dq-textarea" id="cq1" placeholder="Identify the risk and explain it..." oninput="saveItem('biz_cq1',this.value)"></textarea>
+        <div id="rule-cq1"></div>
+        <textarea class="dq-textarea" id="cq1" placeholder="Identify the risk and explain it (full sentences)..." oninput="saveItem('biz_cq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(1)">📋 Model</button>
@@ -270,7 +280,8 @@
       <div class="dq-item">
         <div class="dq-num">Question B</div>
         <div class="dq-q">According to the text, which business structure is subject to double taxation, and why?</div>
-        <textarea class="dq-textarea" id="cq2" placeholder="Name the structure and explain the mechanism..." oninput="saveItem('biz_cq2',this.value)"></textarea>
+        <div id="rule-cq2"></div>
+        <textarea class="dq-textarea" id="cq2" placeholder="Name the structure and explain the mechanism (full sentences)..." oninput="saveItem('biz_cq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(2)">📋 Model</button>
@@ -280,7 +291,8 @@
       <div class="dq-item">
         <div class="dq-num">Question C</div>
         <div class="dq-q">What three financial documents are described as the core of financial reporting?</div>
-        <textarea class="dq-textarea" id="cq3" placeholder="Name and briefly describe all three..." oninput="saveItem('biz_cq3',this.value)"></textarea>
+        <div id="rule-cq3"></div>
+        <textarea class="dq-textarea" id="cq3" placeholder="Name all three and say what each one shows..." oninput="saveItem('biz_cq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(3)">📋 Model</button>
@@ -309,7 +321,8 @@
     </div>
   </div>
   <div class="card">
-    <p class="text-sm mb-16" style="color:var(--text3);">Select a term, then click its best category. Correct assignments highlight in the category's colour.</p>
+    <p class="text-sm mb-16" style="color:var(--text3);">Select a term, then click its best category. Press Check when you have placed all the terms. You can change your answers and check again; your best result is kept.</p>
+    <p class="rule" id="rule-cat">Scoring: 0.5 point for each of the 24 terms placed in a correct category (maximum 12). Terms that belong to two groups are accepted in either one. Check shows only how many are correct, not which ones.</p>
     <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
       <button class="cat-btn cat-btn-S" id="catbtn-S" onclick="assignCategory('S')">🔵 Business Structure</button>
       <button class="cat-btn cat-btn-R" id="catbtn-R" onclick="assignCategory('R')">🟢 Financial Reporting</button>
@@ -317,6 +330,7 @@
     </div>
     <div id="cat-terms-grid" style="margin-bottom:20px;"></div>
     <div class="flex flex-center gap-8" style="flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="checkCategories()">✔ Check</button>
       <button class="btn btn-outline btn-sm" onclick="resetCategories()">↺ Reset</button>
       <span id="cat-score" class="text-sm text-gold fw-600"></span>
     </div>
@@ -333,6 +347,7 @@
     </div>
   </div>
   <div class="card">
+    <p class="practice-note">Practice only: flashcards are not scored (0 points). Use them to prepare for the graded tasks.</p>
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
       <input type="text" class="search-bar" style="margin:0;flex:1;min-width:200px;" placeholder="Search terms..." oninput="filterCards(this.value)" id="card-search">
       <button class="btn btn-outline btn-sm" onclick="flipAll()">↺ Flip All</button>
@@ -354,6 +369,7 @@
     </div>
   </div>
   <div class="card">
+    <p class="rule" id="rule-fib">Scoring: 3 points for each correct blank (6 blanks, maximum 18). Spelling must be exact; a few alternative answers are accepted (for example stock for shares). The Hint button costs nothing. Check All shows the right answer for each wrong blank. Your best result is kept.</p>
     <div id="fib-container"></div>
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
       <button class="btn btn-primary" onclick="checkAllFIB()">✔ Check All</button>
@@ -379,8 +395,9 @@
 
     <div class="writing-task">
       <label>Task 1 — Advisory Recommendation (50+ words)<br>
-        <span style="font-weight:400;color:var(--text3);">Recommend either an LLC or a corporation for Maria's expanding IT business. Justify your recommendation using at least 4 glossary terms.</span>
+        <span style="font-weight:400;color:var(--text3);">Recommend either an LLC or a corporation for Maria's expanding IT business. Justify your recommendation using at least 4 glossary terms, in full sentences.</span>
       </label>
+      <div id="rule-writing1"></div>
       <textarea class="writing-ta" id="w1" placeholder="Start with: 'Based on the client's goals, I recommend...'" oninput="saveItem('biz_w1',this.value);updateWordCount('w1','wc1','wb1')"></textarea>
       <div class="writing-meta">
         <span class="word-count" id="wc1">0 words</span>
@@ -397,6 +414,7 @@
       <label>Task 2 — Explaining Financial Reporting (40+ words)<br>
         <span style="font-weight:400;color:var(--text3);">Explain to a non-specialist colleague why financial reporting matters for a business. Use at least 5 glossary terms.</span>
       </label>
+      <div id="rule-writing2"></div>
       <textarea class="writing-ta" id="w2" placeholder="Start with: 'Financial reporting is essential because...'" oninput="saveItem('biz_w2',this.value);updateWordCount('w2','wc2','wb2')"></textarea>
       <div class="writing-meta">
         <span class="word-count" id="wc2">0 words</span>
@@ -422,6 +440,7 @@
   </div>
   <div class="card">
     <p class="text-sm mb-16" style="color:var(--text3);">Fill in your key points before the speaking task. Notes are saved automatically.</p>
+    <p class="practice-note">Practice only: the speaking plan is not scored (0 points). Your written speaking script on the next tab is graded.</p>
 
     <span class="speaking-plan-label">1. Client Profile &amp; Business Goal</span>
     <input type="text" class="speaking-plan-input" id="sp1" placeholder="e.g. Maria Sokolova, IT consulting, plans to scale with 2 co-founders..." oninput="saveSpeakingPlan()">
@@ -449,6 +468,7 @@
     </div>
   </div>
   <div class="card">
+    <p class="practice-note">Practice only: the timers and the keyword checklist cannot be checked by the page, so they are not scored (0 points). The graded part of this tab is the written speaking script at the bottom.</p>
     <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:28px;">
       <div class="timer-wrap" style="min-width:160px;">
         <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Min. Time</div>
@@ -483,6 +503,19 @@
     <div id="speaking-chips"></div>
     <div style="margin-top:12px;font-size:13px;color:var(--mid-gray);">Used: <span id="chips-used" class="text-gold fw-600">0</span> / 8 keywords</div>
     <div id="speaking-score-msg" style="margin-top:8px;font-size:13px;color:var(--gold);font-weight:600;display:none;"></div>
+
+    <div style="border-top:1px solid var(--border);margin-top:28px;padding-top:24px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;">✍ Speaking Script (graded)</div>
+      <p class="text-sm" style="color:var(--text3);margin-bottom:12px;">Write out what you will say in your 90-second advisory presentation to Maria Sokolova: which structure you recommend and why, what the core financial statements show, and why accurate reporting matters. Use full sentences, as you would say them aloud.</p>
+      <div id="rule-script"></div>
+      <textarea class="writing-ta" id="script" placeholder="Good afternoon, Maria. Today I will explain which structure I recommend for your business..." oninput="saveItem('biz_script',this.value);updateScriptCount()"></textarea>
+      <div class="writing-meta"><span class="word-count" id="wcs">0 words</span></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkScript()">✔ Check</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelScript()">📋 Model Answer</button>
+      </div>
+      <div id="script-fb" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+    </div>
   </div>
 </div>
 
@@ -492,12 +525,12 @@
     <div class="section-num">✓</div>
     <div>
       <div class="section-title">Self-Reflection</div>
-      <div class="section-subtitle">Rate your performance honestly — this affects your final score</div>
+      <div class="section-subtitle">Rate your performance honestly. This is practice only and is not scored (0 points)</div>
     </div>
   </div>
   <div class="card">
     <div class="final-grid" id="reflection-grid"></div>
-    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Self-Reflection Score: <span id="reflection-score" class="text-gold">0</span> / 12</div>
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Self-assessment (practice only, 0 points): <span id="reflection-score" class="text-gold">0</span> / 6 ticked</div>
   </div>
 </div>
 
@@ -507,13 +540,18 @@
     <div class="section-num">★</div>
     <div>
       <div class="section-title">My Score</div>
-      <div class="section-subtitle">Complete all sections and calculate your total</div>
+      <div class="section-subtitle">Every graded task is checked by the rules below</div>
     </div>
   </div>
   <div class="card">
-    <div id="score-breakdown" style="margin-bottom:24px;"></div>
-    <button class="btn btn-primary" onclick="calcScore()">📊 Calculate Score</button>
-    <div id="total-score-display" style="margin-top:24px;text-align:center;"></div>
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:48px;font-weight:800;color:var(--gold);" id="final-score">0</div>
+      <div style="font-size:13px;color:var(--text3);">points out of 93</div>
+      <div style="height:8px;background:var(--border);border-radius:4px;margin:10px auto 0;max-width:420px;overflow:hidden;"><div id="score-bar" style="height:100%;width:0%;background:var(--gold);transition:width .4s;"></div></div>
+      <p style="font-size:13px;color:var(--text3);margin-top:8px;" id="score-msg">Complete tasks to earn points!</p>
+    </div>
+    <p class="rule">How scoring works: open answers are checked for ideas inside real sentences (not for keywords). Closed tasks are checked against the answer key. You can press Check as many times as you like and the best result for each task is kept. Flashcards, the speaking plan, the timers, the keyword checklist and the self-reflection are practice only and are not scored.</p>
+    <table class="rubric-table" id="rubric-table"></table>
   </div>
 </div>
 
@@ -522,6 +560,7 @@
 <div id="confetti-container"></div>
 <div id="excellent-banner"></div>
 
+<script src="grader.js"></script>
 <script>
 var PREFIX = 'biz_';
 
@@ -579,23 +618,169 @@ var glossaryTerms = [
   {term:"decision-making", def:"the process of choosing between options based on available information", ru:"принятие решений"}
 ];
 
+// ===== SCORING RUBRICS (content-aware, see grader.js) =====
+var READING = "When launching or expanding a business, one of the most consequential decisions an entrepreneur faces is selecting the appropriate legal structure. Each type of business entity carries distinct financial implications, affecting everything from taxation to access to capital and day-to-day operations. The simplest form is a sole proprietorship. It is easy to establish, involves minimal regulatory requirements, and gives the owner full control over decision-making. Profits are taxed as personal income, offering flexibility in taxation. However, the critical drawback is unlimited liability — if the business incurs debts and financial obligations, the owner's personal assets are fully exposed. Administrative costs remain low, making this structure most common among independent professionals and small operators. A limited liability company (LLC) offers a more balanced alternative. It combines operational flexibility with the protective governance structure of a corporation. Members benefit from limited liability, meaning their personal assets are shielded from business debts. LLCs are especially popular among small and medium-sized enterprises because they allow owners to maintain operational control while avoiding double taxation. The exact rules vary by jurisdiction. For large-scale business operations requiring significant investment, a corporation is often the preferred choice. Corporations can raise capital through the issuance of shares, making them attractive to investors who seek expected returns. The downside includes higher administrative costs, complex regulatory requirements, and double taxation — whereby profits are taxed at the corporate level and dividends are taxed again in the hands of shareholders. Regardless of business structure, financial reporting is a cornerstone of sound management. Financial statements provide a detailed picture of an organisation's financial position and performance. The three core documents are: the income statement, which reports revenue, expenses, and profit; the balance sheet, which lists assets, liabilities, and equity; and the cash flow statement, which shows how money moves in and out of the business. Reliable reporting depends on accuracy and transparency. Incorrect, incomplete, or inaccurate information can mislead users and lead to poor decisions — damaging financial stability and eroding stakeholder trust. Investors, lenders, and regulators all rely on financial data to evaluate results, assess outcomes, and make informed decisions. By following accounting standards and maintaining transparent reporting, businesses increase trust, demonstrate liquidity, and build the credibility necessary for long-term growth.";
+
+var RB = {};
+
+RB.dq1 = {max:5, minWords:20, source:READING, criteria:[
+  {type:'claim', pts:2, label:'Sole proprietorship: unlimited liability puts the owner\'s personal assets at risk for business debts', all:[['sole|proprietor|\\bowner'],['\\bunlimited|personally (responsible|liable)|personal assets|personal property|own (money|assets|property)|private assets'],['debts?|obligations?|risk|exposed|seized|\\blose|\\bloss|liable|responsible']]},
+  {type:'claim', pts:1, label:'LLC: limited liability shields the members\' personal assets from business debts', all:[['\\bLLC|limited liability company|\\bmembers?'],['\\blimited liability|shield|protect|separate|safe'],['personal|assets|debts?|obligations?|invested|money|risk']]},
+  {type:'contrast', pts:1, label:'Compares the two structures in one sentence (use while, whereas, but, unlike)', topics:[['sole|proprietor'],['\\bLLC|limited liability company']]},
+  {type:'claim', pts:1, label:'An advantage of a sole proprietorship (easy to set up, low costs, full control or tax flexibility)', all:[['sole|proprietor'],['\\beasy|\\beasier|simple|simplest|\\blow\\b|\\blower|minimal|cheap|full control|flexib|\\bfew\\b|personal income']]}
+ ], misconceptions:[
+  {re:'(sole proprietor\\w*|sole trader)\\s+(has|have|offers?|provides?|gives?|enjoys?)\\s+(a\\s+)?(full\\s+)?limited liability', msg:'A sole proprietorship has UNLIMITED liability, not limited liability.'},
+  {re:'\\bLLCs?\\s+(has|have|offers?|provides?|gives?|involves?)\\s+(an?\\s+)?unlimited liability', msg:'An LLC has LIMITED liability, not unlimited liability.'},
+  {re:'^(?!.*\\b(LLC|corporation|limited liability company|unlike|whereas|while|compared)\\b).*(sole|proprietor)[^.]*(not personally|no personal|not responsible|not liable|are protected|is protected|is safe)', msg:'A sole proprietor IS personally responsible for the business debts.'}
+ ]};
+
+RB.dq2 = {max:5, minWords:20, source:READING, criteria:[
+  {type:'claim', pts:2, label:'A corporation can issue shares to raise capital (access to capital)', all:[['shares?|stock|issuance'],['raise|raising|attract|capital|invest|funds|funding|financ']]},
+  {type:'claim', pts:1, label:'Investors expect returns and the company needs large-scale growth', all:[['investors?|shareholders'],['returns?|dividends?|profits?|growth|expan|scal|large|significant|big']]},
+  {type:'contrast', pts:1, label:'Admits a drawback (double taxation or costs) but explains why the benefit is bigger (use although, but, however, while)', topics:[['double tax|administrative|higher cost|complex|regulat|\\btax'],['capital|invest|shares|grow|benefit|advantage|attract|raise|outweigh|worth|larger|bigger|expan|funds|money']]},
+  {type:'reason', pts:1, label:'Explains why: shares or capital make fast growth possible (use because, so, which means, leads to)', topics:[['shares|capital|invest|funds|funding|money|cash'],['grow|expan|scal|large|develop|fast|compet|hire|innovat|research|product']]}
+ ], misconceptions:[
+  {re:'corporations?\\s+(can ?not|can\'t|cannot|do not|does not|don\'t)\\s+(issue|sell|raise)', msg:'A corporation CAN raise capital by issuing shares.'},
+  {re:'corporations?\\s+(avoids?|escapes?|has no|have no|pays? no)\\s+double tax', msg:'Double taxation is exactly the drawback of a corporation.'},
+  {re:'corporations?\\s+(has|have|offers?|provides?|involves?)\\s+(an?\\s+)?unlimited liability', msg:'A corporation does not have unlimited liability.'}
+ ]};
+
+RB.dq3 = {max:5, minWords:20, source:READING, criteria:[
+  {type:'claim', pts:2, label:'External users (investors, lenders, regulators) rely on financial information to make informed decisions', all:[['investors?|lenders?|regulators?|stakeholders?|shareholders|creditors|banks?'],['\\brely|relies|\\buse[sd]?\\b|evaluate|assess|decid|decisions?|informed|judge'],['data|information|reports?|statements?|reporting|results|figures|numbers']]},
+  {type:'claim', pts:1, label:'Accuracy and transparency build trust or credibility', all:[['transparen|accura|reliab|honest|correct|precise'],['trust|credib|confidence|reputation']]},
+  {type:'claim', pts:1, label:'The risk: inaccurate information misleads users and leads to poor decisions or damage', all:[['inaccura|incorrect|incomplete|errors?|mislead|misled|wrong|false|unreliable'],['poor decision|bad decision|wrong decision|bad choices|damag|losses|harm|erod|mistakes']]},
+  {type:'claim', pts:1, label:'Benefit for the company itself (financial stability, liquidity, credibility or long-term growth)', all:[['company|business|firm|management|organi[sz]ation|owners?'],['stabilit|liquidity|long-term growth|credib|better decisions?|manage|obtain|attract|\\bloans?|capital|funding']]}
+ ], misconceptions:[
+  {re:'inaccura\\w+ (reporting|information|data)\\s+(helps|benefits|improves|builds|increases)', msg:'Inaccurate information harms trust and decisions, it does not help.'}
+ ]};
+
+RB.cq1 = {max:5, minWords:12, source:READING, criteria:[
+  {type:'claim', pts:2, label:'The risk is unlimited liability: the owner is personally responsible for the business debts', all:[['unlimited|personal|own (money|savings|assets|property)|\\bowner|sole proprietor'],['responsible|liable|liability|\\bpays?\\b|exposed|risk|\\blose|fully'],['debts?|obligations?|losses']]},
+  {type:'define', pts:1, label:'Explains what unlimited liability means (a sentence with "unlimited liability" + is / means)', term:['unlimited liability|unlimited']},
+  {type:'claim', pts:1, label:'The owner\'s personal assets (savings, property) are exposed or can be seized', all:[['personal assets|personal property|savings|house|home|\\bcar\\b|property|belongings'],['exposed|at risk|seized|\\blose|\\bloss|risk|used to (pay|cover)|taken|sold|\\bcover|responsible|liable|\\bpay|paid|\\bown\\b']]},
+  {type:'reason', pts:1, label:'Explains why: no legal distinction between owner and business (use because, so, which means)', topics:[['business|company|incur|fails?|debts?|loss|legal|separate'],['personal assets|owner|personally|savings|property|seized|exposed|himself|herself|themselves']]}
+ ], misconceptions:[
+  {re:'(sole proprietor\\w*|owner|sole trader)\\s+(has|have|enjoys?)\\s+(a\\s+)?limited liability', msg:'A sole proprietor has UNLIMITED liability.'},
+  {re:'^(?!.*\\b(LLC|corporation|limited liability company|unlike|whereas|while|compared)\\b).*(sole|proprietor|owner)[^.]*(not personally|no personal|not responsible|not liable|are protected|is protected|is safe)', msg:'A sole proprietor IS personally responsible for the business debts.'}
+ ]};
+
+RB.cq2 = {max:5, minWords:12, source:READING, criteria:[
+  {type:'concepts', pts:1, label:'Names the corporation as the structure with double taxation', need:1, of:[['corporation|corporate']]},
+  {type:'claim', pts:1, label:'The profits or income are taxed twice (double taxation)', all:[['double tax|taxed twice|taxed again|twice|two times|second time'],['profits?|income|dividends?|shareholders?|earnings']]},
+  {type:'claim', pts:1, label:'First tax: profits are taxed at the corporate (company) level', all:[['corporate level|company level|corporation level|at the corporate|corporate (profits|income|tax)|taxed (first|at the (corporate|company))|company.s (profits|income)|(company|corporation) (pays|is taxed|taxes)|pays? (corporate )?tax|first (tax|taxed)|taxed first'],['tax']]},
+  {type:'claim', pts:1, label:'Second tax: dividends are taxed again in the hands of shareholders (personal income)', all:[['dividends?'],['shareholders?|personal income|individual|owners?'],['tax']]},
+  {type:'define', pts:1, label:'Explains what double taxation means (a sentence with "double taxation" + is / means)', term:['double taxation']}
+ ], misconceptions:[
+  {re:'\\bLLC\\w*\\s+(is |are )?(subject to|face[sd]?|suffer\\w*|pay\\w*|has|have)\\s+(the )?double tax', msg:'Double taxation applies to the corporation. An LLC avoids it.'},
+  {re:'(sole proprietor\\w*)\\s+(is |are )?(subject to|face[sd]?|suffer\\w*|pay\\w*|has|have)\\s+(the )?double tax', msg:'Double taxation applies to the corporation, not to a sole proprietorship.'}
+ ]};
+
+RB.cq3 = {max:6, minWords:20, source:READING, criteria:[
+  {type:'claim', pts:2, label:'The income statement reports revenue, expenses and profit', all:[['income statement[^.;]{0,40}\\b(shows?|reports?|lists?|tracks?|records?|presents?|summari[sz]es|displays?|includes?|measures?|covers?|details?|describes?|tells?|contains?)\\b[^.;]{0,60}\\b(revenue|expenses?|profit|loss)']]},
+  {type:'claim', pts:2, label:'The balance sheet lists assets, liabilities and equity', all:[['balance sheet[^.;]{0,40}\\b(shows?|reports?|lists?|tracks?|records?|presents?|summari[sz]es|displays?|includes?|measures?|covers?|details?|describes?|tells?|contains?)\\b[^.;]{0,60}\\b(assets?|liabilit|equity)']]},
+  {type:'claim', pts:2, label:'The cash flow statement shows how cash moves in and out of the business', all:[['cash flow statement[^.;]{0,40}\\b(shows?|reports?|lists?|tracks?|records?|presents?|summari[sz]es|displays?|includes?|measures?|covers?|details?|describes?|tells?|contains?)\\b[^.;]{0,60}\\b(cash|money|moves?|in and out|inflows?|outflows?)']]}
+ ], misconceptions:[]};
+
+var G_REC = ['recommend|suggest|advise|propose|should (choose|register|incorporate|become|form|set up|go)|best (choice|option)|better (choice|option)'];
+var G_STRUCT = ['\\bLLC|limited liability company|corporation'];
+var COMMON_MISC = [
+  {re:'\\bLLCs?\\s+(is |are )?(subject to|face[sd]?|suffer\\w*|pay\\w*|has|have)\\s+(the )?double tax', msg:'Double taxation applies to the corporation. An LLC avoids it.'},
+  {re:'corporations?\\s+(has|have|offers?|provides?|involves?)\\s+(an?\\s+)?unlimited liability', msg:'A corporation does not have unlimited liability.'},
+  {re:'corporations?\\s+(avoids?|escapes?|has no|have no|pays? no)\\s+double tax', msg:'Double taxation is the drawback of a corporation.'},
+  {re:'\\bLLCs?\\s+(has|have|offers?|provides?|gives?|involves?)\\s+(an?\\s+)?unlimited liability', msg:'An LLC has LIMITED liability, not unlimited liability.'}
+];
+
+RB.writing1 = {max:12, minWords:50, source:READING, criteria:[
+  {type:'claim', pts:2, label:'States a clear recommendation: LLC or corporation (I recommend ...)', all:[G_REC, G_STRUCT]},
+  {type:'claim', pts:2, label:'Limited liability protects the co-founders\' personal assets from business debts', all:[['personal|co-?founders?|owners?|members?|Maria|shareholders'],['\\blimited liability|shield\\w*|protect\\w*|separate\\w*'],['debts?|obligations?|assets|liabilit|risk']]},
+  {type:'claim', pts:2, label:'Explains a tax or capital consequence of the choice (double taxation, issuance of shares, access to capital)', all:[['double taxation|taxed twice|\\btax\\w*|issu\\w+ (of )?shares|raise capital|access to capital|investors|\\bshares'],['avoid\\w*|lower|higher|bigger|\\bmore\\b|\\bless\\b|raise|attract|risk|drawback|cost|benefit|advantage|disadvantage'],['\\bLLC|corporation|limited liability company']]},
+  {type:'contrast', pts:2, label:'Compares an LLC with a corporation in one sentence (use unlike, while, whereas, but)', topics:[['\\bLLC|limited liability company'],['corporation']]},
+  {type:'reason', pts:2, label:'Gives a reason linked to Maria\'s plans (growth, co-founders, control, costs) with because, so, which means, leads to', topics:[['growth|scal|co-?founders?|expand|invest|capital|control|flexib|cost|tax'],['\\bLLC|corporation|limited liability|double taxation|shares|governance|administrative|jurisdiction']]},
+  {type:'claim', pts:1, label:'Mentions administrative costs, governance, regulatory requirements or jurisdiction correctly', all:[['administrative costs|regulatory requirements|governance|jurisdiction'],['\\bLLC|corporation|lower|higher|complex|flexib|vary|verify|local']]},
+  {type:'length', pts:1, words:60, label:'Writes at least 60 words'}
+ ], misconceptions:COMMON_MISC.concat([
+  {re:'(sole proprietor\\w*)\\s+(has|have|offers?|provides?|gives?|enjoys?)\\s+(a\\s+)?(full\\s+)?limited liability', msg:'A sole proprietorship has UNLIMITED liability.'}
+ ])};
+
+var G_USERS = ['investors?|lenders?|regulators?|stakeholders?|shareholders|creditors|banks?'];
+RB.writing2 = {max:10, minWords:40, source:READING, criteria:[
+  {type:'claim', pts:2, label:'Investors, lenders or regulators rely on financial information to make informed decisions', all:[G_USERS, ['\\brely|relies|\\buse[sd]?\\b|evaluate|assess|decid|decisions?|informed|judge'],['data|information|reports?|statements?|reporting|results|figures|numbers']]},
+  {type:'claim', pts:2, label:'Describes a core statement: the income statement, balance sheet or cash flow statement shows something specific', all:[['income statement|balance sheet|cash flow'],['shows?|reports?|lists?|tracks?|records?|presents?|summari[sz]es'],['revenue|expenses?|profit|assets?|liabilit|equity|cash']]},
+  {type:'claim', pts:1, label:'Accuracy and transparency build trust or credibility', all:[['transparen|accura|reliab|honest|correct|precise'],['trust|credib|confidence|reputation']]},
+  {type:'claim', pts:2, label:'The risk: inaccurate information misleads users and leads to poor decisions or damage', all:[['inaccura|incorrect|incomplete|errors?|mislead|misled|wrong|false|unreliable'],['poor decision|bad decision|wrong decision|bad choices|damag|losses|harm|erod|mistakes']]},
+  {type:'define', pts:1, label:'Explains what financial reporting is (a sentence with "financial reporting" or "financial statements" + is / means)', term:['financial reporting|financial statements?']},
+  {type:'claim', pts:1, label:'Benefit for the company (financial stability, liquidity, credibility or long-term growth)', all:[['company|business|firm|management|organi[sz]ation|owners?'],['stabilit|liquidity|long-term growth|credib|better decisions?|manage|obtain|attract|\\bloans?|capital|funding']]},
+  {type:'length', pts:1, words:50, label:'Writes at least 50 words'}
+ ], misconceptions:[
+  {re:'inaccura\\w+ (reporting|information|data)\\s+(helps|benefits|improves|builds|increases)', msg:'Inaccurate information harms trust and decisions, it does not help.'}
+ ]};
+
+RB.script = {max:10, minWords:60, source:READING, criteria:[
+  {type:'claim', pts:2, label:'Says which structure you recommend: LLC or corporation', all:[G_REC, G_STRUCT]},
+  {type:'claim', pts:2, label:'Gives a reason for it (limited liability, double taxation, issuance of shares, access to capital) in one sentence with the structure', all:[['\\bLLC|corporation|limited liability company'],['\\blimited liability|double taxation|issu\\w+ (of )?shares|access to capital|raise capital|governance|administrative costs|flexib'],['avoid\\w*|protect\\w*|shield\\w*|raise|attract|lower|higher|allow\\w*|give\\w*|provide\\w*|risk|cost']]},
+  {type:'claim', pts:2, label:'Describes a core financial statement: it shows something specific (revenue, assets, cash...)', all:[['income statement|balance sheet|cash flow'],['shows?|reports?|lists?|tracks?|records?|presents?|summari[sz]es'],['revenue|expenses?|profit|assets?|liabilit|equity|cash']]},
+  {type:'claim', pts:2, label:'Warns about the risk: inaccurate reporting misleads stakeholders and leads to poor decisions', all:[['inaccura|incorrect|incomplete|errors?|mislead|misled|wrong|false|unreliable'],['poor decision|bad decision|wrong decision|bad choices|damag|losses|harm|erod|mistakes']]},
+  {type:'claim', pts:1, label:'Accuracy and transparency build trust with investors or lenders', all:[['transparen|accura|reliab'],['trust|credib|confidence|reputation']]},
+  {type:'length', pts:1, words:90, label:'Writes at least 90 words (about 90 seconds of speaking)'}
+ ], misconceptions:COMMON_MISC};
+
+// One table drives everything: the maximum per task, the total (93) and the explanation on the My Score tab.
+function rubricRule(key){ return RB[key].criteria.map(function(c){ return c.label + ' (' + c.pts + ')'; }).join('; ') + '.'; }
+var RUBRIC = [
+  {key:'dq1', label:'Discussion Question 1', max:5, rule:''},
+  {key:'dq2', label:'Discussion Question 2', max:5, rule:''},
+  {key:'dq3', label:'Discussion Question 3', max:5, rule:''},
+  {key:'cq1', label:'Comprehension Question A', max:5, rule:''},
+  {key:'cq2', label:'Comprehension Question B', max:5, rule:''},
+  {key:'cq3', label:'Comprehension Question C', max:6, rule:''},
+  {key:'cat', label:'Glossary Categories', max:12, rule:'0.5 point for each term placed in a correct category (24 terms). Press Check in the task.'},
+  {key:'fib', label:'Fill in the Blanks', max:18, rule:'3 points for each correct blank (6 blanks). Accepted alternatives are listed in the key.'},
+  {key:'writing1', label:'Writing Task 1', max:12, rule:''},
+  {key:'writing2', label:'Writing Task 2', max:10, rule:''},
+  {key:'script', label:'Speaking Script', max:10, rule:''}
+];
+RUBRIC.forEach(function(r){ if (RB[r.key]) r.rule = rubricRule(r.key); });
+var MAX_TOTAL = RUBRIC.reduce(function(a, r){ return a + r.max; }, 0); // 93
+var RUBRIC_VERSION = '2';
+var scores = {};
+
+function addScore(key, pts) {
+  var r = RUBRIC.filter(function(x){ return x.key === key; })[0];
+  if (!r) return; // practice-only activities are not scored
+  pts = Math.max(0, Math.min(r.max, pts));
+  if (scores[key] === undefined || scores[key] < pts) { scores[key] = pts; saveItem(PREFIX + 'sc_' + key, pts); updateTotal(); }
+}
+
+var _celebrated = false;
+function updateTotal() {
+  var total = RUBRIC.reduce(function(a, r){ return a + (scores[r.key] || 0); }, 0);
+  var chip = document.getElementById('total-score-chip'); if (chip) chip.textContent = total;
+  var pct = total / MAX_TOTAL;
+  var big = document.getElementById('final-score'); if (big) big.textContent = total;
+  var bar = document.getElementById('score-bar'); if (bar) bar.style.width = (pct * 100) + '%';
+  var msg = document.getElementById('score-msg');
+  if (msg) msg.textContent = pct >= .85 ? 'Excellent!' : pct >= .65 ? 'Good work!' : pct >= .3 ? 'Keep going!' : 'Complete tasks to earn points!';
+  var t = document.getElementById('rubric-table');
+  if (t) {
+    t.innerHTML = '<tr><th>Task</th><th>How it is scored</th><th style="text-align:right">Your score</th></tr>' +
+      RUBRIC.map(function(r){ return '<tr><td>' + r.label + '</td><td>' + r.rule + '</td><td class="num">' + (scores[r.key] || 0) + ' / ' + r.max + '</td></tr>'; }).join('') +
+      '<tr><td><strong>Total</strong></td><td></td><td class="num">' + total + ' / ' + MAX_TOTAL + '</td></tr>';
+  }
+  if (pct >= .8 && !_celebrated) { _celebrated = true; showConfetti(); showBanner('Excellent! 🏆'); }
+}
+function calcScore() { updateTotal(); }
+
 // ===== DQ =====
 var dqCriteria = {
   1: {
-    keywords:['unlimited liability','limited liability','personal assets','taxation','flexibility','debts','control','decision-making'],
-    minWords:20,
     model:"A sole proprietorship is easy to establish and offers full control over decision-making and flexibility in taxation. However, the main disadvantage is unlimited liability — if the business incurs debts, the owner's personal assets are at risk. An LLC, by contrast, provides limited liability protection, keeping personal assets separate from business obligations, which significantly reduces financial risk.",
     tip:"Mention unlimited liability (sole proprietorship) vs limited liability (LLC), and taxation flexibility."
   },
   2: {
-    keywords:['shares','capital','investors','returns','issuance','access to capital','large-scale','growth','corporation'],
-    minWords:20,
     model:"A corporation can raise capital through the issuance of shares, making it highly attractive to external investors who seek expected returns. This access to capital supports large-scale business growth and expansion. Although double taxation and higher administrative costs are drawbacks, for a fast-growing tech company, the ability to attract significant investment outweighs these disadvantages.",
     tip:"Focus on issuance of shares, access to capital, investors, and expected returns."
   },
   3: {
-    keywords:['transparency','accuracy','decision-making','trust','investors','mislead','financial statement','reliable','stability'],
-    minWords:20,
     model:"Accurate financial reporting builds trust with investors, lenders, and regulators by providing transparent, reliable data about financial position and performance. It enables stakeholders to make informed decisions and evaluate results correctly. Inaccurate or incomplete information can mislead users, lead to poor decisions, and damage the company's financial stability and credibility.",
     tip:"Include transparency, accuracy, decision-making, and the consequences of inaccurate information."
   }
@@ -609,27 +794,23 @@ function revealCase() {
 }
 if (loadItem(PREFIX+'caseRevealed') === '1') { revealCase(); }
 
-function checkDQ(n) {
-  var ta = document.getElementById('dq'+n);
-  var txt = ta.value.toLowerCase();
-  var fb = document.getElementById('dq-fb'+n);
-  var c = dqCriteria[n];
-  var words = ta.value.trim().split(/\s+/).filter(w=>w.length>0).length;
-  var found = c.keywords.filter(k=>txt.includes(k));
-  var score = 0;
-  if (words >= c.minWords) score++;
-  score += Math.min(found.length, 3);
-  if (score > 5) score = 5;
-  var pct = score/5;
+
+function showGraded(fbId, res) {
+  var fb = document.getElementById(fbId);
+  var pct = res.max ? res.pts / res.max : 0;
   var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
   fb.style.display = 'block';
   fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
   fb.style.border = '1px solid ' + color;
-  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
-    (found.length > 0 ? 'Good use of: <em>'+found.slice(0,3).join(', ')+'</em>. ' : 'No key terms found. ')+
-    '<br><span style="color:var(--mid-gray);font-size:12px;">Tip: '+c.tip+'</span>';
-  saveItem(PREFIX+'dq'+n+'score', score);
+  fb.innerHTML = Grader.renderResult(res);
 }
+function gradeOpen(key, taId, fbId) {
+  var res = Grader.score(document.getElementById(taId).value, RB[key]);
+  showGraded(fbId, res);
+  addScore(key, res.pts);
+  return res;
+}
+function checkDQ(n) { return gradeOpen('dq' + n, 'dq' + n, 'dq-fb' + n); }
 
 function showModelDQ(n) {
   var fb = document.getElementById('dq-fb'+n);
@@ -642,35 +823,17 @@ function showModelDQ(n) {
 // ===== CQ =====
 var cqCriteria = {
   1: {
-    keywords:['unlimited liability','personal assets','responsible','debts','obligations','risk'],
     model:"The main financial risk of a sole proprietorship is unlimited liability. This means the owner is personally responsible for all debts and financial obligations of the business. If the business fails or incurs debts, the owner's personal assets — such as savings or property — can be seized to cover those obligations."
   },
   2: {
-    keywords:['corporation','profits','corporate','dividends','shareholders','taxed','twice'],
     model:"Corporations are subject to double taxation. This means corporate profits are taxed at the company level first. Then, when those profits are distributed to shareholders as dividends, they are taxed again as personal income. So the same income is effectively taxed twice."
   },
   3: {
-    keywords:['income statement','balance sheet','cash flow'],
     model:"The three core financial documents are: the income statement (showing revenue, expenses, and profit); the balance sheet (listing assets, liabilities, and equity); and the cash flow statement (tracking how cash moves in and out of the business)."
   }
 };
 
-function checkCQ(n) {
-  var ta = document.getElementById('cq'+n);
-  var txt = ta.value.toLowerCase();
-  var fb = document.getElementById('cq-fb'+n);
-  var c = cqCriteria[n];
-  var found = c.keywords.filter(k=>txt.includes(k));
-  var score = Math.min(Math.round((found.length / Math.max(c.keywords.length * 0.5, 1)) * 5), 5);
-  var pct = score/5;
-  var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
-  fb.style.display = 'block';
-  fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
-  fb.style.border = '1px solid ' + color;
-  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
-    (found.length > 0 ? 'Keywords found: <em>'+found.join(', ')+'</em>.' : 'Key terms not detected.');
-  saveItem(PREFIX+'cq'+n+'score', score);
-}
+function checkCQ(n) { return gradeOpen('cq' + n, 'cq' + n, 'cq-fb' + n); }
 
 function showModelCQ(n) {
   var fb = document.getElementById('cq-fb'+n);
@@ -751,14 +914,18 @@ function assignCategory(cat) {
 }
 
 function updateCatScore() {
+  var placed = Object.keys(catAssignments).filter(function(i){ return catTerms[i]; }).length;
+  document.getElementById('cat-score').textContent = placed + ' of ' + catTerms.length + ' terms placed. Press Check to score.';
+}
+
+function checkCategories() {
   var correct = 0;
   Object.keys(catAssignments).forEach(function(i) {
     if (catTerms[i] && catTerms[i].cats.indexOf(catAssignments[i]) !== -1) correct++;
   });
-  var total = catTerms.length;
-  var score = Math.round((correct / total) * 15);
-  document.getElementById('cat-score').textContent = correct + '/' + total + ' correct — ' + score + '/15 pts';
-  saveItem(PREFIX+'catScore', score);
+  var pts = correct * 0.5;
+  document.getElementById('cat-score').textContent = correct + '/' + catTerms.length + ' correct: ' + pts + '/12 points';
+  addScore('cat', pts);
 }
 
 function resetCategories() {
@@ -847,9 +1014,9 @@ function checkFIBItem(i, showResult) {
 function checkAllFIB() {
   var score = 0;
   fibData.forEach(function(_, i){ if (checkFIBItem(i, true)) score++; });
-  var pts = score * 2;
-  document.getElementById('fib-score').textContent = score + '/6 correct — ' + pts + '/12 pts';
-  saveItem(PREFIX+'fibScore', pts);
+  var pts = score * 3;
+  document.getElementById('fib-score').textContent = score + '/6 correct: ' + pts + '/18 points';
+  addScore('fib', pts);
 }
 
 function resetFIB() {
@@ -865,17 +1032,11 @@ function resetFIB() {
 // ===== WRITING =====
 var writingCriteria = {
   1: {
-    minWords:50,
-    topicKW:['LLC','corporation','limited liability','double taxation','governance','issuance of shares','access to capital','administrative costs','regulatory requirements','unlimited liability'],
     vocabKW:['LLC','corporation','limited liability','double taxation','governance structure','issuance of shares','access to capital','administrative costs','regulatory requirements','unlimited liability','sole proprietorship','jurisdiction','equity','financial implications'],
-    connectors:['because','however','although','therefore','furthermore','in addition','moreover','as a result','consequently','nevertheless','on the other hand','first','secondly','finally','in contrast'],
     model:"Based on the client's goals, I recommend registering as a limited liability company (LLC). This structure provides limited liability protection for all three co-founders, ensuring their personal assets remain separate from business obligations. Unlike a corporation, an LLC avoids double taxation and involves lower administrative costs, which is beneficial for a growing business. The governance structure is also flexible, allowing the founders to maintain operational control. Furthermore, LLC registration requirements vary by jurisdiction, so it is important to verify local rules. Overall, an LLC offers the right balance of protection, flexibility, and cost-efficiency for Maria's expanding business."
   },
   2: {
-    minWords:40,
-    topicKW:['financial statement','income statement','balance sheet','transparency','accuracy','decision-making','mislead','trust','financial stability','cash flow','investors','stakeholders'],
     vocabKW:['financial statement','income statement','balance sheet','cash flow statement','transparency','accuracy','decision-making','financial stability','liquidity','assets','liabilities','equity','revenue','profit','financial reporting'],
-    connectors:['because','however','although','therefore','furthermore','in addition','moreover','as a result','for example','in contrast','first','secondly','finally'],
     model:"Financial reporting is essential because it provides stakeholders — including investors, lenders, and regulators — with accurate, transparent information about a company's financial position and performance. The three core financial statements are the income statement (showing revenue and profit), the balance sheet (listing assets, liabilities, and equity), and the cash flow statement. Accuracy and transparency in reporting enable stakeholders to make informed decisions and evaluate results correctly. Inaccurate or incomplete information can mislead users, lead to poor decisions, and damage the company's financial stability and reputation. Therefore, reliable reporting is fundamental to building trust and ensuring long-term credibility."
   }
 };
@@ -892,41 +1053,7 @@ function updateWordCount(taId, wcId, wbId) {
   else { wb.classList.remove('show'); }
 }
 
-function checkWriting(n) {
-  var val = document.getElementById('w'+n).value;
-  var vLow = val.toLowerCase();
-  var c = writingCriteria[n];
-  var words = val.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
-  var topicFound = c.topicKW.filter(function(k){ return vLow.includes(k.toLowerCase()); });
-  var vocabFound = c.vocabKW.filter(function(k){ return vLow.includes(k.toLowerCase()); });
-  var connFound = c.connectors.filter(function(k){ return vLow.includes(k.toLowerCase()); });
-  var sentences = val.split(/[.!?]+/).filter(function(s){ return s.trim().length > 10; }).length;
-  var score = 0;
-  var details = [];
-  if (words >= c.minWords) { score += 2; details.push('✅ Length (' + words + ' words) +2'); }
-  else { details.push('❌ Length (' + words + '/' + c.minWords + ' words needed) +0'); }
-  var topicScore = Math.min(topicFound.length, 3) >= 3 ? 2 : Math.min(topicFound.length, 3) >= 2 ? 1 : 0;
-  score += topicScore;
-  details.push((topicScore > 0 ? '✅' : '❌') + ' Topic keywords (' + topicFound.length + ' found: ' + topicFound.slice(0,3).join(', ') + ') +' + topicScore);
-  var vocabScore = vocabFound.length >= 5 ? 2 : vocabFound.length >= 3 ? 1 : 0;
-  score += vocabScore;
-  details.push((vocabScore > 0 ? '✅' : '❌') + ' Glossary vocab (' + vocabFound.length + ' terms) +' + vocabScore);
-  var connScore = connFound.length >= 2 ? 1 : 0;
-  score += connScore;
-  details.push((connScore > 0 ? '✅' : '❌') + ' Logical connectors (' + connFound.slice(0,3).join(', ') + ') +' + connScore);
-  var sentScore = sentences >= 3 ? 1 : 0;
-  score += sentScore;
-  details.push((sentScore > 0 ? '✅' : '❌') + ' Sentence variety (' + sentences + ' sentences) +' + sentScore);
-  var maxScore = 8;
-  var pct = score / maxScore;
-  var color = pct >= 0.75 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
-  var fb = document.getElementById('w-fb'+n);
-  fb.style.display = 'block';
-  fb.style.background = pct >= 0.75 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
-  fb.style.border = '1px solid ' + color;
-  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/'+maxScore+'</strong><br>' + details.join('<br>');
-  saveItem(PREFIX+'w'+n+'score', score);
-}
+function checkWriting(n) { return gradeOpen('writing' + n, 'w' + n, 'w-fb' + n); }
 
 function showModelWriting(n) {
   var fb = document.getElementById('w-fb'+n);
@@ -934,6 +1061,22 @@ function showModelWriting(n) {
   fb.style.background = 'rgba(201,168,76,0.06)';
   fb.style.border = '1px solid var(--gold)';
   fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + writingCriteria[n].model;
+}
+
+// ===== SPEAKING SCRIPT =====
+var scriptModel = "Good afternoon, Maria. I recommend that you register as a limited liability company, because limited liability protects the personal assets of all three founders from business debts. Unlike a corporation, an LLC avoids double taxation and has lower administrative costs, which suits a growing consulting business. You will also need financial reporting. The income statement shows revenue, expenses and profit, the balance sheet lists assets, liabilities and equity, and the cash flow statement tracks how cash moves in and out of the business. Accuracy and transparency are essential, because they build trust with investors and lenders. If the information is inaccurate, it can mislead users and lead to poor decisions. Thank you for listening.";
+function updateScriptCount() {
+  var v = document.getElementById('script').value;
+  var n = v.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
+  document.getElementById('wcs').textContent = n + ' words';
+}
+function checkScript() { return gradeOpen('script', 'script', 'script-fb'); }
+function showModelScript() {
+  var fb = document.getElementById('script-fb');
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.06)';
+  fb.style.border = '1px solid var(--gold)';
+  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + scriptModel;
 }
 
 // ===== SPEAKING PLAN =====
@@ -1044,11 +1187,9 @@ function toggleSpeakingChip(i) {
 function updateChipScore() {
   var used = Object.values(chipsUsed).filter(Boolean).length;
   document.getElementById('chips-used').textContent = used;
-  var score = Math.round((used / 8) * 8);
-  saveItem(PREFIX+'chipsScore', score);
   if (used >= 6) {
     document.getElementById('speaking-score-msg').style.display = 'block';
-    document.getElementById('speaking-score-msg').textContent = '★ ' + score + '/8 pts — Great vocabulary use!';
+    document.getElementById('speaking-score-msg').textContent = '★ Great vocabulary use! (practice only, 0 points)';
   }
 }
 
@@ -1092,53 +1233,10 @@ function updateReflectionScore() {
   var saved = loadItem(PREFIX+'reflection');
   var arr = saved ? JSON.parse(saved) : [];
   var checked = arr.filter(Boolean).length;
-  var score = Math.round((checked / reflectionItems.length) * 12);
-  document.getElementById('reflection-score').textContent = score;
-  saveItem(PREFIX+'reflScore', score);
+  document.getElementById('reflection-score').textContent = checked;
 }
 
 // ===== SCORE =====
-function calcScore() {
-  var dq = [1,2,3].reduce(function(a,n){ return a + (parseInt(loadItem(PREFIX+'dq'+n+'score'))||0); }, 0);
-  var cq = [1,2,3].reduce(function(a,n){ return a + (parseInt(loadItem(PREFIX+'cq'+n+'score'))||0); }, 0);
-  var cat = parseInt(loadItem(PREFIX+'catScore')) || 0;
-  var fib = parseInt(loadItem(PREFIX+'fibScore')) || 0;
-  var wr = (parseInt(loadItem(PREFIX+'w1score'))||0) + (parseInt(loadItem(PREFIX+'w2score'))||0);
-  var chips = parseInt(loadItem(PREFIX+'chipsScore')) || 0;
-  var refl = parseInt(loadItem(PREFIX+'reflScore')) || 0;
-  var total = dq + cq + cat + fib + wr + chips + refl;
-  var maxTotal = 93;
-  var pct = Math.round((total/maxTotal)*100);
-
-  var breakdown = [
-    {label:'Discussion Questions (×3)', score:dq, max:15},
-    {label:'Comprehension Questions (×3)', score:cq, max:15},
-    {label:'Glossary Categories', score:cat, max:15},
-    {label:'Fill in the Blanks', score:fib, max:12},
-    {label:'Writing Tasks (×2)', score:wr, max:16},
-    {label:'Speaking Keywords', score:chips, max:8},
-    {label:'Self-Reflection', score:refl, max:12}
-  ];
-
-  var html = '<table style="width:100%;border-collapse:collapse;font-size:14px;">';
-  html += '<tr style="border-bottom:2px solid var(--gold);"><th style="text-align:left;padding:8px 4px;color:var(--text3);">Section</th><th style="text-align:right;padding:8px 4px;color:var(--text3);">Score</th><th style="text-align:right;padding:8px 4px;color:var(--text3);">Max</th></tr>';
-  breakdown.forEach(function(b) {
-    html += '<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 4px;">' + b.label + '</td><td style="text-align:right;padding:8px 4px;font-weight:600;color:var(--gold);">' + b.score + '</td><td style="text-align:right;padding:8px 4px;color:var(--text3);">' + b.max + '</td></tr>';
-  });
-  html += '<tr><td style="padding:10px 4px;font-weight:700;font-size:15px;">TOTAL</td><td style="text-align:right;padding:10px 4px;font-weight:800;font-size:15px;color:var(--gold);">' + total + '</td><td style="text-align:right;padding:10px 4px;font-weight:700;">' + maxTotal + '</td></tr>';
-  html += '</table>';
-  document.getElementById('score-breakdown').innerHTML = html;
-
-  var grade = pct >= 90 ? 'Excellent! 🏆' : pct >= 75 ? 'Great work! ⭐' : pct >= 60 ? 'Good effort! 👍' : 'Keep practising 📚';
-  document.getElementById('total-score-display').innerHTML =
-    '<div style="font-size:48px;font-weight:800;color:var(--gold);">' + total + '<span style="font-size:24px;color:var(--text3);">/' + maxTotal + '</span></div>' +
-    '<div style="font-size:20px;font-weight:700;margin-top:4px;">' + pct + '% — ' + grade + '</div>';
-
-  document.getElementById('total-score-chip').textContent = total;
-  saveItem(PREFIX+'totalScore', total);
-  if (pct >= 80) { showConfetti(); showBanner(grade); }
-}
-
 // ===== CONFETTI =====
 function showConfetti() {
   var container = document.getElementById('confetti-container');
@@ -1168,9 +1266,19 @@ renderFIB();
 renderChips();
 renderReflection();
 
+// Scores saved under the old, inconsistent rules are discarded once, so that all results follow the rubric table.
+if (loadItem(PREFIX+'rubric') !== RUBRIC_VERSION) {
+  ['dq1score','dq2score','dq3score','cq1score','cq2score','cq3score','catScore','fibScore','w1score','w2score','chipsScore','reflScore','totalScore'].forEach(function(k){ try { localStorage.removeItem(PREFIX+k); } catch(e){} });
+  saveItem(PREFIX+'rubric', RUBRIC_VERSION);
+}
+RUBRIC.forEach(function(r){ var v = parseFloat(loadItem(PREFIX+'sc_'+r.key)); if (!isNaN(v)) scores[r.key] = Math.max(0, Math.min(r.max, v)); });
+Object.keys(RB).forEach(function(k){ var el = document.getElementById('rule-'+k); if (el) el.innerHTML = Grader.renderRule(RB[k]); });
+_celebrated = true; updateTotal(); _celebrated = false;
+
 // Restore saved values
 ['dq1','dq2','dq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; } });
 ['cq1','cq2','cq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; } });
+var _s = loadItem(PREFIX+'script'); if (_s) { document.getElementById('script').value = _s; updateScriptCount(); }
 ['w1','w2'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; updateWordCount(id, 'wc'+id.slice(1), 'wb'+id.slice(1)); } });
 
 </script>

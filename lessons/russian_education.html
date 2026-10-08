@@ -136,6 +136,7 @@
   .flex { display: -webkit-flex; display: flex; } .flex-center { -webkit-align-items: center; align-items: center; }
   .gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
   .text-gold { color: var(--gold); } .text-sm { font-size: 13px; } .text-xs { font-size: 11px; color: var(--mid-gray); } .fw-600 { font-weight: 600; }
+  .rule{font-size:13px;line-height:1.5;border:1px solid var(--gold);border-left-width:4px;border-radius:8px;padding:10px 14px;margin:0 0 14px;color:var(--text2)}
   @media print { #dark-toggle, #confetti-container, #excellent-banner, .btn, .timer-wrap { display: none !important; } #main-content { padding: 20px !important; } body { background: white !important; color: black !important; } .card { box-shadow: none !important; border: 1px solid #ddd !important; } .section { display: block !important; } }
   @media (max-width: 900px) { #main-content { padding: 20px 20px 48px; } .flashcard-wrap { width: calc(50% - 8px); } .final-check-item { width: 100%; } }
   @media (max-width: 600px) { .flashcard-wrap { width: 100%; } #main-content { padding: 16px 16px 48px; } .section-title { font-size: 18px; } .final-check-item { width: 100%; } .fib-input { width: 130px; } }
@@ -199,7 +200,8 @@
       <div class="dq-item">
         <div class="dq-num">Question 1</div>
         <div class="dq-q">What are the main strengths of the Russian education system that make it competitive internationally?</div>
-        <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts... (min. 20 words)" oninput="saveItem('edu_dq1',this.value)"></textarea>
+        <div data-rb="dq1"></div>
+        <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts... (at least 25 words)" oninput="saveItem('edu_dq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
@@ -209,7 +211,8 @@
       <div class="dq-item">
         <div class="dq-num">Question 2</div>
         <div class="dq-q">What are the key challenges facing the Russian education system, particularly in rural regions?</div>
-        <textarea class="dq-textarea" id="dq2" placeholder="Name at least 2 specific challenges..." oninput="saveItem('edu_dq2',this.value)"></textarea>
+        <div data-rb="dq2"></div>
+        <textarea class="dq-textarea" id="dq2" placeholder="Name at least 2 specific challenges (at least 25 words)" oninput="saveItem('edu_dq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
@@ -219,6 +222,7 @@
       <div class="dq-item">
         <div class="dq-num">Question 3</div>
         <div class="dq-q">How are ongoing reforms addressing the need for digital literacy and critical thinking in Russian schools?</div>
+        <div data-rb="dq3"></div>
         <textarea class="dq-textarea" id="dq3" placeholder="Describe specific initiatives or approaches..." oninput="saveItem('edu_dq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✔ Check</button>
@@ -259,6 +263,7 @@
       <div class="dq-item">
         <div class="dq-num">Question A</div>
         <div class="dq-q">What examination marks the end of secondary education in Russia, and what is its main purpose?</div>
+        <div data-rb="cq1"></div>
         <textarea class="dq-textarea" id="cq1" placeholder="Name the exam and explain its role..." oninput="saveItem('edu_cq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✔ Check</button>
@@ -269,6 +274,7 @@
       <div class="dq-item">
         <div class="dq-num">Question B</div>
         <div class="dq-q">According to the text, what teaching practice has been criticised, and what does it limit?</div>
+        <div data-rb="cq2"></div>
         <textarea class="dq-textarea" id="cq2" placeholder="Identify the practice and explain the criticism..." oninput="saveItem('edu_cq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✔ Check</button>
@@ -279,6 +285,7 @@
       <div class="dq-item">
         <div class="dq-num">Question C</div>
         <div class="dq-q">What are two specific goals of Russia's ongoing education reforms mentioned in the text?</div>
+        <div data-rb="cq3"></div>
         <textarea class="dq-textarea" id="cq3" placeholder="List two goals with supporting detail..." oninput="saveItem('edu_cq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✔ Check</button>
@@ -310,7 +317,8 @@
     </div>
   </div>
   <div class="card">
-    <p class="text-sm mb-16" style="color:var(--text3);">Select a term, then click its best category. Correct assignments highlight in the category's colour.</p>
+    <p class="rule">How you get points (maximum 11): place all 22 terms in a category, then press Check. Each term in a correct category earns 0.5 points. Some terms fit two categories (critical thinking, cybersecurity, robotics). Your best result is kept.</p>
+    <p class="text-sm mb-16" style="color:var(--text3);">Select a term, then click its best category.</p>
     <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
       <button class="cat-btn cat-btn-S" id="catbtn-S" onclick="assignCategory('S')">🔵 System &amp; Structure</button>
       <button class="cat-btn cat-btn-C" id="catbtn-C" onclick="assignCategory('C')">🔴 Challenges</button>
@@ -318,6 +326,7 @@
     </div>
     <div id="cat-terms-grid" style="margin-bottom:20px;"></div>
     <div class="flex flex-center gap-8" style="flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="checkCategories()">✔ Check</button>
       <button class="btn btn-outline btn-sm" onclick="resetCategories()">↺ Reset</button>
       <span id="cat-score" class="text-sm text-gold fw-600"></span>
     </div>
@@ -332,7 +341,7 @@
     <div class="section-num">4</div>
     <div>
       <div class="section-title">Glossary Flashcards</div>
-      <div class="section-subtitle">Click a card to flip it. Use the search to filter terms.</div>
+      <div class="section-subtitle">Click a card to flip it. Practice only: no points are given for this tab.</div>
     </div>
   </div>
   <div class="card">
@@ -359,6 +368,7 @@
     </div>
   </div>
   <div class="card">
+    <p class="rule">How you get points (maximum 18): 3 points for each correct blank (6 blanks). Spelling must be correct; British and American spelling are both accepted. Your best result is kept.</p>
     <div id="fib-container"></div>
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
       <button class="btn btn-primary" onclick="checkAllFIB()">✔ Check All</button>
@@ -388,6 +398,7 @@
       <label>Task 1 — Strengths of the Russian Education System (50+ words)<br>
         <span style="font-weight:400;color:var(--text3);">Write a paragraph for the report describing at least two strengths of the Russian education system. Use a minimum of 4 glossary terms.</span>
       </label>
+      <div data-rb="w1"></div>
       <textarea class="writing-ta" id="w1" placeholder="The Russian education system is notable for..." oninput="saveItem('edu_w1',this.value);updateWordCount('w1','wc1','wb1')"></textarea>
       <div class="writing-meta">
         <span class="word-count" id="wc1">0 words</span>
@@ -404,6 +415,7 @@
       <label>Task 2 — Challenges and Reform Recommendations (40+ words)<br>
         <span style="font-weight:400;color:var(--text3);">Write a paragraph outlining the main challenges and suggest how reforms could address them. Use at least 5 glossary terms.</span>
       </label>
+      <div data-rb="w2"></div>
       <textarea class="writing-ta" id="w2" placeholder="Despite its strengths, the Russian education system faces..." oninput="saveItem('edu_w2',this.value);updateWordCount('w2','wc2','wb2')"></textarea>
       <div class="writing-meta">
         <span class="word-count" id="wc2">0 words</span>
@@ -430,7 +442,7 @@
     </div>
   </div>
   <div class="card">
-    <p class="text-sm mb-16" style="color:var(--text3);">Fill in your key points. Notes are saved automatically.</p>
+    <p class="text-sm mb-16" style="color:var(--text3);">Fill in your key points. Notes are saved automatically. Practice only: no points are given for this tab.</p>
 
     <span class="speaking-plan-label">1. Historical Background</span>
     <input type="text" class="speaking-plan-input" id="sp1" placeholder="e.g. Long-standing system, literacy campaigns, Ministry of Education oversees..." oninput="saveSpeakingPlan()">
@@ -456,7 +468,7 @@
     <div class="section-num">8</div>
     <div>
       <div class="section-title">Speaking Task</div>
-      <div class="section-subtitle">Present your section of the education report. Use the keyword chips — tick each one as you say it.</div>
+      <div class="section-subtitle">Present your section aloud with the timers, then write your script below and press Check.</div>
     </div>
   </div>
   <div class="card">
@@ -490,10 +502,20 @@
       </div>
     </div>
 
-    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Keyword Checklist — tick each term as you use it:</div>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Keywords to use (tick each one as you say it; the ticks are practice only and give no points):</div>
     <div id="speaking-chips"></div>
     <div style="margin-top:12px;font-size:13px;color:var(--mid-gray);">Used: <span id="chips-used" class="text-gold fw-600">0</span> / 8 keywords</div>
     <div id="speaking-score-msg" style="margin-top:8px;font-size:13px;color:var(--gold);font-weight:600;display:none;"></div>
+    <div style="border-top:1px solid var(--border);margin-top:24px;padding-top:20px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px;">📝 Your speaking script (about 90 seconds, 100+ words)</div>
+      <div data-rb="script"></div>
+      <textarea class="writing-ta" id="script-ta" placeholder="Good afternoon. I will present the section on the Russian education system..." oninput="saveItem('edu_script',this.value)"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkScript()">✔ Check</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelScript()">📋 Model Answer</button>
+      </div>
+      <div id="script-fb" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;"></div>
+    </div>
   </div>
 </section>
 </div>
@@ -505,12 +527,12 @@
     <div class="section-num">✓</div>
     <div>
       <div class="section-title">Self-Reflection</div>
-      <div class="section-subtitle">Rate your performance honestly — this affects your final score</div>
+      <div class="section-subtitle">Rate your performance honestly. Practice only: no points are given for this tab.</div>
     </div>
   </div>
   <div class="card">
     <div class="final-grid" id="reflection-grid"></div>
-    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Self-Reflection Score: <span id="reflection-score" class="text-gold">0</span> / 12</div>
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Statements ticked: <span id="reflection-score" class="text-gold">0</span> / 6 (self-check only, not scored)</div>
   </div>
 </section>
 </div>
@@ -526,9 +548,16 @@
     </div>
   </div>
   <div class="card">
-    <div id="score-breakdown" style="margin-bottom:24px;"></div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:48px;font-weight:800;color:var(--gold);" id="final-score">0</div>
+      <div style="font-size:14px;color:var(--text3);">points out of 93</div>
+      <div style="height:8px;border-radius:4px;background:var(--border);margin:10px 0;overflow:hidden"><div id="score-bar" style="height:100%;width:0%;background:var(--gold)"></div></div>
+      <p style="font-size:.85rem;color:var(--text3)" id="score-msg">Complete tasks to earn points!</p>
+    </div>
+    <p class="rule">How scoring works: every task is checked automatically by the rules below. You can press Check as many times as you like, and the best result for each task is kept. Flashcards, the speaking plan, the timers, the keyword ticks and the self-reflection are practice only and are not scored.</p>
+    <table id="rubric-table" style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px;"></table>
     <button class="btn btn-primary" onclick="calcScore()">📊 Calculate Score</button>
-    <div id="total-score-display" style="margin-top:24px;text-align:center;"></div>
+    <div id="total-score-display" style="margin-top:16px;text-align:center;"></div>
   </div>
 </section>
 </div>
@@ -538,6 +567,7 @@
 <div id="confetti-container"></div>
 <div id="excellent-banner"></div>
 
+<script src="grader.js"></script>
 <script>
 var PREFIX = 'edu_';
 
@@ -594,26 +624,164 @@ var glossaryTerms = [
   {term:"inclusive education", def:"an approach that ensures all students, including those with special needs, learn together", ru:"инклюзивное образование"}
 ];
 
-var dqCriteria = {
-  1: {
-    keywords:['cybersecurity','robotics','curriculum','well-rounded','numeracy','mathematics','science','higher education','digital literacy','engineering'],
-    minWords:20,
-    model:"The Russian education system is well known for its strong emphasis on mathematics and sciences, producing highly skilled graduates in cybersecurity, robotics, and engineering. The national curriculum provides a well-rounded foundation that develops both analytical and technical skills. Additionally, higher education institutions are internationally recognised, and ongoing reforms are promoting digital literacy to keep pace with technological change.",
-    tip:"Mention the curriculum, cybersecurity/robotics, well-rounded foundation, or digital literacy."
-  },
-  2: {
-    keywords:['underfunding','disparities','rural','education gap','inadequate facilities','rote memorisation','shortage','critical thinking','urban'],
-    minWords:20,
-    model:"The Russian education system faces significant challenges, particularly in rural regions. Underfunding leads to inadequate facilities and a shortage of qualified teachers, widening the education gap between urban and rural schools. In addition, an over-reliance on rote memorisation has been criticised for limiting students' critical thinking skills. These disparities make it harder to ensure equal access to quality education across the country.",
-    tip:"Include underfunding, rural disparities, education gap, and rote memorisation."
-  },
-  3: {
-    keywords:['digital literacy','online learning','reforms','Federal Law','initiative','student-centred','inclusive','critical thinking','career advancement'],
-    minWords:20,
-    model:"Ongoing reforms in Russia aim to promote digital literacy and expand online learning platforms, equipping students with the skills needed for modern careers and career advancement. The Federal Law on Education and related initiatives also support a shift toward student-centred approaches and inclusive education, moving away from passive rote memorisation toward active learning that develops critical thinking.",
-    tip:"Mention digital literacy, online learning platforms, student-centred approaches, and inclusive education."
+// ── Scoring ──
+// One table drives everything: the maximum per task, the total (93) and the explanation on the My Score tab.
+var RUBRIC = [
+  {key:'dq1',label:'Discussion Question 1 (strengths)',max:6,rule:'Open answer, graded on content: 2 points for each of three connected ideas about the strengths (maths and science emphasis, noted university fields, digital reforms).'},
+  {key:'dq2',label:'Discussion Question 2 (challenges)',max:6,rule:'Open answer: 2 for underfunding and rural problems, 2 for the urban and rural education gap, 2 for rote memorisation limiting critical thinking.'},
+  {key:'dq3',label:'Discussion Question 3 (reforms)',max:6,rule:'Open answer: 2 for digital literacy and online learning, 2 for student-centred and inclusive education, 2 for less rote learning and more critical thinking.'},
+  {key:'cq1',label:'Comprehension Question A (the USE)',max:5,rule:'Open answer: 2 for naming the exam and its place at the end of secondary school, 2 for its gateway role to university, 1 for length.'},
+  {key:'cq2',label:'Comprehension Question B (criticised practice)',max:5,rule:'Open answer: 2 for naming rote memorisation as criticised, 2 for saying it limits critical thinking, 1 for length.'},
+  {key:'cq3',label:'Comprehension Question C (reform goals)',max:6,rule:'Open answer: 2 for the digital literacy / online learning goal, 2 for the student-centred / inclusive goal, 1 for skills and careers, 1 for length.'},
+  {key:'cats',label:'Glossary Categories (22 terms)',max:11,rule:'0.5 points for each term placed in a correct category (22 terms). Points are given only when every term has been assigned and you press Check.'},
+  {key:'fib',label:'Fill in the Blanks (6 blanks)',max:18,rule:'3 points for each correct blank (6 blanks).'},
+  {key:'w1',label:'Writing Task 1 (strengths)',max:10,rule:'Open answer: 2 points for each of four connected strengths, 1 for using 4 glossary terms, 1 for length (50 words).'},
+  {key:'w2',label:'Writing Task 2 (challenges and reforms)',max:10,rule:'Open answer: 2 points for each of four connected ideas (three challenges and a recommendation), 1 for using 5 glossary terms, 1 for length (40 words).'},
+  {key:'script',label:'Speaking Task (written script)',max:10,rule:'Open answer: 2 points for each of four connected ideas, 1 for using 6 of the 8 keywords, 1 for length (100 words).'}
+];
+var MAX_TOTAL = RUBRIC.reduce(function(a, r){ return a + r.max; }, 0); // 93
+var RUBRIC_VERSION = '2';
+var scores = {};
+
+function wordCount(t) { var x = (t || '').trim(); return x ? x.split(/\s+/).length : 0; }
+function addScore(key, pts) {
+  var r = RUBRIC.find(function(x){ return x.key === key; });
+  if (!r) return; // practice-only activities are not scored
+  pts = Math.max(0, Math.min(r.max, pts));
+  if (scores[key] === undefined || scores[key] < pts) { scores[key] = pts; saveItem(PREFIX+'sc_'+key, pts); }
+  updateTotal();
+}
+function updateTotal() {
+  var total = RUBRIC.reduce(function(a, r){ return a + (scores[r.key] || 0); }, 0);
+  var chip = document.getElementById('total-score-chip'); if (chip) chip.textContent = total;
+  var fs = document.getElementById('final-score'); if (fs) fs.textContent = total;
+  var sb = document.getElementById('score-bar'); if (sb) sb.style.width = (total / MAX_TOTAL * 100) + '%';
+  var pct = total / MAX_TOTAL;
+  var sm = document.getElementById('score-msg');
+  if (sm) sm.textContent = pct >= .85 ? '🌟 Excellent!' : pct >= .65 ? '👍 Good work!' : pct >= .3 ? '📚 Keep going!' : 'Complete tasks to earn points!';
+  var t = document.getElementById('rubric-table');
+  if (t) {
+    t.innerHTML = '<tr><th style="text-align:left;padding:8px 4px">Task</th><th style="text-align:left;padding:8px 4px">How it is scored</th><th style="text-align:right;padding:8px 4px">Your score</th></tr>' +
+      RUBRIC.map(function(r){ return '<tr style="border-top:1px solid var(--border)"><td style="padding:8px 4px">'+r.label+'</td><td style="padding:8px 4px;color:var(--text3)">'+r.rule+'</td><td style="padding:8px 4px;text-align:right;white-space:nowrap">'+(scores[r.key] || 0)+' / '+r.max+'</td></tr>'; }).join('') +
+      '<tr style="border-top:2px solid var(--gold)"><td style="padding:8px 4px"><strong>Total</strong></td><td></td><td style="padding:8px 4px;text-align:right"><strong>'+total+' / '+MAX_TOTAL+'</strong></td></tr>';
   }
+}
+
+// Reading text (without tooltips) plus glossary definitions: answers copied from these are capped.
+var SRC = (function(){
+  var el = document.querySelector('.vocab-text').cloneNode(true);
+  el.querySelectorAll('.tooltip').forEach(function(t){ t.remove(); });
+  return el.textContent.replace(/\s+/g, ' ') + ' ' + glossaryTerms.map(function(g){ return g.term + ' ' + g.def; }).join('. ');
+})();
+
+var G_MATH = ['mathematics','\\bmaths?\\b','sciences?\\b'];
+var G_EMPH = ['emphasis','focus','strong','strength','stress','excellen','particular','good at'];
+var G_TECH = ['cybersecurity','robotics','engineering'];
+var G_UNI = ['universit','higher education','graduates','programmes?','institutions?'];
+var G_NOTED = ['noted for','known for','strong','excellen','recogni[sz]ed','famous','reputation','leading','respected','skilled','top','competitive'];
+var G_DIGI = ['digital literacy','online learning'];
+var G_PROMOTE = ['promot','expand','aim','introduc','equip','improv','develop','encourag'];
+var G_STUD = ['students?','pupils?','young people','children','learners','schools?','skills','technolog','modern'];
+var G_UNDERF = ['underfunding','underfunded','inadequate facilities','shortages? of','lack of','not enough','insufficient'];
+var G_RURAL = ['rural','villages?','countryside','remote'];
+var G_CAUSE = ['lead','led ','cause','result','struggle','suffer','widen','poor','problem','worse','difficult','affect'];
+var G_URBAN = ['urban','cities','city','towns?'];
+var G_ROTE = ['rote','memori[sz]'];
+var G_LIMIT = ['limit','hinder','restrict','prevent','weaken','reduce','harm','holds? back','damage'];
+var G_CT = ['critical thinking','analy'];
+var G_SC = ['student-cent','inclusive'];
+var G_GLOSS = ['compulsory education','basic literacy|numeracy','curriculum','well-rounded','cybersecurity','robotics','digital literacy','ongoing reforms','unified state exam|\\bUSE\\b','secondary education','ministry of education','vital driver|career advancement','online learning platforms','noted for','long-standing','underfunding','disparities','education gap','rote memori[sz]ation','critical thinking','inclusive education','student-cent'];
+
+var RB = {};
+var MIS_ROTE = {re:'rote (memori[sz]ation|learning) (develops|improves|builds|helps|encourages|promotes|strengthens) (students\' )?critical thinking', msg:'Rote memorisation limits critical thinking, it does not develop it.'};
+RB.dq1 = {max:6, minWords:25, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Say that schools put a strong emphasis on mathematics and the sciences (in one sentence)', all:[G_MATH, G_EMPH]},
+  {type:'claim', pts:2, label:'Say that universities and higher education are noted for cybersecurity, robotics or engineering (in one sentence)', all:[G_TECH, G_UNI, G_NOTED]},
+  {type:'claim', pts:2, label:'Say that reforms promote digital literacy or online learning for students (in one sentence)', all:[G_DIGI, G_PROMOTE, G_STUD]}
+], misconceptions:[{re:'rote (memori[sz]ation|learning) (is|as) (a |the )?(strength|advantage|strongest)', msg:'The text presents rote memorisation as a weakness, not a strength.'}]};
+RB.dq2 = {max:6, minWords:25, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Link underfunding, inadequate facilities or teacher shortages to rural regions (in one sentence)', all:[G_UNDERF, G_RURAL, G_CAUSE]},
+  {type:'claim', pts:2, label:'Name the education gap or disparities between urban and rural schools (in one sentence)', all:[['education gap','disparit','inequalit','\\bgap\\b','differences?'], G_URBAN, G_RURAL]},
+  {type:'claim', pts:2, label:'Say that rote memorisation limits critical thinking (in one sentence)', all:[G_ROTE, G_LIMIT, G_CT]}
+], misconceptions:[MIS_ROTE, {re:'rural (schools|regions|areas) (have|has|get|receive) (better|more|enough|sufficient)', msg:'The text says rural regions suffer from underfunding, not from too much funding.'}]};
+RB.dq3 = {max:6, minWords:25, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Say that reforms promote digital literacy and online learning for students (in one sentence)', all:[G_DIGI, G_PROMOTE, G_STUD]},
+  {type:'claim', pts:2, label:'Say that reforms support student-centred or inclusive education (in one sentence)', all:[G_SC, ['promot','reform','shift','introduc','move','encourag','support','initiative'], ['rote','passive','critical thinking','all students','special needs','teaching','learning','active']]},
+  {type:'claim', pts:2, label:'Say that these reforms reduce rote learning or build critical thinking (in one sentence)', all:[['critical thinking','analy','rote','passive'], ['reform','approach','student-cent','active','digital','inclusive','initiative'], ['limit','develop','improve','build','encourag','instead','rather','move away','shift','reduce','less']]}
+], misconceptions:[MIS_ROTE]};
+RB.cq1 = {max:5, minWords:15, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Name the Unified State Exam and say it comes at the end of secondary school (in one sentence)', all:[['unified state exam','\\bUSE\\b','\\bEGE\\b'], ['\\bend\\b','final','culminat','complet','finish','marks','last'], ['secondary','school']]},
+  {type:'claim', pts:2, label:'Say that it is the gateway or entry to university admission (in one sentence)', all:[['unified state exam','\\bUSE\\b','\\bEGE\\b','\\bexam\\b','\\bit\\b','scores?'], ['gateway','entry','admission','admit','enter','entrance','qualif','access','get into','accepted'], ['universit','higher education','college']]},
+  {type:'length', pts:1, label:'Write at least 18 words', words:18}
+], misconceptions:[{re:'\\b(end|ends|marks|completes?|finish(es)?)\\b[^.]{0,25}\\b(primary school|primary education)\\b', msg:'The USE comes at the end of secondary school, not primary school.'}]};
+RB.cq2 = {max:5, minWords:12, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Name rote memorisation as the criticised practice (in one sentence)', all:[G_ROTE, ['criticis','critici[sz]ed','critics','over-reliance','too much','relies','reliance','problem','weakness','disadvantage']]},
+  {type:'claim', pts:2, label:'Say that it limits critical thinking (in one sentence)', all:[G_LIMIT, G_CT, ['students?','learn','pupils?','understand','repetition','facts']]},
+  {type:'length', pts:1, label:'Write at least 18 words', words:18}
+], misconceptions:[MIS_ROTE]};
+RB.cq3 = {max:6, minWords:25, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Goal 1: promote digital literacy and expand online learning (in one sentence)', all:[G_DIGI, ['promot','expand','aim','goal','equip','improv','encourag','introduc']]},
+  {type:'claim', pts:2, label:'Goal 2: student-centred approaches and inclusive education (in one sentence)', all:[G_SC, ['promot','reform','approach','goal','aim','introduc','shift','support','encourag']]},
+  {type:'claim', pts:1, label:'Say that students are equipped with skills for the modern economy or careers', all:[['equip','skills','career','modern economy'], ['students?'], ['digital','modern','career','economy','technolog']]},
+  {type:'length', pts:1, label:'Write at least 30 words', words:30}
+]};
+RB.w1 = {max:10, minWords:50, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Strength 1: schools put a strong emphasis on mathematics and the sciences (one sentence)', all:[G_MATH, G_EMPH]},
+  {type:'claim', pts:2, label:'Strength 2: universities are noted for cybersecurity, robotics or engineering (one sentence)', all:[G_TECH, G_UNI, G_NOTED]},
+  {type:'claim', pts:2, label:'Strength 3: reforms promote digital literacy and online learning for students (one sentence)', all:[G_DIGI, G_PROMOTE, G_STUD]},
+  {type:'claim', pts:2, label:'Strength 4: compulsory education gives children a well-rounded foundation (literacy, numeracy) (one sentence)', all:[['compulsory education','basic literacy','numeracy','well-rounded','curriculum'], ['foundation','begins','starts','age','children','pupils?','students?'], ['provid','give','gives','teach','introduc','build','base','broad','balanced']]},
+  {type:'concepts', pts:1, label:'Use at least 4 different glossary terms', need:4, of:G_GLOSS.map(function(g){ return [g]; })},
+  {type:'length', pts:1, label:'Write at least 50 words', words:50}
+]};
+RB.w2 = {max:10, minWords:40, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Challenge 1: underfunding, inadequate facilities or teacher shortages in rural regions (one sentence)', all:[G_UNDERF, G_RURAL, G_CAUSE]},
+  {type:'claim', pts:2, label:'Challenge 2: an education gap or disparities between urban and rural schools (one sentence)', all:[['education gap','disparit','inequalit','\\bgap\\b','differences?'], G_URBAN, G_RURAL]},
+  {type:'claim', pts:2, label:'Challenge 3: rote memorisation limits critical thinking (one sentence)', all:[G_ROTE, G_LIMIT, G_CT]},
+  {type:'claim', pts:2, label:'Recommendation: reforms (digital literacy, online learning, student-centred or inclusive education) can help to solve these problems (one sentence)', all:[G_DIGI.concat(G_SC), ['address','reduce','help','tackle','overcome','improv','promot','expand','aim','solve','close','narrow'], ['problems?','challenges?','gap','disparit','rote','critical thinking','underfunding','facilities','rural','issues?']]},
+  {type:'concepts', pts:1, label:'Use at least 5 different glossary terms', need:5, of:G_GLOSS.map(function(g){ return [g]; })},
+  {type:'length', pts:1, label:'Write at least 40 words', words:40}
+], misconceptions:[MIS_ROTE]};
+RB.script = {max:10, minWords:60, source:SRC, criteria:[
+  {type:'claim', pts:2, label:'Structure: the Unified State Exam is the gateway to university admission (one sentence)', all:[['unified state exam','\\bUSE\\b'], ['gateway','admission','admit','entry','entrance'], ['universit','higher education']]},
+  {type:'claim', pts:2, label:'Strengths: strong emphasis on mathematics and science, or universities noted for cybersecurity, robotics, engineering (one sentence)', all:[G_MATH.concat(G_TECH), G_EMPH.concat(G_NOTED), ['schools?','universit','higher education','curriculum','students?','graduates','programmes?']]},
+  {type:'claim', pts:2, label:'Challenges: underfunding, shortages, the education gap or rote memorisation, with their effect (one sentence)', all:[['underfunding','inadequate','shortage','education gap','rote','disparit'], ['rural','urban','regions?','schools?','teachers?','critical thinking'], G_CAUSE.concat(G_LIMIT,['widen','gap'])]},
+  {type:'claim', pts:2, label:'Reforms: they promote digital literacy, online learning, student-centred or inclusive education (one sentence)', all:[G_DIGI.concat(G_SC), G_PROMOTE.concat(['reform','shift','support']), G_STUD.concat(['all'])]},
+  {type:'concepts', pts:1, label:'Use at least 6 of the 8 keywords listed under the timers', need:6, of:[['compulsory education'],['unified state exam','\\bUSE\\b'],['rote memori[sz]ation'],['digital literacy'],['education gap'],['ongoing reforms'],['critical thinking'],['well-rounded foundation']]},
+  {type:'length', pts:1, label:'Write at least 100 words (about 90 seconds of speech)', words:100}
+]};
+
+var MODELS = {
+  dq1: "The Russian education system is well known for its strong emphasis on mathematics and sciences, producing highly skilled graduates in cybersecurity, robotics, and engineering. The national curriculum provides a well-rounded foundation that develops both analytical and technical skills. Additionally, higher education institutions are internationally recognised, and ongoing reforms are promoting digital literacy to keep pace with technological change.",
+  dq2: "The Russian education system faces significant challenges, particularly in rural regions. Underfunding leads to inadequate facilities and a shortage of qualified teachers, widening the education gap between urban and rural schools. In addition, an over-reliance on rote memorisation has been criticised for limiting students' critical thinking skills. These disparities make it harder to ensure equal access to quality education across the country.",
+  dq3: "Ongoing reforms in Russia aim to promote digital literacy and expand online learning platforms, equipping students with the skills needed for modern careers and career advancement. The Federal Law on Education and related initiatives also support a shift toward student-centred approaches and inclusive education, moving away from passive rote memorisation toward active learning that develops critical thinking.",
+  cq1: "The Unified State Exam (USE) marks the end of secondary education in Russia. It serves as a gateway to higher education, as university admission relies heavily on USE scores. It is a standardised national examination that assesses students' knowledge across subjects and determines which universities and programmes they can enter.",
+  cq2: "Rote memorisation has been criticised as a dominant teaching practice. Critics argue that it limits students' ability to develop critical thinking, as students learn to repeat information without necessarily understanding or analysing it. This approach is seen as less effective for preparing students for modern, complex professional environments.",
+  cq3: "Two key goals of Russia's ongoing reforms are: first, to promote digital literacy and expand online learning platforms, equipping students with modern technological skills; and second, to introduce student-centred approaches and inclusive education, shifting away from passive rote learning toward active, participatory teaching methods.",
+  w1: "The Russian education system is notable for its strong academic traditions and internationally recognised achievements in several fields. The national curriculum provides a well-rounded foundation, with a particular emphasis on mathematics, sciences, and numeracy. Higher education institutions are noted for their excellent programmes in cybersecurity, robotics, and engineering, making graduates highly competitive internationally. Furthermore, ongoing reforms are promoting digital literacy and expanding online learning platforms, equipping students with the skills needed for career advancement in the modern economy. These strengths make Russia a vital driver of technological development.",
+  w2: "Despite its strengths, the Russian education system faces significant challenges. Underfunding in rural regions has led to inadequate facilities and a shortage of qualified teachers, creating a growing education gap between urban and rural schools. Furthermore, an over-reliance on rote memorisation limits the development of critical thinking skills. However, ongoing reforms are beginning to address these issues through promoting digital literacy, expanding online learning platforms, and encouraging student-centred approaches. A shift toward inclusive education reflects shared priorities with international frameworks and could help reduce existing disparities.",
+  script: "Good afternoon. I will present the section on the Russian education system. Compulsory education begins at six or seven and gives children a well-rounded foundation. Secondary education ends with the Unified State Exam, which is the gateway to university admission. The system is strong in mathematics and the sciences, and Russian universities are noted for cybersecurity, robotics and engineering. However, underfunding in rural regions leads to inadequate facilities and an education gap between urban and rural schools. Rote memorisation also limits critical thinking. Ongoing reforms promote digital literacy and online learning, and they support student-centred and inclusive education. Thank you for listening."
 };
+
+function gradeOpen(key, taId, fbId) {
+  var ta = document.getElementById(taId);
+  var res = Grader.score(ta.value, RB[key]);
+  var pct = res.max ? res.pts / res.max : 0;
+  var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
+  var fb = document.getElementById(fbId);
+  fb.style.display = 'block';
+  fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
+  fb.style.border = '1px solid ' + color;
+  fb.innerHTML = Grader.renderResult(res);
+  addScore(key, res.pts);
+  return res;
+}
+function showModel(key, fbId) {
+  var fb = document.getElementById(fbId);
+  fb.style.display = 'block';
+  fb.style.background = 'rgba(201,168,76,0.06)';
+  fb.style.border = '1px solid var(--gold)';
+  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + MODELS[key];
+}
 
 function revealCase() {
   document.getElementById('case-box').classList.add('visible');
@@ -623,75 +791,14 @@ function revealCase() {
 }
 if (loadItem(PREFIX+'caseRevealed') === '1') { revealCase(); }
 
-function checkDQ(n) {
-  var ta = document.getElementById('dq'+n);
-  var txt = ta.value.toLowerCase();
-  var fb = document.getElementById('dq-fb'+n);
-  var c = dqCriteria[n];
-  var words = ta.value.trim().split(/\s+/).filter(function(w){ return w.length>0; }).length;
-  var found = c.keywords.filter(function(k){ return txt.includes(k); });
-  var score = 0;
-  if (words >= c.minWords) score++;
-  score += Math.min(found.length, 3);
-  if (score > 5) score = 5;
-  var pct = score/5;
-  var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
-  fb.style.display = 'block';
-  fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
-  fb.style.border = '1px solid ' + color;
-  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
-    (found.length > 0 ? 'Good use of: <em>'+found.slice(0,3).join(', ')+'</em>. ' : 'No key terms detected. ')+
-    '<br><span style="color:var(--mid-gray);font-size:12px;">Tip: '+c.tip+'</span>';
-  saveItem(PREFIX+'dq'+n+'score', score);
-}
-
-function showModelDQ(n) {
-  var fb = document.getElementById('dq-fb'+n);
-  fb.style.display = 'block';
-  fb.style.background = 'rgba(201,168,76,0.06)';
-  fb.style.border = '1px solid var(--gold)';
-  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + dqCriteria[n].model;
-}
-
-var cqCriteria = {
-  1: {
-    keywords:['unified state exam','use','secondary','gateway','admission','university','higher education'],
-    model:"The Unified State Exam (USE) marks the end of secondary education in Russia. It serves as a gateway to higher education, as university admission relies heavily on USE scores. It is a standardised national examination that assesses students' knowledge across subjects and determines which universities and programmes they can enter."
-  },
-  2: {
-    keywords:['rote memorisation','critical thinking','limit','passive','repetition'],
-    model:"Rote memorisation has been criticised as a dominant teaching practice. Critics argue that it limits students' ability to develop critical thinking, as students learn to repeat information without necessarily understanding or analysing it. This approach is seen as less effective for preparing students for modern, complex professional environments."
-  },
-  3: {
-    keywords:['digital literacy','online learning','student-centred','inclusive','reform','initiative'],
-    model:"Two key goals of Russia's ongoing reforms are: first, to promote digital literacy and expand online learning platforms, equipping students with modern technological skills; and second, to introduce student-centred approaches and inclusive education, shifting away from passive rote learning toward active, participatory teaching methods."
-  }
-};
-
-function checkCQ(n) {
-  var ta = document.getElementById('cq'+n);
-  var txt = ta.value.toLowerCase();
-  var fb = document.getElementById('cq-fb'+n);
-  var c = cqCriteria[n];
-  var found = c.keywords.filter(function(k){ return txt.includes(k); });
-  var score = Math.min(Math.round((found.length / Math.max(c.keywords.length * 0.5, 1)) * 5), 5);
-  var pct = score/5;
-  var color = pct >= 0.8 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
-  fb.style.display = 'block';
-  fb.style.background = pct >= 0.8 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
-  fb.style.border = '1px solid ' + color;
-  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+
-    (found.length > 0 ? 'Keywords found: <em>'+found.join(', ')+'</em>.' : 'Key terms not detected.');
-  saveItem(PREFIX+'cq'+n+'score', score);
-}
-
-function showModelCQ(n) {
-  var fb = document.getElementById('cq-fb'+n);
-  fb.style.display = 'block';
-  fb.style.background = 'rgba(201,168,76,0.06)';
-  fb.style.border = '1px solid var(--gold)';
-  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + cqCriteria[n].model;
-}
+function checkDQ(n) { return gradeOpen('dq'+n, 'dq'+n, 'dq-fb'+n); }
+function showModelDQ(n) { showModel('dq'+n, 'dq-fb'+n); }
+function checkCQ(n) { return gradeOpen('cq'+n, 'cq'+n, 'cq-fb'+n); }
+function showModelCQ(n) { showModel('cq'+n, 'cq-fb'+n); }
+function checkWriting(n) { return gradeOpen('w'+n, 'w'+n, 'w-fb'+n); }
+function showModelWriting(n) { showModel('w'+n, 'w-fb'+n); }
+function checkScript() { return gradeOpen('script', 'script-ta', 'script-fb'); }
+function showModelScript() { showModel('script', 'script-fb'); }
 
 var catTerms = [
   {label:"compulsory education", cats:['S']},
@@ -755,15 +862,27 @@ function assignCategory(cat) {
   updateCatScore();
 }
 
-function updateCatScore() {
+function catCorrect() {
   var correct = 0;
   Object.keys(catAssignments).forEach(function(i) {
     if (catTerms[i] && catTerms[i].cats.indexOf(catAssignments[i]) !== -1) correct++;
   });
-  var total = catTerms.length;
-  var score = Math.round((correct / total) * 15);
-  document.getElementById('cat-score').textContent = correct + '/' + total + ' correct — ' + score + '/15 pts';
-  saveItem(PREFIX+'catScore', score);
+  return correct;
+}
+function updateCatScore() {
+  var assigned = Object.keys(catAssignments).length;
+  document.getElementById('cat-score').textContent = assigned + '/' + catTerms.length + ' terms placed. Press Check to be scored.';
+}
+function checkCategories() {
+  var assigned = Object.keys(catAssignments).length;
+  var out = document.getElementById('cat-score');
+  if (assigned < catTerms.length) { out.textContent = 'Place all ' + catTerms.length + ' terms first (' + assigned + ' placed so far).'; return; }
+  var correct = catCorrect();
+  var pts = correct * 0.5;
+  var wrong = [];
+  Object.keys(catAssignments).forEach(function(i){ if (catTerms[i].cats.indexOf(catAssignments[i]) === -1) wrong.push(catTerms[i].label); });
+  out.textContent = correct + '/' + catTerms.length + ' correct, ' + pts + '/11 points' + (wrong.length ? '. Check again: ' + wrong.join(', ') : '. Perfect!');
+  addScore('cats', pts);
 }
 
 function resetCategories() {
@@ -808,8 +927,8 @@ function speakSelected() {
 }
 
 var fibData = [
-  {pre:"The Russian education system is overseen by the", blank:"Ministry", post:"of Education and Science, which ensures consistent standards nationwide.", hint:"M___try", alts:['ministry of education']},
-  {pre:"Secondary education culminates in the Unified State", blank:"Exam", post:"(USE), which serves as a gateway to higher education.", hint:"Ex__", alts:['examination','use']},
+  {pre:"The Russian education system is overseen by the", blank:"Ministry", post:"of Education and Science, which ensures consistent standards nationwide.", hint:"M___try", alts:['ministry of education','ministry of education and science']},
+  {pre:"Secondary education culminates in the Unified State", blank:"Exam", post:"(USE), which serves as a gateway to higher education.", hint:"Ex__", alts:['examination']},
   {pre:"An over-reliance on rote", blank:"memorisation", post:"has been criticised for limiting students' critical thinking skills.", hint:"mem___sation", alts:['memorization','rote learning']},
   {pre:"Russian universities are particularly noted for strong programmes in cybersecurity and", blank:"robotics", post:", reflecting the country's technological strengths.", hint:"rob___ics", alts:[]},
   {pre:"Ongoing reforms aim to promote digital", blank:"literacy", post:"and expand online learning platforms across the country.", hint:"lit___cy", alts:[]},
@@ -846,9 +965,9 @@ function checkFIBItem(i, showResult) {
 function checkAllFIB() {
   var score = 0;
   fibData.forEach(function(_, i){ if (checkFIBItem(i, true)) score++; });
-  var pts = score * 2;
-  document.getElementById('fib-score').textContent = score + '/6 correct — ' + pts + '/12 pts';
-  saveItem(PREFIX+'fibScore', pts);
+  var pts = score * 3;
+  document.getElementById('fib-score').textContent = score + '/6 correct, ' + pts + '/18 points';
+  addScore('fib', pts);
 }
 
 function resetFIB() {
@@ -861,77 +980,17 @@ function resetFIB() {
   document.getElementById('fib-score').textContent = '';
 }
 
-var writingCriteria = {
-  1: {
-    minWords:50,
-    topicKW:['cybersecurity','robotics','curriculum','well-rounded','digital literacy','higher education','compulsory','mathematics','science','engineering'],
-    vocabKW:['cybersecurity','robotics','curriculum','well-rounded foundation','digital literacy','compulsory education','secondary education','noted for','ongoing reforms','numeracy','vital driver','career advancement'],
-    connectors:['because','however','although','therefore','furthermore','in addition','moreover','additionally','as a result','for example','in particular','first','secondly','finally'],
-    model:"The Russian education system is notable for its strong academic traditions and internationally recognised achievements in several fields. The national curriculum provides a well-rounded foundation, with a particular emphasis on mathematics, sciences, and numeracy. Higher education institutions are noted for their excellent programmes in cybersecurity, robotics, and engineering, making graduates highly competitive internationally. Furthermore, ongoing reforms are promoting digital literacy and expanding online learning platforms, equipping students with the skills needed for career advancement in the modern economy. These strengths make Russia a vital driver of technological development."
-  },
-  2: {
-    minWords:40,
-    topicKW:['underfunding','disparities','rural','education gap','rote memorisation','critical thinking','inclusive','digital literacy','ongoing reforms','student-centred'],
-    vocabKW:['underfunding','disparities','rural regions','education gap','rote memorisation','critical thinking','inclusive education','ongoing reforms','digital literacy','student-centred','inadequate facilities','shortage'],
-    connectors:['however','although','therefore','nevertheless','despite','furthermore','in addition','as a result','consequently','on the other hand'],
-    model:"Despite its strengths, the Russian education system faces significant challenges. Underfunding in rural regions has led to inadequate facilities and a shortage of qualified teachers, creating a growing education gap between urban and rural schools. Furthermore, an over-reliance on rote memorisation limits the development of critical thinking skills. However, ongoing reforms are beginning to address these issues through promoting digital literacy, expanding online learning platforms, and encouraging student-centred approaches. A shift toward inclusive education reflects shared priorities with international frameworks and could help reduce existing disparities."
-  }
-};
+var WRITING_VOCAB = ['cybersecurity','robotics','curriculum','well-rounded foundation','digital literacy','compulsory education','secondary education','noted for','ongoing reforms','numeracy','vital driver','career advancement','underfunding','disparities','rural regions','education gap','rote memorisation','critical thinking','inclusive education','student-centred','inadequate facilities','shortage'];
 
 function updateWordCount(taId, wcId, wbId) {
   var val = document.getElementById(taId).value;
   var words = val.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
   document.getElementById(wcId).textContent = words + ' words';
-  var n = taId === 'w1' ? 1 : 2;
-  var c = writingCriteria[n];
   var vLow = val.toLowerCase();
-  var vocabFound = c.vocabKW.filter(function(k){ return vLow.includes(k.toLowerCase()); }).length;
+  var vocabFound = WRITING_VOCAB.filter(function(k){ return vLow.includes(k.toLowerCase()); }).length;
   var wb = document.getElementById(wbId);
   if (vocabFound >= 3) { wb.textContent = vocabFound + ' vocab terms'; wb.classList.add('show'); }
   else { wb.classList.remove('show'); }
-}
-
-function checkWriting(n) {
-  var val = document.getElementById('w'+n).value;
-  var vLow = val.toLowerCase();
-  var c = writingCriteria[n];
-  var words = val.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
-  var topicFound = c.topicKW.filter(function(k){ return vLow.includes(k.toLowerCase()); });
-  var vocabFound = c.vocabKW.filter(function(k){ return vLow.includes(k.toLowerCase()); });
-  var connFound = c.connectors.filter(function(k){ return vLow.includes(k.toLowerCase()); });
-  var sentences = val.split(/[.!?]+/).filter(function(s){ return s.trim().length > 10; }).length;
-  var score = 0;
-  var details = [];
-  if (words >= c.minWords) { score += 2; details.push('✅ Length (' + words + ' words) +2'); }
-  else { details.push('❌ Length (' + words + '/' + c.minWords + ' words needed) +0'); }
-  var topicScore = topicFound.length >= 3 ? 2 : topicFound.length >= 2 ? 1 : 0;
-  score += topicScore;
-  details.push((topicScore > 0 ? '✅' : '❌') + ' Topic keywords (' + topicFound.length + ' found: ' + topicFound.slice(0,3).join(', ') + ') +' + topicScore);
-  var vocabScore = vocabFound.length >= 5 ? 2 : vocabFound.length >= 3 ? 1 : 0;
-  score += vocabScore;
-  details.push((vocabScore > 0 ? '✅' : '❌') + ' Glossary vocab (' + vocabFound.length + ' terms) +' + vocabScore);
-  var connScore = connFound.length >= 2 ? 1 : 0;
-  score += connScore;
-  details.push((connScore > 0 ? '✅' : '❌') + ' Logical connectors (' + connFound.slice(0,3).join(', ') + ') +' + connScore);
-  var sentScore = sentences >= 3 ? 1 : 0;
-  score += sentScore;
-  details.push((sentScore > 0 ? '✅' : '❌') + ' Sentence variety (' + sentences + ' sentences) +' + sentScore);
-  var pct = score / 8;
-  var color = pct >= 0.75 ? '#38a169' : pct >= 0.5 ? '#C9A84C' : '#e53e3e';
-  var fb = document.getElementById('w-fb'+n);
-  fb.style.display = 'block';
-  fb.style.background = pct >= 0.75 ? 'rgba(56,161,105,0.08)' : pct >= 0.5 ? 'rgba(201,168,76,0.08)' : 'rgba(229,62,62,0.08)';
-  fb.style.border = '1px solid ' + color;
-  fb.innerHTML = '<strong style="color:'+color+'">Score: '+score+'/8</strong><br>' + details.join('<br>');
-  saveItem(PREFIX+'w'+n+'score', score);
-}
-
-function showModelWriting(n) {
-  var fb = document.getElementById('w-fb'+n);
-  fb.style.display = 'block';
-  fb.style.background = 'rgba(201,168,76,0.06)';
-  fb.style.border = '1px solid var(--gold)';
-  fb.innerHTML = '<strong style="color:var(--gold)">📋 Model Answer:</strong><br>' + writingCriteria[n].model;
 }
 
 function saveSpeakingPlan() {
@@ -1019,12 +1078,6 @@ function toggleSpeakingChip(i) {
 function updateChipScore() {
   var used = Object.values(chipsUsed).filter(Boolean).length;
   document.getElementById('chips-used').textContent = used;
-  var score = Math.round((used / 8) * 8);
-  saveItem(PREFIX+'chipsScore', score);
-  if (used >= 6) {
-    document.getElementById('speaking-score-msg').style.display = 'block';
-    document.getElementById('speaking-score-msg').textContent = '★ ' + score + '/8 pts — Great vocabulary use!';
-  }
 }
 
 var reflectionItems = [
@@ -1066,49 +1119,16 @@ function updateReflectionScore() {
   var saved = loadItem(PREFIX+'reflection');
   var arr = saved ? JSON.parse(saved) : [];
   var checked = arr.filter(Boolean).length;
-  var score = Math.round((checked / reflectionItems.length) * 12);
-  document.getElementById('reflection-score').textContent = score;
-  saveItem(PREFIX+'reflScore', score);
+  document.getElementById('reflection-score').textContent = checked;
 }
 
 function calcScore() {
-  var dq = [1,2,3].reduce(function(a,n){ return a + (parseInt(loadItem(PREFIX+'dq'+n+'score'))||0); }, 0);
-  var cq = [1,2,3].reduce(function(a,n){ return a + (parseInt(loadItem(PREFIX+'cq'+n+'score'))||0); }, 0);
-  var cat = parseInt(loadItem(PREFIX+'catScore')) || 0;
-  var fib = parseInt(loadItem(PREFIX+'fibScore')) || 0;
-  var wr = (parseInt(loadItem(PREFIX+'w1score'))||0) + (parseInt(loadItem(PREFIX+'w2score'))||0);
-  var chips = parseInt(loadItem(PREFIX+'chipsScore')) || 0;
-  var refl = parseInt(loadItem(PREFIX+'reflScore')) || 0;
-  var total = dq + cq + cat + fib + wr + chips + refl;
-  var maxTotal = 93;
-  var pct = Math.round((total/maxTotal)*100);
-
-  var breakdown = [
-    {label:'Discussion Questions (×3)', score:dq, max:15},
-    {label:'Comprehension Questions (×3)', score:cq, max:15},
-    {label:'Glossary Categories', score:cat, max:15},
-    {label:'Fill in the Blanks', score:fib, max:12},
-    {label:'Writing Tasks (×2)', score:wr, max:16},
-    {label:'Speaking Keywords', score:chips, max:8},
-    {label:'Self-Reflection', score:refl, max:12}
-  ];
-
-  var html = '<table style="width:100%;border-collapse:collapse;font-size:14px;">';
-  html += '<tr style="border-bottom:2px solid var(--gold);"><th style="text-align:left;padding:8px 4px;color:var(--text3);">Section</th><th style="text-align:right;padding:8px 4px;color:var(--text3);">Score</th><th style="text-align:right;padding:8px 4px;color:var(--text3);">Max</th></tr>';
-  breakdown.forEach(function(b) {
-    html += '<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 4px;">'+b.label+'</td><td style="text-align:right;padding:8px 4px;font-weight:600;color:var(--gold);">'+b.score+'</td><td style="text-align:right;padding:8px 4px;color:var(--text3);">'+b.max+'</td></tr>';
-  });
-  html += '<tr><td style="padding:10px 4px;font-weight:700;font-size:15px;">TOTAL</td><td style="text-align:right;padding:10px 4px;font-weight:800;font-size:15px;color:var(--gold);">'+total+'</td><td style="text-align:right;padding:10px 4px;font-weight:700;">'+maxTotal+'</td></tr>';
-  html += '</table>';
-  document.getElementById('score-breakdown').innerHTML = html;
-
+  updateTotal();
+  var total = RUBRIC.reduce(function(a, r){ return a + (scores[r.key] || 0); }, 0);
+  var pct = Math.round((total / MAX_TOTAL) * 100);
   var grade = pct >= 90 ? 'Excellent! 🏆' : pct >= 75 ? 'Great work! ⭐' : pct >= 60 ? 'Good effort! 👍' : 'Keep practising 📚';
   document.getElementById('total-score-display').innerHTML =
-    '<div style="font-size:48px;font-weight:800;color:var(--gold);">'+total+'<span style="font-size:24px;color:var(--text3);">/'+maxTotal+'</span></div>'+
-    '<div style="font-size:20px;font-weight:700;margin-top:4px;">'+pct+'% — '+grade+'</div>';
-
-  document.getElementById('total-score-chip').textContent = total;
-  saveItem(PREFIX+'totalScore', total);
+    '<div style="font-size:18px;font-weight:700;margin-top:4px;">' + pct + '%: ' + grade + '</div>';
   if (pct >= 80) { showConfetti(); showBanner(grade); }
 }
 
@@ -1133,6 +1153,17 @@ function showBanner(text) {
   setTimeout(function(){ b.classList.remove('show'); }, 2500);
 }
 
+// Scores saved under the old rules are discarded once, so that all results follow the table above.
+if (loadItem(PREFIX+'rubric') !== RUBRIC_VERSION) {
+  try {
+    ['dq1score','dq2score','dq3score','cq1score','cq2score','cq3score','catScore','fibScore','w1score','w2score','chipsScore','reflScore','totalScore'].forEach(function(k){ localStorage.removeItem(PREFIX+k); });
+    RUBRIC.forEach(function(r){ localStorage.removeItem(PREFIX+'sc_'+r.key); });
+  } catch(e){}
+  saveItem(PREFIX+'rubric', RUBRIC_VERSION);
+}
+RUBRIC.forEach(function(r){ var v = parseFloat(loadItem(PREFIX+'sc_'+r.key)); if (!isNaN(v)) scores[r.key] = Math.max(0, Math.min(r.max, v)); });
+document.querySelectorAll('[data-rb]').forEach(function(el){ el.innerHTML = Grader.renderRule(RB[el.getAttribute('data-rb')]); });
+updateTotal();
 renderCatTerms();
 renderCards('');
 renderFIB();
@@ -1140,6 +1171,7 @@ renderChips();
 renderReflection();
 ['dq1','dq2','dq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) document.getElementById(id).value = v; });
 ['cq1','cq2','cq3'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) document.getElementById(id).value = v; });
+var sc = loadItem(PREFIX+'script'); if (sc) document.getElementById('script-ta').value = sc;
 ['w1','w2'].forEach(function(id){ var v = loadItem(PREFIX+id); if (v) { document.getElementById(id).value = v; updateWordCount(id, 'wc'+id.slice(1), 'wb'+id.slice(1)); } });
 </script>
 <div id="tab-infographics" class="section">

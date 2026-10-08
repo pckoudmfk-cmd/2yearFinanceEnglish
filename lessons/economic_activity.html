@@ -114,6 +114,7 @@
   .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:8px;transition:.6s}
   @media(max-width:600px){.header{padding:14px 16px}.tab{padding:10px 12px;font-size:.75rem}.main{padding:16px 12px}}
 </style>
+<script src="grader.js"></script>
 </head>
 <body>
 <div class="header">
@@ -229,14 +230,17 @@
   <div class="card">
     <h2>🏗 Task 2 — Build the Logical Chain</h2>
     <p style="font-size:.85rem;color:var(--text2);margin-bottom:10px">Fill in the three missing steps in the economic chain.</p>
-    <p class="rule">Scoring: up to 3 points per step (maximum 9). 3 points = at least 4 words and a key term from the text; 1 point = at least 4 words but no key term; 0 = fewer than 4 words. Only your best attempt counts.</p>
+    <p class="rule">Write one full sentence (at least 6 words) for each step. Each step is checked for the ideas it needs inside that sentence. Maximum 9 points in total (3 per step).</p>
     <div style="background:var(--navy2);border-radius:8px;padding:12px 14px;margin-bottom:10px;font-size:.85rem;color:var(--text2)">📌 A country identifies its human, natural, and capital resources</div>
     <div class="question-block">
       <div class="q-label">Step 2</div>
+      <div id="rule-chain1"></div>
       <textarea id="chain1" rows="2" placeholder="What happens next..."></textarea>
       <div class="q-label" style="margin-top:10px">Step 3</div>
+      <div id="rule-chain2"></div>
       <textarea id="chain2" rows="2" placeholder="Continue the chain..."></textarea>
       <div class="q-label" style="margin-top:10px">Step 4</div>
+      <div id="rule-chain3"></div>
       <textarea id="chain3" rows="2" placeholder="Final step before delivery..."></textarea>
     </div>
     <div style="background:var(--navy2);border-radius:8px;padding:12px 14px;margin-bottom:12px;font-size:.85rem;color:var(--text2)">🏁 Goods and services reach consumers, and basic economic questions are answered</div>
@@ -244,18 +248,16 @@
     <div id="chain-fb" class="feedback"></div>
     <script>
     function checkChain(){
-      const vals=[document.getElementById('chain1').value,document.getElementById('chain2').value,document.getElementById('chain3').value];
-      const kws=[['resource','material','identify'],['produce','manufacture','create','make'],['distribute','allocate','sell','market']];
-      let pts=0;
-      vals.forEach((v,i)=>{
-        const t=v.toLowerCase();
-        if(wordCount(t)>=4&&kws[i].some(k=>t.includes(k)))pts+=3;
-        else if(wordCount(t)>=4)pts+=1;
+      let pts=0,html='';
+      [1,2,3].forEach(i=>{
+        const res=Grader.score(document.getElementById('chain'+i).value,RB.chain[i-1]);
+        pts+=res.pts;
+        html+='<div style="margin-bottom:8px"><em>Step '+(i+1)+'</em><br>'+Grader.renderResult(res)+'</div>';
       });
       addScore('structure2',pts);
       const fb=document.getElementById('chain-fb');
-      fb.className='feedback show '+(pts>=9?'good':pts>=3?'ok':'poor');
-      fb.textContent=pts>=9?'Excellent logical chain! +9 pts':pts>=3?`Good effort! +${pts} pts. Use key terms: resources, produce, distribute.`:`+${pts} pts. Write at least 4 words per step and use economic vocabulary.`;
+      fb.className='feedback show '+(pts>=8?'good':pts>=4?'ok':'poor');
+      fb.innerHTML='<strong>Chain total: '+pts+' / 9</strong><div style="margin-top:6px">'+html+'</div>';
     }
     </script>
   </div>
@@ -263,7 +265,7 @@
   <div class="card">
     <h2>🏗 Task 3 — Cause & Effect</h2>
     <p style="font-size:.85rem;color:var(--text2);margin-bottom:10px">Complete each cause-and-effect chain using information from the text.</p>
-    <p class="rule">Scoring: up to 3 points per item (maximum 9). 3 points = at least 4 words and 2 or more key terms; 2 points = at least 4 words and 1 key term; 1 point = at least 4 words, no key term; 0 = fewer than 4 words. Only your best attempt counts.</p>
+    <p class="rule">Write one full sentence (at least 6 words) for each item, in your own words. Each item is worth 3 points and is checked for the ideas it needs inside one sentence (maximum 9). Copying the reading text is capped.</p>
     <div id="ce-container"></div>
     <button class="check-btn" onclick="checkCE()">✔ Check</button>
     <div id="ce-fb" class="feedback"></div>
@@ -280,31 +282,25 @@
         div.className='question-block';
         div.setAttribute('data-kw',JSON.stringify(item.kw));
         div.innerHTML=`<div class="q-text" style="color:var(--gold2)">${item.q}</div>
+          <div id="rule-ce${i}"></div>
           <textarea id="ce${i}" rows="2" placeholder="Write the effect..."></textarea>
           <div id="ce-res${i}" style="font-size:.78rem;margin-top:4px;color:var(--text3)"></div>`;
         container.appendChild(div);
       });
     })();
     function checkCE(){
-      const items=[
-        ['production','stop','halt','decline','insufficient'],
-        ['perishable','consume','satisfy','need','use'],
-        ['scarcity','price','shortage','limited','insufficient']
-      ];
       let total=0;
-      items.forEach((kws,i)=>{
-        const v=document.getElementById(`ce${i}`).value.toLowerCase();
-        const hits=kws.filter(k=>v.includes(k));
-        const pts=wordCount(v)>=4?(hits.length>=2?3:hits.length>=1?2:1):0;
-        total+=pts;
-        const res=document.getElementById(`ce-res${i}`);
-        res.textContent=pts===3?'✅ Great — key terms used!':pts>=1?`✓ Good. Try using: ${kws.filter(k=>!v.includes(k)).slice(0,2).join(', ')}`:'Write at least 4 words.';
-        res.style.color=pts===3?'#7effc8':pts>=1?'#f5c842':'#ff9090';
+      [0,1,2].forEach(i=>{
+        const r=Grader.score(document.getElementById('ce'+i).value,RB.ce[i]);
+        total+=r.pts;
+        const res=document.getElementById('ce-res'+i);
+        res.innerHTML=Grader.renderResult(r);
+        res.style.color='';
       });
       addScore('structure3',total);
       const fb=document.getElementById('ce-fb');
-      fb.className='feedback show '+(total>=7?'good':total>=3?'ok':'poor');
-      fb.textContent=`Total: +${total} pts`;
+      fb.className='feedback show '+(total>=7?'good':total>=4?'ok':'poor');
+      fb.textContent='Total: '+total+' / 9';
     }
     </script>
   </div>
@@ -516,32 +512,35 @@
 <div id="tab-writing" class="section">
   <div class="card">
     <h2>✍️ Writing Tasks</h2>
-    <p class="rule">Scoring: each task is marked on two parts. Length: full length points at the target number of words (30 words for Tasks 1–2, 50 words for Task 3), half of them at half the target, none below that; length points are given only if the answer uses at least 2 key terms. Key terms: 1 point for every 2 different key terms you use, up to 2 points. Maximum: Task 1 = 5, Task 2 = 5, Task 3 = 6 (total 16). Only your best attempt counts.</p>
+    <p class="rule">Each writing task has its own scoring box below. Your answer is checked for the ideas it must contain, written as real sentences in your own words. Keywords alone, repeated words or text copied from the reading earn nothing. Maximum: Task 1 = 5, Task 2 = 5, Task 3 = 6 (total 16). Only your best attempt counts.</p>
 
     <div class="question-block">
       <div class="q-label">Task 1 — Concept Differentiation</div>
       <div class="q-text">Explain the difference between <strong>perishable goods</strong> and <strong>durable goods</strong>. Give one example of each.</div>
+      <div id="rule-w1"></div>
       <textarea id="w1" rows="4" placeholder="Write 2–3 sentences..." oninput="updateWC(1)"></textarea>
       <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc1">0</span> (target 30+)</div>
-      <button class="check-btn" onclick="checkW(1,['perishable','durable','example','last','food','furniture','car','computer','bad'],5,30)">✔ Check</button>
+      <button class="check-btn" onclick="checkW(1)">✔ Check</button>
       <div id="w-fb1" class="feedback"></div>
     </div>
 
     <div class="question-block">
       <div class="q-label">Task 2 — Concept Differentiation</div>
       <div class="q-text">Explain the difference between <strong>needs</strong> and <strong>wants</strong>. Why is this distinction important in economics?</div>
+      <div id="rule-w2"></div>
       <textarea id="w2" rows="4" placeholder="Write 2–3 sentences..." oninput="updateWC(2)"></textarea>
       <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc2">0</span> (target 30+)</div>
-      <button class="check-btn" onclick="checkW(2,['need','want','survive','basic','desire','scarcity','limited','important','economics'],5,30)">✔ Check</button>
+      <button class="check-btn" onclick="checkW(2)">✔ Check</button>
       <div id="w-fb2" class="feedback"></div>
     </div>
 
     <div class="question-block">
       <div class="q-label">Task 3 — Extended Response (50–70 words)</div>
       <div class="q-text">If a country runs out of one type of resource (for example, skilled workers), what happens to the production of goods and services?</div>
+      <div id="rule-w3"></div>
       <textarea id="w3" rows="5" placeholder="Write your paragraph..." oninput="updateWC(3)"></textarea>
       <div style="font-size:.75rem;color:var(--text3);margin-top:4px">Words: <span id="wc3">0</span> (target 50–70)</div>
-      <button class="check-btn" onclick="checkW(3,['production','stop','decline','resource','scarcity','supply','goods','services','workers','human'],6,50)">✔ Check</button>
+      <button class="check-btn" onclick="checkW(3)">✔ Check</button>
       <div id="w-fb3" class="feedback"></div>
     </div>
 
@@ -550,23 +549,12 @@
       const v=document.getElementById('w'+n).value.trim();
       document.getElementById('wc'+n).textContent=v?v.split(/\s+/).length:0;
     }
-    function checkW(n,kws,maxPts,target){
-      const v=document.getElementById('w'+n).value.toLowerCase().trim();
-      const wc=v?v.split(/\s+/).length:0;
-      const lenMax=maxPts-2;
-      const hits=kws.filter(k=>v.includes(k));
-      const lenPts=hits.length<2?0:wc>=target?lenMax:wc>=Math.ceil(target/2)?Math.ceil(lenMax/2):0;
-      const kwPts=Math.min(2,Math.floor(hits.length/2));
-      const pts=Math.min(maxPts,lenPts+kwPts);
-      addScore('writing'+n,pts);
-      const fb=document.getElementById(`w-fb${n}`);
-      const missing=kws.filter(k=>!v.includes(k)).slice(0,3);
-      fb.className='feedback show '+(pts>=maxPts-1?'good':pts>=Math.round(maxPts/2)?'ok':'poor');
-      let msg=`Length: ${lenPts}/${lenMax} pts (${wc} words, target ${target}). Key terms: ${kwPts}/2 pts (${hits.length} found${hits.length?': '+hits.join(', '):''}). Total +${pts}/${maxPts}.`;
-      if(hits.length<2)msg+=' Length points are given only when the answer uses at least 2 key terms.';
-      else if(lenPts<lenMax)msg+=` Write at least ${target} words for full length points.`;
-      if(kwPts<2&&missing.length)msg+=` Try adding: ${missing.join(', ')}.`;
-      fb.textContent=msg;
+    function checkW(n){
+      const res=Grader.score(document.getElementById('w'+n).value,RB.writing[n-1]);
+      addScore('writing'+n,res.pts);
+      const fb=document.getElementById('w-fb'+n);
+      fb.className='feedback show '+(res.pts>=res.max*.8?'good':res.pts>=res.max*.5?'ok':'poor');
+      fb.innerHTML=Grader.renderResult(res);
     }
     </script>
   </div>
@@ -597,7 +585,8 @@
 
   <div class="card">
     <h2>🎤 Speaking Task — 60 Seconds</h2>
-    <p class="rule">Scoring of the script (maximum 8): 8 points = at least 5 key terms and 50 words; 5 points = at least 3 key terms and 30 words; 2 points = at least 1 key term and 10 words; otherwise 0. The timer and the self-score slider are for your own practice and are not counted in the total. Only your best attempt counts.</p>
+    <p class="rule">The script is graded by the scoring box below (maximum 8). The timer and the self-score slider are for your own practice and are not counted in the total. Only your best attempt counts.</p>
+    <div id="rule-script"></div>
     <p style="font-size:.85rem;color:var(--text2);margin-bottom:14px">Explain the concept of <strong>scarcity</strong> to a first-year student. Use at least 5 glossary terms. You have <strong>60 seconds</strong>. Write your script, then practise aloud using the timer.</p>
 
     <div class="question-block">
@@ -659,16 +648,11 @@
     document.getElementById('sp-wc').textContent=v?v.split(/\s+/).length:0;
   }
   function checkScript(){
-    const v=document.getElementById('sp1').value.toLowerCase().trim();
-    const kws=['scarcity','demand','supply','resource','want','need','consumer','producer','goods','services','limited','unlimited'];
-    const hits=kws.filter(k=>v.includes(k));
-    const wc=v?v.split(/\s+/).length:0;
-    const pts=hits.length>=5&&wc>=50?8:hits.length>=3&&wc>=30?5:hits.length>=1&&wc>=10?2:0;
-    addScore('script',pts);
+    const res=Grader.score(document.getElementById('sp1').value,RB.script);
+    addScore('script',res.pts);
     const fb=document.getElementById('sp-script-fb');
-    fb.className='feedback show '+(pts>=8?'good':pts>=5?'ok':'poor');
-    fb.textContent=pts>=8?`✅ Excellent! ${hits.length} key terms: ${hits.join(', ')}. Now practise with the timer! +${pts} pts`:
-      `Terms found (${hits.length}/5): ${hits.join(', ')||'none'}. ${wc<30?'Write more — aim for 80+ words.':'Try adding: '+kws.filter(k=>!v.includes(k)).slice(0,3).join(', ')+'.'} +${pts} pts`;
+    fb.className='feedback show '+(res.pts>=res.max*.8?'good':res.pts>=res.max*.5?'ok':'poor');
+    fb.innerHTML=Grader.renderResult(res);
   }
   </script>
 </div>
@@ -715,17 +699,93 @@ function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 // One table drives everything: the maximum per task, the total (93) and the explanation on the My Score tab.
 const RUBRIC=[
   {key:'structure1',label:'Text Structure · Task 1 (matching)',max:15,rule:'3 points for each correct match (5 matches).'},
-  {key:'structure2',label:'Text Structure · Task 2 (logical chain)',max:9,rule:'Up to 3 points per step: 3 = at least 4 words and a key term; 1 = at least 4 words without a key term; 0 = fewer than 4 words.'},
-  {key:'structure3',label:'Text Structure · Task 3 (cause and effect)',max:9,rule:'Up to 3 points per item: 3 = at least 4 words and 2+ key terms; 2 = 1 key term; 1 = no key term; 0 = fewer than 4 words.'},
+  {key:'structure2',label:'Text Structure · Task 2 (logical chain)',max:9,rule:'Three steps, 3 points each: the main idea of the step stated in one sentence (2: resources and what is done with them; who makes what; goods sold to consumers) plus a second supporting idea (1). Copying is capped.'},
+  {key:'structure3',label:'Text Structure · Task 3 (cause and effect)',max:9,rule:'Three items, 3 points each: the effect stated in one sentence with the right ideas (2) and the second required idea (1). Copying is capped.'},
   {key:'cats',label:'Vocabulary Categorisation',max:12,rule:'Up to 8 points for the share of the 26 glossary terms listed (each counted once), up to 2 for naming the categories, up to 2 for filling the columns (2+ terms each).'},
   {key:'fib',label:'Fill in the Blanks',max:24,rule:'3 points for each correct blank (8 blanks).'},
-  {key:'writing1',label:'Writing · Task 1',max:5,rule:'Length (3 pts at 30 words, 2 pts at 15; only with 2+ key terms) + key terms (1 pt per 2 terms, up to 2).'},
-  {key:'writing2',label:'Writing · Task 2',max:5,rule:'Length (3 pts at 30 words, 2 pts at 15; only with 2+ key terms) + key terms (1 pt per 2 terms, up to 2).'},
-  {key:'writing3',label:'Writing · Task 3',max:6,rule:'Length (4 pts at 50 words, 2 pts at 25; only with 2+ key terms) + key terms (1 pt per 2 terms, up to 2).'},
-  {key:'script',label:'Speaking script',max:8,rule:'8 = 5+ key terms and 50 words; 5 = 3+ key terms and 30 words; 2 = 1+ key term and 10 words.'}
+  {key:'writing1',label:'Writing · Task 1',max:5,rule:'Perishable and durable each explained correctly (1+1), a contrast (1), an example (1) and a correct example of each type (1). Wrong claims lose 1 point.'},
+  {key:'writing2',label:'Writing · Task 2',max:5,rule:'Need explained (1), want explained (1), contrast (1), why the difference matters because of scarcity and choice (2). Wrong claims lose 1 point.'},
+  {key:'writing3',label:'Writing · Task 3',max:6,rule:'Effect on production in one sentence (2), a reason (1), an example (1), reference to the resource types or scarcity (1), length of 50 words (1).'},
+  {key:'script',label:'Speaking script',max:8,rule:'Scarcity defined (1), wants unlimited versus resources limited (2), demand greater than supply (2), types of resources (1), an example (1), 60+ words (1). Wrong claims lose 1 point.'}
 ];
 const MAX_TOTAL=RUBRIC.reduce((a,r)=>a+r.max,0); // 93
-const RUBRIC_VERSION='2';
+const RUBRIC_VERSION='3';
+
+// ── Content-aware rubrics (every open answer is graded with Grader.score) ──
+const SRC=(document.querySelector('.lesson-text')||{}).textContent||'';
+// NEAR(a,b,n): a pattern in which an idea from list a and an idea from list b stand within n words of each other (either order).
+const NEAR=(a,b,n)=>{const A='(?:'+a.join('|')+')',B='(?:'+b.join('|')+')';return [A+'(?:\\W+\\w+){0,'+n+'}\\W+'+B,B+'(?:\\W+\\w+){0,'+n+'}\\W+'+A];};
+const G_RES=['resource','material','\\bcapital','labou?r','\\bworkers?','human','natural'];
+const G_GOODS=['goods','services','\\bproducts?\\b'];
+const G_PROD=['produc\\w*','output','goods','services','economy','manufactur\\w*','business'];
+const G_STOP=['\\bstop','\\bhalt','declin','decreas','\\bfall','fewer','less (production|output|goods|services)','reduc','\\bslow','cannot','can\'t','\\bunable','impossible','shrink','suffer','collaps','not be able','will not','won\'t'];
+const G_CONN=['because','since','therefore','thus','as a result','consequently','so that','this means','which means','that is why','which is why','\\bso\\b','leads? to','results? in'];
+const G_CASE=['doctors?','nurses?','teachers?','engineers?','farm\\w*','bak\\w+','factor\\w+','hospitals?','schools?','banks?','\\boil\\b','water','petrol','hous\\w+','\\bcars?\\b','phones?','bread','wheat','coffee','medicine','electricity','\\bmines?\\b','mining','restaurants?','shops?'];
+const RB={
+  chain:[
+    {max:3,minWords:7,source:SRC,criteria:[
+      {type:'claim',pts:2,label:'One sentence names the resources and what is done with them (use, combine, allocate, plan...)',all:[G_RES,['\\b(use|used|using|combin|gather|allocat|assign|organi[sz]|employ|appl(y|ies)|turn|bring|put|decid|plan|choos|collect)']]},
+      {type:'concepts',pts:1,label:'Names at least 2 of the 3 kinds of resources (human, natural, capital)',need:2,of:[['human','\\bworkers?','labou?r','\\bpeople\\b'],['natural','raw material'],['\\bcapital','\\bmoney','property','machin\\w+']]}]},
+    {max:3,minWords:7,source:SRC,criteria:[
+      {type:'claim',pts:2,label:'One sentence says who makes or provides what (producers make goods or provide services)',all:[NEAR(['produc\\w*','firms?','compan\\w+','factor\\w+','farm\\w*','business\\w*','\\bpeople','workers?'],['\\bmake','\\bmaking','\\bmade','creat\\w+','provid\\w+','build\\w*','manufactur\\w+','\\bproduce'],6),G_GOODS.concat(['food','\\bcars?\\b'])]},
+      {type:'claim',pts:1,label:'The goods or services are made from resources (materials, workers, capital)',all:[['\\bmade (from|of|with)','\\buse','\\busing\\b','\\bfrom\\b','\\bwith\\b','\\bout of\\b','\\bneeds?\\b','\\brequire'],G_RES,G_GOODS]}]},
+    {max:3,minWords:7,source:SRC,criteria:[
+      {type:'claim',pts:2,label:'One sentence says the goods or services are distributed, delivered or sold to consumers',all:[['distribut','deliver','\\bsell','\\bsold','\\bsale','market','allocat','transport','\\bship','supply','reach','\\bbuy','\\bbought','retail'],G_GOODS,['consumer','customer','people','buyer','household','public','demand','market','\\bshops?\\b','\\bstores?\\b','retail','\\bwho\\b']]},
+      {type:'claim',pts:1,label:'The consumers are named and what they do with the goods (buy, use, need, receive)',all:[['consumers?','customers?','buyers?','households?'],['\\bneeds?','\\bwants?','satisf\\w+','\\buse','consum\\w+','\\bbuy','purchas\\w+','demand','\\bget','receiv\\w+','\\bbuying']]}]}
+  ],
+  ce:[
+    {max:3,minWords:7,source:SRC,criteria:[
+      {type:'claim',pts:2,label:'The effect: production (goods, services) stops, falls or becomes impossible',all:[NEAR(G_PROD,G_STOP,5)]},
+      {type:'claim',pts:1,label:'The cause is linked: a lack of capital, money or resources',all:[NEAR(['\\bcapital','money','property','resources?','\\bfunds?\\b','investment','equipment','machin\\w+'],['\\black','missing','shortage','not enough','without','insufficient','run out','\\bno\\b','few','little'],5),['produc','goods','services','output','economy','manufactur','business','factor']]}],
+     misconceptions:[{re:'(production|output) (will |would )?(increase|grow|rise|improve)',msg:'Less capital cannot make production grow.'}]},
+    {max:3,minWords:7,source:SRC,criteria:[
+      {type:'claim',pts:2,label:'The effect: the consumer satisfies or meets a need or want (uses the food)',all:[NEAR(['satisf\\w+','\\bmeet\\w*','fulfil\\w*','cover\\w*'],['\\bneeds?\\b','\\bwants?\\b','hunger'],4)]},
+      {type:'claim',pts:1,label:'Links to the text: food is perishable / used up, bought for personal use, not for resale',all:[['perishable','spoil','go bad','goes bad','going bad','not last','used up','consumer good','personal use','role of (a )?consumer','is (a )?consumer'],['\\bfood','goods','product','meal','\\bit\\b']]}],
+     misconceptions:[{re:'(resell|for resale|to sell it|sells? (the|it|food))',msg:'A consumer buys for personal use, not for resale.'}]},
+    {max:3,minWords:7,source:SRC,criteria:[
+      {type:'claim',pts:2,label:'The effect: scarcity or a shortage, because there is not enough for everyone',all:[NEAR(['scarc\\w*','shortage','not enough','insufficient'],['goods?\\b','services?\\b','resources?','supply','demand','people','wants','consumers','buyers','everyone','all'],6)]},
+      {type:'claim',pts:1,label:'A consequence: prices rise, people compete or must choose',all:[['\\bprices?\\b','expensive','\\bris(e|es|ing)\\b','increas\\w+','\\bchoose','\\bchoice','compet\\w+','ration\\w*','queue'],['goods?\\b','services?\\b','resources?','supply','demand','people','consumers','buyers','scarc','shortage','everyone']]}],
+     misconceptions:[{re:'(supply|production) (is|are|was) (greater|higher|bigger|more) than (the )?demand',msg:'Scarcity exists when demand is greater than supply, not the other way round.'}]}
+  ],
+  writing:[
+    {max:5,minWords:25,source:SRC,criteria:[
+      {type:'claim',pts:1,label:'Perishable goods: they cannot be stored for long and go bad',all:[NEAR(['\\bperishable'],['\\bbad','spoil\\w*','\\brot\\w*','go off','stored','storing','short (time|life)','quickly','soon','not last','not (be )?kept','expire\\w*'],8)]},
+      {type:'claim',pts:1,label:'Durable goods: they last a long time',all:[NEAR(['\\bdurable'],['\\blast\\w*','long time','\\byears','longer','repeated','many times','for a long'],8)]},
+      {type:'contrast',pts:1,label:'A comparison of the two kinds (but, while, whereas, unlike...)',topics:[['perishable','spoil','go bad','goes bad','short','food'],['durable','furniture','\\bcars?\\b','computer','long time','last']]},
+      {type:'claim',pts:1,label:'A correct example of a perishable good (food, milk, fruit...) next to the word perishable',all:[NEAR(['\\bperishable'],['\\bfood','\\bmilk','bread','fruit','vegetable','\\bmeat','\\bfish','yogh?urt','\\beggs?\\b','cheese','banana','apple','tomato'],5)]},
+      {type:'claim',pts:1,label:'A correct example of a durable good (furniture, a car, a computer...) next to the word durable',all:[NEAR(['\\bdurable'],['furniture','\\bcars?\\b','computer','laptop','\\bphone','fridge','washing machine','\\btable','\\bchair','\\bsofa','\\btv\\b','television','\\bhouse','appliance'],5)]}],
+     misconceptions:[{re:'perishable (goods? )?(can )?(last|lasts) (a )?(long|for years|longer)',msg:'Perishable goods do not last long.'},{re:'durable (goods? )?\\b(go|goes|spoil|spoils|rot|rots|are used up)\\b',msg:'Durable goods last a long time.'}]},
+    {max:5,minWords:25,source:SRC,criteria:[
+      {type:'claim',pts:1,label:'Needs: things people must have (basic, essential, to survive)',all:[NEAR(['\\bneeds?\\b'],['survive','survival','essential','\\bbasic','necessary','\\bmust','cannot live','require','\\bfood','water','shelter','health'],7)]},
+      {type:'claim',pts:1,label:'Wants: things people would like but do not have to have (desires, extras, unlimited)',all:[NEAR(['\\bwants?\\b','desires?'],['not essential','non-essential','nonessential','luxur\\w+','extra','nice to have','unnecessary','unlimited','endless','would like','do not (have|need)','don\'t (have|need)','\\bwish','more than'],7)]},
+      {type:'contrast',pts:1,label:'A comparison of needs and wants (but, while, whereas...)',topics:[['\\bneeds?\\b','survive','essential','\\bbasic','necessary'],['\\bwants?\\b','desire','luxur','not essential','unlimited']]},
+      {type:'claim',pts:1,label:'Why it matters: wants are unlimited but resources are limited, so people and countries must choose',all:[NEAR(['resources?','wants?','needs?','supply'],['\\blimited','scarc\\w*','unlimited','finite','not enough','endless'],5),['\\bchoose','\\bchoice','decid\\w+','priorit\\w+','allocat\\w+','economics?\\b','economist','produc\\w+','distribut\\w+']]},
+      {type:'claim',pts:1,label:'A reason (because, so, therefore...) that joins wants or resources with choice, scarcity or production',all:[G_CONN,['\\bwants?\\b','\\bneeds?\\b','resources?','scarc\\w*','\\blimited'],['\\bchoose','\\bchoice','decid\\w+','priorit\\w+','allocat\\w+','produc\\w+','economic\\w*','\\blimited','scarc\\w*']]}],
+     misconceptions:[{re:'wants? (are|is) (limited|finite)\\b',msg:'Human wants tend to be unlimited.'},{re:'needs and wants (are|is) (the same|identical)',msg:'Needs and wants are different things.'},{re:'resources (are|is) unlimited',msg:'Resources are limited.'}]},
+    {max:6,minWords:40,source:SRC,criteria:[
+      {type:'claim',pts:2,label:'One sentence says production of goods and services falls or stops, and links it to the missing resource',all:[NEAR(G_PROD,G_STOP,6),['resource','worker','labou?r','human','skill','capital','natural','material','missing','\\black','shortage','run(s)? out','without']]},
+      {type:'claim',pts:1,label:'A reason (because, so, therefore...) that joins the missing resource with the fall in production',all:[G_CONN,['resource','worker','skill','human','capital','labou?r','missing','\\black','shortage','run(s)? out','without'],G_PROD.concat(['price','unemploy','declin','\\bstop'])]},
+      {type:'claim',pts:1,label:'A concrete example (for example, such as... plus a real case: doctors, a factory, oil, bread...)',all:[['for example','for instance','such as','e\\.g','one example'],G_CASE]},
+      {type:'concepts',pts:1,label:'Refers to at least 2 of: human resources, natural resources, capital resources, scarcity',need:2,of:[['human\\W+resources?','\\bworkers?','labou?r','skilled'],['natural\\W+resources?','raw material'],['capital\\W+resources?','\\bmoney','property'],['scarc\\w+','shortage','not enough']]},
+      {type:'length',pts:1,label:'At least 50 words (no point below 50)',words:50}],
+     misconceptions:[{re:'(production|output) (will |would )?(increase|grow|rise|improve|stay the same|not change)',msg:'Missing resources reduce production.'}]}
+  ],
+  script:{max:8,minWords:40,source:SRC,criteria:[
+    {type:'claim',pts:1,label:'Scarcity is explained: not enough resources for all wants',all:[['scarcity'],NEAR(['resources?','wants?','demand','supply','goods'],['not enough','\\blimited','shortage','cannot (all )?have','can\'t (all )?have','gap','too (little|few)'],6)]},
+    {type:'claim',pts:2,label:'One sentence: wants are unlimited, but resources are limited',all:[NEAR(['wants?','needs?','desires?','demands?'],['unlimited','endless','infinite','never[- ]ending'],4),NEAR(['resources?','supply','supplies'],['\\blimited','finite','scarce','not enough'],4)]},
+    {type:'claim',pts:2,label:'One sentence: scarcity exists when demand is greater than supply',all:[['demand(\\W+\\w+){0,8}\\W+(greater|higher|bigger|larger|more|exceeds?|exceeded|outweighs?)(\\W+\\w+){0,4}\\W+supply','supply(\\W+\\w+){0,8}\\W+(smaller|lower|less|too (low|small|little)|not enough)(\\W+\\w+){0,4}\\W+demand','demand(\\W+\\w+){0,3}\\W+is\\W+too\\W+high']]},
+    {type:'concepts',pts:1,label:'Mentions at least 2 kinds of resources (human, natural, capital)',need:2,of:[['human','\\bworkers?','labou?r'],['natural','raw material'],['\\bcapital','\\bmoney','property']]},
+    {type:'claim',pts:1,label:'An example (for example, such as... plus a real case: doctors, oil, bread, housing...)',all:[['for example','for instance','such as','e\\.g','one example'],G_CASE]},
+    {type:'length',pts:1,label:'At least 60 words (no point below 60)',words:60}],
+   misconceptions:[{re:'scarcity (means|is) (no|zero|plenty|too much)',msg:'Scarcity means there is not enough to satisfy all wants.'},{re:'(supply|production) (is|are|was) (greater|higher|bigger|more) than (the )?demand',msg:'Scarcity exists when demand is greater than supply.'},{re:'resources (are|is) unlimited',msg:'Resources are limited.'}]}
+};
+(function renderRules(){
+  const put=(id,rb,t)=>{const el=document.getElementById(id);if(el)el.innerHTML=Grader.renderRule(rb,t);};
+  RB.chain.forEach((rb,i)=>put('rule-chain'+(i+1),rb,'Step '+(i+2)));
+  RB.ce.forEach((rb,i)=>put('rule-ce'+i,rb,'Item '+(i+1)));
+  RB.writing.forEach((rb,i)=>put('rule-w'+(i+1),rb,'Writing Task '+(i+1)));
+  put('rule-script',RB.script,'Speaking script');
+})();
 const scores={};
 function wordCount(t){const x=(t||'').trim();return x?x.split(/\s+/).length:0;}
 function addScore(key,pts){
@@ -834,7 +894,7 @@ function saveReflectNote(i,v){
     try{old.forEach(k=>localStorage.removeItem(PREFIX+'sc_'+k));}catch(e){}
     lsSet(PREFIX+'rubric',RUBRIC_VERSION);
   }
-  RUBRIC.forEach(r=>{const v=parseInt(lsGet(PREFIX+'sc_'+r.key));if(!isNaN(v))scores[r.key]=Math.max(0,Math.min(r.max,v));});
+  RUBRIC.forEach(r=>{const v=parseFloat(lsGet(PREFIX+'sc_'+r.key));if(!isNaN(v))scores[r.key]=Math.max(0,Math.min(r.max,v));});
   updateTotal();
   renderReflect();
 })();

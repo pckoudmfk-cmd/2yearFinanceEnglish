@@ -133,6 +133,11 @@
   .badge-T{background:rgba(52,152,219,.2);color:#3498db}
   .badge-F{background:rgba(231,76,60,.2);color:#e74c3c}
   .badge-M{background:rgba(46,204,113,.2);color:#2ecc71}
+  .rule{font-size:.76rem;color:var(--text3);background:var(--navy2);border-left:3px solid var(--gold);border-radius:4px;padding:7px 12px;margin:0 0 14px;line-height:1.55}
+  .rubric-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:18px;text-align:left}
+  .rubric-table th{color:var(--text3);font-weight:600;padding:8px 6px;border-bottom:2px solid var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:.3px}
+  .rubric-table td{padding:8px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  .rubric-table td.num{text-align:right;white-space:nowrap;font-weight:700;color:var(--gold)}
   .mt-8{margin-top:8px}.mt-12{margin-top:12px}
   @media(max-width:600px){.header{padding:14px 16px}.tab{padding:10px 12px;font-size:.75rem}}
 
@@ -165,7 +170,7 @@
   <div class="tab" onclick="showTab('writing')">Writing</div>
   <div class="tab" onclick="showTab('speaking')">Speaking</div>
   <div class="tab" onclick="showTab('reflect')">Reflection</div>
-  <div class="tab" onclick="showTab('progress')">Progress</div>
+  <div class="tab" onclick="showTab('progress')">My Score</div>
   <div class="tab" onclick="showTab('infographics')">🖼 Infographics</div>
   <div class="tab" onclick="window.open('mindmap_scientific_inventions.html','_blank')">🧠 Mind Map</div>
 </nav>
@@ -236,7 +241,7 @@
   <div class="card">
     <h2>💬 Discussion Questions</h2>
     <div id="dq-container"></div>
-    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total DQ score: </span><span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span></div>
+    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total DQ score: </span><span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 18</span></div>
   </div>
 </div>
 
@@ -245,7 +250,7 @@
   <div class="card">
     <h2>🎯 Comprehension Questions</h2>
     <div id="cq-container"></div>
-    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total CQ score: </span><span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span></div>
+    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total CQ score: </span><span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 18</span></div>
   </div>
 </div>
 
@@ -253,6 +258,7 @@
 <div id="tab-glossary" class="section">
   <div class="card">
     <h2>📚 Glossary (43 terms) — Click to flip</h2>
+    <p class="rule">Flashcards are practice only (0 points).</p>
     <input class="search-bar" type="text" placeholder="Search terms..." oninput="filterGlossary()" id="gloss-search">
     <div class="category-filters">
       <button class="cat-btn active" onclick="filterCat('all',this)">All</button>
@@ -269,6 +275,7 @@
   <div class="card">
     <h2>🗂 Category Match (15 key terms)</h2>
     <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px">Assign each term: <b style="color:#3498db">T</b>=Innovation &amp; Technology · <b style="color:#e74c3c">F</b>=Investment &amp; Finance · <b style="color:#2ecc71">M</b>=Market &amp; Business</p>
+    <p class="rule">How you get points: 1 point for each correct category (15 terms, maximum 15). Terms left empty earn 0. You can press Check again and your best result is kept.</p>
     <div class="match-grid" id="match-grid"></div>
     <button class="check-btn" onclick="checkCategories()">✔ Check</button>
     <div class="feedback" id="cat-feedback"></div>
@@ -281,6 +288,7 @@
   <div class="card">
     <h2>🔗 Cause &amp; Effect — Fill in the Blanks</h2>
     <p style="font-size:.82rem;color:var(--text2);margin-bottom:16px">Complete each cause-effect chain with the correct glossary term.</p>
+    <p class="rule">How you get points: 3 points for each blank (4 blanks, maximum 12). Type the exact glossary term; a longer sentence or a different word earns 0. You can press Check again and your best result is kept.</p>
     <div id="fib-container"></div>
     <button class="check-btn" onclick="checkFIB()">✔ Check</button>
     <div class="feedback" id="fib-feedback"></div>
@@ -296,19 +304,14 @@
       <div class="role">Task</div>
       <p>Choose ONE innovation from the text (AI, SpaceX, CRISPR, or fintech exhibitions). Evaluate it as an investment opportunity: Why does it attract investors? Is it high-risk or low-risk? What financial indicators should be analyzed? Write 5–6 sentences using at least 5 glossary terms.</p>
     </div>
-    <div class="criteria-list">
-      <div class="criterion"><div class="cnum">1</div>Identifies a specific innovation with financial data from the text</div>
-      <div class="criterion"><div class="cnum">2</div>Explains investment appeal clearly</div>
-      <div class="criterion"><div class="cnum">3</div>Addresses risk level (high-risk / low-risk)</div>
-      <div class="criterion"><div class="cnum">4</div>Uses at least 5 glossary terms</div>
-    </div>
+    <div id="writing1-rule"></div>
     <textarea id="writing1-input" placeholder="Write your investment evaluation here..." rows="6" oninput="saveWriting('writing1')"></textarea>
     <button class="check-btn" onclick="checkWriting(1)">✔ Check</button>
     <div class="feedback" id="writing1-feedback"></div>
     <div class="writing-score-row">
       <span class="writing-score-label">Task 1 score:</span>
       <span class="writing-score-val" id="writing1-score">0</span>
-      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+      <span style="font-size:.8rem;color:var(--text3)">/12</span>
     </div>
   </div>
   <div class="card">
@@ -317,20 +320,14 @@
       <div class="role">Task</div>
       <p>Write a short professional retelling of the text (5–6 sentences). Follow this structure: (1) how scientific progress propels economic change, (2) how innovations unlock investment opportunities, (3) the role of industry exhibitions. Use at least 8 glossary terms. Do NOT copy sentences from the text.</p>
     </div>
-    <div class="criteria-list">
-      <div class="criterion"><div class="cnum">1</div>Covers all 3 structural points</div>
-      <div class="criterion"><div class="cnum">2</div>Uses at least 8 glossary terms</div>
-      <div class="criterion"><div class="cnum">3</div>Does not copy sentences directly from the text</div>
-      <div class="criterion"><div class="cnum">4</div>Professional financial language and logical flow</div>
-      <div class="criterion"><div class="cnum">5</div>Minimum 5 sentences</div>
-    </div>
+    <div id="writing2-rule"></div>
     <textarea id="writing2-input" placeholder="Write your structured retelling here..." rows="7" oninput="saveWriting('writing2')"></textarea>
     <button class="check-btn" onclick="checkWriting(2)">✔ Check</button>
     <div class="feedback" id="writing2-feedback"></div>
     <div class="writing-score-row">
       <span class="writing-score-label">Task 2 score:</span>
       <span class="writing-score-val" id="writing2-score">0</span>
-      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+      <span style="font-size:.8rem;color:var(--text3)">/18</span>
     </div>
   </div>
 </div>
@@ -339,6 +336,7 @@
 <div id="tab-speaking" class="section">
   <div class="card">
     <h2>🎤 Speaking Task — Structured Retelling</h2>
+    <p class="rule">Practice only, 0 points: the timer, the term chips and the self-rating below cannot be checked by the page, so they are not part of your score. Record or say your retelling aloud, then rate yourself honestly.</p>
     <div class="case-box">
       <div class="role">Topic</div>
       <p><b>Scientific and Technological Progress as a Driver of Financial Opportunity</b></p>
@@ -370,7 +368,7 @@
       <button class="timer-btn stop" onclick="resetTimer()">↺ Reset</button>
     </div>
     <div style="margin-top:16px">
-      <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Self-score your speaking (0–8):</div>
+      <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Self-rating of your speaking (0–8, practice only, not scored):</div>
       <input type="range" min="0" max="8" value="0" id="speaking-range" oninput="updateSpeakingScore(this.value)" style="width:100%;accent-color:var(--gold)">
       <div style="text-align:center;font-size:1rem;font-weight:700;color:var(--gold);margin-top:4px"><span id="speaking-val">0</span> / 8</div>
     </div>
@@ -381,32 +379,34 @@
 <div id="tab-reflect" class="section">
   <div class="card">
     <h2>🪞 Self-Reflection</h2>
+    <p class="rule">Practice only, 0 points: stars and notes are for your own revision and are not part of your score.</p>
     <div id="reflect-container"></div>
-    <div class="mt-12" style="font-size:.8rem;color:var(--text3)">Reflection score: <span id="reflect-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+    
   </div>
 </div>
 
 <!-- PROGRESS -->
 <div id="tab-progress" class="section">
   <div class="progress-section">
-    <h2>📊 Your Progress</h2>
-    <div class="progress-row"><label>Discussion (DQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-dq" style="width:0%"></div></div><span id="prog-dq-val">0/15</span></div>
-    <div class="progress-row"><label>Comprehension (CQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-cq" style="width:0%"></div></div><span id="prog-cq-val">0/15</span></div>
+    <h2>📊 My Score</h2>
+    <p class="rule">How scoring works: every graded task is checked automatically by the rules shown on its tab. You can press Check as many times as you like, and the best result for each task is kept. Flashcards, the timer, the speaking self-rating and the self-reflection are practice only and are not scored.</p>
+    <div class="progress-row"><label>Discussion (DQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-dq" style="width:0%"></div></div><span id="prog-dq-val">0/18</span></div>
+    <div class="progress-row"><label>Comprehension (CQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-cq" style="width:0%"></div></div><span id="prog-cq-val">0/18</span></div>
     <div class="progress-row"><label>Categories</label><div class="progress-bar"><div class="progress-fill" id="prog-cat" style="width:0%"></div></div><span id="prog-cat-val">0/15</span></div>
     <div class="progress-row"><label>Cause &amp; Effect</label><div class="progress-bar"><div class="progress-fill" id="prog-fib" style="width:0%"></div></div><span id="prog-fib-val">0/12</span></div>
-    <div class="progress-row"><label>Writing</label><div class="progress-bar"><div class="progress-fill" id="prog-writ" style="width:0%"></div></div><span id="prog-writ-val">0/16</span></div>
-    <div class="progress-row"><label>Speaking</label><div class="progress-bar"><div class="progress-fill" id="prog-spk" style="width:0%"></div></div><span id="prog-spk-val">0/8</span></div>
-    <div class="progress-row"><label>Self-Reflection</label><div class="progress-bar"><div class="progress-fill" id="prog-ref" style="width:0%"></div></div><span id="prog-ref-val">0/12</span></div>
+    <div class="progress-row"><label>Writing</label><div class="progress-bar"><div class="progress-fill" id="prog-writ" style="width:0%"></div></div><span id="prog-writ-val">0/30</span></div>
+    <table class="rubric-table" id="rubric-table"></table>
     <div class="total-score"><div class="big" id="total-big">0</div><div class="sub">out of 93 points total</div></div>
     <button class="check-btn" style="margin-top:14px;width:100%" onclick="resetAll()">↺ Reset All Progress</button>
   </div>
 </div>
 
 </main>
+<script src="grader.js"></script>
 <script>
 const LS='sci_';
-function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch{return null}}
-function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch{}}
+function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch(e){}}
 
 const glossary=[
   {term:'propel',ru:'стимулировать, двигать вперёд',cat:'T'},
@@ -457,92 +457,184 @@ const glossary=[
 // 15 terms for categories exercise
 const catTerms=['propel','groundbreaking','disrupt','fueling','reusable rockets','vast investment opportunities','high returns','venture capital','high-risk, high-reward investments','initial public offering candidates','unveiling','forging','closing deals','facilitating','fraud detection'];
 
-const dqs=[
-  {q:'Can technological progress change financial markets? How?',kw:['disrupt','investment','opportunities','markets','boost','returns','innovation','industries','transform']},
-  {q:'Why do investors follow scientific innovations?',kw:['returns','opportunities','growth','appeal','high-risk','reward','patents','value','profit']},
-  {q:'What information about technology is most important for finance professionals?',kw:['risk','growth','profitability','potential','adoption','market','returns','analysis','indicators']},
-];
 
-const cqs=[
-  {q:'According to the text, how do scientific inventions like Edison\'s light bulb and Bell\'s telephone demonstrate financial value?',kw:['trillion','valued at','shareholders','patents','value','electric power','telecommunications','protect']},
-  {q:'What financial role do industry exhibitions like CES and Money20/20 play according to the text?',kw:['transactions','venture capital','mergers','partnerships','deals','market trends','licensing','IPO','stock']},
-  {q:'How do modern AI tools create financial value for banks according to the text?',kw:['automated trading','fraud detection','efficiency','40 percent','financial services','enhance','bank']},
+// ── Scoring ──
+// One table drives everything: the maximum per task, the total (93) and the explanation on the My Score tab.
+const RUBRIC=[
+  {key:'dq1',label:'Discussion · Question 1',max:6,rule:'Open answer, checked by the rule box above the question (ideas must appear together inside real sentences).'},
+  {key:'dq2',label:'Discussion · Question 2',max:6,rule:'Open answer, checked by the rule box above the question.'},
+  {key:'dq3',label:'Discussion · Question 3',max:6,rule:'Open answer, checked by the rule box above the question.'},
+  {key:'cq1',label:'Comprehension · Question 1',max:6,rule:'Open answer based on the text: 2 + 2 points for the two inventions, 1 for patents, 1 for length.'},
+  {key:'cq2',label:'Comprehension · Question 2',max:6,rule:'Open answer based on the text: 2 points for deals and partnerships, 1 + 1 + 1 for fintech, figures and finance experts, 1 for length.'},
+  {key:'cq3',label:'Comprehension · Question 3',max:6,rule:'Open answer based on the text: fraud detection, automated trading, 40% efficiency, a reason and length.'},
+  {key:'cat',label:'Category Match',max:15,rule:'1 point for each correct category (15 terms).'},
+  {key:'fib',label:'Cause & Effect (fill in the blanks)',max:12,rule:'3 points for each correct term (4 blanks). The answer must be the exact glossary term.'},
+  {key:'writing1',label:'Writing · Task 1 (investment evaluation)',max:12,rule:'Open answer checked by the rule box: innovation with data, appeal, risk level, financial indicators, a reason, a contrast, glossary terms, length.'},
+  {key:'writing2',label:'Writing · Task 2 (structured retelling)',max:18,rule:'Open answer checked by the rule box: three structural points with ideas in one sentence, glossary terms, structure, length. Copied text is capped at half.'}
 ];
+const MAX_TOTAL=RUBRIC.reduce((a,r)=>a+r.max,0); // 93
+const RUBRIC_VERSION='2';
+const scores={};
+function addScore(key,pts){
+  const r=RUBRIC.find(x=>x.key===key);
+  if(!r)return; // practice-only activities are not scored
+  pts=Math.max(0,Math.min(r.max,pts));
+  if(scores[key]===undefined||scores[key]<pts){scores[key]=pts;lsSet('sc_'+key,pts)}
+  updateTotal();
+}
+function sc(key){return scores[key]||0}
+function updateTotal(){
+  const total=RUBRIC.reduce((a,r)=>a+(scores[r.key]||0),0);
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  set('total-score-chip',total);set('total-big',total);
+  set('dq-total',sc('dq1')+sc('dq2')+sc('dq3'));
+  set('cq-total',sc('cq1')+sc('cq2')+sc('cq3'));
+  set('cat-score',sc('cat'));set('fib-score',sc('fib'));
+  set('writing1-score',sc('writing1'));set('writing2-score',sc('writing2'));
+  const t=document.getElementById('rubric-table');
+  if(t){
+    t.innerHTML='<tr><th>Task</th><th>How it is scored</th><th style="text-align:right">Your score</th></tr>'+
+      RUBRIC.map(r=>`<tr><td>${r.label}</td><td>${r.rule}</td><td class="num">${scores[r.key]||0} / ${r.max}</td></tr>`).join('')+
+      `<tr><td><strong>Total</strong></td><td></td><td class="num">${total} / ${MAX_TOTAL}</td></tr>`;
+  }
+  return total;
+}
 
-const fibs=[
-  {before:'Scientific progress ',blank:'propels',after:' economic change by transforming industries and unlocking vast investment opportunities.',hint:'стимулировать',accept:['propels','propel']},
-  {before:'Groundbreaking technology disrupts ',blank:'established markets',after:', forcing financial analysts to identify new investment opportunities.',hint:'устоявшиеся рынки',accept:['established markets','established']},
-  {before:'Industry exhibitions unveil innovations and help finance experts forge partnerships and find ',blank:'initial public offering',after:' candidates.',hint:'первичное публичное размещение',accept:['initial public offering','ipo','initial public offering candidates']},
-  {before:'',blank:'Venture capital',after:' supports innovative startups, often yielding immediate stock impacts when new technologies are announced.',hint:'венчурный капитал',accept:['venture capital']},
-];
+// ── Rubric building blocks (idea groups, written from the reading text and the glossary) ──
+const SOURCE=[...document.querySelectorAll('#tab-reading .lesson-text')].map(e=>e.textContent).join(' ');
+const G_INNOV=['technolog','innovation','invention','discover','scientific','progress','crispr','spacex','\\bai\\b','openai','mrna','vaccine','rocket','gene','world wide web','fintech','blockchain','light ?bulb','telephone'];
+const G_MARKET=['market','industr','sector','econom','compan','business','\\bstocks?\\b','shares'];
+const G_INVEST=['invest','capital','\\bfunds?\\b','funding','shareholder','venture'];
+const G_RETURN=['return','profit','reward','\\bgains?\\b','growth','yield','revenue','earnings'];
+const G_RISK=['\\brisk','volatil','uncertain','\\bfail','\\bloss'];
+const G_NUM=['\\d','billion','trillion','percent'];
+const G_EXAMPLE_WORD=['for example','for instance','such as','e\\.g\\.?'];
+const G_EXAMPLES=['crispr','spacex','\\bai\\b','openai','mrna','vaccine','light ?bulb','edison','telephone','\\bbell\\b','world wide web','\\bweb\\b','berners','\\bces\\b','hannover','money20','blockchain','rockets?'];
+const GL_TERMS=[['\\bpropel'],['groundbreaking'],['\\bboost'],['disrupt'],['\\bprecise'],['\\bfuel'],['reusable'],['\\benhance'],['momentum'],['quantum'],['mrna|messenger rna'],['electric vehicle'],['vast investment|investment opportunit'],['high returns?'],['\\bseeking'],['valued at'],['high-risk,? high-reward'],['private funds?'],['venture capital'],['merger'],['\\bappeal'],['underscor'],['initial public offering|\\bipo\\b'],['national output'],['reshap'],['fraud detection'],['established markets?'],['unveil'],['\\bforg'],['closing deals?|close deals?'],['facilitat'],['business-to-business|\\bb2b\\b'],['sustainable manufacturing'],['tech giants?'],['supply chain'],['previews? of market'],['licensing'],['stock impact'],['\\bunlock'],['incandescent'],['\\bspark'],['\\blaunch']];
 
-const reflections=[
-  'I can explain how scientific progress creates financial opportunities using specific examples from the text.',
-  'I can analyze investment appeal and risks of a specific technology using financial vocabulary.',
-  'I can confidently use at least 12 glossary terms in a structured speaking retelling.',
-];
+const RB={
+  dq1:{max:6,minWords:25,source:SOURCE,criteria:[
+    {type:'claim',pts:2,label:'Says that technology or innovation disrupts, transforms or boosts markets or industries (in ONE sentence)',all:[G_INNOV,['disrupt','transform','reshap','\\bchange','replac','boost','propel','\\bdrive','spark','fuel'],G_MARKET]},
+    {type:'claim',pts:1,label:'Links innovation to investment: opportunities, capital or returns (in ONE sentence)',all:[G_INNOV,G_INVEST,['opportunit','return','profit','billion','trillion','growth','attract','draw']]},
+    {type:'reason',pts:1,label:'Gives a reason with because, so or therefore, linking technology to markets or investors',topics:[G_INNOV,G_MARKET.concat(G_INVEST)]},
+    {type:'claim',pts:1,label:'Gives a specific example from the text (for example, such as + CRISPR, SpaceX, AI, mRNA, the web...)',all:[G_EXAMPLE_WORD,G_EXAMPLES]},
+    {type:'length',pts:1,label:'Writes at least 40 words',words:40}],
+    misconceptions:[{re:'(technolog\\w*|innovation\\w*|progress).{0,25}(has|have|had|does|do|did) (no|not) (effect|impact|influence|change)|(cannot|can\'t|can not|never) (change|affect|influence) (the )?(financial )?markets?',msg:'The text says the opposite: innovations disrupt established markets and boost output.'}]},
+  dq2:{max:6,minWords:25,source:SOURCE,criteria:[
+    {type:'claim',pts:2,label:'Says that investors seek or expect high returns or profit (in ONE sentence)',all:[['investor'],['seek','want','look for','follow','chase','hope','expect','attract','aim'],['return','profit','\\bgains?\\b','growth','reward','yield','income']]},
+    {type:'claim',pts:1,label:'Says that innovations create or unlock big markets and opportunities, worth billions or trillions (in ONE sentence)',all:[G_INNOV,['market','industr','opportunit','billion','trillion','sector','economy'],['creat','unlock','\\bopen','worth','valued','generat','build','launch','spark','fuel','\\bsupport']]},
+    {type:'claim',pts:1,label:'Mentions the balance of risk and reward (high-risk, high-reward) (in ONE sentence)',all:[G_RISK,G_RETURN.concat(['high-risk'])]},
+    {type:'claim',pts:1,label:'Gives a specific example from the text (for example, such as + mRNA vaccines, SpaceX, CRISPR...)',all:[G_EXAMPLE_WORD,G_EXAMPLES]},
+    {type:'length',pts:1,label:'Writes at least 40 words',words:40}],
+    misconceptions:[{re:'\\bno risk\\b|risk[- ]free|guaranteed (profit|return|gain)|(never|do not|don\'t) (face|take|have) (any )?risk|always (profit|win|make money)',msg:'Innovation investing is high-risk, high-reward; profit is never guaranteed.'}]},
+  dq3:{max:6,minWords:25,source:SOURCE,criteria:[
+    {type:'claim',pts:2,label:'Names profitability (or returns), risks and growth potential together as key information (in ONE sentence)',all:[['profitab','\\bprofit','earnings','revenue','\\breturns?\\b'],['\\brisks?\\b'],['growth','potential','adoption']]},
+    {type:'claim',pts:1,label:'Says finance professionals must assess adoption rates or patent protection of a technology (in ONE sentence)',all:[['adoption','\\badopt','patent','protect','intellectual','licens','demand','customers'],['technolog','innovation','invention','idea','product'],['analy','assess','predict','evaluat','measure','\\bneed','important','must','should']]},
+    {type:'reason',pts:1,label:'Explains why with because, so or therefore (information leads to better investment decisions)',topics:[['\\brisk','profit','growth','adoption','patent','information','data'],['invest','decision','return','\\bloss','money','valu','market','portfolio','capital']]},
+    {type:'claim',pts:1,label:'Gives a specific example (for example, such as + a named technology from the text)',all:[G_EXAMPLE_WORD,G_EXAMPLES]},
+    {type:'length',pts:1,label:'Writes at least 40 words',words:40}],
+    misconceptions:[{re:'(ignore|ignoring|do not need|don\'t need|never need|no need).{0,20}\\brisks?|\\brisks? (is|are) (not|never) important|only (the )?(price|profit)',msg:'Risk is a core part of the analysis (see the Financial Conclusion).'}]},
 
-let scores=lsGet('scores')||{dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:0};
-function saveScores(){lsSet('scores',scores)}
+  cq1:{max:6,minWords:20,source:SOURCE,criteria:[
+    {type:'claim',pts:2,label:'Edison\'s light bulb created the electric power sector, valued at about $6 trillion (in ONE sentence)',all:[['edison','light ?bulb','\\bbulb'],['electric','energy','power'],['\\b6 ?(trillion|tn)','\\$ ?6\\b','six trillion']]},
+    {type:'claim',pts:2,label:'Bell\'s telephone launched telecommunications, now about a $1.7 trillion industry (in ONE sentence)',all:[['\\bbell','telephone','\\bphone'],['telecom','communicat'],['1\\.7','one point seven']]},
+    {type:'claim',pts:1,label:'Patents protect ideas and generate value for shareholders or inventors (in ONE sentence)',all:[['patent','protect'],['value','profit','revenue','wealth','benefit','generat'],['shareholder','investor','owner','inventor','compan']]},
+    {type:'length',pts:1,label:'Writes at least 30 words',words:30}],
+    misconceptions:[
+      {re:'edison\\W{0,3}s? (invented|created|made|developed|launched|built) (the )?(telephone|phone|telecom)|(telephone|phone) (was )?(invented|created|made|developed) by edison',msg:'Edison invented the light bulb (1879), not the telephone.'},
+      {re:'bell\\W{0,3}s? (invented|created|made|developed|launched|built) (the )?(incandescent )?(light ?bulb|electric)|(light ?bulb) (was )?(invented|created|made|developed) by bell',msg:'Bell invented the telephone (1876), not the light bulb.'},
+      {re:'patents? (have|has|had|give|gives) no (value|use|effect)|patents? (are|is) (useless|worthless)',msg:'The text says patents generate massive value for shareholders.'}]},
+  cq2:{max:6,minWords:20,source:SOURCE,criteria:[
+    {type:'claim',pts:2,label:'Exhibitions are platforms where companies unveil innovations, forge partnerships and close deals or contracts (in ONE sentence)',all:[['exhibition','trade fair','\\bfairs?\\b','\\bces\\b','money20','hannover','\\bevents?\\b'],['deal','contract','transaction','partnership','agreement'],['platform','meet','bring','connect','forg','unveil','\\bclos','\\bsign','generat','facilitat','enable']]},
+    {type:'claim',pts:1,label:'Money20/20 or fintech events attract venture capital and mergers (in ONE sentence)',all:[['money20','fintech','blockchain'],['venture','merger','capital','investor']]},
+    {type:'claim',pts:1,label:'CES or Hannover Messe generate billions in transactions or contracts (in ONE sentence)',all:[['\\bces\\b','consumer electronics','hannover'],['\\d ?b\\b','billion','\\$ ?6','€ ?10','\\b10 ?b']]},
+    {type:'claim',pts:1,label:'They give finance experts previews of trends, licensing chances or IPO candidates (in ONE sentence)',all:[['finance','investor','analyst','expert','professional'],['preview','trend','\\bipo\\b','initial public','licens','stock','\\bshares\\b']]},
+    {type:'length',pts:1,label:'Writes at least 30 words',words:30}],
+    misconceptions:[{re:'exhibitions? (are|is) (only|just) (for )?(fun|entertainment|advertising|show)|no (financial|real) (role|impact|effect)',msg:'The text says exhibitions facilitate billions in deals and give previews of market trends.'}]},
+  cq3:{max:6,minWords:20,source:SOURCE,criteria:[
+    {type:'claim',pts:2,label:'AI helps banks with fraud detection (in ONE sentence)',all:[['\\bai\\b','artificial','openai','model'],['fraud'],['detect','prevent','catch','\\bstop','identif','\\bspot','\\bfind']]},
+    {type:'claim',pts:1,label:'AI supports or powers automated trading (in ONE sentence)',all:[['\\bai\\b','artificial','openai','model'],['automat'],['trad'],['help','support','improv','enhanc','speed','allow','enable','power','\\brun','handle','execut','react','\\buse']]},
+    {type:'claim',pts:1,label:'AI improves bank efficiency by about 40% (in ONE sentence)',all:[['efficien','productiv'],['\\b40\\b','forty'],['bank'],['improv','increas','boost','rais','enhanc','better','gain','higher','up by']]},
+    {type:'reason',pts:1,label:'Gives a reason with because, so or therefore (AI makes banks faster, safer or more efficient)',topics:[['\\bai\\b','artificial','model','openai','tool','fraud','trad'],['improv','reduc','\\bsav','faster','prevent','protect','lower','\\bcut','increas','\\bless','higher','better','react']]},
+    {type:'length',pts:1,label:'Writes at least 30 words',words:30}],
+    misconceptions:[{re:'\\bai\\b.{0,30}(makes?|made|reduces?|lowers?|decreases?) (banks?|bank efficiency)?.{0,12}(less efficient|efficiency)|\\bai\\b.{0,20}(does not|doesn\'t|cannot|can\'t) (help|improve)',msg:'The text says AI improves bank efficiency by 40%.'}]},
+
+  writing1:{max:12,minWords:50,source:SOURCE,criteria:[
+    {type:'claim',pts:2,label:'Names ONE innovation (AI, SpaceX, CRISPR, fintech exhibitions) with a figure from the text (in ONE sentence)',all:[['crispr','spacex','\\bai\\b','openai','fintech','money20','exhibition','mrna','reusable','rockets?','gene'],G_NUM,['market','economy','industr','sector','cost','efficien','fund','valu','sales','shares','stock']]},
+    {type:'claim',pts:2,label:'Explains why it attracts investors: returns, growth or a big market (in ONE sentence)',all:[G_INVEST,['attract','appeal','interest','draw','seek','want','\\bfollow','opportunit','potential'],G_RETURN.concat(G_MARKET)]},
+    {type:'claim',pts:2,label:'States the risk level, high-risk or low-risk, and says why (in ONE sentence)',all:[['\\brisk','volatil','uncertain'],['\\bhigh','\\blow','moderate','substantial','considerable','significant','great'],['because','since','as ','due to','depend','new','unproven','uncertain','costly','fail','regulat','competition','cost']]},
+    {type:'claim',pts:2,label:'Names financial indicators to analyse, such as profitability, revenue, market size, adoption rate or funding (in ONE sentence)',all:[['indicator','metric','ratio','return on investment','\\broi\\b','profitab','revenue','earnings','market (size|share|value)','valuation','growth rate','adoption rate','funding','share price','stock price'],['analy','monitor','track','check','measure','assess','evaluat','compar','examin','should','need','must']]},
+    {type:'contrast',pts:1,label:'Compares risk with reward (but, however, while, whereas...)',topics:[G_RISK,G_RETURN]},
+    {type:'concepts',pts:1,label:'Uses at least 5 glossary terms',need:5,of:GL_TERMS},
+    {type:'length',pts:2,label:'Writes about 5 to 6 sentences (at least 70 words)',words:70}],
+    misconceptions:[{re:'\\bno risk\\b|risk[- ]free|guaranteed (profit|return|gain)|(never|not) (a )?(high[- ])?risk(y)?\\b',msg:'Innovation investing always carries risk.'}]},
+  writing2:{max:18,minWords:60,source:SOURCE,criteria:[
+    {type:'claim',pts:2,label:'Point 1: scientific progress propels or drives economic change (in ONE sentence)',all:[['scientific','technolog','innovation','progress','invention'],['propel','\\bdrive','boost','stimulat','fuel','spark','promote','transform','push','accelerat','\\bpower'],['econom','industr','national output','\\bgdp\\b','growth','production']]},
+    {type:'claim',pts:2,label:'Point 1: it disrupts established markets or boosts national output (in ONE sentence)',all:[['disrupt','boost','transform','reshap'],['established','market','industr','national output','output','\\bgdp\\b'],G_INNOV.concat(['inventions?'])]},
+    {type:'claim',pts:2,label:'Point 2: innovations unlock investment opportunities and attract investors (in ONE sentence)',all:[['innovation','invention','discover','technolog','groundbreaking'],['unlock','\\bopen','creat','generat','offer','provide','bring','attract','draw'],['invest','opportunit','capital','funds?\\b']]},
+    {type:'claim',pts:2,label:'Point 2: a modern example with a figure (CRISPR, SpaceX, AI, mRNA, the web) (in ONE sentence)',all:[['crispr','spacex','\\bai\\b','mrna','world wide web','\\bweb\\b','light ?bulb','telephone','vaccine','rockets?'],G_NUM]},
+    {type:'claim',pts:2,label:'Point 3: exhibitions are platforms to unveil innovations, forge partnerships and close deals (in ONE sentence)',all:[['exhibition','trade fair','\\bfairs?\\b','\\bces\\b','hannover','money20'],['platform','unveil','forg','partnership','deal','contract','transaction','meet','showcase','present','introduc','launch']]},
+    {type:'claim',pts:2,label:'Point 3: they give finance experts previews of trends, IPO candidates, licensing or venture capital (in ONE sentence)',all:[['exhibition','fairs?\\b','events?\\b','\\bces\\b','hannover','money20'],['preview','trend','\\bipo\\b','initial public','licens','venture','merger','stock','investor','finance']]},
+    {type:'claim',pts:1,label:'Finance professionals analyse and manage risks, profitability and growth potential (in ONE sentence)',all:[['finance','analyst','investor','professional','expert'],['\\brisks?\\b','profitab','adoption','patent','growth potential'],['analy','assess','predict','manage','evaluat','measure','check']]},
+    {type:'reason',pts:1,label:'Links progress or innovation to growth or investment with because, so or therefore',topics:[['progress','innovation','technolog','invention'],['invest','growth','market','econom','industr','opportunit']]},
+    {type:'concepts',pts:2,label:'Uses at least 8 glossary terms',need:8,of:GL_TERMS},
+    {type:'structure',pts:1,label:'Writes at least 5 full sentences',sentences:5},
+    {type:'length',pts:1,label:'Writes at least 80 words',words:80}]}
+};
+// every rubric must add up to its maximum
+Object.keys(RB).forEach(k=>{const s=RB[k].criteria.reduce((a,c)=>a+c.pts,0);if(s!==RB[k].max)console.error('Rubric '+k+' sums to '+s)});
+
+function fbClass(pts,max){const r=pts/max;return 'feedback show '+(r>=.75?'good':r>=.4?'ok':'poor')}
+function gradeOpen(key,taId,fbId){
+  const ta=document.getElementById(taId),fb=document.getElementById(fbId);
+  const res=Grader.score(ta.value,RB[key]);
+  addScore(key,res.pts);
+  fb.className=fbClass(res.pts,res.max);
+  fb.innerHTML=Grader.renderResult(res)+'<div style="margin-top:6px;opacity:.85">Best result kept: <strong>'+sc(key)+' / '+res.max+'</strong></div>';
+  return res;
+}
 
 function showTab(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  event.target.classList.add('active');
+  if(typeof event!=='undefined'&&event&&event.target&&event.target.classList)event.target.classList.add('active');
   updateProgress();
 }
 function toggleTheme(){
   document.body.classList.toggle('light-mode');
-  document.querySelector('.theme-btn').textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀ Light';
+  document.querySelector('.theme-btn:last-of-type').textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀ Light';
   lsSet('theme',document.body.classList.contains('light-mode')?'light':'dark');
 }
-function scoreKeywords(text,kw,max){
-  const t=text.toLowerCase();
-  const hits=kw.filter(k=>t.includes(k.toLowerCase())).length;
-  return Math.min(max,Math.round((hits/Math.max(kw.length,1))*max));
-}
 
-function renderDQ(){
-  const c=document.getElementById('dq-container');c.innerHTML='';
-  dqs.forEach((d,i)=>{
-    const saved=lsGet('dq'+i)||'';
-    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${d.q}</div><textarea id="dq-ta-${i}" placeholder="Your answer..." oninput="lsSet('dq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkDQ(${i})">✔ Check</button><div class="feedback" id="dq-fb-${i}"></div></div>`;
-  });
+// ── Discussion and comprehension questions ──
+const dqs=[
+  {q:'Can technological progress change financial markets? How?'},
+  {q:'Why do investors follow scientific innovations?'},
+  {q:'What information about technology is most important for finance professionals?'},
+];
+const cqs=[
+  {q:'According to the text, how do scientific inventions like Edison\'s light bulb and Bell\'s telephone demonstrate financial value?'},
+  {q:'What financial role do industry exhibitions like CES and Money20/20 play according to the text?'},
+  {q:'How do modern AI tools create financial value for banks according to the text?'},
+];
+function renderQuestions(prefix,list,container,checkFn){
+  const c=document.getElementById(container);
+  c.innerHTML=list.map((d,i)=>`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${d.q}</div>${Grader.renderRule(RB[prefix+(i+1)])}<textarea id="${prefix}-ta-${i+1}" placeholder="Your answer..." oninput="lsSet('${prefix}Text${i+1}',this.value)"></textarea><button class="check-btn" onclick="${checkFn}(${i+1})">✔ Check</button><div class="feedback" id="${prefix}-fb-${i+1}"></div></div>`).join('');
+  list.forEach((d,i)=>{const v=lsGet(prefix+'Text'+(i+1));if(v)document.getElementById(prefix+'-ta-'+(i+1)).value=v});
 }
-function checkDQ(i){
-  const txt=document.getElementById('dq-ta-'+i).value;
-  const sc=scoreKeywords(txt,dqs[i].kw,5);
-  scores.dq[i]=sc;saveScores();updateTotal();
-  const fb=document.getElementById('dq-fb-'+i);
-  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
-  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Excellent!':sc>=2?'Good. Add more financial vocabulary.':'Try using: '+dqs[i].kw.slice(0,4).join(', ')+'.');
-  document.getElementById('dq-total').textContent=scores.dq.reduce((a,b)=>a+b,0);
-}
+function renderDQ(){renderQuestions('dq',dqs,'dq-container','checkDQ')}
+function renderCQ(){renderQuestions('cq',cqs,'cq-container','checkCQ')}
+function checkDQ(n){gradeOpen('dq'+n,'dq-ta-'+n,'dq-fb-'+n)}
+function checkCQ(n){gradeOpen('cq'+n,'cq-ta-'+n,'cq-fb-'+n)}
 
-function renderCQ(){
-  const c=document.getElementById('cq-container');c.innerHTML='';
-  cqs.forEach((q,i)=>{
-    const saved=lsGet('cq'+i)||'';
-    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${q.q}</div><textarea id="cq-ta-${i}" placeholder="Your answer..." oninput="lsSet('cq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkCQ(${i})">✔ Check</button><div class="feedback" id="cq-fb-${i}"></div></div>`;
-  });
-}
-function checkCQ(i){
-  const txt=document.getElementById('cq-ta-'+i).value;
-  const sc=scoreKeywords(txt,cqs[i].kw,5);
-  scores.cq[i]=sc;saveScores();updateTotal();
-  const fb=document.getElementById('cq-fb-'+i);
-  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
-  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Correct!':sc>=2?'Partially correct.':'Review the reading section.');
-  document.getElementById('cq-total').textContent=scores.cq.reduce((a,b)=>a+b,0);
-}
-
+// ── Glossary ──
 let activeCat='all';
 function renderGlossary(){
   const grid=document.getElementById('glossary-grid');
   const q=(document.getElementById('gloss-search')||{value:''}).value.toLowerCase();
   const filtered=glossary.filter(g=>(activeCat==='all'||g.cat===activeCat)&&(!q||g.term.toLowerCase().includes(q)||g.ru.toLowerCase().includes(q)));
-  grid.innerHTML=filtered.map(g=>`<div class="flip-card cat-${g.cat}" onclick="flipCard(this)"><div class="flip-inner"><div class="flip-front"><span class="term">${g.term}</span><span class="cat-tag">${g.cat==='T'?'Innovation & Technology':g.cat==='F'?'Investment & Finance':'Market & Business'}</span><span class="card-count">tap to see translation</span><button onclick="event.stopPropagation();speakTerm(g.term)" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button></div><div class="flip-back"><div class="ru">${g.ru}</div></div></div></div>`).join('');
+  grid.innerHTML=filtered.map(g=>`<div class="flip-card cat-${g.cat}" onclick="flipCard(this)"><div class="flip-inner"><div class="flip-front"><span class="term">${g.term}</span><span class="cat-tag">${g.cat==='T'?'Innovation & Technology':g.cat==='F'?'Investment & Finance':'Market & Business'}</span><span class="card-count">tap to see translation</span><button data-term="${g.term}" onclick="event.stopPropagation();speakTerm(this.dataset.term)" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button></div><div class="flip-back"><div class="ru">${g.ru}</div></div></div></div>`).join('');
 }
 function flipCard(el){el.classList.toggle('flipped')}
 function filterGlossary(){renderGlossary()}
@@ -554,89 +646,74 @@ function speakTerm(term){
   u.lang='en-US';u.rate=0.85;
   window.speechSynthesis.speak(u);
 }
-function speak(word){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=0.85;window.speechSynthesis.cancel();window.speechSynthesis.speak(u)}
+function speak(word){speakTerm(word)}
 
+// ── Categories (closed task) ──
 function renderCategories(){
   const grid=document.getElementById('match-grid');
   const shuffled=[...catTerms].sort(()=>Math.random()-.5);
   const termMap={};glossary.forEach(g=>termMap[g.term]=g.cat);
-  const saved=lsGet('catAnswers')||{};
-  grid.innerHTML=shuffled.map((term,i)=>`<div class="match-item"><span class="match-term">${term}</span><div style="display:flex;align-items:center;gap:8px"><select class="match-select" id="ms-${i}" data-correct="${termMap[term]}" onchange="saveCatAnswer(${i},this.value)"><option value="">— select —</option><option value="T" ${saved[i]==='T'?'selected':''}>T — Innovation &amp; Technology</option><option value="F" ${saved[i]==='F'?'selected':''}>F — Investment &amp; Finance</option><option value="M" ${saved[i]==='M'?'selected':''}>M — Market &amp; Business</option></select><span class="match-result" id="mr-${i}"></span></div></div>`).join('');
+  const saved=lsGet('catAnswers2')||{};
+  grid.innerHTML=shuffled.map((term,i)=>`<div class="match-item"><span class="match-term">${term}</span><div style="display:flex;align-items:center;gap:8px"><select class="match-select" id="ms-${i}" data-term="${term}" data-correct="${termMap[term]}" onchange="saveCatAnswer(this.dataset.term,this.value)"><option value="">— select —</option><option value="T" ${saved[term]==='T'?'selected':''}>T — Innovation &amp; Technology</option><option value="F" ${saved[term]==='F'?'selected':''}>F — Investment &amp; Finance</option><option value="M" ${saved[term]==='M'?'selected':''}>M — Market &amp; Business</option></select><span class="match-result" id="mr-${i}"></span></div></div>`).join('');
 }
-function saveCatAnswer(i,v){const s=lsGet('catAnswers')||{};s[i]=v;lsSet('catAnswers',s)}
+function saveCatAnswer(term,v){const s=lsGet('catAnswers2')||{};s[term]=v;lsSet('catAnswers2',s)}
 function checkCategories(){
   let correct=0;
   document.querySelectorAll('.match-select').forEach((s,i)=>{
     const r=document.getElementById('mr-'+i);
     if(s.value===s.dataset.correct){r.textContent='✓';r.style.background='rgba(46,204,113,.2)';r.style.color='#2ecc71';correct++}
     else if(s.value){r.textContent='✗';r.style.background='rgba(231,76,60,.2)';r.style.color='#e74c3c'}
+    else{r.textContent='';r.style.background=''}
   });
-  const sc=Math.round((correct/catTerms.length)*15);
-  scores.cat=sc;saveScores();updateTotal();
+  const pts=correct; // 1 point per term
+  addScore('cat',pts);
   const fb=document.getElementById('cat-feedback');
-  fb.className='feedback show '+(sc>=12?'good':sc>=8?'ok':'poor');
-  fb.innerHTML=`${correct}/${catTerms.length} correct — Score: <strong>${sc}/15</strong>`;
-  document.getElementById('cat-score').textContent=sc;
+  fb.className=fbClass(pts,catTerms.length);
+  fb.innerHTML=`${correct}/${catTerms.length} correct. Score: <strong>${pts}/15</strong> · Best result kept: <strong>${sc('cat')}/15</strong>`;
 }
 
+// ── Cause & Effect (closed task) ──
+const fibs=[
+  {before:'Scientific progress ',after:' economic change by transforming industries and unlocking vast investment opportunities.',hint:'стимулировать',accept:['propels','propel']},
+  {before:'Groundbreaking technology disrupts ',after:', forcing financial analysts to identify new investment opportunities.',hint:'устоявшиеся рынки',accept:['established markets','established market']},
+  {before:'Industry exhibitions unveil innovations and help finance experts forge partnerships and find ',after:' candidates.',hint:'первичное публичное размещение',accept:['initial public offering','ipo','initial public offering candidates']},
+  {before:'',after:' supports innovative startups, often yielding immediate stock impacts when new technologies are announced.',hint:'венчурный капитал',accept:['venture capital']},
+];
+function normAns(v){return String(v||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function renderFIB(){
   const c=document.getElementById('fib-container');
   const saved=lsGet('fibAnswers')||{};
-  c.innerHTML=fibs.map((f,i)=>`<div class="fib-sentence"><b>→</b> ${f.before}<input class="blank-input" id="fib-${i}" placeholder="${f.hint}" value="${saved[i]||''}" oninput="saveFIB(${i},this.value)">${f.after}</div>`).join('');
+  c.innerHTML=fibs.map((f,i)=>`<div class="fib-sentence"><b>→</b> ${f.before}<input class="blank-input" id="fib-${i}" placeholder="${f.hint}" oninput="saveFIB(${i},this.value)">${f.after}</div>`).join('');
+  fibs.forEach((f,i)=>{if(saved[i])document.getElementById('fib-'+i).value=saved[i]});
 }
 function saveFIB(i,v){const s=lsGet('fibAnswers')||{};s[i]=v;lsSet('fibAnswers',s)}
 function checkFIB(){
   let correct=0;
   fibs.forEach((f,i)=>{
     const inp=document.getElementById('fib-'+i);
-    const val=(inp.value||'').trim().toLowerCase();
-    const ok=f.accept.some(a=>val===a.toLowerCase()||val.includes(a.toLowerCase()));
+    const val=normAns(inp.value);
+    const ok=f.accept.some(a=>val===a);
     inp.className='blank-input '+(ok?'correct':'wrong');
     if(ok)correct++;
   });
-  const sc=correct*3;
-  scores.fib=sc;saveScores();updateTotal();
+  const pts=correct*3;
+  addScore('fib',pts);
   const fb=document.getElementById('fib-feedback');
-  fb.className='feedback show '+(correct===fibs.length?'good':correct>=2?'ok':'poor');
-  fb.innerHTML=`${correct}/${fibs.length} correct — Score: <strong>${sc}/12</strong>`;
-  document.getElementById('fib-score').textContent=sc;
+  fb.className=fbClass(pts,12);
+  fb.innerHTML=`${correct}/${fibs.length} correct. Score: <strong>${pts}/12</strong> · Best result kept: <strong>${sc('fib')}/12</strong>`;
 }
 
+// ── Writing ──
 function saveWriting(id){lsSet(id,document.getElementById(id+'-input').value)}
 function checkWriting(n){
-  const txt=(document.getElementById('writing'+n+'-input').value||'').toLowerCase();
-  const kw=glossary.map(g=>g.term.toLowerCase());
-  const usedKw=kw.filter(k=>txt.includes(k));
-  let sc=0;
-  if(n===1){
-    if(usedKw.length>=5)sc+=3;else if(usedKw.length>=3)sc+=2;else if(usedKw.length>=1)sc+=1;
-    const examples=['ai','spacex','crispr','mrna','fintech','money20','ces','openai','gene'].filter(w=>txt.includes(w));
-    if(examples.length>=1)sc+=2;
-    const riskWords=['risk','high-risk','reward','appeal','returns','growth'].filter(w=>txt.includes(w));
-    if(riskWords.length>=2)sc+=2;
-    if(txt.length>200)sc+=1;
-    sc=Math.min(8,sc);
-    const fb=document.getElementById('writing1-feedback');
-    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
-    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms used: ${usedKw.length}/5 required`;
-  }else{
-    if(usedKw.length>=8)sc+=4;else if(usedKw.length>=5)sc+=3;else if(usedKw.length>=3)sc+=2;else sc+=1;
-    const structure=['progress','innovation','exhibition','exhibition','market','opportunity','invest'].filter(w=>txt.includes(w));
-    if(structure.length>=3)sc+=2;
-    if(txt.length>250)sc+=2;else if(txt.length>150)sc+=1;
-    sc=Math.min(8,sc);
-    const fb=document.getElementById('writing2-feedback');
-    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
-    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms: ${usedKw.length}/8 required`;
-  }
-  scores['writing'+n]=sc;saveScores();updateTotal();
-  document.getElementById('writing'+n+'-score').textContent=sc;
+  gradeOpen('writing'+n,'writing'+n+'-input','writing'+n+'-feedback');
 }
 
+// ── Speaking: practice only ──
 function renderChips(){
   const chips=['propel','groundbreaking','disrupt','vast investment opportunities','high returns','venture capital','high-risk, high-reward investments','unveiling','forging','closing deals','facilitating','mergers','initial public offering candidates','fraud detection','reusable rockets'];
   const used=lsGet('chips')||[];
-  document.getElementById('speaking-chips').innerHTML=chips.map(c=>`<span class="chip ${used.includes(c)?'used':''}" onclick="toggleChip(this,'${c}')">${c}</span>`).join('');
+  document.getElementById('speaking-chips').innerHTML=chips.map(c=>`<span class="chip ${used.includes(c)?'used':''}" data-term="${c}" onclick="toggleChip(this,this.dataset.term)">${c}</span>`).join('');
 }
 function toggleChip(el,term){
   el.classList.toggle('used');
@@ -659,47 +736,60 @@ function updateTimerDisplay(){
 function startTimer(){if(timerRunning)return;timerRunning=true;timerInterval=setInterval(()=>{timerSeconds--;updateTimerDisplay();if(timerSeconds<=0){clearInterval(timerInterval);timerRunning=false}},1000)}
 function stopTimer(){clearInterval(timerInterval);timerRunning=false}
 function resetTimer(){stopTimer();timerSeconds=90;updateTimerDisplay();document.getElementById('timer-ring').style.stroke='var(--gold)'}
-function updateSpeakingScore(v){document.getElementById('speaking-val').textContent=v;scores.speaking=parseInt(v);saveScores();updateTotal()}
+function updateSpeakingScore(v){document.getElementById('speaking-val').textContent=v;lsSet('speakingSelf',parseInt(v))} // self-rating, not scored
 
+// ── Self-reflection: practice only ──
+const reflections=[
+  'I can explain how scientific progress creates financial opportunities using specific examples from the text.',
+  'I can analyze investment appeal and risks of a specific technology using financial vocabulary.',
+  'I can confidently use at least 12 glossary terms in a structured speaking retelling.',
+];
 function renderReflect(){
   const c=document.getElementById('reflect-container');
   const saved=lsGet('reflect')||{};
-  c.innerHTML=reflections.map((r,i)=>`<div class="reflect-item"><div class="r-label">${r}</div><div class="star-row">${[1,2,3,4].map(n=>`<span class="star ${(saved['s'+i]||0)>=n?'lit':''}" onclick="setStar(${i},${n})">⭐</span>`).join('')}</div><textarea class="r-note" placeholder="Notes..." oninput="saveReflectNote(${i},this.value)">${saved['n'+i]||''}</textarea></div>`).join('');
+  c.innerHTML=reflections.map((r,i)=>`<div class="reflect-item"><div class="r-label">${r}</div><div class="star-row">${[1,2,3,4].map(n=>`<span class="star ${(saved['s'+i]||0)>=n?'lit':''}" onclick="setStar(${i},${n})">⭐</span>`).join('')}</div><textarea class="r-note" placeholder="Notes..." oninput="saveReflectNote(${i},this.value)"></textarea></div>`).join('');
+  c.querySelectorAll('.r-note').forEach((t,i)=>{t.value=saved['n'+i]||''});
 }
 function setStar(i,v){
   const saved=lsGet('reflect')||{};saved['s'+i]=v;lsSet('reflect',saved);
-  scores.reflect=Math.min(12,[0,1,2].reduce((a,j)=>{const s=lsGet('reflect')||{};return a+(s['s'+j]||0)},0));
-  saveScores();updateTotal();document.getElementById('reflect-score').textContent=scores.reflect;renderReflect();
+  renderReflect();
 }
 function saveReflectNote(i,v){const s=lsGet('reflect')||{};s['n'+i]=v;lsSet('reflect',s)}
 
-function updateTotal(){
-  const t=scores.dq.reduce((a,b)=>a+b,0)+scores.cq.reduce((a,b)=>a+b,0)+scores.cat+scores.fib+(scores.writing1||0)+(scores.writing2||0)+scores.speaking+scores.reflect;
-  document.getElementById('total-score-chip').textContent=t;
-  document.getElementById('total-big').textContent=t;
-  return t;
-}
+// ── Progress ──
 function updateProgress(){
-  const dq=scores.dq.reduce((a,b)=>a+b,0),cq=scores.cq.reduce((a,b)=>a+b,0),writ=(scores.writing1||0)+(scores.writing2||0);
-  [{id:'dq',val:dq,max:15},{id:'cq',val:cq,max:15},{id:'cat',val:scores.cat,max:15},{id:'fib',val:scores.fib,max:12},{id:'writ',val:writ,max:16},{id:'spk',val:scores.speaking,max:8},{id:'ref',val:scores.reflect,max:12}].forEach(it=>{
-    const el=document.getElementById('prog-'+it.id);if(el)el.style.width=(it.val/it.max*100)+'%';
-    const vl=document.getElementById('prog-'+it.id+'-val');if(vl)vl.textContent=it.val+'/'+it.max;
+  const grp=[{id:'dq',keys:['dq1','dq2','dq3']},{id:'cq',keys:['cq1','cq2','cq3']},{id:'cat',keys:['cat']},{id:'fib',keys:['fib']},{id:'writ',keys:['writing1','writing2']}];
+  grp.forEach(g=>{
+    const val=g.keys.reduce((a,k)=>a+sc(k),0),max=g.keys.reduce((a,k)=>a+RUBRIC.find(r=>r.key===k).max,0);
+    const el=document.getElementById('prog-'+g.id);if(el)el.style.width=(val/max*100)+'%';
+    const vl=document.getElementById('prog-'+g.id+'-val');if(vl)vl.textContent=val+'/'+max;
   });
   updateTotal();
 }
-function resetAll(){if(!confirm('Reset all progress?'))return;['scores','catAnswers','fibAnswers','chips','reflect','writing1','writing2'].forEach(k=>localStorage.removeItem(LS+k));[0,1,2].forEach(i=>{localStorage.removeItem(LS+'dq'+i);localStorage.removeItem(LS+'cq'+i)});scores={dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:0};location.reload()}
+function resetAll(){
+  if(!confirm('Reset all progress?'))return;
+  ['scores','rubric','catAnswers','catAnswers2','fibAnswers','chips','reflect','writing1','writing2','speakingSelf'].forEach(k=>{try{localStorage.removeItem(LS+k)}catch(e){}});
+  RUBRIC.forEach(r=>{try{localStorage.removeItem(LS+'sc_'+r.key)}catch(e){}});
+  [1,2,3].forEach(i=>{try{localStorage.removeItem(LS+'dqText'+i);localStorage.removeItem(LS+'cqText'+i)}catch(e){}});
+  location.reload();
+}
 
 (function init(){
   if(lsGet('theme')==='light')document.body.classList.add('light-mode');
+  // Scores saved under the old keyword-based rules are discarded once, so that all results follow the table above.
+  if(lsGet('rubric')!==RUBRIC_VERSION){
+    try{['scores','catAnswers','speakingSelf'].forEach(k=>localStorage.removeItem(LS+k));
+      RUBRIC.forEach(r=>localStorage.removeItem(LS+'sc_'+r.key))}catch(e){}
+    lsSet('rubric',RUBRIC_VERSION);
+  }
+  RUBRIC.forEach(r=>{const v=lsGet('sc_'+r.key);if(typeof v==='number'&&!isNaN(v))scores[r.key]=Math.max(0,Math.min(r.max,v))});
   renderDQ();renderCQ();renderGlossary();renderCategories();renderFIB();renderChips();renderReflect();
-  [0,1,2].forEach(i=>{
-    const dt=document.getElementById('dq-ta-'+i);if(dt){const v=lsGet('dq'+i);if(v)dt.value=v}
-    const ct=document.getElementById('cq-ta-'+i);if(ct){const v=lsGet('cq'+i);if(v)ct.value=v}
-  });
   const w1=document.getElementById('writing1-input');if(w1){const v=lsGet('writing1');if(v)w1.value=v}
   const w2=document.getElementById('writing2-input');if(w2){const v=lsGet('writing2');if(v)w2.value=v}
-  const spk=document.getElementById('speaking-range');if(spk&&scores.speaking){spk.value=scores.speaking;document.getElementById('speaking-val').textContent=scores.speaking}
-  updateTimerDisplay();updateTotal();
+  const spk=document.getElementById('speaking-range');const sv=lsGet('speakingSelf');if(spk&&sv){spk.value=sv;document.getElementById('speaking-val').textContent=sv}
+  const w1r=document.getElementById('writing1-rule');if(w1r)w1r.innerHTML=Grader.renderRule(RB.writing1);
+  const w2r=document.getElementById('writing2-rule');if(w2r)w2r.innerHTML=Grader.renderRule(RB.writing2);
+  updateTimerDisplay();updateProgress();
 })();
 </script>
 <div id="tab-infographics" class="section">

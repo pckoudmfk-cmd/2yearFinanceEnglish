@@ -174,6 +174,14 @@
   .total-score .big{font-size:2rem;font-weight:800;color:var(--gold)}
   .total-score .sub{font-size:.8rem;color:var(--text3);margin-top:2px}
 
+  .rule{font-size:.76rem;color:var(--text3);background:var(--navy2);border-left:3px solid var(--gold);border-radius:4px;padding:7px 12px;margin:0 0 14px;line-height:1.55}
+  .g-rule{background:var(--navy2);color:var(--text2)}
+  .rubric-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:18px;text-align:left}
+  .rubric-table th{color:var(--text3);font-weight:600;padding:8px 6px;border-bottom:2px solid var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:.3px}
+  .rubric-table td{padding:8px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  .rubric-table td.num{text-align:right;white-space:nowrap;font-weight:700;color:var(--gold)}
+  .practice-note{font-size:.78rem;color:var(--text3);background:var(--navy2);border-left:3px solid var(--text3);border-radius:4px;padding:7px 12px;margin:0 0 14px;line-height:1.55}
+
   /* UTIL */
   .badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:800}
   .badge-C{background:rgba(52,152,219,.2);color:#3498db}
@@ -292,7 +300,7 @@
     <div id="dq-container"></div>
     <div class="mt-12">
       <span style="font-size:.8rem;color:var(--text3)">Total DQ score: </span>
-      <span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span>
+      <span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 18</span>
     </div>
   </div>
 </div>
@@ -304,7 +312,7 @@
     <div id="cq-container"></div>
     <div class="mt-12">
       <span style="font-size:.8rem;color:var(--text3)">Total CQ score: </span>
-      <span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span>
+      <span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 18</span>
     </div>
   </div>
 </div>
@@ -329,10 +337,11 @@
   <div class="card">
     <h2>🗂 Category Match</h2>
     <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px">Assign each term to its category: <b style="color:#3498db">C</b>=Compliance &amp; Risk · <b style="color:#e74c3c">F</b>=Financial Impact · <b style="color:#2ecc71">S</b>=Strategy &amp; Investment</p>
+    <p class="rule">How you get points: 1 point for each term placed in the correct category (17 terms, 17 points). You can press Check again and your best result is kept.</p>
     <div class="match-grid" id="match-grid"></div>
     <button class="check-btn" onclick="checkCategories()">✔ Check</button>
     <div class="feedback" id="cat-feedback"></div>
-    <div class="mt-8" style="font-size:.8rem;color:var(--text3)">Score: <span id="cat-score" style="color:var(--gold);font-weight:700">0</span> / 15</div>
+    <div class="mt-8" style="font-size:.8rem;color:var(--text3)">Score: <span id="cat-score" style="color:var(--gold);font-weight:700">0</span> / 17</div>
   </div>
 </div>
 
@@ -341,6 +350,7 @@
   <div class="card">
     <h2>🔗 Cause &amp; Effect — Fill in the Blanks</h2>
     <p style="font-size:.82rem;color:var(--text2);margin-bottom:16px">Complete each cause-effect chain with the correct financial term from the glossary.</p>
+    <p class="rule">How you get points: 3 points for each correct blank (4 blanks, 12 points). Write the glossary term itself; the answer must match the term (small spelling variants such as a plural are accepted). You can press Check again and your best result is kept.</p>
     <div id="fib-container"></div>
     <button class="check-btn" onclick="checkFIB()">✔ Check</button>
     <div class="feedback" id="fib-feedback"></div>
@@ -356,19 +366,14 @@
       <div class="role">Situation</div>
       <p>You are preparing a report for management. Using the case study data, identify at least 3 financial risks and explain the potential consequences of ignoring them.</p>
     </div>
-    <div class="criteria-list">
-      <div class="criterion"><div class="cnum">1</div>Identifies at least 3 distinct financial risks</div>
-      <div class="criterion"><div class="cnum">2</div>Uses at least 4 glossary terms correctly</div>
-      <div class="criterion"><div class="cnum">3</div>Connects violations to financial consequences</div>
-      <div class="criterion"><div class="cnum">4</div>Clear, professional sentence structure</div>
-    </div>
+    <div id="writing1-rule"></div>
     <textarea id="writing1-input" placeholder="Write your risk analysis report here..." rows="6" oninput="saveWriting('writing1')"></textarea>
     <button class="check-btn" onclick="checkWriting(1)">✔ Check</button>
     <div class="feedback" id="writing1-feedback"></div>
     <div class="writing-score-row">
       <span class="writing-score-label">Task 1 score:</span>
       <span class="writing-score-val" id="writing1-score">0</span>
-      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+      <span style="font-size:.8rem;color:var(--text3)">/10</span>
     </div>
   </div>
 
@@ -376,22 +381,16 @@
     <h2>✍️ Writing Task 2 — Investment Justification</h2>
     <div class="case-box">
       <div class="role">Task</div>
-      <p>Is it financially reasonable to invest $60,000 in safety improvements? Write a structured argument using cost-benefit logic. Include at least 6 glossary terms and 2 cause-effect structures (e.g., "because", "therefore", "as a result", "this leads to").</p>
+      <p>Is it financially reasonable to invest $60,000 in safety improvements? Write a structured argument using cost-benefit logic. Use your own words, include glossary terms and show cause and effect (for example with "because", "therefore", "as a result").</p>
     </div>
-    <div class="criteria-list">
-      <div class="criterion"><div class="cnum">1</div>Takes a clear position (yes/no with justification)</div>
-      <div class="criterion"><div class="cnum">2</div>Uses cost-benefit analysis framework</div>
-      <div class="criterion"><div class="cnum">3</div>Includes at least 6 glossary terms</div>
-      <div class="criterion"><div class="cnum">4</div>Uses 2+ cause-effect connectors</div>
-      <div class="criterion"><div class="cnum">5</div>Professional tone and logical structure</div>
-    </div>
+    <div id="writing2-rule"></div>
     <textarea id="writing2-input" placeholder="Write your financial justification here..." rows="7" oninput="saveWriting('writing2')"></textarea>
     <button class="check-btn" onclick="checkWriting(2)">✔ Check</button>
     <div class="feedback" id="writing2-feedback"></div>
     <div class="writing-score-row">
       <span class="writing-score-label">Task 2 score:</span>
       <span class="writing-score-val" id="writing2-score">0</span>
-      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+      <span style="font-size:.8rem;color:var(--text3)">/10</span>
     </div>
   </div>
 </div>
@@ -413,9 +412,10 @@
         <li>Long-term financial stability and investor confidence</li>
       </ol>
     </div>
+    <p class="practice-note">Practice only (0 points): the term chips, the timer and the self-score slider are for rehearsal. Your written script below is the scored part.</p>
     <p style="font-size:.82rem;color:var(--text2);margin-bottom:8px">Use these terms in your monologue — click to mark as used:</p>
     <div class="chips-wrap" id="speaking-chips"></div>
-    <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Target: min 9 glossary words · 2 cause-effect links · 1.5 min</div>
+    <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Target: 9 glossary words · 2 cause-effect links · 1.5 min</div>
     <div class="timer-wrap">
       <svg class="timer-svg" width="110" height="110" viewBox="0 0 110 110">
         <circle class="timer-bg" cx="55" cy="55" r="45"/>
@@ -430,9 +430,19 @@
       <button class="timer-btn stop" onclick="resetTimer()">↺ Reset</button>
     </div>
     <div style="margin-top:16px">
-      <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Self-score your speaking (0–8):</div>
+      <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Self-rate your speaking after rehearsal (0–8, practice only, 0 points):</div>
       <input type="range" min="0" max="8" value="0" id="speaking-range" oninput="updateSpeakingScore(this.value)" style="width:100%;accent-color:var(--gold)">
       <div style="text-align:center;font-size:1rem;font-weight:700;color:var(--gold);margin-top:4px"><span id="speaking-val">0</span> / 8</div>
+    </div>
+    <h3 style="margin-top:22px">Write your speaking script (scored)</h3>
+    <div id="script-rule"></div>
+    <textarea id="script-input" placeholder="Write the script of your 1.5-minute talk here..." rows="8" oninput="lsSet('script',this.value)"></textarea>
+    <button class="check-btn" onclick="checkScript()">✔ Check</button>
+    <div class="feedback" id="script-feedback"></div>
+    <div class="writing-score-row">
+      <span class="writing-score-label">Script score:</span>
+      <span class="writing-score-val" id="script-score">0</span>
+      <span style="font-size:.8rem;color:var(--text3)">/8</span>
     </div>
   </div>
 </div>
@@ -441,8 +451,9 @@
 <div id="tab-reflect" class="section">
   <div class="card">
     <h2>🪞 Self-Reflection</h2>
+    <p class="practice-note">Practice only (0 points): rate yourself honestly and write notes for revision. Self-ratings cannot be checked, so they are not scored.</p>
     <div id="reflect-container"></div>
-    <div class="mt-12" style="font-size:.8rem;color:var(--text3)">Reflection score: <span id="reflect-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+    <div class="mt-12" style="font-size:.8rem;color:var(--text3)">Self-rating: <span id="reflect-score" style="color:var(--gold);font-weight:700">0</span> / 12 (not scored)</div>
   </div>
 </div>
 
@@ -450,27 +461,29 @@
 <div id="tab-progress" class="section">
   <div class="progress-section">
     <h2>📊 Your Progress</h2>
-    <div class="progress-row"><label>Discussion (DQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-dq" style="width:0%"></div></div><span id="prog-dq-val">0/15</span></div>
-    <div class="progress-row"><label>Comprehension (CQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-cq" style="width:0%"></div></div><span id="prog-cq-val">0/15</span></div>
-    <div class="progress-row"><label>Categories</label><div class="progress-bar"><div class="progress-fill" id="prog-cat" style="width:0%"></div></div><span id="prog-cat-val">0/15</span></div>
+    <div class="progress-row"><label>Discussion (DQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-dq" style="width:0%"></div></div><span id="prog-dq-val">0/18</span></div>
+    <div class="progress-row"><label>Comprehension (CQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-cq" style="width:0%"></div></div><span id="prog-cq-val">0/18</span></div>
+    <div class="progress-row"><label>Categories</label><div class="progress-bar"><div class="progress-fill" id="prog-cat" style="width:0%"></div></div><span id="prog-cat-val">0/17</span></div>
     <div class="progress-row"><label>Cause &amp; Effect</label><div class="progress-bar"><div class="progress-fill" id="prog-fib" style="width:0%"></div></div><span id="prog-fib-val">0/12</span></div>
-    <div class="progress-row"><label>Writing</label><div class="progress-bar"><div class="progress-fill" id="prog-writ" style="width:0%"></div></div><span id="prog-writ-val">0/16</span></div>
-    <div class="progress-row"><label>Speaking</label><div class="progress-bar"><div class="progress-fill" id="prog-spk" style="width:0%"></div></div><span id="prog-spk-val">0/8</span></div>
-    <div class="progress-row"><label>Self-Reflection</label><div class="progress-bar"><div class="progress-fill" id="prog-ref" style="width:0%"></div></div><span id="prog-ref-val">0/12</span></div>
+    <div class="progress-row"><label>Writing</label><div class="progress-bar"><div class="progress-fill" id="prog-writ" style="width:0%"></div></div><span id="prog-writ-val">0/20</span></div>
+    <div class="progress-row"><label>Speaking script</label><div class="progress-bar"><div class="progress-fill" id="prog-spk" style="width:0%"></div></div><span id="prog-spk-val">0/8</span></div>
     <div class="total-score">
       <div class="big" id="total-big">0</div>
       <div class="sub">out of 93 points total</div>
     </div>
+    <p class="rule" style="margin-top:16px">How scoring works: every task is checked automatically by the rules below. You can press Check as many times as you like, and the best result for each task is kept. Flashcards, the term chips, the timer, the speaking self-rating and the self-reflection are practice only and are not scored.</p>
+    <table class="rubric-table" id="rubric-table"></table>
     <button class="check-btn" style="margin-top:14px;width:100%" onclick="resetAll()">↺ Reset All Progress</button>
   </div>
 </div>
 
 </main>
 
+<script src="grader.js"></script>
 <script>
 const LS = 'prod_';
-function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch{return null}}
-function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch{}}
+function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch(e){}}
 
 // GLOSSARY DATA
 const glossary = [
@@ -493,74 +506,164 @@ const glossary = [
   {term:'long-term stability',ru:'долгосрочная стабильность',cat:'S'},
 ];
 
-// DISCUSSION QUESTIONS
-const dqs = [
-  {q:'How can safety problems affect company profits?',kw:['direct','indirect','compensation','fines','production','reputational','productivity','delay']},
-  {q:'Why might management delay safety investments?',kw:['short-term','capital','cash flow','preventive','crisis','expense','strategic','cost']},
-  {q:'What is the relationship between production standards and investor confidence?',kw:['standards','investor','confidence','contracts','penalties','risk','stability','compliance']},
+// READING TEXT (used by the grader to detect copying)
+const READING_TEXT = 'Production standards are not only technical requirements but also financial protection tools. Compliance with safety and quality regulations reduces operational risks and protects the company from unexpected costs. International standards help businesses maintain investor confidence, secure contracts, and avoid legal penalties. For financial managers, standards are part of risk management strategy. '+
+ 'Failure to meet safety requirements leads to direct and indirect financial losses. Direct costs include medical compensation, equipment damage, fines, and legal expenses. Indirect costs involve production delays, reputational damage, reduced employee productivity, and loss of clients. In some cases, one serious accident can reduce annual profit significantly. '+
+ 'If protective equipment is missing, ventilation systems are outdated, or emergency exits are blocked, the company faces high operational risk. Insurance premiums may increase, regulators may impose sanctions, and investors may reconsider their partnerships. Financial departments must evaluate the probability and impact of such risks through structured risk assessment. '+
+ 'Investing in workplace safety requires capital allocation. However, preventive investment is often cheaper than crisis management. Financial analysis should compare: the cost of safety improvements, potential financial losses, and long-term productivity gains. Strategic decision-making requires balancing short-term expenses with long-term stability.';
+
+// Glossary-term patterns used by the writing rubrics
+const TERM_GROUPS = [['compliance'],['operational risk'],['legal penalt'],['sanctions?'],['regulatory authorit'],['financial loss'],['compensation'],['indirect costs?'],['insurance premium'],['reputational damage'],['productivity'],['investor confidence'],['capital allocation'],['preventive investment'],['crisis management'],['cost-benefit'],['long-term stability']];
+
+// ── RUBRICS (open tasks, graded by Grader.score) ──
+const RB_DQ = [
+ {max:6,minWords:25,source:READING_TEXT,prompt:'How can safety problems affect company profits?',
+  criteria:[
+   {type:'claim',pts:2,label:'Says that direct costs (fines, compensation, equipment damage, legal expenses) reduce profit',all:[['\\b(fines?|compensation|equipment damage|damaged equipment|legal expenses|legal costs?|medical)\\b'],['\\b(reduce|reduces|lower|lowers|decrease|decreases|cut|cuts|loss|losses|lose|eat into)\\b'],['\\b(profits?|earnings|income|revenue)\\b']]},
+   {type:'claim',pts:2,label:'Says that indirect costs (production delays, reputation, productivity, lost clients) also hurt the company',all:[['\\bindirect\\b'],['delays?|downtime|reputation|productivity|clients|customers'],['also|too|besides|include|includes|involve|involves|such as|for example|for instance|like|mean|means|add|adds|in addition|additional|hidden|not only|but']]},
+   {type:'reason',pts:1,label:'Explains a cause and its financial result in one sentence (because, leads to, as a result)',topics:[['accident|violation|unsafe|safety|injur|non-compliance|failure|problem'],['loss|cost|profit|fines?|damage|expens|delay']]},
+   {type:'example',pts:1,label:'Gives an example (for example, such as) of a safety problem and its cost'}],
+  misconceptions:[{re:'(safety|accidents?|violations?|problems?)\\s+(do|does|did)\\s*(not|n\'t)\\s+(affect|influence|change|reduce)\\s+(the\\s+)?(company\\s+)?(profits?|costs?)',msg:'The text says safety failures create direct and indirect financial losses.'}]},
+ {max:6,minWords:25,source:READING_TEXT,prompt:'Why might management delay safety investments?',
+  criteria:[
+   {type:'claim',pts:2,label:'Says that safety investment means an immediate, short-term cost or use of capital',all:[['short-term|short term|immediate|upfront|up-front|right now|current'],['cost|expens|spend|capital|cash|budget|money']]},
+   {type:'claim',pts:2,label:'Says that preventive investment is cheaper than crisis management or accident losses',all:[['preventive|prevention|prevent\\b'],['cheaper|less expensive|cost less|saves?|lower'],['crisis|accident|disaster|emergency|loss']]},
+   {type:'reason',pts:1,label:'Gives the reason in one sentence with because, since or due to (management, cost, capital)',topics:[['manag|compan|invest|delay|safety|postpone'],['cost|expens|capital|short|budget|cash|profit|money|spend']]},
+   {type:'contrast',pts:1,label:'Contrasts short-term expense with long-term benefit (but, however, while)',topics:[['short|cost|expens|capital|cash|budget|now'],['long|stabil|preventive|benefit|future|cheaper|save']]}],
+  misconceptions:[{re:'safety\\s+(investments?|measures|improvements?)\\s+(is|are)\\s+(not|never)\\s+(needed|necessary|important|worth)|waste of money',msg:'The text says preventive investment is often cheaper than crisis management.'}]},
+ {max:6,minWords:25,source:READING_TEXT,prompt:'What is the relationship between production standards and investor confidence?',
+  criteria:[
+   {type:'claim',pts:2,label:'Says that standards or compliance reduce risk and protect the company from costs or penalties',all:[['standards?|compliance|regulations?|safety'],['reduce|lower|protect|avoid|minimi[sz]e|decrease'],['risk|cost|penalt|loss|fine']]},
+   {type:'claim',pts:2,label:'Says that investors keep or lose confidence (trust, contracts, partnerships) depending on standards',all:[['investors?'],['\\b(keeps?|lose|loses|lost|maintains?|protects?|builds?|supports?|secures?|stay|stays|reconsider|reconsiders|withdraw|leave|leaves|helps?|harms?|reduces?|increases?|improves?|boosts?|attracts?)\\b'],['confidence|trust|partnerships?|contracts?|invest'],['standards?|compliance|safe|regulat|violat']]},
+   {type:'reason',pts:1,label:'Links standards to investor trust with a cause or result (because, so, leads to)',topics:[['standard|compliance|safety|violation|regulat|penalt'],['investor|confidence|trust|contract|stabil|partnership']]},
+   {type:'example',pts:1,label:'Gives an example (for example, such as) of a standard, violation or consequence'}],
+  misconceptions:[{re:'standards?\\s+(have|has)\\s+no\\s+(effect|influence|connection|relationship)|(not|no)\\s+(related|connected)\\s+to\\s+investors?',msg:'The text says standards help maintain investor confidence.'}]}
 ];
 
-// COMPREHENSION QUESTIONS
-const cqs = [
-  {q:'What are the direct costs of non-compliance mentioned in the text?',kw:['medical compensation','equipment damage','fines','legal expenses','compensation','equipment','legal']},
-  {q:'According to the text, what three factors should financial analysis compare when evaluating safety investments?',kw:['cost of safety','potential financial losses','long-term productivity','improvements','losses','productivity','gains']},
-  {q:'How can safety violations affect a company\'s relationship with investors and insurance providers?',kw:['insurance premiums','increase','sanctions','investors','reconsider','partnerships','operational risk','regulators']},
+const RB_CQ = [
+ {max:6,minWords:12,source:READING_TEXT,prompt:'What are the direct costs of non-compliance mentioned in the text?',
+  criteria:[
+   {type:'claim',pts:3,label:'Names the direct costs: says "direct costs" and lists at least two of them',all:[['\\bdirect\\b'],['costs?|expenses|losses'],['(medical|compensation).*(equipment|machin|fines?|legal)|(equipment|machin).*(medical|compensation|fines?|legal)|(fines?).*(medical|compensation|equipment|legal)|(legal).*(medical|compensation|equipment|fines?)']]},
+   {type:'concepts',pts:1,label:'Lists all four: medical compensation, equipment damage, fines, legal expenses',need:4,of:[['medical|compensation'],['equipment|machin'],['\\bfines?\\b'],['legal']]},
+   {type:'claim',pts:2,label:'Says that a serious accident or non-compliance can reduce annual profit',all:[['accident|non-compliance|violation|failure'],['reduce|lower|cut|decrease|damage'],['profit']]}]},
+ {max:6,minWords:12,source:READING_TEXT,prompt:'According to the text, what three factors should financial analysis compare when evaluating safety investments?',
+  criteria:[
+   {type:'claim',pts:2,label:'Factor 1: the cost of safety improvements',all:[['costs? of (the )?(safety|improvements?|upgrades?|safety improvements|safety measures)|(safety|improvements?|upgrades?|safety measures).{0,25}\\bcosts?\\b|costs? (to|for) (improve|upgrade|install|improving)']]},
+   {type:'claim',pts:2,label:'Factor 2: potential financial losses',all:[['potential|possible|future|expected'],['losses|loss']]},
+   {type:'claim',pts:2,label:'Factor 3: long-term productivity gains',all:[['long-term|long term|longer-term'],['productivity'],['gains?|(?<!cost-)benefits?|\\bincreases?\\b|improv']]}],
+  misconceptions:[{re:'\\bonly\\s+(compare|consider|look at|check)\\s+(the\\s+)?costs?',msg:'The text names three factors, not only the cost.'}]},
+ {max:6,minWords:12,source:READING_TEXT,prompt:'How can safety violations affect a company\'s relationship with investors and insurance providers?',
+  criteria:[
+   {type:'claim',pts:2,label:'Insurance: premiums can increase',all:[['insurance'],['premiums?|costs?|payments?'],['increase|rise|rises|higher|go up|raise']]},
+   {type:'claim',pts:2,label:'Investors: they may reconsider their partnerships or lose confidence',all:[['investors?'],['reconsider|withdraw|leave|lose|rethink|doubt|stop|reduce'],['partnerships?|invest|confidence|trust|contracts?|cooperation']]},
+   {type:'claim',pts:2,label:'Regulators: they may impose sanctions or penalties',all:[['regulators?|regulatory|authorit'],['\\b(impose|imposes|imposed|issue|issues|apply|applies|levy|levies|introduce|introduces|punish|punishes|give|gives)\\b'],['sanctions?|penalt|fines?']]}]}
 ];
 
-// FIB DATA
-const fibs = [
-  {before:'Lack of ',blank:'compliance',after:' with safety regulations exposes the company to legal penalties and regulatory sanctions.',hint:'соблюдение требований',accept:['compliance']},
-  {before:'A safety accident generates direct ',blank:'compensation',after:' costs for injured workers and may significantly reduce annual profit.',hint:'компенсация',accept:['compensation']},
-  {before:'Reputational damage leads to loss of clients and undermines ',blank:'investor confidence',after:', making it harder to secure future contracts.',hint:'доверие инвесторов',accept:['investor confidence','investor']},
-  {before:'',blank:'Preventive investment',after:' in safety measures reduces operational risk and supports the company\'s long-term stability.',hint:'превентивные инвестиции',accept:['preventive investment','preventive','preventative investment']},
+const RB_W1 = {max:10,minWords:40,source:READING_TEXT,prompt:'Risk analysis report',
+  criteria:[
+   {type:'claim',pts:2,label:'Risk 1: no protective helmets leads to a possible fine (up to $100,000)',all:[['helmets?|protective (equipment|gear)'],['fines?|100,000|\\$100|penalt|sanction']]},
+   {type:'claim',pts:2,label:'Risk 2: outdated machinery raises the insurance premium (+15%)',all:[['machinery|machines?|equipment'],['insurance'],['premium|15|increase|rise|higher|raise']]},
+   {type:'claim',pts:2,label:'Risk 3: blocked emergency exits cause production downtime (2 weeks)',all:[['exits?'],['downtime|two weeks|2 weeks|delay|stop|halt|shut|lost production|production']]},
+   {type:'claim',pts:1,label:'Risk 4: poor ventilation needs an upgrade (about $60,000)',all:[['ventilation'],['60,000|\\$60|upgrade|invest|cost|improve']]},
+   {type:'reason',pts:1,label:'Explains a consequence in one sentence (because, leads to, as a result)',topics:[['violation|helmet|machinery|exit|ventilation|risk|safety|ignor|accident'],['loss|cost|fines?|penalt|downtime|premium|damage|sanction|profit']]},
+   {type:'concepts',pts:1,label:'Uses at least 4 different glossary terms',need:4,of:TERM_GROUPS},
+   {type:'length',pts:1,words:60,label:'Writes at least 60 words'}]};
+
+const RB_W2 = {max:10,minWords:50,source:READING_TEXT,prompt:'Is it financially reasonable to invest $60,000 in safety improvements?',
+  criteria:[
+   {type:'claim',pts:2,label:'Takes a clear position (for example "yes, it is justified" or "not reasonable") about the investment',all:[['\\b(yes|no|justified|reasonable|unreasonable|worth|recommend|should|should not|not justified)\\b'],['invest|safety|improvement|60,000|\\$60']]},
+   {type:'claim',pts:2,label:'Cost-benefit logic: compares the $60,000 cost with possible losses, fines or savings',all:[['cost-benefit|cost benefit|compare|compared|comparing|weigh|(?<!cost-)benefits?|outweigh'],['60,000|\\$ ?60|60k|sixty thousand|cost of (the )?(safety|improvements?|investment|upgrade)'],['100,000|losses|fines?|savings?|downtime|premiums?|damages?']]},
+   {type:'claim',pts:2,label:'Says that preventive investment is cheaper than crisis management or accident losses',all:[['preventive|prevention|prevent\\b'],['cheaper|less expensive|cost less|saves?|lower|reduce'],['crisis|accident|losses|fines?|penalt|damage']]},
+   {type:'reason',pts:1,label:'Shows cause and effect in one sentence (because, therefore, as a result)',topics:[['invest|safety|improv|violation|compl|risk|prevent|spend'],['loss|cost|fines?|penalt|saving|stabil|productiv|premium|downtime|profit|confidence']]},
+   {type:'claim',pts:1,label:'Mentions long-term benefits (stability, productivity, gains)',all:[['long-term|long term'],['stabil|productiv|gains?|(?<!cost-)benefits?|returns?|savings?'],['gains?|(?<!cost-)benefits?|returns?|savings?|protects?|supports?|ensures?|secures?|improves?|increases?|brings?|gives?|helps?|builds?']]},
+   {type:'concepts',pts:1,label:'Uses at least 5 different glossary terms',need:5,of:TERM_GROUPS},
+   {type:'length',pts:1,words:70,label:'Writes at least 70 words'}]};
+
+const RB_SCRIPT = {max:8,minWords:50,source:READING_TEXT,prompt:'Why Workplace Safety Is a Financial Strategy, Not Just a Technical Requirement',
+  criteria:[
+   {type:'claim',pts:2,label:'Point 1: explains direct and indirect costs of non-compliance',all:[['\\bdirect\\b'],['\\bindirect\\b'],['costs?|losses|expenses']]},
+   {type:'claim',pts:2,label:'Point 2: safety violations increase operational risk',all:[['violations?|missing|blocked|outdated|non-compliance|failure|unsafe'],['operational risk'],['increase|raise|create|lead|cause|face|high']]},
+   {type:'claim',pts:2,label:'Point 3: preventive investment is cheaper than crisis management',all:[['preventive|prevention'],['cheaper|less expensive|cost-effective|saves?|lower'],['crisis|accident|losses|damage']]},
+   {type:'claim',pts:1,label:'Point 4: long-term stability and investor confidence',all:[['long-term|long term|stability'],['investor']]},
+   {type:'length',pts:1,words:80,label:'Writes a script of at least 80 words (about 1.5 minutes)'}]};
+
+// ── Scoring: ONE table drives the maximum per task, the total (93) and the My Score table ──
+const RUBRIC = [
+  {key:'dq0',label:'Discussion · Question 1 (profits)',max:6,rule:'Open answer checked against the reading: direct costs reduce profit (2), indirect costs (2), a cause and result (1), an example (1).'},
+  {key:'dq1',label:'Discussion · Question 2 (delaying investment)',max:6,rule:'Short-term cost or capital (2), preventive is cheaper than crisis (2), a reason with because (1), a contrast short-term vs long-term (1).'},
+  {key:'dq2',label:'Discussion · Question 3 (standards and investors)',max:6,rule:'Standards reduce risk (2), investor confidence and contracts (2), a cause and result (1), an example (1).'},
+  {key:'cq0',label:'Comprehension · Question 1 (direct costs)',max:6,rule:'Direct costs named with at least two items (3), all four items (1), an accident reduces annual profit (2).'},
+  {key:'cq1',label:'Comprehension · Question 2 (three factors)',max:6,rule:'2 points for each of the three factors: cost of improvements, potential losses, long-term productivity gains.'},
+  {key:'cq2',label:'Comprehension · Question 3 (investors and insurers)',max:6,rule:'2 points each: insurance premiums increase, investors reconsider partnerships, regulators impose sanctions.'},
+  {key:'cat',label:'Category Match',max:17,rule:'1 point for each of the 17 terms placed in the correct category.'},
+  {key:'fib',label:'Cause & Effect (fill in the blanks)',max:12,rule:'3 points for each correct blank (4 blanks).'},
+  {key:'writing1',label:'Writing · Task 1 (risk analysis)',max:10,rule:'Up to 2 points each for helmets and fine, machinery and insurance, exits and downtime; ventilation (1); a consequence (1); 4+ glossary terms (1); 60 words (1).'},
+  {key:'writing2',label:'Writing · Task 2 (investment justification)',max:10,rule:'Position (2), cost-benefit logic (2), preventive is cheaper (2), cause and effect (1), long-term benefit (1), 5+ glossary terms (1), 70 words (1).'},
+  {key:'script',label:'Speaking script (written)',max:8,rule:'Direct and indirect costs (2), violations increase operational risk (2), preventive is cheaper than crisis (2), long-term stability and investors (1), 80 words (1).'}
 ];
-
-// REFLECT
-const reflections = [
-  'I can explain how safety violations create financial risks (direct and indirect costs).',
-  'I can justify an investment decision using cost-benefit analysis and glossary vocabulary.',
-  'I can confidently use at least 9 glossary terms in speaking and writing tasks.',
-];
-
-let scores = lsGet('scores') || {dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:[0,0,0]};
-
-function saveScores(){lsSet('scores',scores)}
+const MAX_TOTAL = RUBRIC.reduce((a,r)=>a+r.max,0); // 93
+const RUBRIC_VERSION = '2';
+const scores = {};
+function addScore(key,pts){
+  const r=RUBRIC.find(x=>x.key===key);
+  if(!r)return; // practice-only activities are not scored
+  pts=Math.max(0,Math.min(r.max,pts));
+  if(scores[key]===undefined||scores[key]<pts){scores[key]=pts;lsSet('sc_'+key,pts);}
+  updateTotal();
+}
+function sumKeys(prefix){return RUBRIC.filter(r=>r.key.indexOf(prefix)===0).reduce((a,r)=>a+(scores[r.key]||0),0)}
+function updateTotal(){
+  const total=RUBRIC.reduce((a,r)=>a+(scores[r.key]||0),0);
+  const c=document.getElementById('total-score-chip'); if(c)c.textContent=total;
+  const b=document.getElementById('total-big'); if(b)b.textContent=total;
+  const dqt=document.getElementById('dq-total'); if(dqt)dqt.textContent=sumKeys('dq');
+  const cqt=document.getElementById('cq-total'); if(cqt)cqt.textContent=sumKeys('cq');
+  const t=document.getElementById('rubric-table');
+  if(t){
+    t.innerHTML='<tr><th>Task</th><th>How it is scored</th><th style="text-align:right">Your score</th></tr>'+
+      RUBRIC.map(r=>`<tr><td>${r.label}</td><td>${r.rule}</td><td class="num">${scores[r.key]||0} / ${r.max}</td></tr>`).join('')+
+      `<tr><td><strong>Total</strong></td><td></td><td class="num">${total} / ${MAX_TOTAL}</td></tr>`;
+  }
+  return total;
+}
 
 // TABS
 function showTab(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  event.target.classList.add('active');
+  if(typeof event!=='undefined'&&event&&event.target&&event.target.classList)event.target.classList.add('active');
   updateProgress();
 }
 
 // THEME
 function toggleTheme(){
   document.body.classList.toggle('light-mode');
-  const btn=document.querySelector('.theme-btn');
+  const btn=document.querySelector('.theme-btn:last-of-type');
   btn.textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀ Light';
   lsSet('theme',document.body.classList.contains('light-mode')?'light':'dark');
 }
 
-// KEYWORD SCORING
-function scoreKeywords(text,kw,max){
-  const t=text.toLowerCase();
-  let hits=kw.filter(k=>t.includes(k.toLowerCase())).length;
-  return Math.min(max,Math.round((hits/Math.max(kw.length,1))*max));
-}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function fbClass(res){const r=res.pts/res.max;return 'feedback show '+(r>=0.8?'good':r>=0.4?'ok':'poor')}
 
 // RENDER DQ
+const dqs = [
+  'How can safety problems affect company profits?',
+  'Why might management delay safety investments?',
+  'What is the relationship between production standards and investor confidence?',
+];
 function renderDQ(){
   const c=document.getElementById('dq-container');
   c.innerHTML='';
-  dqs.forEach((d,i)=>{
+  dqs.forEach((q,i)=>{
     const saved=lsGet('dq'+i)||'';
     c.innerHTML+=`
     <div class="question-block">
       <div class="q-label">Question ${i+1}</div>
-      <div class="q-text">${d.q}</div>
-      <textarea id="dq-ta-${i}" placeholder="Your answer..." oninput="lsSet('dq${i}',this.value)">${saved}</textarea>
+      <div class="q-text">${q}</div>
+      ${Grader.renderRule(RB_DQ[i])}
+      <textarea id="dq-ta-${i}" placeholder="Your answer (2-3 full sentences, in your own words)..." oninput="lsSet('dq${i}',this.value)">${esc(saved)}</textarea>
       <button class="check-btn" onclick="checkDQ(${i})">✔ Check</button>
       <div class="feedback" id="dq-fb-${i}"></div>
     </div>`;
@@ -568,15 +671,19 @@ function renderDQ(){
 }
 function checkDQ(i){
   const txt=document.getElementById('dq-ta-'+i).value;
-  const sc=scoreKeywords(txt,dqs[i].kw,5);
-  scores.dq[i]=sc; saveScores(); updateTotal();
+  const res=Grader.score(txt,RB_DQ[i]);
+  addScore('dq'+i,res.pts);
   const fb=document.getElementById('dq-fb-'+i);
-  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
-  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Excellent! Strong use of key vocabulary.':sc>=2?'Good attempt. Try adding more specific financial terms.':'Add more detail using terms like: '+dqs[i].kw.slice(0,4).join(', ')+'.');
-  document.getElementById('dq-total').textContent=scores.dq.reduce((a,b)=>a+b,0);
+  fb.className=fbClass(res);
+  fb.innerHTML=Grader.renderResult(res);
 }
 
 // RENDER CQ
+const cqs = [
+  'What are the direct costs of non-compliance mentioned in the text, and what can one serious accident do to the company?',
+  'According to the text, what three factors should financial analysis compare when evaluating safety investments?',
+  'How can safety violations affect a company\'s relationship with investors and insurance providers?',
+];
 function renderCQ(){
   const c=document.getElementById('cq-container');
   c.innerHTML='';
@@ -585,8 +692,9 @@ function renderCQ(){
     c.innerHTML+=`
     <div class="question-block">
       <div class="q-label">Question ${i+1}</div>
-      <div class="q-text">${q.q}</div>
-      <textarea id="cq-ta-${i}" placeholder="Your answer..." oninput="lsSet('cq${i}',this.value)">${saved}</textarea>
+      <div class="q-text">${q}</div>
+      ${Grader.renderRule(RB_CQ[i])}
+      <textarea id="cq-ta-${i}" placeholder="Your answer (full sentences, in your own words)..." oninput="lsSet('cq${i}',this.value)">${esc(saved)}</textarea>
       <button class="check-btn" onclick="checkCQ(${i})">✔ Check</button>
       <div class="feedback" id="cq-fb-${i}"></div>
     </div>`;
@@ -594,12 +702,11 @@ function renderCQ(){
 }
 function checkCQ(i){
   const txt=document.getElementById('cq-ta-'+i).value;
-  const sc=scoreKeywords(txt,cqs[i].kw,5);
-  scores.cq[i]=sc; saveScores(); updateTotal();
+  const res=Grader.score(txt,RB_CQ[i]);
+  addScore('cq'+i,res.pts);
   const fb=document.getElementById('cq-fb-'+i);
-  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
-  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Correct — well referenced!':sc>=2?'Partially correct. Add more specific terms.':'Review the reading section and look for: '+cqs[i].kw.slice(0,4).join(', ')+'.');
-  document.getElementById('cq-total').textContent=scores.cq.reduce((a,b)=>a+b,0);
+  fb.className=fbClass(res);
+  fb.innerHTML=Grader.renderResult(res);
 }
 
 // GLOSSARY
@@ -619,7 +726,7 @@ function renderGlossary(){
           <span class="term">${g.term}</span>
           <span class="cat-tag">${g.cat==='C'?'Compliance & Risk':g.cat==='F'?'Financial Impact':'Strategy & Investment'}</span>
           <span class="card-count">tap to see translation</span>
-          <button onclick="event.stopPropagation();speakTerm(g.term)" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button>
+          <button onclick="event.stopPropagation();speakTerm('${g.term}')" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button>
         </div>
         <div class="flip-back">
           <div class="ru">${g.ru}</div>
@@ -650,7 +757,7 @@ function speak(word){
   window.speechSynthesis.speak(u);
 }
 
-// CATEGORIES MATCH
+// CATEGORIES MATCH (closed task: 1 point per correct term)
 function renderCategories(){
   const grid=document.getElementById('match-grid');
   const shuffled=[...glossary].sort(()=>Math.random()-.5);
@@ -659,39 +766,46 @@ function renderCategories(){
     <div class="match-item" id="mi-${i}">
       <span class="match-term">${g.term}</span>
       <div style="display:flex;align-items:center;gap:8px">
-        <select class="match-select" id="ms-${i}" data-correct="${g.cat}" onchange="saveCatAnswer(${i},this.value)">
+        <select class="match-select" id="ms-${i}" data-correct="${g.cat}" data-term="${g.term}" onchange="saveCatAnswer(${i},this.value)">
           <option value="">— select —</option>
-          <option value="C" ${saved[i]==='C'?'selected':''}>C — Compliance &amp; Risk</option>
-          <option value="F" ${saved[i]==='F'?'selected':''}>F — Financial Impact</option>
-          <option value="S" ${saved[i]==='S'?'selected':''}>S — Strategy &amp; Investment</option>
+          <option value="C" ${saved[g.term]==='C'?'selected':''}>C — Compliance &amp; Risk</option>
+          <option value="F" ${saved[g.term]==='F'?'selected':''}>F — Financial Impact</option>
+          <option value="S" ${saved[g.term]==='S'?'selected':''}>S — Strategy &amp; Investment</option>
         </select>
         <span class="match-result" id="mr-${i}"></span>
       </div>
     </div>`).join('');
 }
-function saveCatAnswer(i,v){const s=lsGet('catAnswers')||{};s[i]=v;lsSet('catAnswers',s)}
+function saveCatAnswer(i,v){const sel=document.getElementById('ms-'+i);const s=lsGet('catAnswers')||{};s[sel.dataset.term]=v;lsSet('catAnswers',s)}
 function checkCategories(){
   let correct=0;
   document.querySelectorAll('.match-select').forEach((s,i)=>{
     const r=document.getElementById('mr-'+i);
     if(s.value===s.dataset.correct){r.textContent='✓';r.style.background='rgba(46,204,113,.2)';r.style.color='#2ecc71';correct++}
     else if(s.value){r.textContent='✗';r.style.background='rgba(231,76,60,.2)';r.style.color='#e74c3c'}
+    else{r.textContent='';r.style.background=''}
   });
-  const sc=Math.round((correct/glossary.length)*15);
-  scores.cat=sc; saveScores(); updateTotal();
+  const sc=correct; // 1 point per term, 17 in total
+  addScore('cat',sc);
   const fb=document.getElementById('cat-feedback');
-  fb.className='feedback show '+(sc>=12?'good':sc>=8?'ok':'poor');
-  fb.innerHTML=`${correct}/${glossary.length} correct — Score: <strong>${sc}/15</strong>`;
-  document.getElementById('cat-score').textContent=sc;
+  fb.className='feedback show '+(sc>=14?'good':sc>=9?'ok':'poor');
+  fb.innerHTML=`${correct}/${glossary.length} correct — Score: <strong>${sc}/17</strong>`;
+  document.getElementById('cat-score').textContent=scores.cat||0;
 }
 
-// FIB
+// FIB (closed task: the blank must match the glossary term)
+const fibs = [
+  {before:'Lack of ',blank:'compliance',after:' with safety regulations exposes the company to legal penalties and regulatory sanctions.',hint:'соблюдение требований',accept:['compliance']},
+  {before:'A safety accident generates direct ',blank:'compensation',after:' costs for injured workers and may significantly reduce annual profit.',hint:'компенсация',accept:['compensation']},
+  {before:'Reputational damage leads to loss of clients and undermines ',blank:'investor confidence',after:', making it harder to secure future contracts.',hint:'доверие инвесторов',accept:['investor confidence']},
+  {before:'',blank:'Preventive investment',after:' in safety measures reduces operational risk and supports the company\'s long-term stability.',hint:'превентивные инвестиции',accept:['preventive investment','preventative investment']},
+];
 function renderFIB(){
   const c=document.getElementById('fib-container');
   const saved=lsGet('fibAnswers')||{};
   c.innerHTML=fibs.map((f,i)=>`
     <div class="fib-sentence">
-      <b>→</b> ${f.before}<input class="blank-input" id="fib-${i}" placeholder="${f.hint}" value="${saved[i]||''}" oninput="saveFIB(${i},this.value)">${f.after}
+      <b>→</b> ${f.before}<input class="blank-input" id="fib-${i}" placeholder="${f.hint}" value="${esc(saved[i]||'')}" oninput="saveFIB(${i},this.value)">${f.after}
     </div>`).join('');
 }
 function saveFIB(i,v){const s=lsGet('fibAnswers')||{};s[i]=v;lsSet('fibAnswers',s)}
@@ -699,52 +813,42 @@ function checkFIB(){
   let correct=0;
   fibs.forEach((f,i)=>{
     const inp=document.getElementById('fib-'+i);
-    const val=(inp.value||'').trim().toLowerCase();
-    const ok=f.accept.some(a=>val===a.toLowerCase()||val.includes(a.toLowerCase()));
+    const val=(inp.value||'').trim().toLowerCase().replace(/\s+/g,' ').replace(/[.,;:!]+$/,'');
+    const ok=f.accept.some(a=>val===a||val===a+'s');
     inp.className='blank-input '+(ok?'correct':'wrong');
     if(ok)correct++;
   });
   const sc=correct*3;
-  scores.fib=sc; saveScores(); updateTotal();
+  addScore('fib',sc);
   const fb=document.getElementById('fib-feedback');
   fb.className='feedback show '+(correct===fibs.length?'good':correct>=2?'ok':'poor');
   fb.innerHTML=`${correct}/${fibs.length} correct — Score: <strong>${sc}/12</strong>`;
-  document.getElementById('fib-score').textContent=sc;
+  document.getElementById('fib-score').textContent=scores.fib||0;
 }
 
 // WRITING
+const RB_WRITING={1:RB_W1,2:RB_W2};
 function saveWriting(id){lsSet(id,document.getElementById(id+'-input').value)}
 function checkWriting(n){
-  const txt=(document.getElementById('writing'+n+'-input').value||'').toLowerCase();
-  const kw=glossary.map(g=>g.term.toLowerCase());
-  const usedKw=kw.filter(k=>txt.includes(k));
-  const causeEffect=['because','therefore','as a result','this leads to','consequently','due to','thus','this causes','as a consequence'].filter(c=>txt.includes(c));
-  let sc=0;
-  if(n===1){
-    if(usedKw.length>=4)sc+=3;else if(usedKw.length>=2)sc+=2;else if(usedKw.length>=1)sc+=1;
-    const risks=['fine','insurance','downtime','compensation','penalty','sanction','loss','damage','risk'].filter(r=>txt.includes(r));
-    if(risks.length>=3)sc+=3;else if(risks.length>=2)sc+=2;else if(risks.length>=1)sc+=1;
-    if(txt.length>200)sc+=2;else if(txt.length>100)sc+=1;
-    sc=Math.min(8,sc);
-    const fb=document.getElementById('writing1-feedback');
-    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
-    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms used: ${usedKw.length} · Financial risks identified: ${risks.length}`;
-  }else{
-    if(usedKw.length>=6)sc+=3;else if(usedKw.length>=4)sc+=2;else if(usedKw.length>=2)sc+=1;
-    if(causeEffect.length>=2)sc+=2;else if(causeEffect.length>=1)sc+=1;
-    const hasPosition=(txt.includes('yes')||txt.includes('justified')||txt.includes('recommend')||txt.includes('reasonable'));
-    if(hasPosition)sc+=2;
-    if(txt.length>300)sc+=1;
-    sc=Math.min(8,sc);
-    const fb=document.getElementById('writing2-feedback');
-    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
-    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms: ${usedKw.length}/6 required · Cause-effect connectors: ${causeEffect.length}/2 required`;
-  }
-  scores['writing'+n]=sc; saveScores(); updateTotal();
-  document.getElementById('writing'+n+'-score').textContent=sc;
+  const txt=document.getElementById('writing'+n+'-input').value||'';
+  const res=Grader.score(txt,RB_WRITING[n]);
+  addScore('writing'+n,res.pts);
+  const fb=document.getElementById('writing'+n+'-feedback');
+  fb.className=fbClass(res);
+  fb.innerHTML=Grader.renderResult(res);
+  document.getElementById('writing'+n+'-score').textContent=scores['writing'+n]||0;
 }
 
-// SPEAKING CHIPS
+// SPEAKING SCRIPT (scored) and practice tools
+function checkScript(){
+  const txt=document.getElementById('script-input').value||'';
+  const res=Grader.score(txt,RB_SCRIPT);
+  addScore('script',res.pts);
+  const fb=document.getElementById('script-feedback');
+  fb.className=fbClass(res);
+  fb.innerHTML=Grader.renderResult(res);
+  document.getElementById('script-score').textContent=scores.script||0;
+}
 function renderChips(){
   const chips=['compliance','operational risk','financial loss','preventive investment','cost-benefit analysis','investor confidence','capital allocation','risk assessment','long-term stability','sanctions','reputational damage'];
   const used=lsGet('chips')||[];
@@ -785,13 +889,19 @@ function startTimer(){
 function stopTimer(){clearInterval(timerInterval);timerRunning=false}
 function resetTimer(){stopTimer();timerSeconds=90;updateTimerDisplay();document.getElementById('timer-ring').style.stroke='var(--gold)'}
 
-// SPEAKING SCORE
+// SPEAKING SELF-RATING (practice only, 0 points)
 function updateSpeakingScore(v){
   document.getElementById('speaking-val').textContent=v;
-  scores.speaking=parseInt(v); saveScores(); updateTotal();
+  lsSet('speakSelf',parseInt(v));
 }
 
-// REFLECTION
+// REFLECTION (practice only, 0 points)
+const reflections = [
+  'I can explain how safety violations create financial risks (direct and indirect costs).',
+  'I can justify an investment decision using cost-benefit analysis and glossary vocabulary.',
+  'I can confidently use at least 9 glossary terms in speaking and writing tasks.',
+];
+function reflectTotal(){const s=lsGet('reflect')||{};return [0,1,2].reduce((a,j)=>a+(s['s'+j]||0),0)}
 function renderReflect(){
   const c=document.getElementById('reflect-container');
   const saved=lsGet('reflect')||{};
@@ -801,38 +911,23 @@ function renderReflect(){
       <div class="star-row">
         ${[1,2,3,4].map(n=>`<span class="star ${(saved['s'+i]||0)>=n?'lit':''}" onclick="setStar(${i},${n})">⭐</span>`).join('')}
       </div>
-      <textarea class="r-note" placeholder="Notes..." oninput="saveReflectNote(${i},this.value)">${saved['n'+i]||''}</textarea>
+      <textarea class="r-note" placeholder="Notes..." oninput="saveReflectNote(${i},this.value)">${esc(saved['n'+i]||'')}</textarea>
     </div>`).join('');
+  const rs=document.getElementById('reflect-score'); if(rs)rs.textContent=reflectTotal();
 }
 function setStar(i,v){
   const saved=lsGet('reflect')||{};
   saved['s'+i]=v; lsSet('reflect',saved);
-  const total=([0,1,2].reduce((a,j)=>{const s=lsGet('reflect')||{};return a+(s['s'+j]||0)},0));
-  scores.reflect=Math.round(total/1);
-  // Recompute: max stars per item=4, 3 items=12 total
-  scores.reflect=Math.min(12,[0,1,2].reduce((a,j)=>{const s=lsGet('reflect')||{};return a+(s['s'+j]||0)},0));
-  saveScores(); updateTotal();
-  document.getElementById('reflect-score').textContent=scores.reflect;
   renderReflect();
 }
 function saveReflectNote(i,v){const s=lsGet('reflect')||{};s['n'+i]=v;lsSet('reflect',s)}
 
 // PROGRESS
-function updateTotal(){
-  const t=scores.dq.reduce((a,b)=>a+b,0)+scores.cq.reduce((a,b)=>a+b,0)+scores.cat+scores.fib+(scores.writing1||0)+(scores.writing2||0)+scores.speaking+scores.reflect;
-  document.getElementById('total-score-chip').textContent=t;
-  document.getElementById('total-big').textContent=t;
-  return t;
-}
 function updateProgress(){
-  const dq=scores.dq.reduce((a,b)=>a+b,0);
-  const cq=scores.cq.reduce((a,b)=>a+b,0);
-  const writ=(scores.writing1||0)+(scores.writing2||0);
   const items=[
-    {id:'dq',val:dq,max:15},{id:'cq',val:cq,max:15},
-    {id:'cat',val:scores.cat,max:15},{id:'fib',val:scores.fib,max:12},
-    {id:'writ',val:writ,max:16},{id:'spk',val:scores.speaking,max:8},
-    {id:'ref',val:scores.reflect,max:12}
+    {id:'dq',val:sumKeys('dq'),max:18},{id:'cq',val:sumKeys('cq'),max:18},
+    {id:'cat',val:scores.cat||0,max:17},{id:'fib',val:scores.fib||0,max:12},
+    {id:'writ',val:(scores.writing1||0)+(scores.writing2||0),max:20},{id:'spk',val:scores.script||0,max:8}
   ];
   items.forEach(it=>{
     const pct=(it.val/it.max)*100;
@@ -846,29 +941,37 @@ function updateProgress(){
 
 function resetAll(){
   if(!confirm('Reset all progress for this lesson?'))return;
-  ['scores','catAnswers','fibAnswers','chips','reflect','writing1','writing2'].forEach(k=>localStorage.removeItem(LS+k));
+  ['scores','catAnswers','fibAnswers','chips','reflect','writing1','writing2','script','speakSelf'].forEach(k=>localStorage.removeItem(LS+k));
+  RUBRIC.forEach(r=>localStorage.removeItem(LS+'sc_'+r.key));
   [0,1,2].forEach(i=>{localStorage.removeItem(LS+'dq'+i);localStorage.removeItem(LS+'cq'+i)});
-  scores={dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:[0,0,0]};
   location.reload();
 }
 
 // INIT
 (function init(){
   if(lsGet('theme')==='light')document.body.classList.add('light-mode');
+  // Scores saved under the old keyword rules are discarded once, so all results follow the RUBRIC table.
+  if(lsGet('rubric')!==RUBRIC_VERSION){
+    try{localStorage.removeItem(LS+'scores');}catch(e){}
+    lsSet('rubric',RUBRIC_VERSION);
+  }
+  RUBRIC.forEach(r=>{const v=parseFloat(lsGet('sc_'+r.key));if(!isNaN(v))scores[r.key]=Math.max(0,Math.min(r.max,v));});
   renderDQ(); renderCQ(); renderGlossary(); renderCategories(); renderFIB(); renderChips(); renderReflect();
-  // restore textarea values
-  [0,1,2].forEach(i=>{
-    const dta=document.getElementById('dq-ta-'+i);
-    if(dta){const v=lsGet('dq'+i);if(v)dta.value=v}
-    const cta=document.getElementById('cq-ta-'+i);
-    if(cta){const v=lsGet('cq'+i);if(v)cta.value=v}
-  });
+  document.getElementById('writing1-rule').innerHTML=Grader.renderRule(RB_W1);
+  document.getElementById('writing2-rule').innerHTML=Grader.renderRule(RB_W2);
+  document.getElementById('script-rule').innerHTML=Grader.renderRule(RB_SCRIPT);
   const w1=document.getElementById('writing1-input');if(w1){const v=lsGet('writing1');if(v)w1.value=v}
   const w2=document.getElementById('writing2-input');if(w2){const v=lsGet('writing2');if(v)w2.value=v}
+  const sc=document.getElementById('script-input');if(sc){const v=lsGet('script');if(v)sc.value=v}
   const spk=document.getElementById('speaking-range');
-  if(spk&&scores.speaking){spk.value=scores.speaking;document.getElementById('speaking-val').textContent=scores.speaking}
+  const ss=lsGet('speakSelf');
+  if(spk&&ss){spk.value=ss;document.getElementById('speaking-val').textContent=ss}
+  ['writing1','writing2'].forEach(k=>{const e=document.getElementById(k+'-score');if(e)e.textContent=scores[k]||0});
+  const se=document.getElementById('script-score');if(se)se.textContent=scores.script||0;
+  const cs=document.getElementById('cat-score');if(cs)cs.textContent=scores.cat||0;
+  const fs=document.getElementById('fib-score');if(fs)fs.textContent=scores.fib||0;
   updateTimerDisplay();
-  updateTotal();
+  updateProgress();
 })();
 
 </script>
