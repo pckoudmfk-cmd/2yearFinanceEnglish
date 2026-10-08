@@ -139,6 +139,12 @@
   @media (max-width: 900px) { #main-content { padding: 20px 20px 48px; } .flashcard-wrap { width: calc(50% - 8px); } .final-check-item { width: 100%; } #progress-label { right: 60px; } }
   @media (max-width: 600px) { .flashcard-wrap { width: 100%; } #main-content { padding: 16px 16px 48px; } .section-title { font-size: 18px; } .final-check-item { width: 100%; } .fib-input { width: 130px; } .tab{padding:10px 12px;font-size:.75rem} }
 
+  .rule{font-size:.76rem;color:var(--text3);background:var(--navy2);border-left:3px solid var(--gold);border-radius:4px;padding:7px 12px;margin:0 0 14px;line-height:1.55}
+  .rubric-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:18px;text-align:left}
+  .rubric-table th{color:var(--text3);font-weight:600;padding:8px 6px;border-bottom:2px solid var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:.3px}
+  .rubric-table td{padding:8px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  .rubric-table td.num{text-align:right;white-space:nowrap;font-weight:700;color:var(--gold)}
+  .practice-note{font-size:12px;color:var(--text3);border:1px dashed var(--border);border-radius:8px;padding:8px 12px;margin:0 0 14px;line-height:1.5}
   body.light-mode .tab{color:#3a4466}
   body.light-mode .tab.active{color:#0A1628;border-bottom-color:#C9A84C}
   body.light-mode .tab:hover{color:#0A1628}
@@ -197,8 +203,9 @@
       <div style="margin:20px 0 14px;font-size:14px;font-weight:700;color:var(--text);">💬 Discussion Questions</div>
       <div class="dq-item">
         <div class="dq-num">Question 1</div>
+        <div id="rule-dq1"></div>
         <div class="dq-q">What specific professional goals can a finance specialist have when attending a FinTech exhibition?</div>
-        <textarea class="dq-textarea" id="dq1" placeholder="Write your thoughts... (min. 20 words)" oninput="saveItem('exhib_dq1',this.value)"></textarea>
+        <textarea class="dq-textarea" id="dq1" placeholder="Write full sentences (at least 20 words)..." oninput="saveItem('exhib_dq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(1)">📋 Model Answer</button>
@@ -207,8 +214,9 @@
       </div>
       <div class="dq-item">
         <div class="dq-num">Question 2</div>
+        <div id="rule-dq2"></div>
         <div class="dq-q">What types of information collected at an exhibition are crucial for a financial analysis or market report?</div>
-        <textarea class="dq-textarea" id="dq2" placeholder="List at least 3 types of information..." oninput="saveItem('exhib_dq2',this.value)"></textarea>
+        <textarea class="dq-textarea" id="dq2" placeholder="Write full sentences naming at least 3 types of information (at least 20 words)..." oninput="saveItem('exhib_dq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(2)">📋 Model Answer</button>
@@ -217,8 +225,9 @@
       </div>
       <div class="dq-item">
         <div class="dq-num">Question 3</div>
+        <div id="rule-dq3"></div>
         <div class="dq-q">Besides booking a ticket, what preparation is necessary to make exhibition participation effective?</div>
-        <textarea class="dq-textarea" id="dq3" placeholder="Give 2-3 specific preparation steps..." oninput="saveItem('exhib_dq3',this.value)"></textarea>
+        <textarea class="dq-textarea" id="dq3" placeholder="Write full sentences with 2-3 preparation steps (at least 25 words)..." oninput="saveItem('exhib_dq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkDQ(3)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelDQ(3)">📋 Model Answer</button>
@@ -250,8 +259,9 @@
       <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">📝 Comprehension Questions</div>
       <div class="dq-item">
         <div class="dq-num">Question A</div>
+        <div id="rule-cq1"></div>
         <div class="dq-q">What are the two main strategic purposes of attending exhibitions, according to the text?</div>
-        <textarea class="dq-textarea" id="cq1" placeholder="Identify two purposes from the text..." oninput="saveItem('exhib_cq1',this.value)"></textarea>
+        <textarea class="dq-textarea" id="cq1" placeholder="Write full sentences naming the two purposes (at least 15 words)..." oninput="saveItem('exhib_cq1',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(1)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(1)">📋 Model</button>
@@ -260,8 +270,9 @@
       </div>
       <div class="dq-item">
         <div class="dq-num">Question B</div>
+        <div id="rule-cq2"></div>
         <div class="dq-q">How do global and regional exhibitions differ in their primary focus?</div>
-        <textarea class="dq-textarea" id="cq2" placeholder="Compare global vs. regional exhibitions..." oninput="saveItem('exhib_cq2',this.value)"></textarea>
+        <textarea class="dq-textarea" id="cq2" placeholder="Compare global and regional exhibitions in full sentences (at least 20 words)..." oninput="saveItem('exhib_cq2',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(2)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(2)">📋 Model</button>
@@ -270,8 +281,9 @@
       </div>
       <div class="dq-item">
         <div class="dq-num">Question C</div>
+        <div id="rule-cq3"></div>
         <div class="dq-q">How can exhibitions directly influence a company's strategic planning?</div>
-        <textarea class="dq-textarea" id="cq3" placeholder="Explain the connection between exhibitions and strategy..." oninput="saveItem('exhib_cq3',this.value)"></textarea>
+        <textarea class="dq-textarea" id="cq3" placeholder="Explain the connection in full sentences (at least 20 words)..." oninput="saveItem('exhib_cq3',this.value)"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm" onclick="checkCQ(3)">✔ Check</button>
           <button class="btn btn-outline btn-sm" onclick="showModelCQ(3)">📋 Model</button>
@@ -300,7 +312,7 @@
     </div>
   </div>
   <div class="card">
-    <p class="text-sm mb-16" style="color:var(--text3);">Select a term, then click its best category. Correct assignments highlight in that category's colour. Score counts unique correct assignments.</p>
+    <p class="rule">How you get points (maximum 15): 1 point for each of the 15 terms. A term earns its point when it has at least one correct group and you made no wrong attempt for it. Some terms belong to two groups. Select a term, then click a category: a correct choice turns the category colour, a wrong one flashes red and costs that term its point. Reset starts the task again; your best result is kept.</p>
     <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
       <button class="cat-btn cat-btn-S" id="catbtn-S" onclick="assignCategory('S')">🔵 Strategy &amp; Planning</button>
       <button class="cat-btn cat-btn-M" id="catbtn-M" onclick="assignCategory('M')">🟢 Market &amp; Innovation</button>
@@ -335,10 +347,10 @@
     <div class="section-num">5</div>
     <div>
       <div class="section-title">Fill in the Blanks</div>
-      <div class="section-subtitle">Complete each sentence with the correct glossary term. Click outside to check.</div>
+      <div class="section-subtitle">Complete each sentence with the correct glossary term. Click outside the box to check.</div>
     </div>
   </div>
-  <div class="card" id="fib-container"></div>
+  <div class="card"><p class="rule">How you get points (maximum 26): 2 points for each correct blank (13 blanks). Type the glossary term; singular and plural forms are accepted, and the hint button shows the first letter. Where two blanks use two different terms, either order is accepted. Your best result is kept.</p><div id="fib-container"></div></div>
 </section>
 
 <!-- PART 6 -->
@@ -347,7 +359,7 @@
     <div class="section-num">6</div>
     <div>
       <div class="section-title">Writing Tasks</div>
-      <div class="section-subtitle">Write at least 40 words. Use 5+ glossary terms for a vocabulary bonus!</div>
+      <div class="section-subtitle">Write full sentences. Each task has its own scoring box, and 3+ glossary terms are checked inside your sentences.</div>
     </div>
   </div>
   <div class="card">
@@ -360,11 +372,12 @@
       Write a short memo (4–5 sentences) recommending one option. Use at least <strong>5 glossary terms</strong>.
     </div>
     <div class="writing-task">
+      <div id="rule-w1"></div>
       <label for="wt1">Your memo to management:</label>
       <textarea class="writing-ta" id="wt1" placeholder="To: Management Team. Re: Exhibition Recommendation..." oninput="updateWriting(1,this.value)"></textarea>
       <div class="writing-meta">
         <span class="word-count" id="wc1">0 words</span>
-        <span class="vocab-badge" id="vb1">⭐ Good vocabulary!</span>
+        <span class="vocab-badge" id="vb1">⭐ Good vocabulary! (a hint, not scored)</span>
       </div>
       <div style="display:flex;gap:8px;margin-top:8px;">
         <button class="btn btn-primary btn-sm" onclick="checkWriting(1)">✔ Check</button>
@@ -376,11 +389,12 @@
     <div style="border-top:1px solid var(--border);padding-top:24px;margin-top:8px;">
       <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">📝 Task 5a — Evaluate &amp; Justify</div>
       <div class="writing-task">
+        <div id="rule-w2"></div>
         <label for="wt2"><strong>Statement 1:</strong> "Specialized forums are more valuable for a finance specialist's professional development than large global exhibitions." — Do you agree or disagree? Justify with 2–3 sentences and 5+ glossary terms.</label>
         <textarea class="writing-ta" id="wt2" placeholder="I agree/disagree because..." oninput="updateWriting(2,this.value)"></textarea>
         <div class="writing-meta">
           <span class="word-count" id="wc2">0 words</span>
-          <span class="vocab-badge" id="vb2">⭐ Good vocabulary!</span>
+          <span class="vocab-badge" id="vb2">⭐ Good vocabulary! (a hint, not scored)</span>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px;">
           <button class="btn btn-primary btn-sm" onclick="checkWriting(2)">✔ Check</button>
@@ -389,11 +403,12 @@
         <div id="wfb2" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid var(--border);"></div>
       </div>
       <div class="writing-task">
+        <div id="rule-w3"></div>
         <label for="wt3"><strong>Statement 2:</strong> "In the digital age, the primary value of an exhibition is no longer seeing products, but facilitating high-level networking." — Do you agree or disagree? Justify with 2–3 sentences and 5+ glossary terms.</label>
         <textarea class="writing-ta" id="wt3" placeholder="I agree/disagree because..." oninput="updateWriting(3,this.value)"></textarea>
         <div class="writing-meta">
           <span class="word-count" id="wc3">0 words</span>
-          <span class="vocab-badge" id="vb3">⭐ Good vocabulary!</span>
+          <span class="vocab-badge" id="vb3">⭐ Good vocabulary! (a hint, not scored)</span>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px;">
           <button class="btn btn-primary btn-sm" onclick="checkWriting(3)">✔ Check</button>
@@ -415,7 +430,8 @@
     </div>
   </div>
   <div class="card">
-    <p class="text-sm mb-16" style="color:var(--text3);">Imagine you attended a major exhibition. Complete this briefing plan for your colleagues. Your notes will be used in Part 8.</p>
+    <p class="text-sm mb-16" style="color:var(--text3);">Imagine you attended a major exhibition. Complete this briefing plan for your colleagues. Your notes will be used in Part 8. Write each box as one or two full sentences.</p>
+    <div id="rule-sp"></div>
     <span class="speaking-plan-label">Event &amp; Purpose</span>
     <input type="text" class="speaking-plan-input" id="sp1" placeholder="I attended [Exhibition Name] to gather intelligence on..." oninput="updateSpeakingPlan()">
     <span class="speaking-plan-label">Key Trend Identified</span>
@@ -426,8 +442,11 @@
     <input type="text" class="speaking-plan-input" id="sp4" placeholder="Therefore, I recommend we focus on... to manage risk / seize an opportunity." oninput="updateSpeakingPlan()">
     <div style="margin-top:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
       <span class="text-sm" id="sp-wordcount" style="color:var(--mid-gray);">0 words in your plan</span>
-      <button class="btn btn-primary btn-sm" onclick="showTab('part8')">✓ Ready for Speaking Task →</button>
+      <button class="btn btn-primary btn-sm" onclick="checkSpeakingPlan()">✔ Check</button>
+      <button class="btn btn-outline btn-sm" onclick="showSpeakingModel()">📋 Model</button>
+      <button class="btn btn-outline btn-sm" onclick="showTab('part8')">Ready for Speaking Task →</button>
     </div>
+    <div id="sp-fb" style="display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid var(--border);"></div>
   </div>
 </section>
 
@@ -441,6 +460,7 @@
     </div>
   </div>
   <div class="card">
+    <p class="practice-note">Practice only, 0 points. The timers and the term chips cannot be checked automatically, so they are not scored. The written briefing plan in Part 7 is the scored speaking task.</p>
     <div class="writing-scenario" style="margin-bottom:20px;">
       <strong style="color:var(--gold);">🎤 Instructions</strong><br>
       Speak for <strong>1.5–2 minutes</strong> (90–120 seconds) · Use your notes from Part 7 · Structure: <em>Observation → Analysis → Recommendation</em> · Use at least <strong>8 glossary terms</strong>
@@ -470,7 +490,7 @@
       </div>
     </div>
     <div>
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">🎯 Tick off each term as you use it:</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">🎯 Tick off each term as you use it (practice only):</div>
       <div id="speaking-chips" style="margin-bottom:12px;"></div>
       <div id="speaking-chip-count" class="text-sm" style="color:var(--mid-gray);">0 / 8 terms used</div>
     </div>
@@ -487,6 +507,7 @@
     </div>
   </div>
   <div class="card">
+    <p class="practice-note">Practice only, 0 points. Self-assessment cannot be checked automatically, so it is not part of your score. Use it as your own revision plan.</p>
     <p class="text-sm mb-16" style="color:var(--text3);">Reflect honestly. Check an item only when you are truly confident.</p>
     <div class="final-grid" id="final-grid"></div>
     <div style="text-align:center;">
@@ -501,7 +522,7 @@
     <div class="section-num">★</div>
     <div>
       <div class="section-title">My Overall Score</div>
-      <div class="section-subtitle">Aggregated results from all checked tasks</div>
+      <div class="section-subtitle">93 points in total. Your best result for each task is kept.</div>
     </div>
   </div>
   <div class="card" id="score-card">
@@ -518,7 +539,9 @@
       </div>
       <div id="score-grade" style="margin-top:12px;font-size:18px;font-weight:700;color:var(--text);">Complete tasks to see your grade</div>
     </div>
-    <div id="score-breakdown" style="margin-top:4px;"></div>
+    <div style="text-align:center;font-size:13px;color:var(--text3);margin-top:4px;"><strong id="score-total-num" style="font-size:22px;color:var(--gold);">0</strong> points out of 93</div>
+    <p class="rule" style="text-align:left;margin-top:16px">How scoring works: every task is checked automatically by the rules below. You can press Check as many times as you like, and the best result for each task is kept. Flashcards, the timers, the speaking term chips and the self-reflection are practice only and are not scored.</p>
+    <table class="rubric-table" id="rubric-table"></table>
     <div style="margin-top:20px;text-align:center;">
       <button class="btn btn-primary" onclick="updateOverallScore()">🔄 Refresh Score</button>
     </div>
@@ -530,6 +553,7 @@
 <div id="confetti-container"></div>
 <div id="excellent-banner">🏆 Excellent Work! You've mastered this lesson!</div>
 
+<script src="grader.js"></script>
 <script>
 // DATA
 var glossaryTerms = [
@@ -567,29 +591,131 @@ var glossaryTerms = [
   {term:"focus",def:"the main area of attention or activity",ru:"фокус, направленность"}
 ];
 
-var dqCriteria = {
-  1: {keywords:['network','partner','benchmark','trend','innovat','strateg','competi','intelligen','insight','technolog','scout','develop'],minWords:20,
-    model:"A finance specialist can attend a FinTech exhibition to gather strategic intelligence on emerging technologies, benchmark their organisation against global leaders, scout for potential partners and vendors, and identify disruptive innovations that could affect their investment strategy or business model.",
-    tip:"Mention: benchmark, strategic intelligence, scout for, disruptive technology, innovation, networking."},
-  2: {keywords:['trend','competi','data','product','partner','market','pricing','regulat','technolog','innovat','insight','landscape'],minWords:20,
-    model:"Key information includes data on emerging economic trends and the competitive landscape, details of new disruptive technologies, regulatory updates, pricing benchmarks, and partnership opportunities. This raw observation must be converted into actionable insight to be useful in a market report.",
-    tip:"Mention: trends, competitive landscape, actionable insight, regulatory data, technology."},
-  3: {keywords:['goal','research','agenda','contact','compan','session','priorit','strateg','briefing','budget','plan','object'],minWords:25,
-    model:"Effective preparation requires setting clear strategic goals, researching exhibitors and keynote speakers in advance, prioritising sessions and networking events, preparing targeted questions for potential partners, and defining what specific actionable insights the team needs to bring back. A pre-event briefing aligned with the company's strategic direction is essential.",
-    tip:"Mention: goals, research, prioritise, agenda, strategic direction, actionable insights."}
+var MODELS = {
+  dq1:"A finance specialist can attend a FinTech exhibition to gather strategic intelligence on emerging technologies, benchmark their organisation against global leaders, scout for potential partners and vendors, and identify disruptive innovations that could affect their investment strategy or business model.",
+  dq2:"Key information includes data on emerging economic trends and the competitive landscape, details of new disruptive technologies, regulatory updates, pricing benchmarks, and partnership opportunities. This raw observation must be converted into actionable insight to be useful in a market report.",
+  dq3:"Effective preparation requires setting clear strategic goals, researching exhibitors and keynote speakers in advance, prioritising sessions and networking events, preparing targeted questions for potential partners, and defining what specific actionable insights the team needs to bring back. A pre-event briefing aligned with the company's strategic direction is essential.",
+  cq1:"According to the text, the two main strategic purposes are gathering strategic intelligence (understanding market innovations, competitive landscapes, and emerging trends) and professional development (building expertise and partnerships that support career and organisational growth).",
+  cq2:"Global exhibitions like Money20/20 focus on worldwide disruptive technologies and cross-continental partnerships. Regional events like FinCore address local market adaptation and practical implementation within a specific regulatory and economic context.",
+  cq3:"Exhibitions provide actionable insights that directly inform investment strategies and risk management frameworks. By benchmarking against competitors and assessing market entry feasibility, professionals gather the strategic intelligence needed to update their company's strategic direction.",
+  w1:"To: Management Team. Re: Exhibition Recommendation. I recommend we attend the Regional ESG Finance Summit. Our strategic direction for the next three years prioritises sustainable investment models and long-term valuation. This specialized forum will provide expert-level knowledge in ESG compliance that a global event like Money20/20 cannot offer with the same depth. I will scout for compliance automation tools and benchmark our ESG framework against industry leaders. This actionable insight will directly inform our investment strategy.",
+  w2:"I partially agree. Specialized forums provide expert-level knowledge and deep actionable insight in a specific domain, which is invaluable for professional development in that area. However, large global exhibitions offer unmatched strategic intelligence on competitive landscapes and emerging economic trends that is equally vital. The ideal approach is to triangulate both types of events based on the company's current strategic direction.",
+  w3:"I agree. While the primary value of exhibitions once lay in showcasing physical products, digital channels now provide access to product information more efficiently. Today, the irreplaceable benefit is the ability to facilitate high-level partnerships, build trust through face-to-face interaction, and gain strategic intelligence through conversations that cannot happen online. The real asset is the network built, not the brochures collected.",
+  sp:"I attended FinCore Moscow to gather intelligence on how local banks are adopting new technology. The most significant trend was the fast growth of RegTech, and this matters for our business because compliance costs are rising. In terms of the competitive landscape, I noticed that key players are investing heavily in automation. Therefore, I recommend we focus on compliance automation to manage risk and seize an opportunity."
 };
 
-var cqCriteria = {
-  1: {keywords:['intelligen','develop','network','innovat','partner','benchmark','trend','insight','strateg'],minWords:15,
-    model:"According to the text, the two main strategic purposes are gathering strategic intelligence (understanding market innovations, competitive landscapes, and emerging trends) and professional development (building expertise and partnerships that support career and organisational growth).",
-    tip:"Look for: strategic intelligence, professional development."},
-  2: {keywords:['global','regional','local','disrupt','innovat','implement','adapt','market','partner','worldwide','national'],minWords:20,
-    model:"Global exhibitions like Money20/20 focus on worldwide disruptive technologies and cross-continental partnerships. Regional events like FinCore address local market adaptation and practical implementation within a specific regulatory and economic context.",
-    tip:"Contrast: global = disruptive technology / regional = practical implementation, market adaptation."},
-  3: {keywords:['strateg','invest','risk','direction','insight','benchmark','decision','innovat','framework','planning','inform'],minWords:20,
-    model:"Exhibitions provide actionable insights that directly inform investment strategies and risk management frameworks. By benchmarking against competitors and assessing market entry feasibility, professionals gather the strategic intelligence needed to update their company's strategic direction.",
-    tip:"Mention: actionable insight, investment strategy, risk management, strategic direction."}
-};
+// ── Reading text used as the copy-detection source: main text + glossary definitions ──
+function readingSource() {
+  var src = '';
+  try {
+    var el = document.querySelector('.vocab-text'); var c = el.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll('.tooltip'), function(t){ t.parentNode.removeChild(t); });
+    src = c.textContent;
+  } catch (e) {}
+  return src + ' ' + glossaryTerms.map(function(t){ return t.term + ' ' + t.def; }).join('. ');
+}
+var READING = readingSource();
+
+// ── Rubrics for every open answer (idea groups are regular expressions; \\b stops 'unlimited'-type false hits) ──
+function mkRubric(key, max, minWords, prompt, criteria, misc) {
+  return { key: key, max: max, minWords: minWords, prompt: prompt, source: READING + ' ' + MODELS[key], criteria: criteria, misconceptions: misc || [] };
+}
+var GOALV = 'gather|collect|learn|research|identify|spot|discover|track|monitor|understand|study|find out|observe|explore|\\bsee\\b|keep up';
+var RB = {};
+RB.dq1 = mkRubric('dq1', 5, 20, 'What specific professional goals can a finance specialist have when attending a FinTech exhibition?', [
+  {type:'claim', pts:2, label:'A goal about gathering intelligence: say what the specialist learns or gathers (trends, innovations, competitors, the market) at the event, in one sentence', all:[[GOALV],['trend|innovat|technolog|competitor|competitive|landscape|market|intelligen|insight|product|disrupt'],['exhibition|event|fintech|conference|attend|visit|money20|forum|show|there|go to|going to']]},
+  {type:'claim', pts:2, label:'A second goal, in one sentence: compare the bank with leaders and competitors, or meet potential partners, vendors, clients or experts', all:[['benchmark|compare|scout|network|meet|contact|find|build|talk|speak'],['against|leaders|competitors|rivals|potential|suppliers|vendors|clients|investors|experts|colleagues|contacts|relationships|peers']]},
+  {type:'reason', pts:1, label:'A reason inside one sentence: why the goal helps the bank, its decisions, growth or career (because, so that, which means)', topics:[['partners?|contacts?|competitors?|suppliers?|vendors?|clients?|leaders|network|innovations?|products?|ideas|experts?|investors?|decisions?|growth|plans?|business|bank|company|career|skills|customers?|profit|success|money']]}
+], [{re:'\\b(free (gifts|samples|food|drinks)|souvenirs?|relax|holiday|have fun|enjoy (the )?(food|party|trip))\\b', msg:'Professional goals are about intelligence, benchmarking and partnerships, not entertainment.'}]);
+RB.dq2 = mkRubric('dq2', 5, 20, 'What types of information collected at an exhibition are crucial for a financial analysis or market report?', [
+  {type:'claim', pts:2, label:'Name types of information, in one sentence: competitors, regulation, prices, products, partners, customers', all:[['information|data|details|facts|figures|updates|findings'],['concern|about|on |includ|such as|cover|collect|gather|record|note|obtain|capture'],['competitors?|rivals|regulat|prices?|pricing|costs?|products?|partners?|customers?|clients?|suppliers?|vendors?|demand|launch']]},
+  {type:'claim', pts:2, label:'Say that raw data or observations must be turned into useful, actionable insight, in one sentence', all:[['raw|observation|data|information|facts|notes'],['convert|translate|turn|transform|analy[sz]e|interpret|process|become'],['actionable|useful|practical|decision|insight|conclusion']]},
+  {type:'reason', pts:1, label:'A reason inside one sentence: why this information matters (because, so that, which means)', topics:[['competitors?|rivals|regulat|prices?|pricing|costs?|products?|partners?|customers?|clients?|suppliers?|report|analysis|analysts?|decisions?|forecast|plans?|investors?|accurate|reliable|conclusions?']]}
+], [{re:'\\b(only|just) (photos|brochures|gifts|business cards|souvenirs)\\b|information (is|are) (not|never) (needed|important|crucial|useful)', msg:'Reports need data and analysis, not brochures or gifts.'}]);
+var PREP = ['(set|define|agree|write|decide)(\\s+\\w+){0,3}\\s+(goals?|objectives?|targets?|aims?|priorities)',
+  '(research|study|review|check|learn about|look up|find out about|read about)(\\s+\\w+){0,3}\\s+(exhibitors?|speakers?|companies|participants|programme|agenda|stands|sessions|attendees)',
+  'prioriti[sz]\\w*(\\s+\\w+){0,3}\\s+(sessions?|talks|stands|exhibitors|meetings|events|agenda|speakers)',
+  '(book|arrange|schedule|plan|organi[sz]e|fix)(\\s+\\w+){0,3}\\s+(meetings?|appointments?|interviews?|sessions?|visits?|route|schedule)',
+  '(prepare|write|draft|make)(\\s+\\w+){0,3}\\s+(questions?|list|briefing|agenda|plan)',
+  '(brief|inform|meet with)(\\s+\\w+){0,2}\\s+(team|colleagues|manager)',
+  '(set|agree|fix|check)(\\s+\\w+){0,2}\\s+budget'];
+RB.dq3 = mkRubric('dq3', 5, 25, 'Besides booking a ticket, what preparation is necessary to make exhibition participation effective?', [
+  {type:'claim', pts:2, label:'One real preparation step, in one sentence: set goals, research exhibitors or speakers, prioritise sessions, book meetings, prepare questions, brief the team', all:[PREP]},
+  {type:'concepts', pts:2, label:'At least 3 different kinds of preparation: goals, research on exhibitors or speakers, an agenda or priorities, meetings or contacts, questions, a team briefing or budget', need:3, of:[['goals?|objectives?|targets?'],['exhibitors?|speakers?|companies'],['agenda|sessions?|schedule|prioriti|programme'],['meetings?|appointments?|contacts?|partners?'],['questions?'],['briefing|budget|team|colleagues?']]},
+  {type:'reason', pts:1, label:'A reason inside one sentence: how preparation makes the visit effective (because, so that, which means)', topics:[['goals?|objectives?|exhibitors?|speakers?|agenda|sessions?|meetings?|questions?|schedule|team|budget|plans?|research|prepar|time|results?|visit|waste|useful|effective|efficient|worth|benefit|contacts|stands|partners?']]}
+], [{re:'\\bno (need|preparation)\\b|\\b(just|simply) (walk|turn up|show up)\\b', msg:'Effective participation needs preparation; you cannot simply turn up.'}]);
+RB.cq1 = mkRubric('cq1', 4, 15, 'What are the two main strategic purposes of attending exhibitions, according to the text?', [
+  {type:'claim', pts:2, label:'First purpose, in one sentence: strategic intelligence means gathering and analysing information about the market, innovations or competitors for decisions', all:[['intelligen|information|data|market|competitors?|innovations?'],['gather|collect|analy[sz]|understand|study|monitor|decisions?|compar']]},
+  {type:'claim', pts:2, label:'Second purpose, in one sentence: professional development means improving skills, expertise or career', all:[['develop|improv|build|grow|train'],['skills?|career|learn|expertise|abilit|qualif|professional|growth']]}
+], []);
+RB.cq2 = mkRubric('cq2', 5, 20, 'How do global and regional exhibitions differ in their primary focus?', [
+  {type:'claim', pts:2, label:'Global events, in one sentence: they focus on worldwide trends, disruptive technology or partnerships across countries', all:[['global|worldwide|international|money20'],['\\bfocus(es|ed|ing)?\\s+(on|mainly|primarily|more)|concentrate|address|\\baim|deal with|\\babout\\b|centred|centered|cover|set the|bring together|\\bshow'],['disrupt|innovat|trend|technolog|digital assets|agenda|partnership|continents|leaders|cutting|countries|world']]},
+  {type:'claim', pts:2, label:'Regional events, in one sentence: they focus on local implementation, market adaptation or the regulatory context', all:[['regional|national|local|fincore|moscow|\\bcis\\b'],['\\bfocus(es|ed|ing)?\\s+(on|mainly|primarily|more)|concentrate|address|\\baim|deal with|\\babout\\b|centred|centered|cover|revolve|\\bshow|discuss'],['implement|adapt|execution|regulat|challenge|banking|practical|local market|region|country']]},
+  {type:'contrast', pts:1, label:'A contrast inside one sentence: global against regional (while, whereas, but, unlike, in contrast)', topics:[['global|worldwide|international|money20|regional|national|local|fincore|moscow']]}
+], [{re:'(global|worldwide)[^.]{0,40}(focus(es)?|address(es)?|about|concentrate)[^.]{0,25}(local|regional|national)', msg:'Global events focus on worldwide trends; regional events focus on local execution.'},
+    {re:'(regional|local|national)[^.]{0,40}(focus(es)?|address(es)?|about|concentrate)[^.]{0,25}(worldwide|disrupt|across continents)', msg:'Regional events focus on local execution, not worldwide disruption.'}]);
+RB.cq3 = mkRubric('cq3', 5, 20, "How can exhibitions directly influence a company's strategic planning?", [
+  {type:'claim', pts:2, label:'Say that what the company learns informs its decisions, plans or investment, in one sentence', all:[['insight|intelligen|information|knowledge|findings|observation|data|results|learn'],['inform|guide|shape|feed|influence|help|drive|improve|affect|change|adjust|revise|update|lead|base|decide'],['decisions?|plans?|planning|budgets?|portfolio|allocat|priorit|choices?|capital|direction']]},
+  {type:'reason', pts:1, label:'A cause or result inside one sentence (because, as a result, which means, so that)', topics:[['decisions?|plans?|planning|budgets?|portfolio|priorit|choices?|capital|company|bank|firm|managers?|visit|event|exhibitions?|competitors?|enter|update|adjust|revise|change|improve']]},
+  {type:'example', pts:1, label:'An example (for example, for instance, such as) of what a company can learn or assess'},
+  {type:'claim', pts:1, label:'Name the three kinds of events (global, regional, specialized) as sources of information, in one sentence', all:[['global'],['regional|local|national'],['specialized|specialised|forum|niche']]}
+], []);
+RB.w1 = mkRubric('w1', 8, 40, 'Write a short memo (4-5 sentences) recommending one exhibition: Money20/20 Europe, a Regional ESG Finance Summit or FinCore Moscow.', [
+  {type:'claim', pts:1, label:'Recommend ONE option by name (Money20/20, ESG Summit or FinCore) in one sentence', all:[['recommend|propose|suggest|should attend|we should|best choice|i would choose|choose|prefer'],['money20|\\besg\\b|fincore|summit|option [abc]|moscow|global event|regional']]},
+  {type:'claim', pts:2, label:'Link the choice to your firm (clients, portfolios, funds, regulation, growth), in one sentence', all:[['portfolios?|clients?|funds?|\\bfirm|company|our (business|investors)|asset manag|investors'],['sustainab|esg|global|regional|local|growth|returns?|regulat|networking|partners?|trends?|knowledge|rules|needs|aims?|goals?'],['because|since|\\bas\\b|\\bso\\b|will|help|allow|provide|benefit|need|require|attract|demand|priority|fit|match|align|offer']]},
+  {type:'claim', pts:2, label:'Say what you will do at the event, in one sentence: scout, compare, meet or learn from clients, vendors, speakers, experts or competitors', all:[['scout|benchmark|meet|network|learn|gather|talk|speak|compare|research|identify|find|build|collect|hear|study|explore|discuss'],['clients?|vendors?|speakers?|experts?|competitors?|investors?|leaders|peers|suppliers?|regulators?|other (firms|banks|managers|companies)|asset managers|providers?|start-?ups?|contacts?|solutions?|tools?|products?|rivals|approach|framework']]},
+  {type:'reason', pts:1, label:'A reason for your choice inside one sentence (because, since, so that, which means)', topics:[['clients?|portfolios?|funds?|\\bfirm|company|growth|returns?|summit|event|money20|fincore|moscow|regional|global|local|networking|partners?|experts?|competitors?|investors?|attendees|speakers?|regulat|rules|needs?|\\baims?\\b|goals?|priorit|depth|broad']]},
+  {type:'contrast', pts:1, label:'Compare with the other options inside one sentence: why not the others (while, whereas, rather than, but)', topics:[['money20|fincore|moscow|regional|global|summit|other|options?|events?']]},
+  {type:'concepts', pts:1, label:'Use at least 3 different glossary terms from this lesson', need:3, of:[['strategic direction'],['sustainable investment'],['long-term valuation'],['specialized forum'],['expert-level knowledge'],['compliance automation'],['to scout|scout for|scouting'],['benchmark'],['actionable insight'],['investment strateg'],['competitive landscape'],['market adaptation'],['regtech'],['strategic intelligence'],['risk management'],['professional development']]}
+], [{re:'(all three|every|each of the) (events?|options?|exhibitions?)[^.]{0,30}(attend|visit)|\\bwe (can|should) attend (all|every|both)\\b|\\battend all\\b', msg:'The firm can attend only ONE exhibition. Recommend a single option.'}]);
+RB.w2 = mkRubric('w2', 5, 30, 'Specialized forums are more valuable for professional development than large global exhibitions. Agree or disagree and justify.', [
+  {type:'claim', pts:1, label:'State your position (agree, disagree or partly agree) about specialized forums and global exhibitions, in one sentence', all:[['agree|disagree|partly|partially|opinion|i think|i believe|in my view|true|false'],['specialized|specialised|forum|global|exhibition|money20']]},
+  {type:'claim', pts:2, label:'Justify with deep, narrow or detailed knowledge that builds skills, in one sentence', all:[['deep|niche|narrow|detail|technical|specialist|in-depth|depth|advanced|particular|\\bexperts?\\b(?!-)'],['skills?|understanding|learn|career|train|qualif|improv|grow|abilit|competenc|expertise|knowledge|specific']]},
+  {type:'contrast', pts:1, label:'Compare the two types of event inside one sentence (while, whereas, but, unlike)', topics:[['niche|narrow|global|broad|worldwide|large|general|big|money20|small|focused|deep|detail']]},
+  {type:'claim', pts:1, label:'Say what global exhibitions offer (trends, competitors, networking, a wide view), in one sentence', all:[['global|worldwide|large|big|money20'],['trends?|competitors?|network|partners?|overview|broad|wide|innovations?|leaders|view']]}
+], []);
+RB.w3 = mkRubric('w3', 5, 30, 'In the digital age, the primary value of an exhibition is no longer seeing products but facilitating high-level networking. Agree or disagree and justify.', [
+  {type:'claim', pts:1, label:'State your position (agree, disagree or partly agree) about products and networking, in one sentence', all:[['agree|disagree|partly|partially|opinion|i think|i believe|in my view|true|false'],['network|product|exhibition|digital|partner|value']]},
+  {type:'claim', pts:2, label:'Justify with networking, partnerships, trust or personal contact, in one sentence', all:[['network|partner|relationship|trust|contact|meeting|face-to-face|face to face|conversation|connection'],['value|benefit|valuable|important|build|create|facilitate|allow|enable|gain|help|offer|provide|business|deal']]},
+  {type:'contrast', pts:1, label:'Compare products or online information with networking inside one sentence (while, whereas, but, instead of)', topics:[['products?|online|websites?|virtual|brochures?|networking|relationships?|trust|contacts?|meetings?|face-to-face|conversations?|partnerships?']]},
+  {type:'claim', pts:1, label:'Say what digital channels do for product information, in one sentence', all:[['digital|online|website|video|virtual|internet'],['products?|catalogs?|demos?|brochures?|details|specifications?|information|data']]}
+], []);
+RB.sp = mkRubric('sp', 5, 30, 'Team briefing plan: event and purpose, key trend, competitive insight, strategic recommendation.', [
+  {type:'claim', pts:1, label:'Event and purpose: name the event you attended and what you went to learn, in one sentence', all:[['attended|visited|went to'],['money20|fincore|esg|summit|forum|exhibition|event|conference'],['intelligen|insight|trend|gather|benchmark|partner|research|learn|innovat|competitor|find out|understand']]},
+  {type:'claim', pts:1, label:'Key trend: name a trend and say why it matters for your business, in one sentence', all:[['trend|shift|development|growth|rise|adoption|grow'],['matters?|important|business|bank|impact|affects?|means|relevant|opportunit|our ']]},
+  {type:'claim', pts:1, label:'Competitive insight: say what competitors or key players are doing, in one sentence', all:[['competitors?|key players|rivals|players|leaders|other banks|peers'],['launch|offer|adopt|building|builds|using|uses|doing|moving|moves|ahead|behind|noticed|saw|observed|spending|investing heavily']]},
+  {type:'claim', pts:1, label:'Recommendation: recommend an action and link it to an opportunity, saving or growth, in one sentence', all:[['recommend|propose|suggest|should|need to'],['opportunit|partner|clients?|customers?|costs?|savings?|growth|plan|project|pilot|team|budget|solution|tool|system|process|approach|seize']]},
+  {type:'reason', pts:1, label:'A link between your observation and your recommendation inside one sentence (because, so, which means)', topics:[['business|bank|clients?|customers?|costs?|savings?|growth|team|players|competitors?|opportunit|regulators?|rules|demand|rising|changes?|recommend|plan|should']]}
+], []);
+
+// ── RUBRIC TABLE: one table drives the maximum per task, the total (93) and the My Score tab ──
+var RUBRIC = [
+  {key:'dq1',label:'Part 1 · Discussion Question 1',max:5,rule:'Content-checked: 2 + 2 points for two goals (each inside one real sentence), 1 for a reason. Copying and keyword lists earn nothing.'},
+  {key:'dq2',label:'Part 1 · Discussion Question 2',max:5,rule:'Content-checked: 2 points for types of information, 2 for turning raw data into actionable insight, 1 for a reason.'},
+  {key:'dq3',label:'Part 1 · Discussion Question 3',max:5,rule:'Content-checked: 2 points for a preparation step, 2 for 3+ different kinds of preparation, 1 for a reason.'},
+  {key:'cq1',label:'Part 2 · Question A',max:4,rule:'Content-checked: 2 points for naming both purposes, 2 for explaining what they mean.'},
+  {key:'cq2',label:'Part 2 · Question B',max:5,rule:'Content-checked: 2 points for the global focus, 2 for the regional focus, 1 for a contrast. A swapped claim costs 1 point.'},
+  {key:'cq3',label:'Part 2 · Question C',max:5,rule:'Content-checked: 2 points for insight informing decisions, 1 for a cause or result, 1 for an example, 1 for naming the three kinds of events.'},
+  {key:'cats',label:'Part 3 · Glossary Categories',max:15,rule:'1 point for each of 15 terms: at least one correct group and no wrong attempt for that term.'},
+  {key:'fib',label:'Part 5 · Fill in the Blanks',max:26,rule:'2 points for each correct blank (13 blanks).'},
+  {key:'w1',label:'Part 6 · Writing Task 1 (memo)',max:8,rule:'Content-checked: 2 points for recommending one option, 2 for the link to the firm, 1 reason, 1 comparison with the other options, 1 for 3+ glossary terms, 1 for 4+ sentences.'},
+  {key:'w2',label:'Part 6 · Writing Task 2 (Statement 1)',max:5,rule:'Content-checked: 1 point for a position, 2 for the justification, 1 for a contrast, 1 for what global events offer.'},
+  {key:'w3',label:'Part 6 · Writing Task 3 (Statement 2)',max:5,rule:'Content-checked: 1 point for a position, 2 for networking justification, 1 for a contrast, 1 for the role of digital channels.'},
+  {key:'sp',label:'Part 7 · Speaking plan (written briefing)',max:5,rule:'Content-checked: 1 point each for event and purpose, key trend, competitive insight, recommendation, and a link between observation and recommendation.'}
+];
+var MAX_TOTAL = RUBRIC.reduce(function(a, r){ return a + r.max; }, 0); // 93
+var RUBRIC_VERSION = '2';
+var PREFIX = 'exhib_';
+var scores = {};
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function addScore(key, pts) {
+  var r = RUBRIC.filter(function(x){ return x.key === key; })[0];
+  if (!r) return; // practice-only activities are not scored
+  pts = Math.max(0, Math.min(r.max, pts));
+  if (scores[key] === undefined || scores[key] < pts) { scores[key] = pts; lsSet(PREFIX + 'sc_' + key, String(pts)); }
+  updateTotal();
+}
 
 var catTerms = [
   {label:"strategic intelligence",   cats:['S','A']},
@@ -621,36 +747,18 @@ var fibData = [
     {s:"A key outcome for any finance professional should be to translate observations into ___ that can guide our decisions.", blanks:["actionable insights"]},
     {s:"Before investing in a new technology, it is crucial to ___ our current capabilities against industry leaders.", blanks:["benchmark"]},
     {s:"Attending a ___ provides expert-level knowledge on a very specific business challenge.", blanks:["specialized forum"]},
-    {s:"The ultimate goal of market research is gaining a deep understanding of the ___ and ___.", blanks:["competitive landscape","emerging economic trends"]},
+    {s:"The ultimate goal of market research is gaining a deep understanding of the ___ and ___.", blanks:["competitive landscape","emerging economic trends"], anyOrder:true},
     {s:"For a product to succeed internationally, a strategy for ___ is as important as the innovation itself.", blanks:["market adaptation"]}
   ]}
 ];
 
-var writingCriteria = {
-  1: {
-    keywords:['money20','esg','fincore','strateg','intelligen','benchmark','invest','adapt','scope','competi','insight','develop','risk','disrupt','regional','global','forum'],
-    model:"To: Management Team. Re: Exhibition Recommendation. I recommend we attend the Regional ESG Finance Summit. Our strategic direction for the next three years prioritises sustainable investment models and long-term valuation. This specialized forum will provide expert-level knowledge in ESG compliance that a global event like Money20/20 cannot offer with the same depth. I will scout for compliance automation tools and benchmark our ESG framework against industry leaders. This actionable insight will directly inform our investment strategy.",
-    tip:"State your choice. Explain strategic goal. Mention specific information to gather. Use 5+ terms."
-  },
-  2: {
-    keywords:['special','forum','global','develop','expert','knowledge','scope','innovat','competi','network','value','intelligen','professional','benchmark'],
-    model:"I partially agree. Specialized forums provide expert-level knowledge and deep actionable insight in a specific domain, which is invaluable for professional development in that area. However, large global exhibitions offer unmatched strategic intelligence on competitive landscapes and emerging economic trends that is equally vital. The ideal approach is to triangulate both types of events based on the company's current strategic direction.",
-    tip:"State position clearly. Compare forums vs. global events. Use: expert-level knowledge, strategic intelligence, competitive landscape, professional development."
-  },
-  3: {
-    keywords:['network','partner','digital','value','product','showcase','facilitat','relationship','trust','intelligen','contact','meeting','primary'],
-    model:"I agree. While the primary value of exhibitions once lay in showcasing physical products, digital channels now provide access to product information more efficiently. Today, the irreplaceable benefit is the ability to facilitate high-level partnerships, build trust through face-to-face interaction, and gain strategic intelligence through conversations that cannot happen online. The real asset is the network built, not the brochures collected.",
-    tip:"State position. Contrast old vs. new primary value. Use: facilitate, strategic intelligence, primary value, showcase, partnerships."
-  }
-};
-
-var writingScores = [0,0,0];
 var speakingChipsUsed = 0;
 var timerIntervals = {};
 var timerTimes = {90:90, 120:120};
 var timerRunning = {90:false, 120:false};
 var catSelected = null;
 var catResults = {};
+var catWrong = {};
 var progressEvents = {};
 var totalProgressEvents = 10;
 
@@ -680,9 +788,19 @@ document.addEventListener('DOMContentLoaded', function() {
   buildSpeakingChips();
   buildFinalCheck();
   loadFromStorage();
+  initScores();
+  Object.keys(RB).forEach(function(k){ var box = document.getElementById('rule-' + k); if (box) box.innerHTML = Grader.renderRule(RB[k]); });
   updateProgress();
-  updateOverallScore();
+  updateTotal();
 });
+function initScores() {
+  // Scores saved under older rules are discarded once, so that all results follow the RUBRIC table.
+  if (lsGet(PREFIX + 'rubric') !== RUBRIC_VERSION) {
+    try { RUBRIC.map(function(r){ return r.key; }).concat(['dq','cq','writing','speaking','reflect']).forEach(function(k){ localStorage.removeItem(PREFIX + 'sc_' + k); }); } catch (e) {}
+    lsSet(PREFIX + 'rubric', RUBRIC_VERSION);
+  }
+  RUBRIC.forEach(function(r){ var v = parseFloat(lsGet(PREFIX + 'sc_' + r.key)); if (!isNaN(v)) scores[r.key] = Math.max(0, Math.min(r.max, v)); });
+}
 // DARK MODE
 function toggleDark() {
   document.body.classList.toggle('light-mode');
@@ -701,10 +819,11 @@ function loadDarkMode() {
 
 // TABS
 function showTab(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  var sec = document.getElementById(id) || document.getElementById('tab-' + id);
+  if (sec) sec.classList.add('active');
+  document.querySelectorAll('.tab').forEach(function(t){ var oc = t.getAttribute('onclick') || ''; if (oc.indexOf("showTab('" + id + "')") !== -1) t.classList.add('active'); });
   window.scrollTo(0,0);
 }
 
@@ -719,7 +838,7 @@ function markProgress(key) {
 }
 function updateProgress() {
   var count = Object.keys(progressEvents).length;
-  var pct = Math.round((count / totalProgressEvents) * 100);
+  var pct = Math.min(100, Math.round((count / totalProgressEvents) * 100));
   document.getElementById('progress-bar-fill').style.width = pct + '%';
   document.getElementById('progress-label').textContent = pct + '% Complete';
 }
@@ -734,58 +853,26 @@ function revealCase() {
   markProgress('case_reveal');
 }
 
-// DQ checking (Part 1)
-function checkDQ(n) {
-  var ta = document.getElementById('dq'+n);
-  var val = ta ? ta.value.trim() : '';
-  var fb = document.getElementById('dq-fb'+n);
-  if (!fb) return;
-  if (val.length < 10) { fb.style.display='block'; fb.style.background='rgba(229,62,62,0.08)'; fb.style.border='1px solid rgba(229,62,62,0.3)'; fb.innerHTML='⚠️ Please write a more complete answer first.'; return; }
-  var crit = dqCriteria[n]; var lower = val.toLowerCase(); var words = val.split(/\s+/).length;
-  var found = crit.keywords.filter(function(k){ return lower.includes(k); });
-  var score = 0; var feedback = [];
-  if (words >= crit.minWords) { score += 2; } else { feedback.push('📏 Try to write at least '+crit.minWords+' words (you have '+words+').'); }
-  if (found.length >= 3) { score += 3; } else if (found.length >= 1) { score += 1; feedback.push('📚 Use more key terms — '+crit.tip); } else { feedback.push('📚 No key vocabulary detected. '+crit.tip); }
-  var hasCause = lower.includes(' because') || lower.includes(' therefore') || lower.includes(' as a result') || lower.includes(' which means') || lower.includes(' leads to') || lower.includes(' so ');
-  if (hasCause) { score += 1; } else { feedback.push('🔗 Try adding a cause-effect link (because, therefore, as a result…).'); }
-  var hasMulti = val.includes('.') && val.split('.').filter(function(s){ return s.trim().length > 5; }).length >= 2;
-  if (hasMulti) score += 1;
-  var totalScore = Math.min(score, 5); var pct = Math.round(totalScore/5*100);
-  var color = pct>=80?'#38a169':pct>=50?'#C9A84C':'#e53e3e'; var emoji = pct>=80?'🌟':pct>=50?'👍':'💪';
-  fb.style.display='block'; fb.style.background='rgba(201,168,76,0.05)'; fb.style.border='1px solid var(--border)';
-  fb.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="font-size:18px;">'+emoji+'</span><strong style="color:'+color+';">Score: '+totalScore+' / 5</strong><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="width:'+pct+'%;height:100%;background:'+color+';border-radius:3px;transition:width 0.5s;"></div></div></div>'+(found.length>0?'<div style="color:#38a169;font-size:12px;margin-bottom:6px;">✅ Key terms used: <em>'+found.slice(0,5).join(', ')+'</em></div>':'')+(feedback.length>0?'<div style="color:var(--text3);">'+feedback.map(function(f){ return '<div style="margin-bottom:4px;">'+f+'</div>'; }).join('')+'</div>':'<div style="color:#38a169;">Great answer! You covered the key ideas well.</div>');
-  if (totalScore >= 4) markProgress('dq'+n+'_done');
-  updateOverallScore();
+// Open answers: every one is graded by the shared content-aware Grader with its own rubric
+function runOpen(key, taId, fbId, progKey) {
+  var ta = document.getElementById(taId); var fb = document.getElementById(fbId);
+  if (!ta || !fb) return;
+  var res = Grader.score(ta.value, RB[key]);
+  fb.style.display = 'block'; fb.style.background = 'rgba(201,168,76,0.05)'; fb.style.border = '1px solid var(--border)';
+  fb.innerHTML = Grader.renderResult(res);
+  addScore(key, res.pts);
+  if (progKey && res.pts >= res.max * 0.8) markProgress(progKey);
 }
-function showModelDQ(n) {
-  var fb = document.getElementById('dq-fb'+n); if (!fb) return;
-  fb.style.display='block'; fb.style.background='rgba(102,126,234,0.06)'; fb.style.border='1px solid rgba(102,126,234,0.3)';
-  fb.innerHTML='<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>'+escHtml(dqCriteria[n].model);
+function showModel(fbId, text) {
+  var fb = document.getElementById(fbId); if (!fb) return;
+  fb.style.display = 'block'; fb.style.background = 'rgba(102,126,234,0.06)'; fb.style.border = '1px solid rgba(102,126,234,0.3)';
+  fb.innerHTML = '<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>' + escHtml(text);
 }
-
-// CQ checking (Part 2)
-function checkCQ(n) {
-  var ta = document.getElementById('cq'+n); var val = ta ? ta.value.trim() : '';
-  var fb = document.getElementById('cq-fb'+n); if (!fb) return;
-  if (val.length < 10) { fb.style.display='block'; fb.innerHTML='⚠️ Please write a more complete answer.'; return; }
-  var crit = cqCriteria[n]; var lower = val.toLowerCase(); var words = val.split(/\s+/).length;
-  var found = crit.keywords.filter(function(k){ return lower.includes(k); });
-  var score = 0; var feedback = [];
-  if (words >= crit.minWords) { score += 2; } else { feedback.push('📏 Aim for at least '+crit.minWords+' words (you have '+words+').'); }
-  if (found.length >= 3) { score += 2; } else if (found.length >= 1) { score += 1; feedback.push('📚 '+crit.tip); } else { feedback.push('📚 '+crit.tip); }
-  if (val.includes('.') && val.split('.').filter(function(s){ return s.trim().length>5; }).length>=2) score+=1;
-  var totalScore = Math.min(score,5); var pct = Math.round(totalScore/5*100);
-  var color = pct>=80?'#38a169':pct>=50?'#C9A84C':'#e53e3e';
-  fb.style.display='block'; fb.style.background='rgba(201,168,76,0.05)'; fb.style.border='1px solid var(--border)';
-  fb.innerHTML='<strong style="color:'+color+';">Score: '+totalScore+' / 5</strong>'+(found.length>0?' — ✅ terms: <em>'+found.slice(0,4).join(', ')+'</em>':'')+(feedback.length>0?'<div style="margin-top:6px;color:var(--text3);">'+feedback.join(' ')+'</div>':'<div style="color:#38a169;margin-top:4px;">Good answer!</div>');
-  if (totalScore>=4) markProgress('cq'+n+'_done');
-  updateOverallScore();
-}
-function showModelCQ(n) {
-  var fb = document.getElementById('cq-fb'+n); if (!fb) return;
-  fb.style.display='block'; fb.style.background='rgba(102,126,234,0.06)'; fb.style.border='1px solid rgba(102,126,234,0.3)';
-  fb.innerHTML='<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>'+escHtml(cqCriteria[n].model);
-}
+// PART 1 and 2
+function checkDQ(n) { runOpen('dq' + n, 'dq' + n, 'dq-fb' + n, 'dq' + n + '_done'); }
+function showModelDQ(n) { showModel('dq-fb' + n, MODELS['dq' + n]); }
+function checkCQ(n) { runOpen('cq' + n, 'cq' + n, 'cq-fb' + n, 'cq' + n + '_done'); }
+function showModelCQ(n) { showModel('cq-fb' + n, MODELS['cq' + n]); }
 
 // PART 3 — Categorization
 function buildCatTerms() {
@@ -813,19 +900,25 @@ function assignCategory(cat) {
     catResults[key] = true;
     if (el) { el.classList.remove('selected'); el.classList.add('assigned-'+cat); }
   } else {
+    catWrong[catSelected] = true;
     if (el) {
       el.style.background='rgba(229,62,62,0.15)'; el.style.borderColor='#e53e3e'; el.style.color='#e53e3e';
       setTimeout(function(){ if(el){ el.style.background=''; el.style.borderColor=''; el.style.color=''; el.classList.remove('selected'); } },800);
     }
   }
   catSelected = null;
-  var correctCount = Object.keys(catResults).filter(function(k){ return catResults[k]; }).length;
-  document.getElementById('cat-score').textContent = correctCount + ' correct assignment'+(correctCount!==1?'s':'');
-  if (correctCount >= 10) markProgress('cat_done');
-  updateOverallScore();
+  var pts = catPoints();
+  document.getElementById('cat-score').textContent = pts + ' / ' + catTerms.length + ' terms scored';
+  if (pts >= 10) markProgress('cat_done');
+  addScore('cats', pts);
+}
+function catPoints() {
+  var n = 0;
+  catTerms.forEach(function(t, i){ if (catWrong[i] !== true && (catResults[i+'-S'] || catResults[i+'-M'] || catResults[i+'-A'])) n++; });
+  return n;
 }
 function resetCategories() {
-  catResults = {}; catSelected = null;
+  catResults = {}; catWrong = {}; catSelected = null;
   document.querySelectorAll('.cat-term').forEach(function(el){ el.className='cat-term'; });
   document.getElementById('cat-score').textContent = '';
 }
@@ -872,7 +965,8 @@ function buildFIB() {
         html += escHtml(part);
         if (pi < item.blanks.length) {
           var ans = item.blanks[pi]; var inputW = Math.max(130, ans.length*9);
-          html += '<span class="fib-input-wrap"><input type="text" class="fib-input" style="width:'+inputW+'px" data-answer="'+escAttr(ans)+'" data-gi="'+globalIdx+'" data-pi="'+pi+'" id="fib-'+globalIdx+'-'+pi+'" placeholder="..." onblur="checkFIB(this)"><span class="fib-status" id="fs-'+globalIdx+'-'+pi+'"></span><button class="hint-btn" type="button" onclick="showHint('+globalIdx+','+pi+')">Hint</button></span>';
+          var alts = item.anyOrder ? item.blanks.join('|') : ans;
+          html += '<span class="fib-input-wrap"><input type="text" class="fib-input" style="width:'+inputW+'px" data-answer="'+escAttr(ans)+'" data-alts="'+escAttr(alts)+'" data-gi="'+globalIdx+'" data-pi="'+pi+'" id="fib-'+globalIdx+'-'+pi+'" placeholder="..." onblur="checkFIB(this)"><span class="fib-status" id="fs-'+globalIdx+'-'+pi+'"></span><button class="hint-btn" type="button" onclick="showHint('+globalIdx+','+pi+')">Hint</button></span>';
         }
       });
       html += '</div>';
@@ -881,16 +975,28 @@ function buildFIB() {
   });
   container.innerHTML = html;
 }
+function fibMatch(val, ans) {
+  var a = ans.toLowerCase();
+  return val === a || val.replace(/s$/, '') === a || a.replace(/s$/, '') === val || (a === 'benchmark' && val === 'benchmarking') || (a === 'benchmarking' && val === 'benchmark');
+}
 function checkFIB(input) {
-  var answer = input.dataset.answer; var val = input.value.trim().toLowerCase();
-  var ansL = answer.toLowerCase();
-  if (val === '') { input.classList.remove('correct','incorrect'); document.getElementById('fs-'+input.dataset.gi+'-'+input.dataset.pi).textContent=''; return; }
-  var correct = val === ansL || (ansL==='benchmark' && val==='benchmarking') || (ansL==='actionable insights' && val==='actionable insight') || (ansL.replace(/s$/,'')===val);
+  var val = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+  var status = document.getElementById('fs-'+input.dataset.gi+'-'+input.dataset.pi);
+  if (val === '') { input.classList.remove('correct','incorrect'); if (status) status.textContent=''; fibScore(); return; }
+  var alts = (input.dataset.alts || input.dataset.answer).split('|');
+  var correct = alts.some(function(a){ return fibMatch(val, a); });
+  if (correct && alts.length > 1) { // two blanks with interchangeable answers: the other blank must not repeat this one
+    var sib = document.querySelectorAll('input.fib-input[data-gi="'+input.dataset.gi+'"]');
+    Array.prototype.forEach.call(sib, function(o){ if (o !== input && o.value.trim().toLowerCase() === val) correct = false; });
+  }
   input.classList.toggle('correct', correct); input.classList.toggle('incorrect', !correct);
-  document.getElementById('fs-'+input.dataset.gi+'-'+input.dataset.pi).textContent = correct ? '✅' : '❌';
+  if (status) status.textContent = correct ? '✅' : '❌';
+  fibScore();
+}
+function fibScore() {
   var total = document.querySelectorAll('.fib-input.correct').length;
-  if (total >= 5) markProgress('fib_done');
-  updateOverallScore();
+  if (total >= 10) markProgress('fib_done');
+  addScore('fib', total * 2);
 }
 function showHint(gi, pi) {
   var input = document.getElementById('fib-'+gi+'-'+pi); if(!input) return;
@@ -906,36 +1012,8 @@ function updateWriting(n, val) {
   document.getElementById('vb'+n).classList.toggle('show', vocabCount >= 4);
   if (wc >= 30) markProgress('writing'+n+'_started');
 }
-function checkWriting(n) {
-  var ta = document.getElementById('wt'+n); var val = ta ? ta.value.trim() : '';
-  var fb = document.getElementById('wfb'+n); if (!fb) return;
-  if (val.length < 15) { fb.style.display='block'; fb.innerHTML='⚠️ Please write a more complete answer first.'; return; }
-  var crit = writingCriteria[n]; var lower = val.toLowerCase();
-  var words = val.split(/\s+/).length;
-  var found = crit.keywords.filter(function(k){ return lower.includes(k); });
-  var vocabFound = vocabKeywords.filter(function(k){ return lower.includes(k); });
-  var connectors = ['because','therefore','as a result','which means','leads to','consequently','however','although','this causes','this results'];
-  var connFound = connectors.filter(function(c){ return lower.includes(c); });
-  var sentences = val.split(/[.!?]+/).filter(function(s){ return s.trim().length>8; });
-  var score = 0; var feedback = [];
-  if (words>=40){score+=2;}else if(words>=25){score+=1;feedback.push('📏 Aim for 40+ words (you have '+words+').');}else{feedback.push('📏 Write more — 40+ words needed (you have '+words+').');}
-  if (found.length>=3){score+=2;}else if(found.length>=1){score+=1;feedback.push('🎯 Use more topic terms. '+crit.tip);}else{feedback.push('🎯 No topic terms found. '+crit.tip);}
-  if (vocabFound.length>=5){score+=2;}else if(vocabFound.length>=3){score+=1;feedback.push('📚 Use more glossary terms ('+vocabFound.length+' found, aim 5+).');}else{feedback.push('📚 Include key glossary vocabulary.');}
-  if (connFound.length>=2){score+=1;}else if(connFound.length===1){feedback.push('🔗 Add more logical connectors (therefore, as a result…).');}else{feedback.push('🔗 Use logical connectors.');}
-  if (sentences.length>=3) score+=1;
-  var totalScore=Math.min(score,8); var pct=Math.round(totalScore/8*100);
-  var color=pct>=75?'#38a169':pct>=50?'#C9A84C':'#e53e3e'; var emoji=pct>=75?'🌟':pct>=50?'👍':'💪';
-  writingScores[n-1] = totalScore;
-  fb.style.display='block';
-  fb.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-size:18px;">'+emoji+'</span><strong style="color:'+color+';">Score: '+totalScore+' / 8</strong><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="width:'+pct+'%;height:100%;background:'+color+';border-radius:3px;transition:width 0.5s;"></div></div><span style="font-size:12px;color:'+color+';">'+pct+'%</span></div>'+'<table style="width:100%;font-size:12px;border-collapse:collapse;"><tr style="color:var(--text3);"><td style="padding:3px 0;">📏 Length (40+ words)</td><td style="text-align:right;color:'+(words>=40?'#38a169':'#e53e3e')+';">'+(words>=40?'✅ '+words:'❌ '+words)+' words</td></tr><tr style="color:var(--text3);"><td style="padding:3px 0;">🎯 Topic coverage</td><td style="text-align:right;color:'+(found.length>=3?'#38a169':found.length>=1?'#C9A84C':'#e53e3e')+';">'+(found.length>=3?'✅ ':'')+found.length+' terms</td></tr><tr style="color:var(--text3);"><td style="padding:3px 0;">📚 Glossary terms (5+)</td><td style="text-align:right;color:'+(vocabFound.length>=5?'#38a169':vocabFound.length>=3?'#C9A84C':'#e53e3e')+';">'+(vocabFound.length>=5?'✅ ':'')+vocabFound.length+' used</td></tr><tr style="color:var(--text3);"><td style="padding:3px 0;">🔗 Logical connectors</td><td style="text-align:right;color:'+(connFound.length>=2?'#38a169':'#C9A84C')+';">'+(connFound.length>=2?'✅ '+connFound.length:connFound.length)+' found</td></tr></table>'+(feedback.length>0?'<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">'+feedback.map(function(f){return '<div style="margin-bottom:4px;color:var(--text3);">'+f+'</div>';}).join('')+'</div>':'<div style="margin-top:8px;color:#38a169;font-size:12px;">Excellent analytical writing!</div>');
-  if (totalScore>=6) markProgress('writing'+n+'_done');
-  updateOverallScore();
-}
-function showWritingModel(n) {
-  var fb = document.getElementById('wfb'+n); if (!fb) return;
-  fb.style.display='block';
-  fb.innerHTML='<strong style="color:#667eea;display:block;margin-bottom:6px;">📋 Model Answer:</strong>'+escHtml(writingCriteria[n].model);
-}
+function checkWriting(n) { runOpen('w' + n, 'wt' + n, 'wfb' + n, 'writing' + n + '_done'); }
+function showWritingModel(n) { showModel('wfb' + n, MODELS['w' + n]); }
 
 // PART 7 — Speaking Plan
 function updateSpeakingPlan() {
@@ -944,6 +1022,21 @@ function updateSpeakingPlan() {
   document.getElementById('sp-wordcount').textContent = total+' word'+(total!==1?'s':'')+' in your plan';
   if (total >= 20) markProgress('speaking_plan_done');
 }
+function planText() {
+  return ['sp1','sp2','sp3','sp4'].map(function(id){
+    var t = (document.getElementById(id).value || '').trim();
+    return t && !/[.!?]$/.test(t) ? t + '.' : t;
+  }).filter(Boolean).join(' ');
+}
+function checkSpeakingPlan() {
+  var fb = document.getElementById('sp-fb'); if (!fb) return;
+  var res = Grader.score(planText(), RB.sp);
+  fb.style.display = 'block'; fb.style.background = 'rgba(201,168,76,0.05)';
+  fb.innerHTML = Grader.renderResult(res);
+  addScore('sp', res.pts);
+  if (res.pts >= res.max * 0.8) markProgress('speaking_plan_done');
+}
+function showSpeakingModel() { showModel('sp-fb', MODELS.sp); }
 
 // PART 8 — Timers
 var speakingTerms = ['strategic intelligence','competitive landscape','actionable insight','disruptive technology','to benchmark','market adaptation','specialized forum','strategic direction'];
@@ -957,7 +1050,6 @@ function toggleSpeakingChip(i) {
   speakingChipsUsed = document.querySelectorAll('#speaking-chips .kchip.used').length;
   document.getElementById('speaking-chip-count').textContent = speakingChipsUsed+' / 8 terms used';
   if (speakingChipsUsed >= 8) markProgress('speaking_done');
-  updateOverallScore();
 }
 function startTimer(total) {
   if (timerRunning[total]) return;
@@ -999,7 +1091,6 @@ function onFinalCheckChange() {
   var total=states.filter(function(s){return s==='1';}).length;
   document.getElementById('final-score').textContent=total+' / 12 completed';
   if(total>=12){markProgress('final_done');triggerConfetti();}
-  updateOverallScore();
 }
 
 // CONFETTI
@@ -1010,43 +1101,24 @@ function triggerConfetti() {
   for(var i=0;i<90;i++){ (function(idx){ setTimeout(function(){ var piece=document.createElement('div'); piece.className='confetti-piece'; var size=6+Math.random()*10; piece.style.cssText=['left:'+Math.random()*100+'vw','top:-20px','width:'+size+'px','height:'+size+'px','background:'+colors[Math.floor(Math.random()*colors.length)],'border-radius:'+(Math.random()>0.5?'50%':'2px'),'animation-duration:'+(2+Math.random()*3)+'s'].join(';'); container.appendChild(piece); setTimeout(function(){if(piece.parentNode)piece.parentNode.removeChild(piece);},5500); },idx*35); })(i); }
 }
 
-// OVERALL SCORE
-function updateOverallScore() {
-  var rows=[]; var totalPts=0; var earnedPts=0;
-  // Part 1 DQ
-  var dqE=0;
-  [1,2,3].forEach(function(n){ if(progressEvents['dq'+n+'_done'])dqE+=5; else{ var ta=document.getElementById('dq'+n); if(ta&&ta.value.trim().split(/\s+/).length>=15)dqE+=2; } });
-  rows.push({label:'Part 1 · Discussion Questions',earned:dqE,total:15,icon:'💬'}); totalPts+=15; earnedPts+=dqE;
-  // Part 2 CQ
-  var cqE=0;
-  [1,2,3].forEach(function(n){ if(progressEvents['cq'+n+'_done'])cqE+=5; else{ var ta=document.getElementById('cq'+n); if(ta&&ta.value.trim().split(/\s+/).length>=10)cqE+=2; } });
-  rows.push({label:'Part 2 · Comprehension Questions',earned:cqE,total:15,icon:'📝'}); totalPts+=15; earnedPts+=cqE;
-  // Part 3 categorization
-  var catE=Math.min(Object.keys(catResults).filter(function(k){return catResults[k];}).length,15);
-  rows.push({label:'Part 3 · Glossary Categories',earned:catE,total:15,icon:'🗂️'}); totalPts+=15; earnedPts+=catE;
-  // Part 5 FIB
-  var fibE=Math.min(document.querySelectorAll('.fib-input.correct').length,12);
-  rows.push({label:'Part 5 · Fill in Blanks',earned:fibE,total:12,icon:'✏️'}); totalPts+=12; earnedPts+=fibE;
-  // Part 6 Writing
-  var wE=writingScores.reduce(function(a,b){return a+b;},0);
-  rows.push({label:'Part 6 · Writing Tasks',earned:wE,total:24,icon:'✍️'}); totalPts+=24; earnedPts+=wE;
-  // Part 8 speaking chips
-  rows.push({label:'Part 8 · Speaking Terms Used',earned:speakingChipsUsed,total:8,icon:'🎤'}); totalPts+=8; earnedPts+=speakingChipsUsed;
-  // Final check
-  var fc=localStorage.getItem('exhib_finalChecks')||''; var fcDone=fc?fc.split(',').filter(function(s){return s==='1';}).length:0;
-  rows.push({label:'Self-Reflection · Checklist',earned:fcDone,total:12,icon:'✅'}); totalPts+=12; earnedPts+=fcDone;
-  var pct=totalPts>0?Math.round(earnedPts/totalPts*100):0;
-  var grade=pct>=90?'A+  Excellent':pct>=80?'A  Very Good':pct>=70?'B  Good':pct>=60?'C  Satisfactory':pct>=40?'D  Needs Practice':'Work in Progress';
-  var gradeColor=pct>=80?'#38a169':pct>=60?'#C9A84C':'#e53e3e';
-  var fill=document.getElementById('score-ring-fill'); if(fill)fill.setAttribute('stroke-dashoffset',377-(377*pct/100));
-  var pctEl=document.getElementById('score-pct'); if(pctEl)pctEl.textContent=pct+'%';
-  var chip=document.getElementById('score-chip'); if(chip)chip.textContent='Score: '+pct+'%';
-  var gradeEl=document.getElementById('score-grade'); if(gradeEl){gradeEl.textContent=grade;gradeEl.style.color=gradeColor;}
-  var bd=document.getElementById('score-breakdown'); if(!bd)return;
-  var html='<div style="border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px;">Score Breakdown</div>';
-  rows.forEach(function(r){ var rp=r.total>0?Math.round(r.earned/r.total*100):0; var rc=rp>=75?'#38a169':rp>=50?'#C9A84C':'#e53e3e'; html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-size:16px;flex-shrink:0;">'+r.icon+'</span><div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span style="color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+escHtml(r.label)+'</span><span style="color:'+rc+';font-weight:700;flex-shrink:0;margin-left:8px;">'+r.earned+'/'+r.total+'</span></div><div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="width:'+rp+'%;height:100%;background:'+rc+';border-radius:3px;-webkit-transition:width 0.6s ease;transition:width 0.6s ease;"></div></div></div></div>'; });
-  html+='<div style="border-top:1px solid var(--border);padding-top:12px;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:700;color:var(--text);">Total</span><span style="font-weight:800;font-size:16px;color:'+gradeColor+';">'+earnedPts+' / '+totalPts+' pts</span></div></div>';
-  bd.innerHTML=html;
+// OVERALL SCORE (rendered from the RUBRIC table)
+function updateOverallScore() { updateTotal(); }
+function updateTotal() {
+  var total = RUBRIC.reduce(function(a, r){ return a + (scores[r.key] || 0); }, 0);
+  var pct = Math.round(total / MAX_TOTAL * 100);
+  var grade = pct>=90?'A+  Excellent':pct>=80?'A  Very Good':pct>=70?'B  Good':pct>=60?'C  Satisfactory':pct>=40?'D  Needs Practice':'Work in Progress';
+  var gradeColor = pct>=80?'#38a169':pct>=60?'#C9A84C':'#e53e3e';
+  var fill = document.getElementById('score-ring-fill'); if (fill) fill.setAttribute('stroke-dashoffset', 377-(377*pct/100));
+  var pctEl = document.getElementById('score-pct'); if (pctEl) pctEl.textContent = pct + '%';
+  var chip = document.getElementById('score-chip'); if (chip) chip.textContent = 'Score: ' + total + ' / ' + MAX_TOTAL;
+  var gradeEl = document.getElementById('score-grade'); if (gradeEl) { gradeEl.textContent = grade; gradeEl.style.color = gradeColor; }
+  var tn = document.getElementById('score-total-num'); if (tn) tn.textContent = total;
+  var t = document.getElementById('rubric-table');
+  if (t) {
+    t.innerHTML = '<tr><th>Task</th><th>How it is scored</th><th style="text-align:right">Your score</th></tr>' +
+      RUBRIC.map(function(r){ return '<tr><td>' + r.label + '</td><td>' + r.rule + '</td><td class="num">' + (scores[r.key] || 0) + ' / ' + r.max + '</td></tr>'; }).join('') +
+      '<tr><td><strong>Total</strong></td><td></td><td class="num">' + total + ' / ' + MAX_TOTAL + '</td></tr>';
+  }
 }
 
 // LOAD FROM STORAGE

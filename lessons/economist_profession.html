@@ -145,6 +145,19 @@
   body.light-mode .tab.active{color:#0A1628;border-bottom-color:#C9A84C}
   body.light-mode .tab:hover{color:#0A1628}
   body.light-mode .tabs{background:var(--navy2);border-bottom-color:var(--border)}
+  .rule{font-size:.76rem;color:var(--text3);background:var(--navy2);border-left:3px solid var(--gold);border-radius:4px;padding:7px 12px;margin:0 0 14px;line-height:1.55}
+  .rule.practice{border-left-color:#667eea}
+  .fb-box{display:none;margin-top:10px;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6}
+  .score-section{text-align:center;padding:32px 16px}
+  .score-big{font-size:3rem;font-weight:800;color:var(--gold)}
+  .score-label{font-size:.9rem;color:var(--text3);margin-top:4px}
+  .progress-bar{background:var(--navy2);border-radius:8px;height:10px;margin:20px 0 8px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:8px;transition:.6s}
+  .rubric-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:18px;text-align:left}
+  .rubric-table th{color:var(--text3);font-weight:600;padding:8px 6px;border-bottom:2px solid var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:.3px}
+  .rubric-table td{padding:8px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  .rubric-table td.num{text-align:right;white-space:nowrap;font-weight:700;color:var(--gold)}
+  .script-ta{min-height:160px}
 </style>
 </head>
 <body>
@@ -307,6 +320,7 @@
   </div>
   <div class="card">
     <p class="text-sm mb-16" style="color:var(--text3);">Assign each term to its best category: Professional Activities, Financial Indicators, or Skills &amp; Tools.</p>
+    <p class="rule">How you get points (maximum 20): 1 point for each of the 20 terms placed in a correct category. Four terms (accounting principles, accuracy, financial documents, inaccurate data) accept two categories. A term you leave unassigned earns 0. Press Check to score; you can change your answers and press Check again, and your best result is kept.</p>
     <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
       <button class="cat-btn cat-btn-A" id="catbtn-A" onclick="assignCategory('A')">🔵 Professional Activities</button>
       <button class="cat-btn cat-btn-F" id="catbtn-F" onclick="assignCategory('F')">🟢 Financial Indicators</button>
@@ -314,6 +328,7 @@
     </div>
     <div id="cat-terms-grid" style="margin-bottom:20px;"></div>
     <div class="flex flex-center gap-8" style="flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="checkCategories()">✔ Check</button>
       <button class="btn btn-outline btn-sm" onclick="resetCategories()">↺ Reset</button>
       <span id="cat-score" class="text-sm text-gold fw-600"></span>
     </div>
@@ -330,6 +345,7 @@
     </div>
   </div>
   <div class="card">
+    <p class="rule practice">Practice only: flashcards are for revision and are not scored (0 points).</p>
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
       <input type="text" class="search-bar" style="margin:0;flex:1;min-width:200px;" placeholder="Search terms..." oninput="filterCards(this.value)" id="card-search">
       <button class="btn btn-outline btn-sm" onclick="flipAll()">↺ Flip All</button>
@@ -352,6 +368,7 @@
   </div>
   <div class="card">
     <p class="text-sm mb-16" style="color:var(--text3);">These sentences describe cause-and-effect relationships in finance. Complete the missing word.</p>
+    <p class="rule">How you get points (maximum 18): 3 points for each correct blank (6 blanks). One word per blank; spelling must be exact (capital letters do not matter). A few close synonyms are accepted. The Hint button does not cost points. Press Check All; you can try again and your best result is kept.</p>
     <div id="fib-container"></div>
     <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
       <button class="btn btn-primary" onclick="checkAllFIB()">✔ Check All</button>
@@ -420,6 +437,7 @@
   </div>
   <div class="card">
     <p class="text-sm mb-16" style="color:var(--text3);">Plan your 1–1.5 minute monologue. Notes are saved automatically.</p>
+    <p class="rule practice">Practice only: the speaking plan is not scored (0 points). Your written script in the next tab is scored.</p>
 
     <span class="speaking-plan-label">1. Role of an Economist &amp; Key Tasks</span>
     <input type="text" class="speaking-plan-input" id="sp1" placeholder="e.g. Analysis, planning, decision-making, financial forecasting, risk assessment..." oninput="saveSpeakingPlan()">
@@ -477,10 +495,22 @@
       </div>
     </div>
 
-    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Keyword Checklist — tick each term as you use it:</div>
+    <p class="rule practice">Practice only: the timers and the keyword checklist are not scored (0 points) because the computer cannot hear you. Below, write out your monologue as a script: that text is scored.</p>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Keyword Checklist: tick each term as you use it (practice only)</div>
     <div id="speaking-chips"></div>
     <div style="margin-top:12px;font-size:13px;color:var(--mid-gray);">Used: <span id="chips-used" class="text-gold fw-600">0</span> / 8 keywords</div>
     <div id="speaking-score-msg" style="margin-top:8px;font-size:13px;color:var(--gold);font-weight:600;display:none;"></div>
+    <div style="border-top:1px solid var(--border);margin-top:24px;padding-top:20px;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;">📝 Monologue Script (scored)</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:10px;">Write what you will say for 1 to 1.5 minutes on "Professional Requirements for an Economist" (about 60 to 120 words). Use 6 to 8 keywords and include 1 to 2 cause and effect ideas.</div>
+      <textarea class="writing-ta script-ta" id="script" placeholder="An economist is a specialist who analyses data... (min. 50 words)" oninput="saveItem('econ_script',this.value);updateWordCount('script','wc-script','wb-script')"></textarea>
+      <div class="writing-meta"><span class="word-count" id="wc-script">0 words</span><span class="vocab-badge" id="wb-script"></span></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="checkScript()">✔ Check</button>
+        <button class="btn btn-outline btn-sm" onclick="showModelScript()">📋 Model Answer</button>
+      </div>
+      <div id="script-fb" class="fb-box"></div>
+    </div>
   </div>
 </section>
 
@@ -490,12 +520,13 @@
     <div class="section-num">✓</div>
     <div>
       <div class="section-title">Self-Reflection</div>
-      <div class="section-subtitle">Rate your performance honestly — this affects your final score</div>
+      <div class="section-subtitle">Tick what you can do. This is practice only and does not change your score</div>
     </div>
   </div>
   <div class="card">
     <div class="final-grid" id="reflection-grid"></div>
-    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Self-Reflection Score: <span id="reflection-score" class="text-gold">0</span> / 12</div>
+    <p class="rule practice">Practice only: self-reflection cannot be checked by the computer, so it is not scored (0 points).</p>
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin-top:8px;">Ticked: <span id="reflection-score" class="text-gold">0</span> / 6</div>
   </div>
 </section>
 
@@ -505,13 +536,18 @@
     <div class="section-num">★</div>
     <div>
       <div class="section-title">My Score</div>
-      <div class="section-subtitle">Complete all sections and calculate your total</div>
+      <div class="section-subtitle">Every task is checked automatically by the rules in the table</div>
     </div>
   </div>
-  <div class="card">
-    <div id="score-breakdown" style="margin-bottom:24px;"></div>
-    <button class="btn btn-primary" onclick="calcScore()">📊 Calculate Score</button>
-    <div id="total-score-display" style="margin-top:24px;text-align:center;"></div>
+  <div class="card score-section">
+    <div class="score-big" id="final-score">0</div>
+    <div class="score-label">points out of 93</div>
+    <div class="progress-bar"><div class="progress-fill" id="score-bar" style="width:0%"></div></div>
+    <p style="font-size:.85rem;color:var(--text3);margin-top:8px" id="score-msg">Complete tasks to earn points!</p>
+    <p class="rule" style="text-align:left;margin-top:16px">How scoring works: you can press Check as many times as you like, and the best result for each task is kept. Flashcards, the speaking plan, the timers, the keyword checklist and the self-reflection are practice only and are not scored.</p>
+    <table class="rubric-table" id="rubric-table"></table>
+    <button class="btn btn-primary" style="margin-top:20px" onclick="calcScore()">📊 Calculate Score</button>
+    <div id="total-score-display" style="margin-top:16px;text-align:center;"></div>
   </div>
 </section>
 
@@ -519,6 +555,7 @@
 <div id="confetti-container"></div>
 <div id="excellent-banner"></div>
 
+<script src="grader.js"></script>
 <script>
 var PREFIX = 'econ_';
 function saveItem(k,v){try{localStorage.setItem(k,v);}catch(e){}}
@@ -563,35 +600,223 @@ var glossaryTerms=[
   {term:"essential",def:"absolutely necessary; extremely important and cannot be done without",ru:"необходимый, существенный"}
 ];
 
+// ── Scoring ──
+// One table drives everything: the maximum per task, the total (93) and the explanation on the My Score tab.
+var RUBRIC=[
+  {key:'dq1',label:'Problem Case · Question 1',max:5,rule:'Graded by content (see the rule box above the task): missing skills 2, English risk 1, cause and result 1, consequences 1.'},
+  {key:'dq2',label:'Problem Case · Question 2',max:5,rule:'Graded by content: how incorrect analysis causes risk 2, link between analysis and result 1, a specific example 1, a full chain (analysis, decision, loss) 1.'},
+  {key:'dq3',label:'Problem Case · Question 3',max:6,rule:'Graded by content: position 2, argument about English 1, argument about knowledge 1, counterargument 1, reasoning 1.'},
+  {key:'cq1',label:'Comprehension · Question A',max:4,rule:'Three main tasks named 3 points (1 each), short description of at least two of them 1.'},
+  {key:'cq2',label:'Comprehension · Question B',max:4,rule:'Both causes of a profit decrease 2, interpreting data 1, clear conclusions for management 1.'},
+  {key:'cq3',label:'Comprehension · Question C',max:4,rule:'Reason 1: documents and reports 1, reason 2: partners and global work 1, result of poor English 1, a cause and result sentence 1.'},
+  {key:'cats',label:'Glossary Categories',max:20,rule:'1 point for each of the 20 terms placed in a correct category (press Check).'},
+  {key:'fib',label:'Cause & Effect · Fill in the Blanks',max:18,rule:'3 points for each correct blank (6 blanks).'},
+  {key:'writing1',label:'Writing · Task 1',max:9,rule:'Graded by content: 4+ glossary terms 2, analysis problem and result 2, English problem 1, skills to improve 1, risks for the company 1, cause and result 1, length 1.'},
+  {key:'writing2',label:'Writing · Task 2',max:9,rule:'Graded by content: 5+ glossary terms 2, all four required topics 2, knowledge plus practice 1, responsibility 1, role of English 1, cause and result 1, 5+ sentences 1.'},
+  {key:'script',label:'Speaking · Monologue script',max:9,rule:'Graded by content: 6+ of the 8 keywords 3, role of an economist 1, skills 1, English 1, two cause and effect ideas 2, length 1.'}
+];
+var MAX_TOTAL=RUBRIC.reduce(function(a,r){return a+r.max;},0); // 93
+var RUBRIC_VERSION='1';
+var scores={};
+function addScore(key,pts){
+  var r=RUBRIC.find(function(x){return x.key===key;});
+  if(!r)return; // practice-only activities are not scored
+  pts=Math.max(0,Math.min(r.max,pts));
+  if(scores[key]===undefined||scores[key]<pts){scores[key]=pts;saveItem(PREFIX+'sc_'+key,String(pts));}
+  updateTotal();
+}
+function updateTotal(){
+  var total=RUBRIC.reduce(function(a,r){return a+(scores[r.key]||0);},0);
+  var chip=document.getElementById('total-score-chip');if(chip)chip.textContent=total;
+  var fs=document.getElementById('final-score');if(fs)fs.textContent=total;
+  var sb=document.getElementById('score-bar');if(sb)sb.style.width=(total/MAX_TOTAL*100)+'%';
+  var pct=total/MAX_TOTAL;
+  var sm=document.getElementById('score-msg');
+  if(sm)sm.textContent=pct>=.85?'🌟 Excellent!':pct>=.65?'👍 Good work!':pct>=.3?'📚 Keep going!':'Complete tasks to earn points!';
+  var t=document.getElementById('rubric-table');
+  if(t){
+    t.innerHTML='<tr><th>Task</th><th>How it is scored</th><th style="text-align:right">Your score</th></tr>'+
+      RUBRIC.map(function(r){return '<tr><td>'+r.label+'</td><td>'+r.rule+'</td><td class="num">'+(scores[r.key]||0)+' / '+r.max+'</td></tr>';}).join('')+
+      '<tr><td><strong>Total</strong></td><td></td><td class="num">'+total+' / '+MAX_TOTAL+'</td></tr>';
+  }
+  return total;
+}
+
+// ── Reading text (the source for the content-aware grader: copying it is capped) ──
+var READING="The profession of an economist is based on analysis, planning, and decision-making. Economists work with financial and economic data to evaluate business performance and support management decisions. Their tasks include cost analysis, financial forecasting, and risk assessment. An economist must not only understand economic concepts but also apply them in real-world situations. "+
+"A key part of an economist's work is financial analysis. Specialists analyse indicators such as revenue, costs, profit, and productivity to identify trends and problems. For example, a decrease in profit may be caused by rising costs or inefficient operations. Therefore, economists must interpret data correctly and provide clear conclusions for decision-making. "+
+"Professional training in economics includes both theoretical knowledge and practical skills. Students study financial systems, accounting principles, and business processes. However, effective training also requires the ability to work with financial documents, use analytical tools, and solve real business problems. Practical skills are essential for professional performance. "+
+"The work of an economist requires a high level of responsibility. Financial decisions influence company results, investment outcomes, and financial stability. Incorrect analysis or inaccurate data can lead to financial losses and increased risk. Therefore, economists must ensure accuracy, follow professional standards, and justify their conclusions. "+
+"In modern finance, English plays an important professional role. Financial specialists use English to work with international documents, communicate with partners, and participate in global financial operations. English is necessary for understanding financial reports, contracts, and regulatory requirements. Poor language skills can lead to misunderstandings, errors, and financial risks in international communication.";
+
+// Glossary term patterns (used to count glossary vocabulary in written answers)
+var GL=[
+  ['financial analysis'],['financial forecasting|forecasting'],['risk assessment'],['cost analysis'],['decision-making|decision making'],
+  ['\\brevenue'],['\\bcosts\\b'],['\\bprofit'],['productivity'],['interpret'],['accounting principles'],['financial documents'],
+  ['analytical tools'],['practical skills'],['professional performance'],['investment outcomes'],['financial stability'],
+  ['inaccurate data'],['financial loss'],['\\baccuracy'],['international communication'],['regulatory requirements'],
+  ['language skills'],['inefficient']
+];
+// Common building blocks for the rubrics
+var G_BAD='inaccura|incorrect|wrong|error|mistake|misread|misinterpret|\\bfail|\\bpoor|\\bweak|\\black|cannot|unable|without';
+var G_RESULT='loss|risk|decision|profit|invest|stabil|damage|conclusion|reputation|\\bcosts?\\b|problem|bankrupt|penalt';
+
+var RB={};
+RB.dq1={max:5,minWords:25,source:READING,prompt:'Why can this candidate be rejected?',
+  criteria:[
+    {type:'claim',pts:2,label:'Names a missing skill in one sentence (for example: the candidate lacks practical skills and cannot analyse data, or has poor English)',
+      all:[['\\black|\\bweak|\\bpoor|missing|cannot|can.t|unable|without|not able|insufficient|\\bno\\b|not have|does not|doesn.t|struggle|\\bfail'],['practical|real-world|hands-on|\\bapply|applying|english|language'],['analy|interpret|data|financial|communicat|document|\\bwork|\\bjob|\\btask|skill|experience']]},
+    {type:'claim',pts:1,label:'Explains the risk of poor English (misunderstandings, contracts, international communication)',
+      all:[['english|language'],['risk|misunderstand|error|mistake|contract|regulat|international|partner|document|communicat'],['\\bpoor|\\bweak|\\black|cannot|unable|without|lead|cause|create|result|problem|bad']]},
+    {type:'reason',pts:1,label:'A cause and result sentence (for example: poor analysis leads to wrong decisions)',
+      topics:[['skill|knowledge|analy|data|english|language|practical|communicat'],['loss|risk|error|mistake|decision|misunderstand|inaccura|problem|fail|damage|cost|reject']]},
+    {type:'concepts',pts:1,label:'Names at least 2 different consequences for the company',need:2,
+      of:[['\\bloss|\\blose|money'],['decision'],['\\brisk'],['reputation|trust|client|customer|partner'],['error|mistake|inaccura|incorrect|wrong'],['misunderstand|contract|regulat|penalt|fine']]}
+  ],
+  misconceptions:[{re:'knowledge (alone )?(is|are) (enough|sufficient)|english (is|are) (not (important|needed|necessary)|unimportant|useless|irrelevant)|english (does not|doesn.t) matter|(should|must|can) (definitely )?be hired (because|since)',msg:'The text says practical skills and English are essential, so this claim is wrong.'}]};
+RB.dq2={max:5,minWords:20,source:READING,prompt:'How does incorrect financial analysis create financial risks?',
+  criteria:[
+    {type:'claim',pts:2,label:'Says that incorrect or inaccurate analysis or data leads to losses, risk or poor decisions (all in one sentence)',
+      all:[[G_BAD],['analy|data|forecast|interpret|conclusion|figures'],[G_RESULT]]},
+    {type:'reason',pts:1,label:'Links analysis to a result with because, so, therefore, leads to, results in',
+      topics:[['analy|data|forecast|interpret|conclusion|misread|mistake'],['loss|risk|decision|profit|cost|invest|stabil|damage|action|bankrupt']]},
+    {type:'example',pts:1,label:'Gives a specific example (use for example, such as, for instance + a real case)'},
+    {type:'concepts',pts:1,label:'Shows the whole chain: analysis or data, then decision or management, then loss or instability',need:3,
+      of:[['analy|data|forecast'],['decision|manage|strateg|invest|action'],['\\bloss|\\blose|profit|stabil|bankrupt|debt|unprofitable']]}
+  ],
+  misconceptions:[{re:'(incorrect|inaccurate|wrong) (financial )?(analysis|data) (is|are) (harmless|safe|not a problem)|(incorrect|wrong) analysis (cannot|can.t|does not|doesn.t|never) (create|cause|lead)',msg:'Incorrect analysis does create risk (see the text: it can lead to financial losses).'}]};
+RB.dq3={max:6,minWords:30,source:READING,prompt:'Professional knowledge is more important than communication skills in finance.',
+  criteria:[
+    {type:'claim',pts:2,label:'States your position in one sentence (agree or disagree) that mentions knowledge and communication or English',
+      all:[['agree|in my (view|opinion)|i (think|believe)|i would say|my position'],['knowledge|professional|expertise'],['communicat|english|language']]},
+    {type:'claim',pts:1,label:'Argument about English or communication (international documents, partners, contracts) in one sentence',
+      all:[['english|language|communicat'],['international|document|partner|contract|regulat|report|client|foreign|global'],['need|require|essential|necessary|important|must|cannot|work']]},
+    {type:'claim',pts:1,label:'Argument about knowledge or analysis (accuracy, risk, decisions) in one sentence',
+      all:[['knowledge|analys|expertise|technical|accounting'],['data|risk|decision|accura|error|mistake|loss|understand|result|outcome'],['need|require|essential|necessary|important|must|without|cannot|foundation|basis']]},
+    {type:'contrast',pts:1,label:'A counterargument sentence that compares knowledge and communication with but, however, while, although (for example: Knowledge matters, but English is also needed)',
+      topics:[['knowledge|analys|technical|expert|professional'],['communicat|english|language']]},
+    {type:'reason',pts:1,label:'Reasoning with because, so, therefore, leads to',
+      topics:[['knowledge|analys|technical|expert|accura|professional'],['communicat|english|language|risk|loss|error|misunderstand|decision|international|performance']]}
+  ],
+  misconceptions:[{re:'(communication|english|language skills?) (is|are) (not (important|needed|necessary)|unimportant|useless|irrelevant)|(communication|english) (does not|doesn.t) matter',msg:'The text says English and communication are essential in finance.'}]};
+
+RB.cq1={max:4,minWords:12,source:READING,prompt:'What are the three main tasks of an economist mentioned in the first paragraph?',
+  criteria:[
+    {type:'concepts',pts:3,label:'Names the three tasks: analysis (or cost analysis), planning or forecasting, decision-making or risk assessment (1 point each)',need:3,
+      of:[['cost analysis|(^|[,:;]\\s*|\\b(and|or|are|is|include|includes|on|of|the|a)\\s+)analysis\\b|analyse|analyze'],['forecast|\\bplanning|\\bplans?\\b'],['risk assessment|assess\\w* (the )?risk|decision']]},
+    {type:'concepts',pts:1,label:'Briefly describes at least 2 of the tasks (for example: forecasting estimates future performance)',need:2,
+      of:[['(cost|analys\\w+).{0,70}(examin|identif|inefficien|where money|spent|data|understand)|(examin|identif|inefficien|where money|spent|data|understand).{0,70}(cost|analys)'],['forecast.{0,70}(estimat|predict|future|trend|performance)|(estimat|predict|future|trend).{0,70}forecast|planning.{0,70}(goals?|decid|advance|achieve)'],['risk.{0,70}(identif|evaluat|threat|uncertain|potential)|(identif|evaluat|threat|uncertain|potential).{0,70}risk|decision.{0,70}(choos|option|data|management|support)']]}
+  ]};
+RB.cq2={max:4,minWords:15,source:READING,prompt:'What can cause a decrease in profit? What should an economist do in response?',
+  criteria:[
+    {type:'claim',pts:2,label:'Gives both causes of a profit decrease in one sentence: rising costs and inefficient operations',
+      all:[['profit'],['\\bcosts?\\b'],['inefficien|wasteful|waste']]},
+    {type:'claim',pts:1,label:'Says the economist must interpret or analyse the data',
+      all:[['interpret|analys|analyz|examin'],['data|indicators|figures|numbers'],['must|should|needs? to|has to|have to|response|in response|then']]},
+    {type:'claim',pts:1,label:'Says the economist gives clear conclusions that support management decisions',
+      all:[['conclusion|recommend|inform|report|present'],['decision|management|manager|improve']]}
+  ],
+  misconceptions:[{re:'(decrease|fall|drop|decline)\\w* (in|of) profit (is|can be|may be) caused by (rising|increasing|higher) revenue',msg:'Rising revenue does not reduce profit; the text names rising costs and inefficient operations.'}]};
+RB.cq3={max:4,minWords:20,source:READING,prompt:'Why is English described as important for finance professionals? Give two specific reasons from the text.',
+  criteria:[
+    {type:'claim',pts:1,label:'Reason 1: English is needed to work with international documents, reports, contracts or regulations',
+      all:[['english'],['document|report|contract|regulat|requirement'],['work|understand|read|need|necessary|important|use|essential']]},
+    {type:'claim',pts:1,label:'Reason 2: English is needed to communicate with partners or take part in global operations',
+      all:[['english'],['partner|communicat|global|international|colleague|client|operation'],['work|participate|need|necessary|important|use|essential|allow|enable|help']]},
+    {type:'claim',pts:1,label:'Says what poor English leads to: misunderstandings, errors or risks',
+      all:[['\\bpoor|\\bweak|\\black|without|\\bbad'],['language|english'],['misunderstand|error|mistake|risk|loss']]},
+    {type:'reason',pts:1,label:'A cause and result sentence (for example: poor English can lead to errors)',
+      topics:[['english|language'],['misunderstanding|error|risk|loss|mistake|document|partner|communicat']]}
+  ]};
+
+RB.writing1={max:9,minWords:50,source:READING,prompt:'Describe the problems this company might face, what skills the specialist must improve, and what risks this situation creates.',
+  criteria:[
+    {type:'concepts',pts:2,label:'Uses at least 4 different glossary terms',need:4,of:GL},
+    {type:'claim',pts:2,label:'Says that weak analysis or inaccurate data leads to a bad result, in one sentence (loss, wrong decision, risk)',
+      all:[['analys|interpret|data|forecast'],[G_BAD],['loss|decision|risk|conclusion|profit|cost|stabil|invest']]},
+    {type:'claim',pts:1,label:'Explains the problem caused by poor English (misunderstandings, errors, risks) in one sentence',
+      all:[['english|language'],['international|document|contract|partner|regulat|communicat|report'],['misunderstand|error|mistake|risk|loss|problem|\\bpoor|\\bweak|cannot|unable']]},
+    {type:'claim',pts:1,label:'Says which skills the specialist must improve (practical skills, analytical tools, English)',
+      all:[['must|should|need|improve|develop|learn|train|study|practi[sc]e'],['practical skill|analytical tool|interpret|english|language skill|accounting|financial analysis|analyse|analyze|practical']]},
+    {type:'claim',pts:1,label:'Names a risk for the company (losses, damaged reputation, instability)',
+      all:[['risk|loss|damage|reputation|stability|penalt|fine'],['company|business|firm|employer|client|organi[sz]ation|management']]},
+    {type:'reason',pts:1,label:'A cause and result sentence (because, therefore, leads to, as a result)',
+      topics:[['analys|data|english|language|skill|knowledge|specialist'],['loss|risk|error|misunderstand|decision|stabil|problem|performance|reputation']]},
+    {type:'length',pts:1,label:'At least 50 words',words:50}
+  ],
+  misconceptions:[{re:'(no|not any) (problems?|risks?)|will not (face|have) (any )?(problems?|risks?)|english (is|are) (not (important|needed|necessary)|unimportant)',msg:'The case says the specialist has weak analysis and poor English, so there are problems and risks.'}]};
+RB.writing2={max:9,minWords:40,source:READING,prompt:'What makes a successful finance specialist? Include knowledge, practical skills, responsibility and the role of English.',
+  criteria:[
+    {type:'concepts',pts:2,label:'Uses at least 5 different glossary terms',need:5,of:GL},
+    {type:'concepts',pts:2,label:'Covers all four required topics: knowledge, practical skills, responsibility, English',need:4,
+      of:[['knowledge|theor|accounting principles'],['practical|real-world|apply|applying'],['responsib|accura|standards|justify'],['english|language']]},
+    {type:'claim',pts:1,label:'Combines theoretical knowledge and practical skills in one sentence',
+      all:[['knowledge|theor'],['practical|apply|applying|real-world|practice'],['both|and|together|combine|not only|balance|with']]},
+    {type:'claim',pts:1,label:'Explains responsibility or accuracy (inaccurate data or wrong analysis harms the company)',
+      all:[['responsib|accura'],['inaccura|incorrect|error|mistake|loss|risk|stabil|decision|invest|conclusion'],['can|may|lead|result|cause|affect|influence|ensure|must|require']]},
+    {type:'claim',pts:1,label:'Explains the role of English (international documents, partners, regulations)',
+      all:[['english|language'],['international|document|partner|contract|regulat|global|report'],['need|essential|necessary|important|must|use|require|work|allow']]},
+    {type:'reason',pts:1,label:'A cause and result sentence (because, therefore, as a result)',
+      topics:[['knowledge|skill|analys|data|english|language|accura|responsib'],['loss|risk|decision|performance|stabil|result|error|success|effective|outcome']]},
+    {type:'structure',pts:1,label:'At least 5 full sentences',sentences:5}
+  ],
+  misconceptions:[{re:'english (is|are) (not (important|needed|necessary)|unimportant|useless)|(practical skills|responsibility|accuracy) (is|are) (not (important|needed|necessary)|unimportant)',msg:'The text says English, practical skills and accuracy are essential.'}]};
+
+var speakingTerms=['financial analysis','financial forecasting','risk assessment','practical skills','decision-making','accounting principles','financial stability','international communication'];
+RB.script={max:9,minWords:50,source:READING,prompt:'Professional Requirements for an Economist',
+  criteria:[
+    {type:'concepts',pts:3,label:'Uses at least 6 of the 8 keywords: financial analysis, financial forecasting, risk assessment, practical skills, decision-making, accounting principles, financial stability, international communication',need:6,
+      of:[['financial analysis'],['financial forecasting|forecasting'],['risk assessment'],['practical skills'],['decision-making|decision making'],['accounting principles'],['financial stability'],['international communication']]},
+    {type:'claim',pts:1,label:'Says what an economist does (analyses data, plans, supports decisions) in one sentence',
+      all:[['economist|specialist|finance professional'],['analys|plan|decision|forecast|assess|evaluat'],['data|business|company|risk|performance|financial|management']]},
+    {type:'claim',pts:1,label:'Says that skills are needed: knowledge together with practical skills',
+      all:[['knowledge|theor|accounting'],['practical|apply|tools|interpret']]},
+    {type:'claim',pts:1,label:'Mentions English for international documents, partners or communication',
+      all:[['english|language'],['international|document|partner|contract|regulat|global|communicat']]},
+    {type:'reason',pts:1,label:'Cause and effect idea 1 about analysis or data (for example: inaccurate data leads to financial losses)',
+      topics:[['analys|data|accura|forecast'],['loss|decision|risk|stabil|invest']]},
+    {type:'reason',pts:1,label:'Cause and effect idea 2 about English (for example: poor English leads to misunderstandings)',
+      topics:[['english|language|communicat'],['misunderstand|error|risk|contract|regulat|document|mistake']]},
+    {type:'length',pts:1,label:'At least 60 words',words:60}
+  ],
+  misconceptions:[{re:'english (is|are) (not (important|needed|necessary)|unimportant|useless)',msg:'The text says English is important for finance professionals.'}]};
+
 var dqCriteria={
-  1:{keywords:['financial analysis','practical skills','risk','english','communication','decisions','losses','inaccurate','incorrect','performance','risk assessment'],minWords:25,
-     model:"The candidate may be rejected because financial analysis requires practical skills, not just theoretical knowledge. Without the ability to analyse data, the specialist may produce inaccurate conclusions, leading to poor decisions and financial losses. Additionally, poor English skills create significant risks in international communication — misunderstandings in contracts or regulatory requirements can have serious consequences. The company should prioritise hiring candidates who can both apply knowledge and communicate professionally in English.",
-     tip:"Mention practical skills, financial analysis, risk, English/communication, and consequences like financial losses."},
-  2:{keywords:['incorrect analysis','financial losses','risk','decisions','profit','costs','stability','inaccurate','data'],minWords:20,
-     model:"Incorrect financial analysis can create serious risks. For example, if an economist fails to identify rising costs as a cause of declining profit, management may not take corrective action, leading to continued financial losses. Furthermore, inaccurate data can distort forecasting, causing poor investment decisions that affect overall financial stability. Therefore, accuracy in analysis is directly linked to the company's ability to remain profitable and competitive.",
-     tip:"Describe a specific cause-effect chain: incorrect analysis → poor decisions → financial losses or instability."},
-  3:{keywords:['knowledge','communication','english','international','risk','language','professional','analysis','both','important','however'],minWords:30,
-     model:"I disagree that professional knowledge is more important than communication skills, as both are essential in modern finance. First, an economist with deep knowledge but poor English cannot work with international documents, participate in global operations, or communicate with foreign partners — creating serious risks. Second, financial reports and regulatory requirements are often in English, so language skills directly affect accuracy and professional performance. However, one counterargument is that technical knowledge forms the foundation: without understanding financial analysis and risk assessment, language skills alone cannot produce good outcomes. Therefore, the ideal finance specialist must develop both competencies equally.",
-     tip:"State your position clearly, give 2 arguments, then provide 1 counterargument. Use terms like English, communication, knowledge, professional performance."}
+  1:{model:"The candidate may be rejected because he lacks practical skills and cannot analyse financial data. Without the ability to interpret data, the specialist may produce inaccurate conclusions, which leads to poor decisions and financial losses. In addition, poor English creates serious risks in international communication, because misunderstandings in contracts or regulatory requirements can have expensive consequences. So the company should prefer a candidate who can both apply knowledge and communicate professionally in English.",
+     tip:"Name a missing skill (practical skills, analysing data, English), explain the risk of poor English, and give a result such as poor decisions or financial losses."},
+  2:{model:"Incorrect financial analysis can create serious risks for a company. For example, if an economist does not notice that rising costs cause a decline in profit, management will not take corrective action, which leads to continued financial losses. Inaccurate data can also distort forecasting, so management makes poor investment decisions that damage financial stability. Therefore, accuracy in analysis is directly linked to the company's ability to remain profitable.",
+     tip:"Describe a chain: incorrect analysis or inaccurate data, then a poor decision, then financial losses or instability, and add a specific example."},
+  3:{model:"I disagree that professional knowledge is more important than communication skills, because both are essential in modern finance. An economist with deep knowledge but poor English cannot work with international documents or communicate with foreign partners, which creates serious risks. Financial reports and regulatory requirements are often in English, so language skills directly affect accuracy and professional performance. Technical knowledge forms the foundation of good analysis, but communication is also necessary to explain the conclusions to management. Therefore, the ideal finance specialist must develop both competencies.",
+     tip:"State your position in one sentence, give one argument about English and one about knowledge, then add a counterargument with but, however or although."}
 };
 
 function revealCase(){document.getElementById('case-box').classList.add('visible');document.getElementById('discussion-qs').classList.add('visible');document.getElementById('reveal-btn').style.display='none';saveItem(PREFIX+'caseRevealed','1');}
 if(loadItem(PREFIX+'caseRevealed')==='1'){revealCase();}
 
-function checkDQ(n){var ta=document.getElementById('dq'+n);var txt=ta.value.toLowerCase();var fb=document.getElementById('dq-fb'+n);var c=dqCriteria[n];var words=ta.value.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;var found=c.keywords.filter(function(k){return txt.includes(k);});var score=0;if(words>=c.minWords)score++;score+=Math.min(found.length,3);if(score>5)score=5;var pct=score/5;var color=pct>=0.8?'#38a169':pct>=0.5?'#C9A84C':'#e53e3e';fb.style.display='block';fb.style.background=pct>=0.8?'rgba(56,161,105,0.08)':pct>=0.5?'rgba(201,168,76,0.08)':'rgba(229,62,62,0.08)';fb.style.border='1px solid '+color;fb.innerHTML='<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+(found.length>0?'Key terms found: <em>'+found.slice(0,3).join(', ')+'</em>. ':'No key terms detected. ')+'<br><span style="color:var(--mid-gray);font-size:12px;">Tip: '+c.tip+'</span>';saveItem(PREFIX+'dq'+n+'score',score);}
-function showModelDQ(n){var fb=document.getElementById('dq-fb'+n);fb.style.display='block';fb.style.background='rgba(201,168,76,0.06)';fb.style.border='1px solid var(--gold)';fb.innerHTML='<strong style="color:var(--gold)">📋 Model Answer:</strong><br>'+dqCriteria[n].model;}
+function openCheck(key,taId,fbId,rb){
+  var ta=document.getElementById(taId),fb=document.getElementById(fbId);
+  var res=Grader.score(ta.value,rb);
+  var pct=res.max?res.pts/res.max:0;
+  var color=pct>=0.8?'#38a169':pct>=0.5?'#C9A84C':'#e53e3e';
+  fb.style.display='block';
+  fb.style.background=pct>=0.8?'rgba(56,161,105,0.08)':pct>=0.5?'rgba(201,168,76,0.08)':'rgba(229,62,62,0.08)';
+  fb.style.border='1px solid '+color;
+  fb.innerHTML=Grader.renderResult(res);
+  addScore(key,res.pts);
+  return res;
+}
+function showModel(fbId,text){var fb=document.getElementById(fbId);fb.style.display='block';fb.style.background='rgba(201,168,76,0.06)';fb.style.border='1px solid var(--gold)';fb.innerHTML='<strong style="color:var(--gold)">📋 Model Answer:</strong><br>'+text;}
+function checkDQ(n){return openCheck('dq'+n,'dq'+n,'dq-fb'+n,RB['dq'+n]);}
+function showModelDQ(n){showModel('dq-fb'+n,dqCriteria[n].model+'<br><span style="color:var(--mid-gray);font-size:12px;">Tip: '+dqCriteria[n].tip+'</span>');}
 
 var cqCriteria={
-  1:{keywords:['cost analysis','financial forecasting','risk assessment','analysis','planning','decision-making','tasks','include'],
-     model:"The three main tasks are: cost analysis (examining costs to identify inefficiencies), financial forecasting (estimating future performance based on data), and risk assessment (identifying and evaluating potential business threats). Economists perform these tasks to support management decisions and evaluate business performance."},
-  2:{keywords:['costs','inefficient','profit','interpret','rising','decrease','conclusions','analysis'],
-     model:"A decrease in profit can be caused by rising costs or inefficient operations. In response, an economist must interpret data correctly to identify the root cause, then provide clear, accurate conclusions to management so they can make informed decisions to improve performance."},
-  3:{keywords:['international documents','english','contracts','regulatory requirements','misunderstandings','errors','partners','communication','reports'],
-     model:"Two reasons: first, financial specialists need English to work with international documents, financial reports, and contracts that are often written in English. Second, English is essential for communicating with international partners and participating in global financial operations. Poor language skills can lead to misunderstandings, errors, and financial risks."}
+  1:{model:"The three main tasks are cost analysis, which examines costs to identify inefficiencies, financial forecasting, which estimates future performance from current data, and risk assessment, which identifies and evaluates possible threats to a business. Economists perform these tasks to support management decisions and evaluate business performance."},
+  2:{model:"A decrease in profit can be caused by rising costs or inefficient operations. In response, an economist must interpret the data correctly to find the root cause. Then the economist provides clear conclusions to management so that they can make decisions to improve performance."},
+  3:{model:"First, financial specialists need English to work with international documents, financial reports and contracts, because these are often written in English. Second, English is essential for communicating with international partners and taking part in global financial operations. Poor language skills can lead to misunderstandings, errors and financial risks."}
 };
 
-function checkCQ(n){var ta=document.getElementById('cq'+n);var txt=ta.value.toLowerCase();var fb=document.getElementById('cq-fb'+n);var c=cqCriteria[n];var found=c.keywords.filter(function(k){return txt.includes(k);});var score=Math.min(Math.round((found.length/Math.max(c.keywords.length*0.5,1))*5),5);var pct=score/5;var color=pct>=0.8?'#38a169':pct>=0.5?'#C9A84C':'#e53e3e';fb.style.display='block';fb.style.background=pct>=0.8?'rgba(56,161,105,0.08)':pct>=0.5?'rgba(201,168,76,0.08)':'rgba(229,62,62,0.08)';fb.style.border='1px solid '+color;fb.innerHTML='<strong style="color:'+color+'">Score: '+score+'/5</strong> — '+(found.length>0?'Keywords found: <em>'+found.join(', ')+'</em>.':'Key terms not detected.');saveItem(PREFIX+'cq'+n+'score',score);}
-function showModelCQ(n){var fb=document.getElementById('cq-fb'+n);fb.style.display='block';fb.style.background='rgba(201,168,76,0.06)';fb.style.border='1px solid var(--gold)';fb.innerHTML='<strong style="color:var(--gold)">📋 Model Answer:</strong><br>'+cqCriteria[n].model;}
+function checkCQ(n){return openCheck('cq'+n,'cq'+n,'cq-fb'+n,RB['cq'+n]);}
+function showModelCQ(n){showModel('cq-fb'+n,cqCriteria[n].model);}
 
 var catTerms=[
   {label:"financial analysis",cats:['A']},
@@ -619,7 +844,8 @@ var catSelected=null,catAssignments={};
 function renderCatTerms(){var s=loadItem(PREFIX+'catAssignments');if(s){try{catAssignments=JSON.parse(s);}catch(e){}}var grid=document.getElementById('cat-terms-grid');grid.innerHTML='';catTerms.forEach(function(t,i){var el=document.createElement('span');el.className='cat-term';el.id='cterm-'+i;el.textContent=t.label;el.onclick=function(){selectCatTerm(i);};if(catAssignments[i])el.classList.add('assigned-'+catAssignments[i]);grid.appendChild(el);});updateCatScore();}
 function selectCatTerm(i){document.querySelectorAll('.cat-term').forEach(function(el){el.classList.remove('selected');});catSelected=i;document.getElementById('cterm-'+i).classList.add('selected');}
 function assignCategory(cat){if(catSelected===null){alert('Please click a term first.');return;}catAssignments[catSelected]=cat;saveItem(PREFIX+'catAssignments',JSON.stringify(catAssignments));var el=document.getElementById('cterm-'+catSelected);el.classList.remove('selected','assigned-A','assigned-F','assigned-S');el.classList.add('assigned-'+cat);catSelected=null;updateCatScore();}
-function updateCatScore(){var correct=0;Object.keys(catAssignments).forEach(function(i){if(catTerms[i]&&catTerms[i].cats.indexOf(catAssignments[i])!==-1)correct++;});var score=Math.round((correct/catTerms.length)*15);document.getElementById('cat-score').textContent=correct+'/'+catTerms.length+' correct — '+score+'/15 pts';saveItem(PREFIX+'catScore',score);}
+function updateCatScore(){var n=Object.keys(catAssignments).length;document.getElementById('cat-score').textContent=n+' of '+catTerms.length+' terms assigned. Press Check to score.';}
+function checkCategories(){var correct=0;Object.keys(catAssignments).forEach(function(i){if(catTerms[i]&&catTerms[i].cats.indexOf(catAssignments[i])!==-1)correct++;});document.getElementById('cat-score').textContent=correct+' / '+catTerms.length+' correct, '+correct+' / 20 points';addScore('cats',correct);}
 function resetCategories(){catAssignments={};saveItem(PREFIX+'catAssignments','{}');catSelected=null;renderCatTerms();}
 
 function renderCards(filter){var grid=document.getElementById('flashcard-grid');grid.innerHTML='';var terms=filter?glossaryTerms.filter(function(t){return t.term.toLowerCase().includes(filter.toLowerCase())||t.def.toLowerCase().includes(filter.toLowerCase());}):glossaryTerms;terms.forEach(function(t,i){var wrap=document.createElement('div');wrap.className='flashcard-wrap';var flipped=loadItem(PREFIX+'fc_'+t.term)==='1';if(flipped)wrap.classList.add('flipped');wrap.innerHTML='<div class="flashcard-inner"><div class="flashcard-face flashcard-front"><div style="width:100%"><div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px;">'+t.term+'</div><div style="display:flex;justify-content:space-between;align-items:center;"><span class="fc-hint">click to flip</span><button onclick="event.stopPropagation();speakTerm(\''+t.term.replace(/'/g,'\\&apos;')+'\')" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;">🔊</button></div></div></div><div class="flashcard-face flashcard-back"><div><div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:6px;">'+t.ru+'</div><div style="font-size:11px;color:#5a6a8a;border-top:1px solid #d0d4e8;padding-top:5px;line-height:1.5;">'+t.def+'</div></div></div></div>';wrap.onclick=function(){wrap.classList.toggle('flipped');saveItem(PREFIX+'fc_'+t.term,wrap.classList.contains('flipped')?'1':'');};grid.appendChild(wrap);});document.getElementById('card-count').textContent=terms.length+' of '+glossaryTerms.length+' terms shown';}
@@ -647,20 +873,21 @@ var fibData=[
 function renderFIB(){var container=document.getElementById('fib-container');container.innerHTML='';fibData.forEach(function(item,i){var saved=loadItem(PREFIX+'fib'+i);var div=document.createElement('div');div.className='fib-item';div.innerHTML=item.pre+' <span class="fib-input-wrap"><input type="text" class="fib-input" id="fib-inp-'+i+'" value="'+saved+'" placeholder="___" oninput="saveItem(\''+PREFIX+'fib'+i+'\',this.value)"><span class="fib-status" id="fib-st-'+i+'"></span><button class="hint-btn" onclick="showFIBHint('+i+')">Hint</button></span> '+item.post;container.appendChild(div);if(saved)checkFIBItem(i,false);});}
 function showFIBHint(i){document.getElementById('fib-st-'+i).textContent='💡 '+fibData[i].hint;}
 function checkFIBItem(i,showResult){var inp=document.getElementById('fib-inp-'+i);var val=inp.value.trim().toLowerCase();var correct=val===fibData[i].blank.toLowerCase()||fibData[i].alts.some(function(a){return val===a.toLowerCase();});inp.classList.remove('correct','incorrect');if(val){inp.classList.add(correct?'correct':'incorrect');document.getElementById('fib-st-'+i).textContent=correct?'✅':(showResult?'❌ '+fibData[i].blank:'');}return correct;}
-function checkAllFIB(){var score=0;fibData.forEach(function(_,i){if(checkFIBItem(i,true))score++;});var pts=score*2;document.getElementById('fib-score').textContent=score+'/6 correct — '+pts+'/12 pts';saveItem(PREFIX+'fibScore',pts);}
+function checkAllFIB(){var score=0;fibData.forEach(function(_,i){if(checkFIBItem(i,true))score++;});var pts=score*3;document.getElementById('fib-score').textContent=score+' / 6 correct, '+pts+' / 18 points';addScore('fib',pts);}
 function resetFIB(){fibData.forEach(function(_,i){var inp=document.getElementById('fib-inp-'+i);inp.value='';inp.classList.remove('correct','incorrect');document.getElementById('fib-st-'+i).textContent='';saveItem(PREFIX+'fib'+i,'');});document.getElementById('fib-score').textContent='';}
 
 var writingCriteria={
-  1:{minWords:50,topicKW:['financial analysis','risk assessment','english','communication','losses','inaccurate','practical skills','decisions','performance','risk'],vocabKW:['financial analysis','risk assessment','inaccurate data','financial losses','practical skills','professional performance','analytical tools','accuracy','language skills','international communication','decision-making','costs','profit'],connectors:['because','however','therefore','furthermore','as a result','in addition','consequently','due to','moreover','this means','this can lead to'],
-    model:"The specialist may cause serious problems because of their inability to perform effective financial analysis. Without the ability to interpret data and use analytical tools, they risk producing inaccurate conclusions, which can lead to poor decision-making and ultimately financial losses. Furthermore, poor language skills create risks in international communication — misunderstandings in contracts or regulatory requirements can be costly. To improve, the specialist must develop both practical analytical skills and English language proficiency. The company risks reduced professional performance and potential damage to its financial stability and reputation if these gaps are not addressed."},
-  2:{minWords:40,topicKW:['knowledge','practical','responsibility','english','skills','analysis','professional','communication','accuracy','risk'],vocabKW:['financial analysis','financial forecasting','risk assessment','practical skills','professional performance','accounting principles','language skills','accuracy','international communication','financial stability','decision-making','analytical tools'],connectors:['furthermore','however','therefore','in addition','not only','but also','as a result','because','consequently'],
-    model:"A successful finance specialist must combine theoretical knowledge with strong practical skills to be effective in their role. Deep understanding of accounting principles and financial analysis enables them to interpret data accurately and support sound decision-making. Furthermore, responsibility is essential: inaccurate data or incorrect analysis can result in financial losses and affect investment outcomes. The role of English cannot be underestimated — in today's global economy, financial specialists must communicate in English to work with international documents and partners. Therefore, professional performance at the highest level requires a balance of technical expertise, analytical skills, and effective language skills."}
+  1:{model:"The specialist may cause serious problems because he cannot perform effective financial analysis. Without the ability to interpret data and use analytical tools, he risks producing inaccurate data and wrong conclusions, which leads to poor decision-making and financial losses. Poor language skills also create risks in international communication, because misunderstandings in contracts or regulatory requirements can be costly. To improve, the specialist must develop practical skills and learn professional English. The company risks lower professional performance and damage to its financial stability and reputation if these gaps are not closed."},
+  2:{model:"A successful finance specialist combines theoretical knowledge with strong practical skills. Understanding accounting principles and financial analysis helps the specialist to interpret data accurately and support sound decision-making. Responsibility is also essential, because inaccurate data or incorrect analysis can lead to financial losses and damage investment outcomes. English plays an important role too: specialists need it to work with international documents and to communicate with partners. Therefore, high professional performance requires knowledge, practical skills, accuracy and good language skills."}
 };
 
-function updateWordCount(taId,wcId,wbId){var val=document.getElementById(taId).value;var words=val.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;document.getElementById(wcId).textContent=words+' words';var n=taId==='w1'?1:2;var c=writingCriteria[n];var vLow=val.toLowerCase();var vocabFound=c.vocabKW.filter(function(k){return vLow.includes(k.toLowerCase());}).length;var wb=document.getElementById(wbId);if(vocabFound>=3){wb.textContent=vocabFound+' vocab terms';wb.classList.add('show');}else{wb.classList.remove('show');}}
-
-function checkWriting(n){var val=document.getElementById('w'+n).value;var vLow=val.toLowerCase();var c=writingCriteria[n];var words=val.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;var topicFound=c.topicKW.filter(function(k){return vLow.includes(k.toLowerCase());});var vocabFound=c.vocabKW.filter(function(k){return vLow.includes(k.toLowerCase());});var connFound=c.connectors.filter(function(k){return vLow.includes(k.toLowerCase());});var sentences=val.split(/[.!?]+/).filter(function(s){return s.trim().length>10;}).length;var score=0;var details=[];if(words>=c.minWords){score+=2;details.push('✅ Length ('+words+' words) +2');}else{details.push('❌ Length ('+words+'/'+c.minWords+' words needed) +0');}var ts=topicFound.length>=3?2:topicFound.length>=2?1:0;score+=ts;details.push((ts>0?'✅':'❌')+' Topic keywords ('+topicFound.length+' found: '+topicFound.slice(0,3).join(', ')+') +'+ts);var vs=vocabFound.length>=5?2:vocabFound.length>=3?1:0;score+=vs;details.push((vs>0?'✅':'❌')+' Glossary vocab ('+vocabFound.length+' terms) +'+vs);var cs=connFound.length>=2?1:0;score+=cs;details.push((cs>0?'✅':'❌')+' Logical connectors ('+connFound.slice(0,3).join(', ')+') +'+cs);var ss=sentences>=3?1:0;score+=ss;details.push((ss>0?'✅':'❌')+' Sentence variety ('+sentences+' sentences) +'+ss);var pct=score/8;var color=pct>=0.75?'#38a169':pct>=0.5?'#C9A84C':'#e53e3e';var fb=document.getElementById('w-fb'+n);fb.style.display='block';fb.style.background=pct>=0.75?'rgba(56,161,105,0.08)':pct>=0.5?'rgba(201,168,76,0.08)':'rgba(229,62,62,0.08)';fb.style.border='1px solid '+color;fb.innerHTML='<strong style="color:'+color+'">Score: '+score+'/8</strong><br>'+details.join('<br>');saveItem(PREFIX+'w'+n+'score',score);}
-function showModelWriting(n){var fb=document.getElementById('w-fb'+n);fb.style.display='block';fb.style.background='rgba(201,168,76,0.06)';fb.style.border='1px solid var(--gold)';fb.innerHTML='<strong style="color:var(--gold)">📋 Model Answer:</strong><br>'+writingCriteria[n].model;}
+function vocabCount(val){var low=val.toLowerCase();return GL.filter(function(g){return g.some(function(r){return new RegExp(r,'i').test(low);});}).length;}
+function updateWordCount(taId,wcId,wbId){var val=document.getElementById(taId).value;var words=val.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;document.getElementById(wcId).textContent=words+' words';var vocabFound=vocabCount(val);var wb=document.getElementById(wbId);if(vocabFound>=3){wb.textContent=vocabFound+' vocab terms';wb.classList.add('show');}else{wb.classList.remove('show');}}
+function checkWriting(n){return openCheck('writing'+n,'w'+n,'w-fb'+n,RB['writing'+n]);}
+function showModelWriting(n){showModel('w-fb'+n,writingCriteria[n].model);}
+var SCRIPT_MODEL="An economist is a specialist who works with financial data to support management decisions. The profession is based on financial analysis, financial forecasting and risk assessment. To do this job, a specialist needs theoretical knowledge, for example accounting principles, together with practical skills for working with analytical tools. If the data is inaccurate, the analysis is wrong, which leads to poor decision-making and damages financial stability. English is also important, because specialists use it to read international documents and to communicate with partners. Poor English can lead to misunderstandings in contracts and to mistakes with regulatory requirements. That is why good international communication is a professional requirement for every economist.";
+function checkScript(){return openCheck('script','script','script-fb',RB.script);}
+function showModelScript(){showModel('script-fb',SCRIPT_MODEL);}
 
 function saveSpeakingPlan(){['sp1','sp2','sp3','sp4'].forEach(function(id){saveItem(PREFIX+id,document.getElementById(id).value);});var total=['sp1','sp2','sp3','sp4'].reduce(function(acc,id){return acc+document.getElementById(id).value.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;},0);document.getElementById('sp-wordcount').textContent='Total words in notes: '+total;}
 ['sp1','sp2','sp3','sp4'].forEach(function(id){var v=loadItem(PREFIX+id);if(v)document.getElementById(id).value=v;});saveSpeakingPlan();
@@ -671,18 +898,17 @@ function setRing(id,elapsed,total,isMax){var fill=document.getElementById(id);fi
 function startTimers(){if(runningMin||runningMax)return;runningMin=true;runningMax=true;document.getElementById('timer-start-btn').disabled=true;document.getElementById('timer-status').textContent='Speaking...';var elMin=0,elMax=0;timerMin=setInterval(function(){elMin++;document.getElementById('timer-min').textContent=fmtTime(Math.max(0,60-elMin));setRing('ring-fill-min',elMin,60,false);if(elMin>=60){clearInterval(timerMin);runningMin=false;document.getElementById('timer-min').textContent='✓';document.getElementById('timer-status').textContent='Min. time reached!';}},1000);timerMax=setInterval(function(){elMax++;document.getElementById('timer-max').textContent=fmtTime(Math.max(0,90-elMax));setRing('ring-fill-max',elMax,90,true);if(elMax>=90){clearInterval(timerMax);runningMax=false;document.getElementById('timer-max').textContent='0:00';document.getElementById('timer-status').textContent='Time is up!';}},1000);}
 function resetTimers(){clearInterval(timerMin);clearInterval(timerMax);runningMin=false;runningMax=false;document.getElementById('timer-min').textContent='1:00';document.getElementById('timer-max').textContent='1:30';document.getElementById('ring-fill-min').style.strokeDashoffset=283;document.getElementById('ring-fill-max').style.strokeDashoffset=283;document.getElementById('ring-min').classList.remove('red');document.getElementById('ring-max').classList.remove('red');document.getElementById('timer-start-btn').disabled=false;document.getElementById('timer-status').textContent='';}
 
-var speakingTerms=['financial analysis','financial forecasting','risk assessment','practical skills','decision-making','accounting principles','financial stability','international communication'];
 var chipsUsed={};
 function renderChips(){var s=loadItem(PREFIX+'chipsUsed');if(s){try{chipsUsed=JSON.parse(s);}catch(e){}}var container=document.getElementById('speaking-chips');container.innerHTML='';speakingTerms.forEach(function(term,i){var chip=document.createElement('span');chip.className='kchip'+(chipsUsed[i]?' used':'');chip.textContent=term;chip.onclick=function(){toggleSpeakingChip(i);};container.appendChild(chip);});updateChipScore();}
 function toggleSpeakingChip(i){chipsUsed[i]=!chipsUsed[i];saveItem(PREFIX+'chipsUsed',JSON.stringify(chipsUsed));document.querySelectorAll('.kchip')[i].classList.toggle('used',chipsUsed[i]);updateChipScore();}
-function updateChipScore(){var used=Object.values(chipsUsed).filter(Boolean).length;document.getElementById('chips-used').textContent=used;var score=Math.round((used/8)*8);saveItem(PREFIX+'chipsScore',score);if(used>=6){document.getElementById('speaking-score-msg').style.display='block';document.getElementById('speaking-score-msg').textContent='★ '+score+'/8 pts — Great vocabulary use!';}}
+function updateChipScore(){var used=Object.values(chipsUsed).filter(Boolean).length;document.getElementById('chips-used').textContent=used;if(used>=6){document.getElementById('speaking-score-msg').style.display='block';document.getElementById('speaking-score-msg').textContent='Great vocabulary use! (practice only, not scored)';}else{document.getElementById('speaking-score-msg').style.display='none';}}
 
 var reflectionItems=["I can explain the role and main tasks of an economist","I can describe the difference between financial analysis and financial forecasting","I understand how inaccurate data leads to financial losses","I can use at least 8 glossary terms correctly in written and spoken English","I can write an analytical response using cause-effect reasoning","I spoke for at least 60 seconds using the keyword checklist"];
 function renderReflection(){var grid=document.getElementById('reflection-grid');grid.innerHTML='';var saved=loadItem(PREFIX+'reflection');var savedArr=saved?JSON.parse(saved):[];reflectionItems.forEach(function(item,i){var el=document.createElement('div');el.className='final-check-item'+(savedArr[i]?' checked':'');el.id='refl-'+i;el.innerHTML='<input type="checkbox" id="rchk-'+i+'" '+(savedArr[i]?'checked':'')+' onchange="toggleReflection('+i+')">'+'<label for="rchk-'+i+'" style="cursor:pointer;">'+item+'</label>';el.onclick=function(e){if(e.target.tagName!=='INPUT')document.getElementById('rchk-'+i).click();};grid.appendChild(el);});updateReflectionScore();}
 function toggleReflection(i){var saved=loadItem(PREFIX+'reflection');var arr=saved?JSON.parse(saved):Array(reflectionItems.length).fill(false);arr[i]=document.getElementById('rchk-'+i).checked;saveItem(PREFIX+'reflection',JSON.stringify(arr));document.getElementById('refl-'+i).classList.toggle('checked',arr[i]);updateReflectionScore();}
-function updateReflectionScore(){var saved=loadItem(PREFIX+'reflection');var arr=saved?JSON.parse(saved):[];var checked=arr.filter(Boolean).length;var score=Math.round((checked/reflectionItems.length)*12);document.getElementById('reflection-score').textContent=score;saveItem(PREFIX+'reflScore',score);}
+function updateReflectionScore(){var saved=loadItem(PREFIX+'reflection');var arr=saved?JSON.parse(saved):[];var checked=arr.filter(Boolean).length;document.getElementById('reflection-score').textContent=checked;}
 
-function calcScore(){var dq=[1,2,3].reduce(function(a,n){return a+(parseInt(loadItem(PREFIX+'dq'+n+'score'))||0);},0);var cq=[1,2,3].reduce(function(a,n){return a+(parseInt(loadItem(PREFIX+'cq'+n+'score'))||0);},0);var cat=parseInt(loadItem(PREFIX+'catScore'))||0;var fib=parseInt(loadItem(PREFIX+'fibScore'))||0;var wr=(parseInt(loadItem(PREFIX+'w1score'))||0)+(parseInt(loadItem(PREFIX+'w2score'))||0);var chips=parseInt(loadItem(PREFIX+'chipsScore'))||0;var refl=parseInt(loadItem(PREFIX+'reflScore'))||0;var total=dq+cq+cat+fib+wr+chips+refl;var maxTotal=93;var pct=Math.round((total/maxTotal)*100);var breakdown=[{label:'Discussion Questions (×3)',score:dq,max:15},{label:'Comprehension Questions (×3)',score:cq,max:15},{label:'Glossary Categories',score:cat,max:15},{label:'Fill in the Blanks',score:fib,max:12},{label:'Writing Tasks (×2)',score:wr,max:16},{label:'Speaking Keywords',score:chips,max:8},{label:'Self-Reflection',score:refl,max:12}];var html='<table style="width:100%;border-collapse:collapse;font-size:14px;"><tr style="border-bottom:2px solid var(--gold);"><th style="text-align:left;padding:8px 4px;color:var(--text3);">Section</th><th style="text-align:right;padding:8px 4px;color:var(--text3);">Score</th><th style="text-align:right;padding:8px 4px;color:var(--text3);">Max</th></tr>';breakdown.forEach(function(b){html+='<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 4px;">'+b.label+'</td><td style="text-align:right;padding:8px 4px;font-weight:600;color:var(--gold);">'+b.score+'</td><td style="text-align:right;padding:8px 4px;color:var(--text3);">'+b.max+'</td></tr>';});html+='<tr><td style="padding:10px 4px;font-weight:700;font-size:15px;">TOTAL</td><td style="text-align:right;padding:10px 4px;font-weight:800;font-size:15px;color:var(--gold);">'+total+'</td><td style="text-align:right;padding:10px 4px;font-weight:700;">'+maxTotal+'</td></tr></table>';document.getElementById('score-breakdown').innerHTML=html;var grade=pct>=90?'Excellent! 🏆':pct>=75?'Great work! ⭐':pct>=60?'Good effort! 👍':'Keep practising 📚';document.getElementById('total-score-display').innerHTML='<div style="font-size:48px;font-weight:800;color:var(--gold);">'+total+'<span style="font-size:24px;color:var(--text3);">/'+maxTotal+'</span></div><div style="font-size:20px;font-weight:700;margin-top:4px;">'+pct+'% — '+grade+'</div>';saveItem(PREFIX+'totalScore',total);var chip=document.getElementById('total-score-chip');if(chip)chip.textContent=total;if(pct>=80){showConfetti();showBanner(grade);}}
+function calcScore(){var total=updateTotal();var pct=Math.round((total/MAX_TOTAL)*100);var grade=pct>=90?'Excellent! 🏆':pct>=75?'Great work! ⭐':pct>=60?'Good effort! 👍':'Keep practising 📚';document.getElementById('total-score-display').innerHTML='<div style="font-size:48px;font-weight:800;color:var(--gold);">'+total+'<span style="font-size:24px;color:var(--text3);">/'+MAX_TOTAL+'</span></div><div style="font-size:20px;font-weight:700;margin-top:4px;">'+pct+'% · '+grade+'</div>';saveItem(PREFIX+'totalScore',String(total));if(pct>=80){showConfetti();showBanner(grade);}}
 
 function showConfetti(){var container=document.getElementById('confetti-container');container.innerHTML='';var colors=['#C9A84C','#e8c96a','#0A1628','#667eea','#38a169'];for(var i=0;i<60;i++){var piece=document.createElement('div');piece.className='confetti-piece';var size=Math.random()*10+5;piece.style.cssText='left:'+Math.random()*100+'%;width:'+size+'px;height:'+size+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';animation-duration:'+(Math.random()*2+2)+'s;animation-delay:'+(Math.random()*1.5)+'s;';container.appendChild(piece);}setTimeout(function(){container.innerHTML='';},5000);}
 function showBanner(text){var b=document.getElementById('excellent-banner');b.textContent=text;b.classList.add('show');setTimeout(function(){b.classList.remove('show');},2500);}
@@ -691,6 +917,21 @@ renderCatTerms();renderCards('');renderFIB();renderChips();renderReflection();
 ['dq1','dq2','dq3'].forEach(function(id){var v=loadItem(PREFIX+id);if(v)document.getElementById(id).value=v;});
 ['cq1','cq2','cq3'].forEach(function(id){var v=loadItem(PREFIX+id);if(v)document.getElementById(id).value=v;});
 ['w1','w2'].forEach(function(id){var v=loadItem(PREFIX+id);if(v){document.getElementById(id).value=v;updateWordCount(id,'wc'+id.slice(1),'wb'+id.slice(1));}});
+(function(){
+  // Rule boxes before every scored open task
+  [['dq1','dq1'],['dq2','dq2'],['dq3','dq3'],['cq1','cq1'],['cq2','cq2'],['cq3','cq3'],['w1','writing1'],['w2','writing2']].forEach(function(p){
+    var ta=document.getElementById(p[0]);if(ta)ta.insertAdjacentHTML('beforebegin',Grader.renderRule(RB[p[1]]));
+  });
+  var sc=document.getElementById('script');if(sc)sc.insertAdjacentHTML('beforebegin',Grader.renderRule(RB.script));
+  // Scores saved under the old rules are discarded once
+  if(loadItem(PREFIX+'rubric')!==RUBRIC_VERSION){
+    try{['dq1score','dq2score','dq3score','cq1score','cq2score','cq3score','catScore','fibScore','w1score','w2score','chipsScore','reflScore','totalScore'].forEach(function(k){localStorage.removeItem(PREFIX+k);});}catch(e){}
+    saveItem(PREFIX+'rubric',RUBRIC_VERSION);
+  }
+  RUBRIC.forEach(function(r){var v=parseInt(loadItem(PREFIX+'sc_'+r.key));if(!isNaN(v))scores[r.key]=Math.max(0,Math.min(r.max,v));});
+  var sv=loadItem(PREFIX+'script');if(sv){document.getElementById('script').value=sv;updateWordCount('script','wc-script','wb-script');}
+  updateTotal();
+})();
 
 </script>
 <div id="tab-infographics" class="section">

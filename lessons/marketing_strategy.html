@@ -133,6 +133,11 @@
   .badge-M{background:rgba(52,152,219,.2);color:#3498db}
   .badge-S{background:rgba(46,204,113,.2);color:#2ecc71}
   .badge-P{background:rgba(231,76,60,.2);color:#e74c3c}
+  .rule{font-size:.76rem;color:var(--text3);background:var(--navy2);border-left:3px solid var(--gold);border-radius:4px;padding:7px 12px;margin:0 0 14px;line-height:1.55}
+  .rubric-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:18px;text-align:left}
+  .rubric-table th{color:var(--text3);font-weight:600;padding:8px 6px;border-bottom:2px solid var(--gold);font-size:.75rem;text-transform:uppercase;letter-spacing:.3px}
+  .rubric-table td{padding:8px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+  .rubric-table td.num{text-align:right;white-space:nowrap;font-weight:700;color:var(--gold)}
   .mt-8{margin-top:8px}.mt-12{margin-top:12px}
   @media(max-width:600px){.header{padding:14px 16px}.tab{padding:10px 12px;font-size:.75rem}}
 
@@ -151,7 +156,7 @@
   <div class="header-right">
     <div class="score-chip">Score: <span id="total-score-chip">0</span> / 93</div>
     <a href="../index.html" class="theme-btn" style="text-decoration:none">🏠 Главное меню</a>
-    <button class="theme-btn" onclick="toggleTheme()">☀ Light</button>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☀ Light</button>
   </div>
 </header>
 <nav class="tabs">
@@ -237,7 +242,7 @@
   <div class="card">
     <h2>💬 Discussion Questions</h2>
     <div id="dq-container"></div>
-    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total DQ score: </span><span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span></div>
+    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total DQ score: </span><span style="font-weight:700;color:var(--gold)" id="dq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 18</span></div>
   </div>
 </div>
 
@@ -246,7 +251,7 @@
   <div class="card">
     <h2>🎯 Comprehension Questions</h2>
     <div id="cq-container"></div>
-    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total CQ score: </span><span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 15</span></div>
+    <div class="mt-12"><span style="font-size:.8rem;color:var(--text3)">Total CQ score: </span><span style="font-weight:700;color:var(--gold)" id="cq-total">0</span><span style="font-size:.8rem;color:var(--text3)"> / 18</span></div>
   </div>
 </div>
 
@@ -270,6 +275,7 @@
   <div class="card">
     <h2>🗂 Category Match</h2>
     <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px">Assign each term: <b style="color:#3498db">M</b>=Marketing &amp; Analysis · <b style="color:#2ecc71">S</b>=Strategy &amp; Positioning · <b style="color:#e74c3c">P</b>=Products &amp; Services</p>
+    <p class="rule">How you get points: 1 point for each term placed in the correct category (15 terms, maximum 15). A wrong or empty choice earns 0. You can press Check again and your best result is kept.</p>
     <div class="match-grid" id="match-grid"></div>
     <button class="check-btn" onclick="checkCategories()">✔ Check</button>
     <div class="feedback" id="cat-feedback"></div>
@@ -282,6 +288,7 @@
   <div class="card">
     <h2>✏️ Fill in the Blanks</h2>
     <p style="font-size:.82rem;color:var(--text2);margin-bottom:16px">Complete each sentence with the correct term from the glossary.</p>
+    <p class="rule">How you get points: 3 points for each blank that exactly matches an accepted glossary term (4 blanks, maximum 12). A longer phrase or another term earns 0. You can press Check again and your best result is kept.</p>
     <div id="fib-container"></div>
     <button class="check-btn" onclick="checkFIB()">✔ Check</button>
     <div class="feedback" id="fib-feedback"></div>
@@ -303,13 +310,14 @@
       <div class="criterion"><div class="cnum">3</div>States a strategic decision</div>
       <div class="criterion"><div class="cnum">4</div>Uses at least 5 glossary terms</div>
     </div>
+    <div id="writing1-rule"></div>
     <textarea id="writing1-input" placeholder="Write your analysis here..." rows="6" oninput="saveWriting('writing1')"></textarea>
     <button class="check-btn" onclick="checkWriting(1)">✔ Check</button>
     <div class="feedback" id="writing1-feedback"></div>
     <div class="writing-score-row">
       <span class="writing-score-label">Task 1 score:</span>
       <span class="writing-score-val" id="writing1-score">0</span>
-      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+      <span style="font-size:.8rem;color:var(--text3)">/10</span>
     </div>
   </div>
   <div class="card">
@@ -325,13 +333,14 @@
       <div class="criterion"><div class="cnum">4</div>At least 4 glossary terms used</div>
       <div class="criterion"><div class="cnum">5</div>Logical structure and professional tone</div>
     </div>
+    <div id="writing2-rule"></div>
     <textarea id="writing2-input" placeholder="Write your critical response here..." rows="7" oninput="saveWriting('writing2')"></textarea>
     <button class="check-btn" onclick="checkWriting(2)">✔ Check</button>
     <div class="feedback" id="writing2-feedback"></div>
     <div class="writing-score-row">
       <span class="writing-score-label">Task 2 score:</span>
       <span class="writing-score-val" id="writing2-score">0</span>
-      <span style="font-size:.8rem;color:var(--text3)">/8</span>
+      <span style="font-size:.8rem;color:var(--text3)">/10</span>
     </div>
   </div>
 </div>
@@ -370,10 +379,14 @@
       <button class="timer-btn stop" onclick="stopTimer()">■ Stop</button>
       <button class="timer-btn stop" onclick="resetTimer()">↺ Reset</button>
     </div>
+    <p class="rule" style="margin-top:12px">Practice only (0 points): the term chips and the timer are for rehearsal and are not scored. Only the written script below earns points.</p>
     <div style="margin-top:16px">
-      <div style="font-size:.8rem;color:var(--text3);margin-bottom:4px">Self-score your speaking (0–8):</div>
-      <input type="range" min="0" max="8" value="0" id="speaking-range" oninput="updateSpeakingScore(this.value)" style="width:100%;accent-color:var(--gold)">
-      <div style="text-align:center;font-size:1rem;font-weight:700;color:var(--gold);margin-top:4px"><span id="speaking-val">0</span> / 8</div>
+      <h3 style="font-size:.9rem;color:var(--gold2);margin-bottom:8px">Write the script of your talk (scored)</h3>
+      <div id="script-rule"></div>
+      <textarea id="script-input" placeholder="Write what you would say: role of marketing, strategy and competitive advantage, segmentation, risks, results..." rows="9" oninput="saveScript()"></textarea>
+      <button class="check-btn" onclick="checkScript()">✔ Check</button>
+      <div class="feedback" id="script-feedback"></div>
+      <div class="writing-score-row"><span class="writing-score-label">Script score:</span><span class="writing-score-val" id="script-score">0</span><span style="font-size:.8rem;color:var(--text3)">/10</span></div>
     </div>
   </div>
 </div>
@@ -383,7 +396,7 @@
   <div class="card">
     <h2>🪞 Self-Reflection</h2>
     <div id="reflect-container"></div>
-    <div class="mt-12" style="font-size:.8rem;color:var(--text3)">Reflection score: <span id="reflect-score" style="color:var(--gold);font-weight:700">0</span> / 12</div>
+    <p class="rule mt-12">Practice only (0 points): self-assessment cannot be checked automatically, so it is not scored. Use the stars and notes to plan your revision.</p>
   </div>
 </div>
 
@@ -391,23 +404,19 @@
 <div id="tab-progress" class="section">
   <div class="progress-section">
     <h2>📊 Your Progress</h2>
-    <div class="progress-row"><label>Discussion (DQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-dq" style="width:0%"></div></div><span id="prog-dq-val">0/15</span></div>
-    <div class="progress-row"><label>Comprehension (CQ)</label><div class="progress-bar"><div class="progress-fill" id="prog-cq" style="width:0%"></div></div><span id="prog-cq-val">0/15</span></div>
-    <div class="progress-row"><label>Categories</label><div class="progress-bar"><div class="progress-fill" id="prog-cat" style="width:0%"></div></div><span id="prog-cat-val">0/15</span></div>
-    <div class="progress-row"><label>Fill in Blanks</label><div class="progress-bar"><div class="progress-fill" id="prog-fib" style="width:0%"></div></div><span id="prog-fib-val">0/12</span></div>
-    <div class="progress-row"><label>Writing</label><div class="progress-bar"><div class="progress-fill" id="prog-writ" style="width:0%"></div></div><span id="prog-writ-val">0/16</span></div>
-    <div class="progress-row"><label>Speaking</label><div class="progress-bar"><div class="progress-fill" id="prog-spk" style="width:0%"></div></div><span id="prog-spk-val">0/8</span></div>
-    <div class="progress-row"><label>Self-Reflection</label><div class="progress-bar"><div class="progress-fill" id="prog-ref" style="width:0%"></div></div><span id="prog-ref-val">0/12</span></div>
+    <p class="rule">How scoring works: every task is checked automatically by the rules below. You can press Check as many times as you like, and the best result for each task is kept. Flashcards, the timer, the term chips and the self-reflection are practice only and are not scored.</p>
+    <table class="rubric-table" id="rubric-table"></table>
     <div class="total-score"><div class="big" id="total-big">0</div><div class="sub">out of 93 points total</div></div>
     <button class="check-btn" style="margin-top:14px;width:100%" onclick="resetAll()">↺ Reset All Progress</button>
   </div>
 </div>
 
 </main>
+<script src="grader.js"></script>
 <script>
 const LS='mktg_';
-function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch{return null}}
-function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch{}}
+function lsGet(k){try{return JSON.parse(localStorage.getItem(LS+k))}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch(e){}}
 
 const glossary=[
   {term:'marketing',ru:'маркетинг — продвижение и понимание потребностей клиентов',cat:'M'},
@@ -427,84 +436,283 @@ const glossary=[
   {term:'service quality',ru:'качество обслуживания',cat:'P'},
 ];
 
-const dqs=[
-  {q:'Why can a good financial product fail in the market?',kw:['marketing','positioning','segmentation','communication','demand','client','customer','awareness','trust']},
-  {q:'What role does marketing play in financial services?',kw:['client needs','customer behavior','target','segment','promote','position','relationship','demand','product']},
-  {q:'What strategic decisions can improve client growth?',kw:['segmentation','positioning','pricing','service quality','competitive','strategy','marketing','target','decision']},
+// ── Reading text (used by the grader to detect copying) ──
+const READING_TEXT='Marketing in the financial sector is not only about promotion but also about understanding client needs and market conditions. Financial organizations must analyze customer behavior, identify target segments, and design products that meet specific demands. Effective marketing helps companies position their services and build long-term relationships with clients. '+
+'A key element of marketing is market segmentation. Companies divide clients into groups based on income level, financial goals, and risk tolerance. This allows financial institutions to offer personalized products, such as loans, investment plans, or insurance services. Without segmentation, marketing becomes inefficient and resources are wasted. '+
+'Strategy defines long-term direction and decision-making. In finance, strategy includes market positioning, product development, and competitive advantage. A company must decide how to differentiate its services from competitors, through better pricing, improved service quality, or innovative financial solutions. '+
+'Marketing and strategy are closely connected. Marketing provides data about clients and market trends, while strategy uses this information to make decisions. For example, if demand for digital banking increases, a company may invest in online services based on both marketing analysis and strategic planning. '+
+'Incorrect strategy or weak marketing can create serious risks. Poor understanding of customer needs may lead to low demand. Ineffective communication may reduce trust. Therefore, financial organizations must continuously evaluate their marketing activities and adjust strategies to achieve sustainable growth.';
+
+// Glossary terms as regular-expression groups (used to count glossary vocabulary in written answers)
+const TERM_GROUPS=[
+  ['\\bmarketing'],['target market|target segment|target group'],['segmentation|segments?\\b'],['(customer|client) needs'],['market trends?'],
+  ['(customer|client) behaviou?r'],['\\bdemand'],['\\bstrateg'],['positioning|\\bposition (the|its|their|a|our)'],['competitive advantage'],
+  ['decision[- ]making'],['sustainable growth'],['financial products?'],['\\bpricing'],['service quality|quality of (the )?service']
 ];
 
-const cqs=[
-  {q:'According to the text, what does market segmentation allow financial institutions to do?',kw:['personalized','products','loans','investment','insurance','groups','income','goals','risk tolerance']},
-  {q:'How are marketing and strategy connected according to the text?',kw:['marketing','data','clients','trends','strategy','decisions','digital banking','analysis','planning']},
-  {q:'What risks can incorrect strategy or weak marketing create for a financial company?',kw:['low demand','reduce trust','client needs','ineffective','communication','risks','resources','wasted','sustainable']},
-];
+// ── Rubrics for the open tasks (every criterion is shown to the student before the task) ──
+// Each claim needs ALL its idea groups inside ONE sentence, and at least one group is an action or result word (not only a glossary term).
+const NEG='poor|weak|bad|incorrect|ineffective|unclear|lack of|wrong|inadequate|insufficient';
+const LOWD='low demand|less demand|weak demand|lower demand|fewer (clients|customers)|few (clients|customers)|lose (clients|customers)|losing (clients|customers)|lost (clients|customers)|demand (is|stays|remains) low|demand (falls|drops|decreases|declines)|fail|distrust|lose trust|lost trust|reduce trust|reduces trust|waste';
+const RB={
+ dq:[
+  {max:6,minWords:25,source:READING_TEXT,criteria:[
+    {type:'claim',pts:2,label:'Says the product may be good, but clients do not understand, trust or choose it because of how it is presented (needs, communication, positioning)',all:[
+      ['\\bgood|reliable|quality|useful|\\bbut\\b|however|even if|although'],
+      ['not (understand|know|trust|choose|buy|use|reach|attract|meet)|does not (understand|know|reach|attract|meet)|do not (understand|know|trust|choose|buy|use)|fail|unaware|never hear|cannot (find|see|trust)'],
+      ['marketing|communicat|position|segment|promot|present|advertis|(client|customer) needs|\\bneeds\\b|aware|message']]},
+    {type:'reason',pts:2,label:'Explains the chain with because / so / which leads to: a weak marketing or strategy problem, then a result such as low demand or lost trust',topics:[
+      [NEG+'|does not understand|do not understand|ignore|no clear|without'],
+      [LOWD+'|not choose|not buy|not grow|decline|drop|few|fewer']]},
+    {type:'claim',pts:1,label:'Names what the company should do about it (understand clients, segment, position, communicate)',all:[
+      ['should|must|needs? to|has to|have to|can improve|could improve|improve|analy[sz]e|understand|identify|design'],
+      ['segment|position|communicat|promot|client needs|customer needs|(client|customer) behaviou?r|target|market conditions|evaluate'],
+      ['client|customer|market|product|service']]},
+    {type:'length',pts:1,label:'Writes at least 25 words',words:25}],
+   misconceptions:[
+    {re:'^(?!.*\\b(some|may|might|could|however|but|although|claim|argue|say|believe that)\\b).*(good|quality) products? (always |usually )?(sells?|promotes?|advertises) itself',msg:'A good product does not sell itself: the text says weak marketing creates serious risks.'},
+    {re:'(does not|doesn.t|do not|don.t) need (any )?marketing|marketing is (not important|unimportant|useless|unnecessary|not necessary)',msg:'The text says marketing is needed to understand clients and position services.'}]},
+  {max:6,minWords:25,source:READING_TEXT,criteria:[
+    {type:'claim',pts:2,label:'Says marketing helps a financial organization understand or analyze client needs, behavior or market conditions',all:[
+      ['marketing|organi[sz]ations?|compan(y|ies)|banks?|institutions?'],
+      ['understand|analy[sz]|identify|study|research|learn|find out'],
+      ['(client|customer) needs|\\bneeds\\b|behaviou?r|market conditions|segments?|what (clients|customers)']]},
+    {type:'claim',pts:2,label:'Says marketing helps position services and build long-term relationships or trust with clients',all:[
+      ['position|promot|build|create|maintain|strengthen|keep|help'],
+      ['long-term|relationship|trust|loyal'],
+      ['client|customer']]},
+    {type:'reason',pts:1,label:'Links two ideas with a cause or result (because, so, which allows): what marketing finds out, then what the company does',topics:[
+      ['understand|analy[sz]|identify|study|learn|find out|know'],
+      ['design|offer|create|build|develop|meet|attract|keep|improve|decide']]},
+    {type:'length',pts:1,label:'Writes at least 25 words',words:25}],
+   misconceptions:[
+    {re:'marketing (is|means) (only|just|simply) (about )?(advertis|promot|sell)',msg:'The text says marketing is not only promotion: it also means understanding client needs.'}]},
+  {max:6,minWords:25,source:READING_TEXT,criteria:[
+    {type:'claim',pts:2,label:'Proposes a decision on pricing, service quality or innovation so that the company differs from competitors',all:[
+      ['decid|should|invest|improve|introduce|adjust|lower|reduce|offer|choose|better|improved|innovative|differentiate'],
+      ['pricing|prices?\\b|service quality|quality of service|innovati|digital|new (financial )?(products?|solutions)'],
+      ['competitors?|differentiat|stand out|attract|win (clients|customers)|more (clients|customers)|new (clients|customers)|grow']]},
+    {type:'claim',pts:2,label:'Proposes dividing clients into groups (income, goals, risk) and offering each group a suitable product',all:[
+      ['divid|split|segment|target|group'],
+      ['income|goals|risk'],
+      ['offer|suitable|personali[sz]|matching|specific|loans?|insurance|investment']]},
+    {type:'reason',pts:1,label:'Explains why the decision helps (because, so, which leads to): a decision, then growth or more clients',topics:[
+      ['decid|should|invest|improve|introduce|adjust|lower|offer|better|differentiat|innovat|target'],
+      ['more (clients|customers)|new (clients|customers)|attract|win|grow|retain|stay|loyal']]},
+    {type:'length',pts:1,label:'Writes at least 25 words',words:25}],
+   misconceptions:[
+    {re:'strategy (is|means) (about )?short.?term',msg:'The text says strategy defines long-term direction.'}]}
+ ],
+ cq:[
+  {max:6,minWords:20,source:READING_TEXT,criteria:[
+    {type:'claim',pts:2,label:'Says companies divide clients into groups by income, financial goals or risk tolerance',all:[
+      ['divid|group|split|categori[sz]'],
+      ['income|financial goals|\\bgoals|risk'],
+      ['clients?\\b|customers?\\b|compan|bank|institution']]},
+    {type:'claim',pts:2,label:'Says this allows personalized products (for example loans, investment plans, insurance)',all:[
+      ['personali[sz]|tailor|specific|individual|suit'],
+      ['products?|services?|offers?|loans?|insurance|investment'],
+      ['allow|offer|provide|can\\b|able|help']]},
+    {type:'claim',pts:1,label:'Says that without segmentation marketing is inefficient and resources are wasted',all:[
+      ['without|if (there is )?no|if (companies|banks|institutions) (do not|don.t)|lack of'],
+      ['inefficient|wast|ineffective|not effective|loses? money']]},
+    {type:'length',pts:1,label:'Writes at least 20 words',words:20}],
+   misconceptions:[
+    {re:'segmentation (means|is) (the )?(same|one) ',msg:'Segmentation means dividing clients into different groups, not treating everybody the same.'}]},
+  {max:6,minWords:20,source:READING_TEXT,criteria:[
+    {type:'claim',pts:2,label:'Says marketing provides data or analysis about clients and market trends',all:[
+      ['marketing'],
+      ['provides?|gives?|supplies|supplied|shows?|delivers?'],
+      ['data|information|analysis|insight']]},
+    {type:'claim',pts:2,label:'Says strategy uses this information to make decisions or plans',all:[
+      ['strateg'],
+      ['uses?|using|bases?|based on'],
+      ['decisions?|plans?|planning|decide']]},
+    {type:'claim',pts:1,label:'Gives the digital banking case: if demand grows, the company may invest in online services',all:[
+      ['digital|online'],
+      ['demand|increas|grow|rise|popular'],
+      ['invest|develop|launch|expand|offer']]},
+    {type:'length',pts:1,label:'Writes at least 20 words',words:20}],
+   misconceptions:[
+    {re:'strategy (and marketing )?(are|is) (separate|independent|unrelated|not (connected|related))|marketing (and strategy )?(are|is) (separate|independent|unrelated|not (connected|related))',msg:'The text says marketing and strategy are closely connected.'}]},
+  {max:6,minWords:20,source:READING_TEXT,criteria:[
+    {type:'claim',pts:2,label:'Says poor understanding of customer needs, or a wrong strategy, may lead to low demand',all:[
+      [NEG+'|not understand|misunderstand|incorrectly'],
+      ['needs\\b|understanding|strategy|marketing'],
+      [LOWD]]},
+    {type:'claim',pts:2,label:'Says ineffective communication may reduce trust',all:[
+      [NEG],
+      ['communicat|message|information|advertis'],
+      ['trust|confidence|reputation']]},
+    {type:'claim',pts:1,label:'Says organizations must evaluate and adjust their marketing and strategy to reach sustainable growth',all:[
+      ['evaluat|adjust|monitor|review|check'],
+      ['strateg|marketing|activit'],
+      ['sustainable|long-term|growth']]},
+    {type:'length',pts:1,label:'Writes at least 20 words',words:20}],
+   misconceptions:[
+    {re:'(weak|poor) marketing (has|creates|causes|brings) (no|few) (risks?|problems?)|there (is|are) no risks?',msg:'The text says weak marketing creates serious risks.'}]}
+ ],
+ writing:{
+  1:{max:10,minWords:50,source:READING_TEXT,criteria:[
+    {type:'claim',pts:3,label:'Identifies the main problem: marketing or strategy is weak, so the bank does not attract clients or demand is low',all:[
+      [NEG+'|does not (attract|reach|understand)|not (enough|effective)'],
+      ['marketing|strateg|positioning|communicat|segment'],
+      ['demand|clients\\b|customers\\b|growth|sales']]},
+    {type:'claim',pts:3,label:'Proposes specific improvements (segmentation, positioning, communication, pricing, service quality) for the clients',all:[
+      ['improve|propose|recommend|introduce|should (use|develop|invest|segment|position|offer|study|analy[sz]e)|need to (improve|use|develop|segment|study)|must (improve|use|develop|segment|study)'],
+      ['segment|position|communicat|pricing|service quality|target market|campaign|client behaviou?r|customer needs|client needs'],
+      ['client|customer|group|demand|market']]},
+    {type:'claim',pts:2,label:'States a strategic decision that supports long-term growth or competitive advantage',all:[
+      ['strategic decision|decides?\\b|decided|should (choose|adopt)|must (choose|adopt)|adopt|decision is|decision to'],
+      ['long-term|competitive advantage|sustainable growth|differentiat|positioning|target market'],
+      ['bank|company|organi[sz]ation|institution|clients?\\b|growth|market']]},
+    {type:'concepts',pts:1,label:'Uses at least 5 different glossary terms',need:5,of:TERM_GROUPS},
+    {type:'length',pts:1,label:'Writes at least 50 words (5 to 6 sentences)',words:50}],
+   misconceptions:[
+    {re:'^(?!.*\\b(some|may|might|could|however|but|although|claim|argue|say|believe that)\\b).*(good|quality) products? (always |usually )?(sells?|promotes?|advertises) itself',msg:'A good product does not sell itself: the situation says demand is low because marketing is weak.'}]},
+  2:{max:10,minWords:60,source:READING_TEXT,criteria:[
+    {type:'claim',pts:1,label:'States a clear position (I agree / I disagree / in my opinion) about the statement',all:[
+      ['\\bagree|\\bdisagree|in my opinion|i (believe|think)|my view|not true|not correct|is wrong|is false'],
+      ['marketing|product|statement'],
+      ['need|necessary|important|essential|required|useful|matters|true|correct|right|wrong|false|enough']]},
+    {type:'claim',pts:2,label:'Argument 1: without marketing or segmentation clients do not know the product and demand stays low',all:[
+      ['without|lack of|no marketing|weak marketing|poor marketing|ineffective communication'],
+      ['marketing|segment|position|communicat|customer needs|client needs'],
+      ['demand|clients\\b|customers\\b|trust|sales|growth|fail|waste|resources']]},
+    {type:'claim',pts:2,label:'Argument 2: marketing helps understand client needs, build relationships or differentiate from competitors',all:[
+      ['marketing|segmentation|positioning'],
+      ['understand|analy[sz]|identify|build|create|personali[sz]|differentiat|relationship|trust'],
+      ['client|customer|needs|behaviou?r|competitor']]},
+    {type:'contrast',pts:2,label:'Counterargument: acknowledges that a good product or a low price can attract some clients (but, however, although)',topics:[
+      ['good (product|service)|high.quality|quality (product|service)|reliable|\\bprices?\\b|low price|cheap'],
+      ['attract|clients?\\b|demand|grow|sell|customers?\\b|buy']]},
+    {type:'concepts',pts:1,label:'Uses at least 4 different glossary terms',need:4,of:TERM_GROUPS},
+    {type:'reason',pts:1,label:'Gives a reason with because, so or therefore (a marketing problem, then a result)',topics:[
+      [NEG+'|without|ignore|do not (know|understand)|does not (know|understand)'],
+      [LOWD+'|not choose|not buy|decline|drop|few|fewer|fall']]},
+    {type:'length',pts:1,label:'Writes at least 60 words',words:60}],
+   misconceptions:[
+    {re:'^(?!.*\\b(some|may|might|could|however|but|although|claim|argue|say|believe that)\\b).*(good|quality) products? (always |usually )?(sells?|promotes?|advertises) itself',msg:'A good product does not sell itself without marketing.'},
+    {re:'marketing is (a )?(waste|useless|unnecessary|not necessary|not important)|(does not|doesn.t|do not|don.t) need (any )?marketing',msg:'The text says weak marketing creates serious risks, so marketing is necessary.'}]}
+ },
+ script:{max:10,minWords:80,source:READING_TEXT,criteria:[
+    {type:'claim',pts:2,label:'Part 1: explains the role of marketing (understand client needs, analyze behavior, promote, build relationships)',all:[
+      ['marketing'],
+      ['understand|analy[sz]|promot|build|relationship|identify'],
+      ['clients?\\b|customers?\\b|financial|bank']]},
+    {type:'claim',pts:2,label:'Part 2: explains strategy and competitive advantage (long-term direction, differentiation from competitors)',all:[
+      ['strateg'],
+      ['long-term|direction|differentiat|stand out|innovat|decides?\\b|choose'],
+      ['compet|advantage|pricing|service quality|position']]},
+    {type:'claim',pts:1,label:'Part 3: explains how segmentation works (groups by income, goals, risk, then suitable products)',all:[
+      ['segment'],
+      ['income|goals|risk'],
+      ['personali|suitable|offers?|loans?|insurance|investment']]},
+    {type:'claim',pts:1,label:'Part 4: names the risks of weak marketing (low demand, lost trust, wasted resources)',all:[
+      [NEG],
+      ['marketing|strateg|communication'],
+      [LOWD]]},
+    {type:'claim',pts:1,label:'Part 5: names the business results of strong marketing and strategy (growth, trust, advantage)',all:[
+      ['result|outcome|benefit|achiev|lead to|leads to|bring|brings'],
+      ['sustainable growth|growth|more clients|new clients|trust|competitive advantage|profit'],
+      ['marketing|strateg|together|combin']]},
+    {type:'reason',pts:1,label:'Gives at least one cause and effect idea (because, so, therefore)',topics:[
+      [NEG+'|without|ignore|understand|analy[sz]|differentiat|invest'],
+      [LOWD+'|grow|attract|more clients|new clients|trust|advantage|decline|drop']]},
+    {type:'concepts',pts:1,label:'Uses at least 8 different glossary terms',need:8,of:TERM_GROUPS},
+    {type:'length',pts:1,label:'Writes at least 80 words (a talk of 1.5 to 2 minutes)',words:80}],
+   misconceptions:[
+    {re:'^(?!.*\\b(some|may|might|could|however|but|although|claim|argue|say|believe that)\\b).*(good|quality) products? (always |usually )?(sells?|promotes?|advertises) itself',msg:'A good product does not sell itself without marketing.'}]}
+};
 
-const fibs=[
-  {before:'',blank:'Market segmentation',after:' helps identify customer groups and allows companies to offer personalized financial products.',hint:'сегментация рынка',accept:['market segmentation','segmentation']},
-  {before:'',blank:'Strategy',after:' defines long-term direction and guides all major decision-making in a financial organization.',hint:'стратегия',accept:['strategy']},
-  {before:'',blank:'Pricing',after:' is one key factor that influences client decisions and helps companies gain a competitive advantage.',hint:'ценообразование',accept:['pricing']},
-  {before:'',blank:'Market trends',after:' show changes in the market and provide the data that strategy uses to make forward-looking decisions.',hint:'рыночные тенденции',accept:['market trends','trends']},
+// ── Scoring ──
+// One table drives everything: the maximum per task, the total (93) and the explanation on the Progress tab.
+const RUBRIC=[
+  {key:'dq1',label:'Discussion · Question 1 (why a good product can fail)',max:6,rule:'Open answer: product-is-good-but-clients-do-not-choose-it claim 2, cause and result 2, what to do 1, length 1.'},
+  {key:'dq2',label:'Discussion · Question 2 (role of marketing)',max:6,rule:'Open answer: needs/behavior claim 2, relationships claim 2, cause 1, length 1.'},
+  {key:'dq3',label:'Discussion · Question 3 (strategic decisions)',max:6,rule:'Open answer: pricing/service/innovation claim 2, segmentation claim 2, reason 1, length 1.'},
+  {key:'cq1',label:'Comprehension · Question 1 (segmentation)',max:6,rule:'Open answer: groups claim 2, personalized products claim 2, inefficiency claim 1, length 1.'},
+  {key:'cq2',label:'Comprehension · Question 2 (marketing + strategy)',max:6,rule:'Open answer: marketing data claim 2, strategy decisions claim 2, digital banking case 1, length 1.'},
+  {key:'cq3',label:'Comprehension · Question 3 (risks)',max:6,rule:'Open answer: low demand claim 2, trust claim 2, evaluate and adjust claim 1, length 1.'},
+  {key:'cats',label:'Category Match (15 terms)',max:15,rule:'1 point for each term placed in the correct category (M, S or P). Wrong or empty = 0.'},
+  {key:'fib',label:'Fill in the Blanks (4 blanks)',max:12,rule:'3 points for each blank that exactly matches an accepted glossary term (4 blanks). A longer phrase is not accepted.'},
+  {key:'writing1',label:'Writing · Task 1 (analytical report)',max:10,rule:'Problem claim 3, improvements claim 3, strategic decision claim 2, 5+ glossary terms 1, 50+ words 1. Each claim needs its ideas inside one sentence.'},
+  {key:'writing2',label:'Writing · Task 2 (critical thinking)',max:10,rule:'Position 1, argument 1: 2, argument 2: 2, counterargument 2, 4+ glossary terms 1, reason 1, 60+ words 1.'},
+  {key:'script',label:'Speaking · written script',max:10,rule:'Five plan parts (2+2+1+1+1), cause and effect 1, 8+ glossary terms 1, 80+ words 1. The timer and term chips are practice only.'}
 ];
-
-const reflections=[
-  'I understand the role of marketing in financial services and can explain it professionally.',
-  'I can explain how strategy and market segmentation support sustainable growth.',
-  'I can confidently use at least 8 glossary terms in speaking and writing tasks.',
-];
-
-let scores=lsGet('scores')||{dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:0};
-function saveScores(){lsSet('scores',scores)}
+const MAX_TOTAL=RUBRIC.reduce((a,r)=>a+r.max,0); // 93
+const RUBRIC_VERSION='2';
+const scores={};
+function addScore(key,pts){
+  const r=RUBRIC.find(x=>x.key===key);
+  if(!r)return; // practice-only activities are not scored
+  pts=Math.max(0,Math.min(r.max,pts));
+  if(scores[key]===undefined||scores[key]<pts){scores[key]=pts;lsSet('sc_'+key,pts);}
+  updateTotal();
+}
+function sumKeys(prefix){return RUBRIC.filter(r=>r.key.indexOf(prefix)===0).reduce((a,r)=>a+(scores[r.key]||0),0);}
+function updateTotal(){
+  const total=RUBRIC.reduce((a,r)=>a+(scores[r.key]||0),0);
+  const chip=document.getElementById('total-score-chip');if(chip)chip.textContent=total;
+  const big=document.getElementById('total-big');if(big)big.textContent=total;
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('dq-total',sumKeys('dq'));set('cq-total',sumKeys('cq'));
+  set('cat-score',scores.cats||0);set('fib-score',scores.fib||0);
+  set('writing1-score',scores.writing1||0);set('writing2-score',scores.writing2||0);set('script-score',scores.script||0);
+  const t=document.getElementById('rubric-table');
+  if(t){
+    t.innerHTML='<tr><th>Task</th><th>How it is scored</th><th style="text-align:right">Your score</th></tr>'+
+      RUBRIC.map(r=>`<tr><td>${r.label}</td><td>${r.rule}</td><td class="num">${scores[r.key]||0} / ${r.max}</td></tr>`).join('')+
+      `<tr><td><strong>Total</strong></td><td></td><td class="num">${total} / ${MAX_TOTAL}</td></tr>`;
+  }
+  return total;
+}
 
 function showTab(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  event.target.classList.add('active');
-  updateProgress();
+  if(typeof event!=='undefined'&&event&&event.target&&event.target.classList)event.target.classList.add('active');
+  updateTotal();
 }
 function toggleTheme(){
   document.body.classList.toggle('light-mode');
-  document.querySelector('.theme-btn').textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀ Light';
+  document.getElementById('theme-btn').textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀ Light';
   lsSet('theme',document.body.classList.contains('light-mode')?'light':'dark');
 }
-function scoreKeywords(text,kw,max){
-  const t=text.toLowerCase();
-  const hits=kw.filter(k=>t.includes(k.toLowerCase())).length;
-  return Math.min(max,Math.round((hits/Math.max(kw.length,1))*max));
-}
+function fbClass(res){const r=res.max?res.pts/res.max:0;return 'feedback show '+(r>=0.7?'good':r>=0.35?'ok':'poor');}
+function showResult(fbId,res){const fb=document.getElementById(fbId);fb.className=fbClass(res);fb.innerHTML=Grader.renderResult(res);}
 
 function renderDQ(){
   const c=document.getElementById('dq-container');c.innerHTML='';
-  dqs.forEach((d,i)=>{
+  const dqs=[
+    'Why can a good financial product fail in the market?',
+    'What role does marketing play in financial services?',
+    'What strategic decisions can improve client growth?'];
+  dqs.forEach((q,i)=>{
     const saved=lsGet('dq'+i)||'';
-    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${d.q}</div><textarea id="dq-ta-${i}" placeholder="Your answer..." oninput="lsSet('dq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkDQ(${i})">✔ Check</button><div class="feedback" id="dq-fb-${i}"></div></div>`;
+    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${q}</div>${Grader.renderRule(RB.dq[i])}<textarea id="dq-ta-${i}" placeholder="Your answer..." oninput="lsSet('dq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkDQ(${i})">✔ Check</button><div class="feedback" id="dq-fb-${i}"></div></div>`;
   });
 }
 function checkDQ(i){
-  const txt=document.getElementById('dq-ta-'+i).value;
-  const sc=scoreKeywords(txt,dqs[i].kw,5);
-  scores.dq[i]=sc;saveScores();updateTotal();
-  const fb=document.getElementById('dq-fb-'+i);
-  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
-  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Excellent!':sc>=2?'Good attempt. Add more specific terms.':'Try using: '+dqs[i].kw.slice(0,4).join(', ')+'.');
-  document.getElementById('dq-total').textContent=scores.dq.reduce((a,b)=>a+b,0);
+  const res=Grader.score(document.getElementById('dq-ta-'+i).value,RB.dq[i]);
+  addScore('dq'+(i+1),res.pts);showResult('dq-fb-'+i,res);
 }
 
 function renderCQ(){
   const c=document.getElementById('cq-container');c.innerHTML='';
+  const cqs=[
+    'According to the text, what does market segmentation allow financial institutions to do?',
+    'How are marketing and strategy connected according to the text?',
+    'What risks can incorrect strategy or weak marketing create for a financial company?'];
   cqs.forEach((q,i)=>{
     const saved=lsGet('cq'+i)||'';
-    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${q.q}</div><textarea id="cq-ta-${i}" placeholder="Your answer..." oninput="lsSet('cq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkCQ(${i})">✔ Check</button><div class="feedback" id="cq-fb-${i}"></div></div>`;
+    c.innerHTML+=`<div class="question-block"><div class="q-label">Question ${i+1}</div><div class="q-text">${q}</div>${Grader.renderRule(RB.cq[i])}<textarea id="cq-ta-${i}" placeholder="Your answer..." oninput="lsSet('cq${i}',this.value)">${saved}</textarea><button class="check-btn" onclick="checkCQ(${i})">✔ Check</button><div class="feedback" id="cq-fb-${i}"></div></div>`;
   });
 }
 function checkCQ(i){
-  const txt=document.getElementById('cq-ta-'+i).value;
-  const sc=scoreKeywords(txt,cqs[i].kw,5);
-  scores.cq[i]=sc;saveScores();updateTotal();
-  const fb=document.getElementById('cq-fb-'+i);
-  fb.className='feedback show '+(sc>=4?'good':sc>=2?'ok':'poor');
-  fb.innerHTML=`Score: <strong>${sc}/5</strong> — `+(sc>=4?'Correct!':sc>=2?'Partially correct. Add more detail.':'Review the text and use: '+cqs[i].kw.slice(0,4).join(', ')+'.');
-  document.getElementById('cq-total').textContent=scores.cq.reduce((a,b)=>a+b,0);
+  const res=Grader.score(document.getElementById('cq-ta-'+i).value,RB.cq[i]);
+  addScore('cq'+(i+1),res.pts);showResult('cq-fb-'+i,res);
 }
 
 let activeCat='all';
@@ -512,7 +720,7 @@ function renderGlossary(){
   const grid=document.getElementById('glossary-grid');
   const q=(document.getElementById('gloss-search')||{value:''}).value.toLowerCase();
   const filtered=glossary.filter(g=>(activeCat==='all'||g.cat===activeCat)&&(!q||g.term.toLowerCase().includes(q)||g.ru.toLowerCase().includes(q)));
-  grid.innerHTML=filtered.map(g=>`<div class="flip-card cat-${g.cat}" onclick="flipCard(this)"><div class="flip-inner"><div class="flip-front"><span class="term">${g.term}</span><span class="cat-tag">${g.cat==='M'?'Marketing & Analysis':g.cat==='S'?'Strategy & Positioning':'Products & Services'}</span><span class="card-count">tap to see translation</span><button onclick="event.stopPropagation();speakTerm(g.term)" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button></div><div class="flip-back"><div class="ru">${g.ru}</div></div></div></div>`).join('');
+  grid.innerHTML=filtered.map(g=>`<div class="flip-card cat-${g.cat}" onclick="flipCard(this)"><div class="flip-inner"><div class="flip-front"><span class="term">${g.term}</span><span class="cat-tag">${g.cat==='M'?'Marketing & Analysis':g.cat==='S'?'Strategy & Positioning':'Products & Services'}</span><span class="card-count">tap to see translation</span><button onclick="event.stopPropagation();speakTerm('${g.term}')" title="Pronounce" style="background:rgba(30,50,100,0.08);border:1px solid #c0c8e0;color:#3a4a7a;border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer;margin-top:6px;align-self:flex-end;">🔊</button></div><div class="flip-back"><div class="ru">${g.ru}</div></div></div></div>`).join('');
 }
 function flipCard(el){el.classList.toggle('flipped')}
 function filterGlossary(){renderGlossary()}
@@ -529,24 +737,30 @@ function renderCategories(){
   const grid=document.getElementById('match-grid');
   const shuffled=[...glossary].sort(()=>Math.random()-.5);
   const saved=lsGet('catAnswers')||{};
-  grid.innerHTML=shuffled.map((g,i)=>`<div class="match-item"><span class="match-term">${g.term}</span><div style="display:flex;align-items:center;gap:8px"><select class="match-select" id="ms-${i}" data-correct="${g.cat}" onchange="saveCatAnswer(${i},this.value)"><option value="">— select —</option><option value="M" ${saved[i]==='M'?'selected':''}>M — Marketing &amp; Analysis</option><option value="S" ${saved[i]==='S'?'selected':''}>S — Strategy &amp; Positioning</option><option value="P" ${saved[i]==='P'?'selected':''}>P — Products &amp; Services</option></select><span class="match-result" id="mr-${i}"></span></div></div>`).join('');
+  grid.innerHTML=shuffled.map((g,i)=>`<div class="match-item"><span class="match-term">${g.term}</span><div style="display:flex;align-items:center;gap:8px"><select class="match-select" id="ms-${i}" data-term="${g.term}" data-correct="${g.cat}" onchange="saveCatAnswer('${g.term}',this.value)"><option value="">— select —</option><option value="M" ${saved[g.term]==='M'?'selected':''}>M — Marketing &amp; Analysis</option><option value="S" ${saved[g.term]==='S'?'selected':''}>S — Strategy &amp; Positioning</option><option value="P" ${saved[g.term]==='P'?'selected':''}>P — Products &amp; Services</option></select><span class="match-result" id="mr-${i}"></span></div></div>`).join('');
 }
-function saveCatAnswer(i,v){const s=lsGet('catAnswers')||{};s[i]=v;lsSet('catAnswers',s)}
+function saveCatAnswer(term,v){const s=lsGet('catAnswers')||{};s[term]=v;lsSet('catAnswers',s)}
 function checkCategories(){
   let correct=0;
   document.querySelectorAll('.match-select').forEach((s,i)=>{
     const r=document.getElementById('mr-'+i);
     if(s.value===s.dataset.correct){r.textContent='✓';r.style.background='rgba(46,204,113,.2)';r.style.color='#2ecc71';correct++}
     else if(s.value){r.textContent='✗';r.style.background='rgba(231,76,60,.2)';r.style.color='#e74c3c'}
+    else{r.textContent='';r.style.background='';}
   });
-  const sc=Math.round((correct/glossary.length)*15);
-  scores.cat=sc;saveScores();updateTotal();
+  const sc=correct;
+  addScore('cats',sc);
   const fb=document.getElementById('cat-feedback');
   fb.className='feedback show '+(sc>=12?'good':sc>=8?'ok':'poor');
-  fb.innerHTML=`${correct}/${glossary.length} correct — Score: <strong>${sc}/15</strong>`;
-  document.getElementById('cat-score').textContent=sc;
+  fb.innerHTML=`${correct}/${glossary.length} correct. Score: <strong>${sc}/15</strong>`;
 }
 
+const fibs=[
+  {blank:'Market segmentation',after:' helps identify customer groups and allows companies to offer personalized financial products.',hint:'сегментация рынка',accept:['market segmentation','segmentation']},
+  {blank:'Strategy',after:' defines long-term direction and guides all major decision-making in a financial organization.',hint:'стратегия',accept:['strategy']},
+  {blank:'Pricing',after:' means setting the price of financial services, and it is one key factor that helps companies gain a competitive advantage.',hint:'ценообразование',accept:['pricing']},
+  {blank:'Market trends',after:' show changes in the market and provide the data that strategy uses to make forward-looking decisions.',hint:'рыночные тенденции',accept:['market trends','trends']},
+];
 function renderFIB(){
   const c=document.getElementById('fib-container');
   const saved=lsGet('fibAnswers')||{};
@@ -557,48 +771,27 @@ function checkFIB(){
   let correct=0;
   fibs.forEach((f,i)=>{
     const inp=document.getElementById('fib-'+i);
-    const val=(inp.value||'').trim().toLowerCase();
-    const ok=f.accept.some(a=>val===a.toLowerCase()||val.includes(a.toLowerCase()));
+    const val=(inp.value||'').trim().toLowerCase().replace(/\s+/g,' ').replace(/[.!]+$/,'');
+    const ok=f.accept.some(a=>val===a.toLowerCase());
     inp.className='blank-input '+(ok?'correct':'wrong');
     if(ok)correct++;
   });
   const sc=correct*3;
-  scores.fib=sc;saveScores();updateTotal();
+  addScore('fib',sc);
   const fb=document.getElementById('fib-feedback');
   fb.className='feedback show '+(correct===fibs.length?'good':correct>=2?'ok':'poor');
-  fb.innerHTML=`${correct}/${fibs.length} correct — Score: <strong>${sc}/12</strong>`;
-  document.getElementById('fib-score').textContent=sc;
+  fb.innerHTML=`${correct}/${fibs.length} correct. Score: <strong>${sc}/12</strong>`;
 }
 
 function saveWriting(id){lsSet(id,document.getElementById(id+'-input').value)}
 function checkWriting(n){
-  const txt=(document.getElementById('writing'+n+'-input').value||'').toLowerCase();
-  const kw=glossary.map(g=>g.term.toLowerCase());
-  const usedKw=kw.filter(k=>txt.includes(k));
-  let sc=0;
-  if(n===1){
-    if(usedKw.length>=5)sc+=3;else if(usedKw.length>=3)sc+=2;else if(usedKw.length>=1)sc+=1;
-    const problemWords=['problem','weak','demand','marketing','improve','strategy','segment'].filter(w=>txt.includes(w));
-    if(problemWords.length>=3)sc+=3;else if(problemWords.length>=2)sc+=2;else sc+=1;
-    if(txt.length>200)sc+=2;else if(txt.length>100)sc+=1;
-    sc=Math.min(8,sc);
-    const fb=document.getElementById('writing1-feedback');
-    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
-    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms used: ${usedKw.length}/5 required`;
-  }else{
-    if(usedKw.length>=4)sc+=2;else if(usedKw.length>=2)sc+=1;
-    const hasPosition=(txt.includes('agree')||txt.includes('disagree')||txt.includes('believe')||txt.includes('think'));
-    if(hasPosition)sc+=2;
-    const hasCounter=(txt.includes('however')||txt.includes('although')||txt.includes('on the other hand')||txt.includes('counter'));
-    if(hasCounter)sc+=2;
-    if(txt.length>200)sc+=2;else if(txt.length>100)sc+=1;
-    sc=Math.min(8,sc);
-    const fb=document.getElementById('writing2-feedback');
-    fb.className='feedback show '+(sc>=6?'good':sc>=3?'ok':'poor');
-    fb.innerHTML=`Score: <strong>${sc}/8</strong> · Glossary terms: ${usedKw.length}/4 required`;
-  }
-  scores['writing'+n]=sc;saveScores();updateTotal();
-  document.getElementById('writing'+n+'-score').textContent=sc;
+  const res=Grader.score(document.getElementById('writing'+n+'-input').value,RB.writing[n]);
+  addScore('writing'+n,res.pts);showResult('writing'+n+'-feedback',res);
+}
+function saveScript(){lsSet('script',document.getElementById('script-input').value)}
+function checkScript(){
+  const res=Grader.score(document.getElementById('script-input').value,RB.script);
+  addScore('script',res.pts);showResult('script-feedback',res);
 }
 
 function renderChips(){
@@ -627,46 +820,45 @@ function updateTimerDisplay(){
 function startTimer(){if(timerRunning)return;timerRunning=true;timerInterval=setInterval(()=>{timerSeconds--;updateTimerDisplay();if(timerSeconds<=0){clearInterval(timerInterval);timerRunning=false}},1000)}
 function stopTimer(){clearInterval(timerInterval);timerRunning=false}
 function resetTimer(){stopTimer();timerSeconds=90;updateTimerDisplay();document.getElementById('timer-ring').style.stroke='var(--gold)'}
-function updateSpeakingScore(v){document.getElementById('speaking-val').textContent=v;scores.speaking=parseInt(v);saveScores();updateTotal()}
 
+// ── Self-reflection (practice only, not scored) ──
+const reflections=[
+  'I understand the role of marketing in financial services and can explain it professionally.',
+  'I can explain how strategy and market segmentation support sustainable growth.',
+  'I can confidently use at least 8 glossary terms in speaking and writing tasks.',
+];
 function renderReflect(){
   const c=document.getElementById('reflect-container');
   const saved=lsGet('reflect')||{};
   c.innerHTML=reflections.map((r,i)=>`<div class="reflect-item"><div class="r-label">${r}</div><div class="star-row">${[1,2,3,4].map(n=>`<span class="star ${(saved['s'+i]||0)>=n?'lit':''}" onclick="setStar(${i},${n})">⭐</span>`).join('')}</div><textarea class="r-note" placeholder="Notes..." oninput="saveReflectNote(${i},this.value)">${saved['n'+i]||''}</textarea></div>`).join('');
 }
 function setStar(i,v){
-  const saved=lsGet('reflect')||{};saved['s'+i]=v;lsSet('reflect',saved);
-  scores.reflect=Math.min(12,[0,1,2].reduce((a,j)=>{const s=lsGet('reflect')||{};return a+(s['s'+j]||0)},0));
-  saveScores();updateTotal();document.getElementById('reflect-score').textContent=scores.reflect;renderReflect();
+  const saved=lsGet('reflect')||{};saved['s'+i]=v;lsSet('reflect',saved);renderReflect();
 }
 function saveReflectNote(i,v){const s=lsGet('reflect')||{};s['n'+i]=v;lsSet('reflect',s)}
 
-function updateTotal(){
-  const t=scores.dq.reduce((a,b)=>a+b,0)+scores.cq.reduce((a,b)=>a+b,0)+scores.cat+scores.fib+(scores.writing1||0)+(scores.writing2||0)+scores.speaking+scores.reflect;
-  document.getElementById('total-score-chip').textContent=t;
-  document.getElementById('total-big').textContent=t;
-  return t;
+function updateProgress(){updateTotal();}
+function resetAll(){
+  if(!confirm('Reset all progress?'))return;
+  try{Object.keys(localStorage).filter(k=>k.indexOf(LS)===0).forEach(k=>localStorage.removeItem(k));}catch(e){}
+  location.reload();
 }
-function updateProgress(){
-  const dq=scores.dq.reduce((a,b)=>a+b,0),cq=scores.cq.reduce((a,b)=>a+b,0),writ=(scores.writing1||0)+(scores.writing2||0);
-  [{id:'dq',val:dq,max:15},{id:'cq',val:cq,max:15},{id:'cat',val:scores.cat,max:15},{id:'fib',val:scores.fib,max:12},{id:'writ',val:writ,max:16},{id:'spk',val:scores.speaking,max:8},{id:'ref',val:scores.reflect,max:12}].forEach(it=>{
-    const el=document.getElementById('prog-'+it.id);if(el)el.style.width=(it.val/it.max*100)+'%';
-    const vl=document.getElementById('prog-'+it.id+'-val');if(vl)vl.textContent=it.val+'/'+it.max;
-  });
-  updateTotal();
-}
-function resetAll(){if(!confirm('Reset all progress?'))return;['scores','catAnswers','fibAnswers','chips','reflect','writing1','writing2'].forEach(k=>localStorage.removeItem(LS+k));[0,1,2].forEach(i=>{localStorage.removeItem(LS+'dq'+i);localStorage.removeItem(LS+'cq'+i)});scores={dq:[0,0,0],cq:[0,0,0],cat:0,fib:0,writing1:0,writing2:0,speaking:0,reflect:0};location.reload()}
 
 (function init(){
-  if(lsGet('theme')==='light')document.body.classList.add('light-mode');
+  if(lsGet('theme')==='light'){document.body.classList.add('light-mode');document.getElementById('theme-btn').textContent='🌙 Dark';}
+  // Scores saved under the old, inconsistent rules are discarded once, so that all results follow the table above.
+  if(lsGet('rubric')!==RUBRIC_VERSION){
+    try{localStorage.removeItem(LS+'scores');RUBRIC.forEach(r=>localStorage.removeItem(LS+'sc_'+r.key));}catch(e){}
+    lsSet('rubric',RUBRIC_VERSION);
+  }
+  RUBRIC.forEach(r=>{const v=parseInt(lsGet('sc_'+r.key));if(!isNaN(v))scores[r.key]=Math.max(0,Math.min(r.max,v));});
   renderDQ();renderCQ();renderGlossary();renderCategories();renderFIB();renderChips();renderReflect();
-  [0,1,2].forEach(i=>{
-    const dt=document.getElementById('dq-ta-'+i);if(dt){const v=lsGet('dq'+i);if(v)dt.value=v}
-    const ct=document.getElementById('cq-ta-'+i);if(ct){const v=lsGet('cq'+i);if(v)ct.value=v}
+  [1,2].forEach(n=>{
+    document.getElementById('writing'+n+'-rule').innerHTML=Grader.renderRule(RB.writing[n]);
+    const w=document.getElementById('writing'+n+'-input');const v=lsGet('writing'+n);if(w&&v)w.value=v;
   });
-  const w1=document.getElementById('writing1-input');if(w1){const v=lsGet('writing1');if(v)w1.value=v}
-  const w2=document.getElementById('writing2-input');if(w2){const v=lsGet('writing2');if(v)w2.value=v}
-  const spk=document.getElementById('speaking-range');if(spk&&scores.speaking){spk.value=scores.speaking;document.getElementById('speaking-val').textContent=scores.speaking}
+  document.getElementById('script-rule').innerHTML=Grader.renderRule(RB.script);
+  const sv=lsGet('script');if(sv)document.getElementById('script-input').value=sv;
   updateTimerDisplay();updateTotal();
 })();
 
