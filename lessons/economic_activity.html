@@ -752,6 +752,35 @@ function updateTotal(){
   }
 }
 
+// ── Pronunciation (Web Speech API) ──
+let EN_VOICE=null;
+function pickVoice(){
+  try{
+    const vs=window.speechSynthesis.getVoices()||[];
+    EN_VOICE=vs.find(v=>/^en[-_]US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;
+  }catch(e){}
+}
+if('speechSynthesis' in window){
+  pickVoice();
+  try{window.speechSynthesis.onvoiceschanged=pickVoice;}catch(e){}
+}
+function speakTerm(term){
+  if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined'){
+    alert('Your browser does not support audio pronunciation. Try Chrome, Edge or Safari.');
+    return;
+  }
+  try{
+    const synth=window.speechSynthesis;
+    synth.cancel();
+    if(!EN_VOICE)pickVoice();
+    const u=new SpeechSynthesisUtterance(String(term).replace(/&apos;|&#39;/g,"'"));
+    u.lang=(EN_VOICE&&EN_VOICE.lang)||'en-US';
+    if(EN_VOICE)u.voice=EN_VOICE;
+    u.rate=0.85;
+    setTimeout(()=>synth.speak(u),50);
+  }catch(e){}
+}
+
 function showTab(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
